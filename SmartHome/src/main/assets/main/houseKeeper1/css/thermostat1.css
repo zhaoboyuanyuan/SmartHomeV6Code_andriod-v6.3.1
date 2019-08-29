@@ -1,0 +1,127 @@
+@charset "utf-8";
+/*======================================= 中央空调管家列表详情页 ========================================*/
+.save{
+    background:none!important;
+}
+#content{
+    width:100%;
+    height:calc(100% - 6.4rem);
+    padding-top:6.4rem;
+    margin-bottom:4.4rem;
+}
+.device_list{
+    width:100%;
+    overflow:hidden;
+}
+.device_list li{
+    box-sizing: border-box;
+    width:100%;
+    height:4.4rem;
+    padding:0 4%;
+    border-bottom:1px solid #ddd;
+}
+.device_list li span{
+    float:left;
+    display:block;
+    width:50%;
+    height:4.4rem;
+    line-height:4.4rem;
+    font-size:1.5rem;
+    color:#333;
+}
+.device_list li span img{
+    display:block;
+    float:right;
+    width:2rem;
+    height:2rem;
+    margin-top:1.2rem;
+}
+.switch{
+    box-sizing: border-box;
+    width:100%;
+    height:4rem;
+    padding:0 4%;
+    /*background:pink;*/
+}
+.switch span,.switch div{
+    float:left;
+    width:50%;
+    height:4rem;
+}
+.switch span{
+    line-height:4rem;
+    font-size:1.4rem;
+    color:#555;
+}
+.switch em{
+    position:relative;
+    display:block;
+    float:right;
+    width:5rem;
+    height:2.5rem;
+    border-radius:2rem;
+    margin-top:0.75rem;
+    background:#aeb8bb;
+}
+.switch em i{
+    position:absolute;
+    left:0.5rem;
+    top:0.5rem;
+    width:1.5rem;
+    height:1.5rem;
+    border-radius: 50%;
+    background:#fff;
+}
+.switch em[data-state=on]{
+    background:#8dd652;
+}
+.switch em[data-state=off]{
+    background:#aeb8bb;
+}
+.switch em[data-state=on] i{
+    left:2.8rem;
+}
+.switch em[data-state=off] i{
+    left:0.5rem;
+}
+
+.switchOnView{
+    display:none;
+    width:100%;
+    overflow:hidden;
+}
+.switchOnView li{
+    padding:0 4%;
+    width:92%;
+    height:4rem;
+    line-height:4rem;
+}
+.switchOnView li span{
+    float:left;
+    display:block;
+    width:50%;
+    height:4rem;
+    font-size: 1.4rem;
+    color:#555;
+}
+.switchOnView li span:last-child{
+    padding:0 6% 0 4%;
+    width:40%;
+    text-align:right;
+    background:url(../../editScene/fonts/icon_right.png) no-repeat right center;
+    background-size:0.6rem auto;
+}
+.toast{
+    display:none;
+    position:fixed;
+    left:25%;
+    bottom:8rem;
+    width:44%;
+    line-height:2rem;
+    text-align:center;
+    padding:0.8rem 3%;
+    border-radius:5px;
+    background:rgba(0,0,0,.4);
+    font-size: 1.5rem;
+    color:#fff;
+}

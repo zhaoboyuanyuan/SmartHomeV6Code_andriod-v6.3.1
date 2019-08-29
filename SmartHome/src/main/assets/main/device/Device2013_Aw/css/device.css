@@ -1,0 +1,195 @@
+@charset "utf-8";
+.content {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 6.4rem);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+}
+
+*{
+    -webkit-touch-callout:none;  /*系统默认菜单被禁用*/
+    -webkit-user-select:none; /*webkit浏览器*/
+    -khtml-user-select:none; /*早期浏览器*/
+    -moz-user-select:none;/*火狐*/
+    -ms-user-select:none; /*IE10*/
+    user-select:none;
+}
+.keySwitch {
+    margin-top: 5rem;
+}
+
+.key div {
+    width: 13rem;
+    height: 13rem;
+    margin: 0 auto;
+}
+
+.key i {
+    width: 13rem;
+    height: 13rem;
+}
+
+.key span {
+    display: block;
+    text-align: center;
+    line-height: 4.2rem;
+    color: #999;
+    font-size: 1.4rem;
+}
+
+.keyScene div {
+    background: url(../fonts/icon_add_1.png) no-repeat center center;
+    background-size: 12rem auto;
+}
+
+.keySwitch div {
+    margin: 0 auto;
+    position: relative;
+}
+
+.keySwitch div div[openState=off] {
+    background: url(../fonts/icon_close.png) no-repeat center center;
+    background-size: 12rem auto;
+}
+
+.keySwitch div div[openState=on] {
+    background: url(../fonts/icon_open.png) no-repeat center center;
+    background-size: 12rem auto;
+}
+
+.keySwitch div em {
+    display: none;
+    position: absolute;
+    left: -0rem;
+    top: -0rem;
+    width: 13rem;
+    height: 13rem;
+    background: url(../fonts/loading.png) no-repeat center center;
+    background-size: 12.8rem auto;
+}
+
+.isShow {
+    display: block;
+}
+
+.isHide {
+    display: none;
+}
+
+.bellView {
+    margin-top: 6rem;
+    width: 27rem;
+    position: relative;
+    /*margin-left: 2rem;
+    margin-right: 2rem;*/
+    line-height: 4rem;
+    overflow: hidden;
+}
+
+.beallTap{
+    height: 3.8rem;  
+    width: 30rem;
+    margin-top: 4rem;
+}
+
+.beallTap div{
+	float: left;
+	height: 3.8rem;  
+	color: black;
+	font-size: 1.6rem;
+	-webkit-tap-highlight-color:transparent;
+	/*border: solid #7f7f7f 0.1rem;*/
+	width: 8.4rem;
+}
+
+.beallTap div:nth-child(1){
+	/*border-bottom-left-radius: 3.8rem;
+	border-top-left-radius: 3.8rem;*/
+	background: url(../fonts/radiusLeft.png)  no-repeat center center;
+	background-size: 8.4rem 3.8rem;
+}
+
+.beallTap div:nth-child(2){
+	margin-left: 0.5rem;
+	width: 8.3rem;
+	background: url(../fonts/rect.png)  no-repeat center center;
+	background-size: 8.3rem 3.8rem;
+}
+
+.beallTap div:nth-child(3){
+	margin-left: 0.5rem;
+	/*border-bottom-right-radius: 3.8rem;
+	border-top-right-radius: 3.8rem;*/
+	background: url(../fonts/radiusRight.png)  no-repeat center center;
+	background-size: 8.4rem 3.8rem;
+}
+
+.bellView p {
+    text-align: center;
+	margin-bottom: 1.5rem;
+}
+
+.bell {
+    width: 12rem;
+    height: 12rem;
+}
+.bellShake{
+	background: url(../fonts/bellalarm.png) no-repeat center center;
+    background-size: 11.9rem auto;
+}
+.bellNormal{
+	background: url(../fonts/bell.png) no-repeat center center;
+    background-size: 11.9rem auto;
+}
+
+@-webkit-keyframes rotate {
+    from {
+        transform: rotateZ(0deg);
+        -webkit-transform: rotateZ(0deg)
+    }
+    to {
+        transform: rotateZ(360deg);
+        -webkit-transform: rotateZ(360deg)
+    }
+}
+
+@-ms-keyframes rotate {
+    from {
+        transform: rotateZ(0deg);
+        -webkit-transform: rotateZ(0deg)
+    }
+    to {
+        transform: rotateZ(360deg);
+        -webkit-transform: rotateZ(360deg)
+    }
+}
+
+@-moz-keyframes rotate {
+    from {
+        transform: rotateZ(0deg);
+        -webkit-transform: rotateZ(0deg)
+    }
+    to {
+        transform: rotateZ(360deg);
+        -webkit-transform: rotateZ(360deg)
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotateZ(0deg);
+        -webkit-transform: rotateZ(0deg)
+    }
+    to {
+        transform: rotateZ(360deg);
+        -webkit-transform: rotateZ(360deg)
+    }
+}
+
+.keySwitch div em.rotate {
+    -webkit-animation: rotate 1s linear infinite;
+    animation: rotate 1s linear infinite;
+}

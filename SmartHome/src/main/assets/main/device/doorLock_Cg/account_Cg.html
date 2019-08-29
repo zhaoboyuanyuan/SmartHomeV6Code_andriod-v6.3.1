@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>智能门锁_Cg</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+    <link rel="stylesheet" type="text/css" href="css/account_Cg.css">
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body style="width:100%;height:100%;">
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName" key="" href="javascript:;">洞庭湖锁</a>
+        <a class="createIcon" href="javascript:;"></a>
+    </div>
+</header>
+<section class="content_Cg">
+    <section class="userContent">
+        <div class="userHead">用户列表</div>
+        <ul class="userList">
+            <li class="userItem">
+                <i></i>
+                <p>陈友宝</p>
+            </li>
+            <li class="userItem">
+                <i></i>
+                <p>陈友宝1</p>
+            </li>
+            <li class="userItem">
+                <i></i>
+                <p>陈友宝2</p>
+            </li>
+            <li class="userItem">
+                <i></i>
+                <p>陈友宝3</p>
+            </li>
+            <li class="userItem">
+                <i></i>
+                <p>陈友宝4</p>
+            </li>
+            <li class="userItem">
+                <i></i>
+                <p>陈友宝5</p>
+            </li>
+        </ul>
+        <div class="userBottom">
+            <i>更多</i>
+        </div>
+    </section>
+    <section class="lockWayContent">
+        <div class="lockHead">
+            <p>最近添加</p>
+        </div>
+        <ul class="lockList">
+            <li>
+                <i></i>
+                <div class="lockDesc">
+                    <p>001</p>
+                    <p>管理员</p>
+                    <b></b>
+                </div>
+                <div class="delete">删除</div>
+            </li>
+            <li>
+                <i></i>
+                <div class="lockDesc">
+                    <p>002</p>
+                    <p>临时用户</p>
+                    <b></b>
+                </div>
+                <div class="delete">删除</div>
+            </li>
+            <li>
+                <i></i>
+                <div class="lockDesc">
+                    <p>003</p>
+                    <p>管理员</p>
+                    <b></b>
+                </div>
+                <div class="delete">删除</div>
+            </li>
+        </ul>
+    </section>
+</section>
+
+</body>
+<script type="text/javascript" src="js/leftDelete.js"></script>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="js/more.js"></script>
+<script type="text/javascript" src="js/handle.js"></script>
+</html>
+
+<script type="text/javascript">
+
+    var deviceID;
+    var gwID;
+    var appID;
+    initlan();
+    plus.plusReady(function() {
+        plus.gatewayCmd.getDeviceInfo(function(result) {
+            deviceID = result.devID;
+            gwID = result.gwID;
+            appID = result.appID;
+            //查询
+            query()
+        })
+        $("#back").on("click", function() {
+            plus.tools.back(function(){})
+        })
+        $(".userContent ul li").on("click", function() {
+            var index = $(this).index();
+            alert(index)
+        })
+        plus.gatewayCmd.newDataRefresh(function (result) {
+
+            if(data.cmd == "533" && devID == data.devID){
+                //处理零散钥匙
+
+            }
+        })
+    })
+
+    function query() {
+        //查询要是列表
+        var jsonData = {
+            "cmd": "533",
+            "gwID": gwID,
+            "appID": appID,
+            "devID": deviceID,
+            "operType": 1
+        };
+        plus.gatewayCmd.controlDevice(jsonData, function(result) {
+            console.log("result " + result);
+        })
+    }
+
+    $(".lockWayContent ul li").leftDelete({
+        marginLeft: "-15%"
+    });
+</script>

@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <title class="autoSwitchLanguager" key="device_DD_name">背景音乐</title>
+    <link rel="stylesheet" type="text/css" href="../../source/mui/css/mui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/timer.css" />
+    <link rel="stylesheet" type="text/css" href="css/spectrum.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../../source/mui/js/mui.min.js"></script>
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+
+<body>
+    <div>
+        <!--主页面-->
+        <div id="main" class="stage mainStage">
+            <!--头部-->
+            <header class="header">
+                <a id="back" class="back" href="javascript:;"></a>
+                <a class="deviceName autoSwitchLanguager" key="device_DD_name" href="javascript:;">华尔思背景音乐</a>
+                <a id="more" href="javascript:;"></a>
+            </header>
+            <!--随机播放-->
+            <section class="secPlayRandom">
+                <i class="iconPlayRandom"></i>
+                <div>
+                    <span class="textPlayRandom autoSwitchLanguager" key="Music_Shuffle_Playback">随机播放</span>
+                    <span class="textPlaySongs">(</span>
+                    <span class="textPlayCount">0</span>
+                    <span class="textPlaySongs autoSwitchLanguager" key="Music_songs">首</span>
+                    <span class="textPlaySongs">)</span>
+                </div>
+            </section>
+            <!--歌曲列表-->
+            <section class="secSongList">
+                <!--下拉刷新容器-->
+                <div id="refreshContainer" class="mui-content mui-scroll-wrapper" style="margin-top:0rem ">
+                    <div class="mui-scroll">
+                        <!--数据列表-->
+                        <ul class="mui-table-view mui-table-view-chevron songList">
+                            <!--这里是歌曲列表-->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section class="secSongEmpty">
+                <div class="emptyTitle autoSwitchLanguager" key="Music_No_songs">
+                    暂无歌曲
+                </div>
+                <div class="emptyDesc autoSwitchLanguager" key="Music_No_songs_hint">
+                    暂无歌曲，请至设备端添加
+                </div>
+            </section>
+            <!--播放页底部控制-->
+            <section class="secPlayCtrl">
+                <!--<div id="progressBar" class="">-->
+                <!--<span class="progressExpand"></span>-->
+                <!--</div>-->
+                <div class="contentPlayCtrl">
+                    <img class="songsCover" src="fonts/icon_play_disc_default.png">
+                    <div class="songsDetail">
+                        <div class="songsName songsNameText"></div>
+                        <div class="songsSinger songsSingerText"></div>
+                    </div>
+                    <i class="playCtrlNext btnNext"></i>
+                    <i class="playCtrlPlay btnPlay playStateListener" play-state="pause"></i>
+                    <i class="playCtrlLast btnLast"></i>
+                </div>
+            </section>
+        </div>
+        <!--播放页-->
+        <div id="player" class="stage playerStage">
+            <!--播放页头部-->
+            <section class="playerHeader">
+                <i class="backToMain"></i>
+                <div class="playSongsDetail">
+                    <!--歌曲名-->
+                    <div class="playSongsName songsNameText"></div>
+                    <!--歌手-->
+                    <!--<div class="playSongsSinger songsSingerText"></div>-->
+                </div>
+            </section>
+            <!--唱针-->
+            <section class="secSingingNeedle">
+                <img src="fonts/icon_singing_needle_full.png" class="singingNeedle playStateListener" play-state="pause">
+            </section>
+            <!--唱盘-->
+            <section class="secSingingDisc">
+                <img src="fonts/icon_play_disc_default_2.png" class="singingDisc playStateListener" play-state="pause">
+                <!--<img id="songsCoverPic" play-state="pause" src="fonts/icon_cover_mini.png"-->
+                <!--class="songsAlbum singingCover singingCoverPlaying playStateListener"-->
+                <!--style="display:none;">-->
+            </section>
+            <!--控制面板-->
+            <section class="secPlayPanel">
+                <div class="playMusicBtn">
+                    <i class="playMusicMode" onclick="changePlayMode(-1)"></i>
+                    <i class="playMusicVoice" play-mode="0" onclick="showVoiceWindow()"></i>
+                    <i class="playMusicEffect" onclick="showEffectWindow()"></i>
+                    <i class="playMusicTimer" onclick="showTimerStage()" style="display: none"></i>
+                </div>
+                <div style="margin-bottom: 2.4rem;height: 2.4rem; width: 100%;border-bottom: 1px solid rgba(183, 183, 183, 0.5)">
+                    <!--<div class="slideContainer">-->
+                    <!--<span class="songsTimeCur songsTimeText">03:05</span>-->
+                    <!--<span class="songsTimeTotal songsTimeText">05:25</span>-->
+                    <!--<div id="slideBar" class="slideBar">-->
+                    <!--<span class="slideExpand"></span>-->
+                    <!--<i class="slideCircle"></i>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                </div>
+                <div class="playMusicCtrl">
+                    <i class="playMusicLast btnLast"></i>
+                    <i class="playMusicPlay btnPlay playStateListener" play-state="pause"></i>
+                    <i class="playMusicNext btnNext"></i>
+                </div>
+            </section>
+            <section class="secPlayEffect">
+                <div class="divEffectTitle">
+                    <i class="textEffectTitle autoSwitchLanguager" key="Music_set_Sound_effect">音效选择</i>
+                    <i class="iconEffectClose" onclick="hideEffectWindow()"></i>
+                </div>
+                <ul class="listEffect">
+                    <li class="itemEffect">
+                        <i class="textEffect autoSwitchLanguager" key="Music_set_Sound_effect_1" effect-checked="false">普通</i>
+                    </li>
+                    <li class="itemEffect">
+                        <i class="textEffect autoSwitchLanguager" key="Music_set_Sound_effect_2" effect-checked="false">摇滚</i>
+                    </li>
+                    <li class="itemEffect">
+                        <i class="textEffect autoSwitchLanguager" key="Music_set_Sound_effect_3" effect-checked="false">流行</i>
+                    </li>
+                    <li class="itemEffect">
+                        <i class="textEffect autoSwitchLanguager" key="Music_set_Sound_effect_4" effect-checked="true">舞曲</i>
+                    </li>
+                    <li class="itemEffect">
+                        <i class="textEffect autoSwitchLanguager" key="Music_set_Sound_effect_5" effect-checked="false">嘻哈</i>
+                    </li>
+                    <li class="itemEffect">
+                        <i class="textEffect autoSwitchLanguager" key="Music_set_Sound_effect_6" effect-checked="false">古典</i>
+                    </li>
+                    <li class="itemEffect">
+                        <i class="textEffect autoSwitchLanguager" key="Music_set_Sound_effect_7" effect-checked="false">超重低音</i>
+                    </li>
+                    <li class="itemEffect">
+                        <i class="textEffect autoSwitchLanguager" key="Music_set_Sound_effect_8" effect-checked="false">人声</i>
+                    </li>
+                </ul>
+            </section>
+            <section class="secPlayVoice">
+                <div class="divVoiceTitle">
+                    <i class="textVoiceTitle autoSwitchLanguager" key="Music_set_volume">音量调节</i>
+                    <i class="iconVoiceClose" onclick="hideVoiceWindow()"></i>
+                </div>
+                <div>
+                    <!--<div class="slideBarContainer">-->
+                    <!--<i class="textVoiceSec autoSwitchLanguager sectionHide1" key="Music_set_volume_1">一分区</i>-->
+                    <!--<i class="iconVoice"></i>-->
+                    <!--<span class="spanVoicePer songsTimeText">30%</span>-->
+                    <!--<div id="slideBarVoice1" class="slideBar">-->
+                    <!--<span class="slideExpand"></span>-->
+                    <!--<i class="slideCircle" m-section="1"></i>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="slideBarContainer sectionHide1">-->
+                    <!--<i class="textVoiceSec autoSwitchLanguager" key="Music_set_volume_2">二分区</i>-->
+                    <!--<i class="iconVoice"></i>-->
+                    <!--<span class="spanVoicePer songsTimeText">30%</span>-->
+                    <!--<div id="slideBarVoice2" class="slideBar">-->
+                    <!--<span class="slideExpand"></span>-->
+                    <!--<i class="slideCircle" m-section="2"></i>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="slideBarContainer sectionHide1 sectionHide2">-->
+                    <!--<i class="textVoiceSec autoSwitchLanguager" key="Music_set_volume_3">三分区</i>-->
+                    <!--<i class="iconVoice"></i>-->
+                    <!--<span class="spanVoicePer songsTimeText">30%</span>-->
+                    <!--<div id="slideBarVoice3" class="slideBar">-->
+                    <!--<span class="slideExpand"></span>-->
+                    <!--<i class="slideCircle" m-section="3"></i>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="slideBarContainer sectionHide1 sectionHide2">-->
+                    <!--<i class="textVoiceSec autoSwitchLanguager" key="Music_set_volume_4">四分区</i>-->
+                    <!--<i class="iconVoice"></i>-->
+                    <!--<span class="spanVoicePer songsTimeText">30%</span>-->
+                    <!--<div id="slideBarVoice4" class="slideBar">-->
+                    <!--<span class="slideExpand"></span>-->
+                    <!--<i class="slideCircle" m-section="4"></i>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <div class="slideBarContainer">
+                        <i class="textVoiceSec autoSwitchLanguager sectionHide1" key="Music_set_volume_1">一分区</i>
+                        <i class="iconVoice"></i>
+                        <span class="spanVoicePer songsTimeText">0</span>
+                        <div id="slideBarVoice1" class="slideBar" m-section="1">
+                            <ul class="voiceList">
+                                <li>
+                                    <i class="voiceIndex00" m-choose="yes press"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex01" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex02" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex03" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex04" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex05" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex06" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex07" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex08" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex09" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex10" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex11" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex12" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex13" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex14" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex15" m-choose="false"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="slideBarContainer sectionHide1">
+                        <i class="textVoiceSec autoSwitchLanguager" key="Music_set_volume_2">二分区</i>
+                        <i class="iconVoice"></i>
+                        <span class="spanVoicePer songsTimeText">0</span>
+                        <div id="slideBarVoice2" class="slideBar" m-section="2">
+                            <ul class="voiceList">
+                                <li>
+                                    <i class="voiceIndex00" m-choose="yes press"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex01" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex02" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex03" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex04" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex05" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex06" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex07" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex08" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex09" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex10" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex11" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex12" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex13" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex14" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex15" m-choose="false"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="slideBarContainer sectionHide1 sectionHide2">
+                        <i class="textVoiceSec autoSwitchLanguager" key="Music_set_volume_3">三分区</i>
+                        <i class="iconVoice"></i>
+                        <span class="spanVoicePer songsTimeText">0</span>
+                        <div id="slideBarVoice3" class="slideBar" m-section="3">
+                            <ul class="voiceList">
+                                <li>
+                                    <i class="voiceIndex00" m-choose="yes press"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex01" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex02" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex03" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex04" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex05" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex06" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex07" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex08" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex09" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex10" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex11" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex12" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex13" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex14" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex15" m-choose="false"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="slideBarContainer sectionHide1 sectionHide2">
+                        <i class="textVoiceSec autoSwitchLanguager" key="Music_set_volume_4">四分区</i>
+                        <i class="iconVoice"></i>
+                        <span class="spanVoicePer songsTimeText">0</span>
+                        <div id="slideBarVoice4" class="slideBar" m-section="4">
+                            <ul class="voiceList">
+                                <li>
+                                    <i class="voiceIndex00" m-choose="yes press"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex01" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex02" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex03" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex04" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex05" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex06" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex07" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex08" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex09" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex10" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex11" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex12" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex13" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex14" m-choose="false"></i>
+                                </li>
+                                <li>
+                                    <i class="voiceIndex15" m-choose="false"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!--倒计时页面-->
+        <div id="timer" class="stage timerStage">
+            <section class="timerHeader">
+                <i class="backFromTimer" onclick="hideTimerStage()"></i>
+                <i class="timerTitle autoSwitchLanguager" key="Music_Countdown">倒计时</i>
+            </section>
+            <section class="timerTips autoSwitchLanguager" key="Music_Countdown_close">
+                未启动倒计时
+            </section>
+            <section>
+                <div class="timerSelectorContainer">
+                    <i class="timerSelectorText autoSwitchLanguager" key="Music_Countdown_no">不开启</i>
+                    <i class="timerSelectorChecked"></i>
+                </div>
+                <div class="timerSelectorContainer">
+                    <i class="timerSelectorText autoSwitchLanguager" key="Music_30_min">30分钟</i>
+                    <i class="timerSelectorChecked"></i>
+                </div>
+                <div class="timerSelectorContainer">
+                    <i class="timerSelectorText autoSwitchLanguager" key="Music_60_min">60分钟</i>
+                    <i class="timerSelectorChecked"></i>
+                </div>
+                <div class="timerSelectorContainer">
+                    <i class="timerSelectorText autoSwitchLanguager" key="Music_120_min">120分钟</i>
+                    <i class="timerSelectorChecked"></i>
+                </div>
+                <div class="timerSelectorContainer">
+                    <i class="timerSelectorText autoSwitchLanguager" key="Music_customize">自定义</i>
+                    <i class="timerSelectorCustom">100分钟</i>
+                    <i class="timerSelectorChecked"></i>
+                </div>
+            </section>
+        </div>
+
+        <section class="mask_layer" style="display:none;">
+            <i></i>
+            <span id="offLine" class="autoSwitchLanguager"></span>
+        </section>
+    </div>
+</body>
+<script>
+    /**********************************************************************
+     *                              变量区域
+     **********************************************************************/
+    var devID, gwID;
+    // 播放的歌曲的 id
+    var mPlayId = 1;
+    // 页码
+    var mPage = 0;
+    var mTotalPage = 1;
+    // 歌曲列表  字典形式  key id  value info
+    var mSongsDict = {};
+    var mSongsList = [];
+    var mMusicCount = 0;
+    /**
+     *  播放状态
+     *  0 播放 1 暂停
+     */
+    var mPlayState = '0';
+    /**
+     * 播放模式
+     * -1 自由切换 0 顺序播放 2 单曲循环 3 随机播放 1 列表循环
+     */
+    var mPlayMode = 0;
+    /**
+     * 音效
+     * 0 原声，1 流行，2 现代，3 摇滚，4 古典，5 舞曲，6 嘻哈，7 超重低音，8 人声，9 全景环绕，10 现场
+     */
+    var mPlayEffect = 0;
+
+    /**
+     * 音源
+     * 0：local
+     * 1：linein_1
+     * 2：linein_2
+     * 3：blue
+     * 4：UX
+     * 5：MicroPhone
+     */
+    var mMusicSource = '0';
+
+    // 音量
+    var mVoice1 = 0;
+    var mVoice2 = 0;
+    var mVoice3 = 0;
+    var mVoice4 = 0;
+    /**
+     * 分区类型 1, 2, 3, 4
+     */
+    var mSectionType = 1;
+
+    var mMusicInfo = {};
+    mMusicInfo.id = 'id'; // id
+    mMusicInfo.name = ''; // 歌名
+    mMusicInfo.artist = ''; // 歌手
+    mMusicInfo.length = 333; // 总时长
+    mMusicInfo.progress = 200; // 播放时长
+    mMusicInfo.album = 'fonts/icon_cover_mini.png';
+
+    /**********************************************************************
+     *                              初始化
+     **********************************************************************/
+    initlan();
+
+
+    //下拉刷新
+    mui.init({
+        pullRefresh: {
+            container: '#refreshContainer',
+            down: {
+                contentrefresh: languageUtil.getResource("addDevice_DD_Refreshing"),
+                callback: onRefresh
+            },
+            up: {
+                contentrefresh: languageUtil.getResource("Music_Loading"),
+                contentnomore: '',
+                callback: onLoadMore
+            }
+        }
+    });
+
+    plus.plusReady(function () {
+        mui('#refreshContainer').pullRefresh().disablePullupToRefresh();
+
+        plus.gatewayCmd.getDeviceInfo(function (data) {
+            gwID = data.gwID;
+            devID = data.devID;
+            getMoreConfig(devID);
+            query();
+            reloadUI(data);
+        });
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            reloadUI(data);
+        });
+    });
+
+    // 重载全部UI
+    function reloadUI(data) {
+        if (data.cmd == '500') {
+            if (data.mode == 2) {
+                $(".mask_layer").show();
+            } else {
+                $(".mask_layer").hide();
+                editHtml(data);
+            }
+        }
+
+        if (data.cmd == '500' || data.cmd == '501') {
+            var name = data.name.indexOf("#$default$#") != -1 ? Device_Bm_Details_Name + data.name.split("#")[2] : data
+                .name;
+            showDeviceName(name);
+        }
+
+        if (data.cmd == '517' && data.devID == devID) {
+            if (data.page != null && data.page != undefined) {
+                // 表示刷新
+                if (data.totalCount && data.totalCount >= 0) {
+                    mMusicCount = data.totalCount;
+                }
+                if (data.page == 1) {
+                    setTimeout(function () {
+                        mui('#refreshContainer').pullRefresh().endPulldownToRefresh(); //refresh completed
+                    }, 1500);
+                    mSongsDict = {};
+                    mSongsList = [];
+                    mPage = 0;
+                    // 表示加载更多
+                    if (data.page < data.totalPage) {
+                        mui('#refreshContainer').pullRefresh().endPullupToRefresh(true); // 加载数据 有更多内容
+                        setTimeout(function () {
+                            mui('#refreshContainer').pullRefresh().enablePullupToRefresh();
+                        }, 500);
+                    }
+                } else {
+                    // 表示加载更多
+                    if (data.page < data.totalPage) {
+                        mui('#refreshContainer').pullRefresh().endPullupToRefresh(true); // 加载数据 有更多内容
+                        setTimeout(function () {
+                            mui('#refreshContainer').pullRefresh().enablePullupToRefresh();
+                        }, 1000);
+                    } else {
+                        mui('#refreshContainer').pullRefresh().endPullupToRefresh(false); // 加载数据 没有更多内容
+                        setTimeout(function () {
+                            mui('#refreshContainer').pullRefresh().disablePullupToRefresh();
+                        }, 1000);
+                    }
+                }
+
+                if (mPage < data.page) {
+                    mPage = data.page;
+                    mTotalPage = data.totalPage;
+                    data.data.forEach(function (value) {
+                        if (value.artist == '<unknown>') {
+                            value.artist = Music_unknown;
+                        }
+                        // value.artist = value.artist.replace('>', '').replace('<', '');
+                        mSongsDict[value.id] = value;
+                    });
+                    mSongsList = data.data;
+
+                    var count = 0;
+                    for (var i in mSongsDict) {
+                        count++;
+                    }
+                    if (!data.totalCount) {
+                        mMusicCount = count;
+                    }
+
+                    if (mPage == 1) {
+                        resetSongList();
+                    } else {
+                        updateSongList();
+                    }
+                    updateCurrentSong();
+                }
+            }
+        }
+
+        // updateSongList();
+        // updateSongs();
+        // updateEffectMode(mPlayEffect);
+        // updateTimer(2);
+
+        updateVoiceSection();
+    }
+
+    function query() {
+        // 获取列表
+        sendCmd(0x8009, ["1"]);
+        setTimeout(function () {
+            // 获取当前歌曲
+            sendCmd(0x8007, []);
+            setTimeout(function () {
+                // 获取播放状态
+                sendCmd(0x8008, []);
+                setTimeout(function () {
+                    // 获取音源
+                    sendCmd(0x800E, []);
+                    setTimeout(function () {
+                        // 获取音量
+                        sendCmd(0x8003, []);
+                    }, 50);
+                }, 50);
+            }, 50);
+        }, 500);
+    }
+
+    //查询播放模式和音效
+    function queryPlayModelAndEffect() {
+        sendCmd(0x800A, ["0"]);
+        setTimeout(function () {
+            // 获取音效
+            sendCmd(0x800B, []);
+        }, 50);
+    }
+
+    /**********************************************************************
+     *                              协议解析
+     **********************************************************************/
+    function editHtml(data) {
+        var endpoints = data.endpoints;
+        handleEp(endpoints);
+    }
+
+    // 处理 endpoints
+    // 遍历解析
+    function handleEp(endpoints) {
+        endpoints.forEach(function (endpoint) {
+            var clusters = endpoint.clusters;
+            clusters.forEach(function (cluster) {
+                var attributes = cluster.attributes;
+                attributes.forEach(function (attribute) {
+                    var attributeId = attribute.attributeId;
+                    var attributeValue = attribute.attributeValue;
+                    handleAttribute(attributeId, attributeValue)
+                })
+            })
+        });
+    }
+
+    // 处理 attribute
+    function handleAttribute(attributeId, attributeValue) {
+        console.log("attributeId:\t\t" + attributeId.toString());
+        console.log("attributeValue:\t\t" + attributeValue);
+
+        if (attributeId == 0x0001) {
+            handleAttribute0001(attributeValue)
+        } else if (attributeId == 0x0002) {
+            handleAttribute0002(attributeValue)
+        } else if (attributeId == 0x0003) {
+            handleAttribute0003(attributeValue)
+        } else if (attributeId == 0x0004) {
+            handleAttribute0004(attributeValue)
+        } else if (attributeId == 0x0005) {
+            handleAttribute0005(attributeValue)
+        } else if (attributeId == 0x0006) {
+            handleAttribute0006(attributeValue)
+        } else if (attributeId == 0x0007) {
+            handleAttribute0007(attributeValue)
+        } else if (attributeId == 0x000A) {
+            handleAttribute000A(attributeValue)
+        } else if (attributeId == 0x000B) {
+            handleAttribute000B(attributeValue)
+        } else if (attributeId == 0x000C) {
+            handleAttribute000C(attributeValue)
+        } else if (attributeId == 0x000D) {
+            handleAttribute000D(attributeValue)
+        } else if (attributeId == 0x000F) {
+            handleAttribute000F(attributeValue)
+        } else if (attributeId == 0x0010) {
+            handleAttribute0010(attributeValue)
+        }
+    }
+
+    function handleAttribute0001(value) {
+        handleAttribute0007(value);
+    }
+
+    function handleAttribute0002(value) {
+        mPlayState = value;
+        if (value == '0') {
+            // sendCmd(0x8007, []);//V6.2.0 播放状态更新时不需要再次查询
+
+            updatePlayState();
+            updateCurrentSong();
+        } else if (value == '1' || value == '2') {
+
+            updatePlayState();
+            $('.songStateListener').attr('song-state', 'normal');
+        }
+    }
+
+    function handleAttribute0003(value) {
+        // mVoice1 = ~~(value / 15 * 100);
+        mVoice1 = value;
+        updateVoice(1);
+    }
+
+    function handleAttribute0004(value) {
+        mVoice2 = value;
+        updateVoice(2);
+    }
+
+    function handleAttribute0005(value) {
+        mVoice3 = value;
+        updateVoice(3);
+    }
+
+    function handleAttribute0006(value) {
+        mVoice4 = value;
+        updateVoice(4);
+    }
+
+    function handleAttribute0007(value) {
+        var a = value.split(',');
+        if (a.length > 2) {
+            mMusicInfo.id = a[0]; // 歌名
+            mMusicInfo.name = a[1]; // 歌名
+            mMusicInfo.artist = a[2]; // .replace('<', '').replace('>', '');       // 歌手
+            if (a[2] == '<unknown>') {
+                mMusicInfo.artist = Music_unknown;
+            }
+        }
+        updateSongs();
+
+        updatePlayState();
+        updateCurrentSong();
+    }
+
+    function handleAttribute000A(value) {
+        mPlayMode = ~~value;
+        $('.playMusicMode').attr('play-mode', mPlayMode)
+    }
+
+    function handleAttribute000B(value) {
+        mPlayEffect = ~~value;
+        updateEffectMode();
+    }
+
+    function handleAttribute000C(value) {
+        mPlayState = '0';
+        sendCmd(0x8007, [])
+    }
+
+    function handleAttribute000D(value) {
+        mPlayState = '0';
+        sendCmd(0x8007, [])
+    }
+
+    function handleAttribute000F(value) {
+        // alert(value);
+        if(value.indexOf('206') != -1 || value.indexOf('L80') != -1 || value.indexOf('207A') != -1){
+            mSectionType = 1;
+        }else if (value.indexOf('209') != -1) {
+            mSectionType = 4;
+        }else if(value.indexOf('U6') != -1 || value.indexOf('U9') != -1 ||
+                 value.indexOf('U10') != -1|| value.indexOf('H6') != -1 ||
+                 value.indexOf('H7') != -1 || value.indexOf('H8') != -1 ||
+                 value.indexOf('H9') != -1 || value.indexOf('H10') != -1){
+            mSectionType = 2;
+        }
+
+        updateVoiceSection();
+    }
+
+    function handleAttribute0010(value) {
+        mMusicSource = value;
+        if (value == '0') {
+            hideEmpty()
+        } else if (value == '3') {
+            showEmpty(3);
+        } else {
+            showEmpty(2);
+        }
+    }
+
+    /**********************************************************************
+     *                              页面跳转
+     **********************************************************************/
+    function showMainStage() {
+        // $('#player').fadeOut();
+        $('#player').hide()
+    }
+
+    function showPlayStage() {
+        // $('#player').fadeIn()
+        $('#player').show()
+    }
+
+    function showTimerStage() {
+        $('.timerStage').fadeIn();
+    }
+
+    function hideTimerStage() {
+        $('.timerStage').fadeOut();
+    }
+
+    /**********************************************************************
+     *                              播放控制
+     **********************************************************************/
+    // 播放
+    function actionPlay() {
+        sendCmd(0x8002, ['0']);
+    }
+
+    function playById(id) {
+        sendCmd(0x8001, [id])
+    }
+
+    // 暂停
+    function actionPause() {
+        sendCmd(0x8002, ['1']);
+    }
+
+    // 跳转进度
+    function actionJump(s) {
+
+    }
+
+    // 获取进度
+    function getPlayState() {
+        return mPlayState;
+    }
+
+    // 设置倒计时
+    function changeTimer(t) {
+        updateTimer(t);
+    }
+
+    function onRefresh() {
+        sendCmd(0x8009, ["1"]);
+    }
+
+    function onLoadMore() {
+        sendCmd(0x8009, ["" + (mPage + 1)]);
+    }
+
+    /**********************************************************************
+     *                              界面更新
+     **********************************************************************/
+    // 设备名
+    function showDeviceName(name) {
+        $(".deviceName").html(name)
+    }
+
+    // 切歌
+    function updateSongs() {
+        // 歌曲名称
+        $('.songsNameText').html(mMusicInfo.name);
+        // 歌手
+        $('.songsSingerText').html(mMusicInfo.artist);
+        // 底部专辑图
+        // 转盘专辑图
+        // $('.songsAlbum').attr('src', mMusicInfo.album);
+        // 时间
+        // $('.songsTimeTotal').html(second2str(mMusicInfo.length));
+
+        // 更新状态
+        updatePlayState();
+        updateCurrentSong();
+    }
+
+    // 更新当前播放的歌曲
+    function updateCurrentSong() {
+        if (mPlayState == '0') {
+            $('.songStateListener').attr('song-state', 'normal');
+            $('.song_' + mMusicInfo.id).parent('.songItem').find('.songStateListener').attr('song-state', 'playing');
+        }
+        // $(this).find('.songStateListener').attr('song-state', 'playing');
+    }
+
+    // 更新 播放 状态
+    function updatePlayState() {
+        // 转盘动画
+        // 唱针
+        // 进度
+        updateProgress();
+        // 播放按钮
+        if (mPlayState == '0') {
+            $('.playStateListener').attr('play-state', 'play');
+        } else {
+            $('.playStateListener').attr('play-state', 'pause');
+        }
+    }
+
+    function updateProgress() {
+        var progress = mMusicInfo.progress / mMusicInfo.length;
+        var per = (progress * 100) + '%';
+        // $(':root').style('--progress', per);
+    }
+
+    function updateVoice(i) {
+        var me = $('#slideBarVoice' + i);
+        var voice = mVoice1;
+        switch (i) {
+            case 1:
+                voice = mVoice1;
+                break;
+            case 2:
+                voice = mVoice2;
+                break;
+            case 3:
+                voice = mVoice3;
+                break;
+            case 4:
+                voice = mVoice4;
+                break;
+        }
+        console.log("Voice" + i + ' : ' + voice);
+        // me.find('.slideExpand').css('width', voice + '%');
+        // me.find('.slideCircle').css('left', voice + '%');
+        // me.siblings('.spanVoicePer').html(~~voice + '%');
+
+        me.find('i').attr('m-choose', 'false');
+        me.find('i:eq(' + voice + ')').attr('m-choose', 'yes press');
+        me.find('i:lt(' + voice + ')').attr('m-choose', 'yes');
+        me.siblings('.spanVoicePer').html(voice);
+    }
+
+    // 重置歌曲列表
+    function resetSongList() {
+        $('.songList').empty();
+        updateSongList();
+    }
+
+    // 刷新歌曲列表
+    function updateSongList() {
+        if (mMusicCount != 0) {
+            var index = 1;
+            $('.songList').html("")
+            for (var i in mSongsDict) {
+                var li = createSongsItem(mSongsDict[i], index);
+                $('.songList').append(li);
+                index++;
+            }
+            hideEmpty();
+            // 总数
+            $('.textPlayCount').html(mMusicCount);
+        } else {
+            showEmpty(1);
+        }
+
+        // 点击歌曲
+        $('.songItem').on('tap', function () {
+            playById($(this).find('.songItemNum').attr('m-id'));
+        });
+    }
+
+    /**
+     * 显示 暂无歌曲 外部音源等
+     * 1 暂无歌曲
+     * 2 外部音源
+     * 3 蓝牙音源
+     */
+    function showEmpty(s) {
+        switch (s) {
+            case 1:
+                $('.emptyTitle').html(languageUtil.getResource('Music_No_songs'));
+                $('.emptyDesc').html(languageUtil.getResource('Music_No_songs_hint'));
+                $('.secPlayCtrl').show();
+                break;
+            case 2:
+                $('.emptyTitle').html(languageUtil.getResource('Music_source_out'));
+                $('.emptyDesc').html(languageUtil.getResource('Music_source_out_hint'));
+                $('.secPlayCtrl').hide();
+                break;
+            case 3:
+                $('.emptyTitle').html(languageUtil.getResource('Music_source_Bluetooth'));
+                $('.emptyDesc').html(languageUtil.getResource('Music_source_Bluetooth_hint'));
+                $('.secPlayCtrl').hide();
+                break;
+        }
+        $('.secSongList').hide();
+        $('.secSongEmpty').show();
+    }
+
+    // 隐藏 暂无歌曲 外部音源等
+    function hideEmpty() {
+        // 歌曲列表为空
+        if (mMusicCount == 0) {
+            return;
+        }
+        // 非内部音源
+        if (mMusicSource != '0') {
+            return;
+        }
+        $('.secSongList').show();
+        $('.secSongEmpty').hide();
+        $('.secPlayCtrl').show();
+    }
+
+    // 更新 分区的显示
+    function updateVoiceSection() {
+        $('.slideBarContainer').show();
+        if (mSectionType == 1) {
+            $('.sectionHide1').hide();
+        } else if (mSectionType == 2) {
+            $('.sectionHide2').hide();
+        } else if (mSectionType == 4) {
+            $('.slideBarContainer').show();
+        }
+    }
+
+    function updateEffectMode() {
+        $('.itemEffect').find('i').attr('effect-checked', 'false');
+        $('.itemEffect:nth-child(' + (mPlayEffect + 1) + ')').find('i').attr('effect-checked', 'true');
+    }
+
+    // 显示倒计时item
+    function updateTimer(t) {
+        $('.timerSelectorChecked').hide();
+        var thisNode = $('.timerSelectorContainer:nth-child(' + (t + 1) + ')');
+        thisNode.find('.timerSelectorChecked').show();
+        if (t == 0) {
+            $('.timerTips').html(Music_Countdown_close);
+        } else if (t == 4) {
+            $('.timerSelectorCustom').show()
+        } else {
+            $('.timerSelectorCustom').hide();
+            $('.timerTips').html(thisNode.find('.timerSelectorText').text())
+        }
+    }
+
+    function hideAllWindow() {
+        hideEffectWindow();
+        hideVoiceWindow();
+    }
+
+    // 打开特效面板
+    function showEffectWindow() {
+        hideAllWindow();
+        $('.secPlayEffect').show();
+    }
+
+    // 隐藏特效面板
+    function hideEffectWindow() {
+        $('.secPlayEffect').hide();
+    }
+
+    // 打开音量面板
+    function showVoiceWindow() {
+        hideAllWindow();
+        updateVoiceSection();
+        resetVoiceHeight();
+        $('.secPlayVoice').show();
+    }
+
+    // 设置 音量条 高度
+    function resetVoiceHeight() {
+        $('.slideBar').each(function (i0, e) {
+            $(e).find('i').each(function (i, ei) {
+                $(ei).css('background-size', '0.2rem ' + (0.5 + i / 10) + 'rem');
+            })
+        })
+    }
+
+    // 隐藏音量面板
+    function hideVoiceWindow() {
+        $('.secPlayVoice').hide();
+    }
+
+    // 切换模式
+    function changePlayMode(type) {
+        // if (type == -1) {
+        //     mPlayMode++;
+        //     if (mPlayMode > 3) {
+        //         mPlayMode = 0;
+        //     }
+        // } else {
+        //     mPlayMode = type;
+        // }
+
+        sendCmd(0x800A, ['1']);
+    }
+
+    /**********************************************************************
+     *                              绑定事件
+     **********************************************************************/
+    $('.secPlayCtrl').on('click', function () {
+        queryPlayModelAndEffect();
+        showPlayStage();
+    });
+    $('.backToMain').on('click', function () {
+        showMainStage();
+    });
+
+    $('#back').click(function () {
+        plus.tools.back(function () {});
+    });
+    $('#more').click(function () {
+        plus.tools.more(moreConfig, function () {})
+    });
+    $('.songsCover').click(function () {
+        // $('.expand').css('-webkit-animation', 'fullexpand 10s linear');
+        $('#progressBar').removeClass('fullwidth').delay(0).queue(function (next) {
+            $(this).addClass('fullwidth');
+            next();
+        });
+        return false;
+    });
+
+    // 随机播放
+    $('.iconPlayRandom').click(function () {
+        var idList = [];
+        for (var id in mSongsDict) {
+            idList.push(id);
+        }
+        playById(idList[Math.ceil(Math.random() * idList.length)]);
+    });
+
+    // 上一曲
+    $('.btnLast').click(function () {
+        sendCmd(0x800C, []);
+        return false;
+    });
+    // 下一曲
+    $('.btnNext').click(function () {
+        sendCmd(0x800D, []);
+        return false;
+    });
+    // 点击播放按钮
+    $('.btnPlay').click(function () {
+        if (mPlayState == 0) {
+            actionPause();
+        } else {
+            actionPlay();
+        }
+
+        return false;
+    });
+
+    // 点击音效 item
+    $('.itemEffect').click(function () {
+        sendCmd(0x800B, ['' + ($(this).index() + 1)]);
+    });
+
+    $('.timerSelectorContainer').click(function () {
+        updateTimer($(this).index())
+    });
+
+    $('.voiceList li').on('click', function () {
+        var parent = $(this).parents('.slideBar');
+        parent.find('i').attr('m-choose', 'yes');
+        var index = $(this).index();
+        parent.find('i').each(function (i, e) {
+            $(e).css('background-size', '0.2rem ' + (0.5 + i / 10) + 'rem');
+            if (i < index) {
+                $(e).attr('m-choose', 'yes');
+            } else if (i == index) {
+                $(e).attr('m-choose', 'yes press');
+            } else {
+                $(e).attr('m-choose', 'false');
+            }
+        });
+        var section = parent.attr('m-section');
+        console.log(section + ': ' + index);
+        parent.siblings('.spanVoicePer').html(index);
+        sendCmd(0x8003, [section + '' + index])
+    });
+
+    $('.slideCircle').on('touchstart', function (e) {
+        var parent = $(this).parents('.slideBar');
+        var touch = e.touches[0]; //获取第一个触点
+        var left = parent.offset().left;
+        var width = parent.width();
+        var x = touch.pageX;
+        var per = (x - left) / width;
+        // console.log('========== 开始滑动 ==========');
+    });
+    $('.slideCircle').on('touchmove', function (e) {
+        var parent = $(this).parents('.slideBar');
+        var touch = e.touches[0]; //获取第一个触点
+        var left = parent.offset().left;
+        var width = parent.width();
+        var x = touch.pageX;
+        var per = (x - left) / width;
+        if (per < 0) {
+            per = 0;
+        } else if (per > 1) {
+            per = 1;
+        }
+        per = per * 100;
+        parent.find('.slideExpand').css('width', per + '%');
+        parent.find('.slideCircle').css('left', per + '%');
+        parent.siblings('.spanVoicePer').html(~~per + '%');
+        // console.log('滑动中 : ' + per + '%');
+    });
+    $('.slideCircle').on('touchend', function (e) {
+        var parent = $(this).parents('.slideBar');
+        var touch = e.changedTouches[0]; //获取第一个触点
+        var left = parent.offset().left;
+        var width = parent.width();
+        var x = touch.pageX;
+        var per = (x - left) / width;
+        if (per < 0) {
+            per = 0;
+        } else if (per > 1) {
+            per = 1;
+        }
+        per = ~~(per * 15);
+        if (per < 10) {
+            per = '0' + per;
+        }
+        console.log('========== 滑动结束 ==========');
+        console.log($(this).attr('m-section') + '分区' + ', ' + per);
+        sendCmd(0x8003, [$(this).attr('m-section') + per])
+    });
+
+    /**********************************************************************
+     *                              公共方法
+     **********************************************************************/
+    // 秒转分秒
+    function second2str(s) {
+        var m = ~~(s / 60);
+        if (m < 10) {
+            m = '0' + m;
+        }
+        var second = s % 60;
+        if (second < 10) {
+            second = '0' + second;
+        }
+        return m + ':' + second;
+    }
+
+    // 创建音谱
+    function creatSpectrum() {
+        var li = '';
+        for (var i = 1; i <= 6; i++) {
+            li = li + '<li class="li' + i +
+                ' lii"><span class="ani-li"></span></li>'
+        }
+
+        var div = '<div class="musicSpectrum songStateListener">' +
+            '<div class="music">' +
+            '<ul class="waves">' +
+            li +
+            '</ul>' +
+            '</div></div>';
+
+        return div;
+    }
+
+    function createSongsItem(song, index) {
+        var li = '<li class="songItem" onclick="">' +
+            '<i class="songItemNum songStateListener song_' + song.id + '" m-id="' + song.id + '">' + index + '</i>' +
+            '<div class="songItemLineContainer">' +
+            '<div class="songItemContainer">' +
+            '<span class="songItemName songStateListener">' + song.name + '</span>' +
+            '<span class="songItemSinger">' + song.artist + '</span>' +
+            '</div>' +
+            creatSpectrum() +
+            '</div>' +
+            '</li>';
+        return li;
+    }
+
+    function sendCmd(commandId, parameter) {
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.endpointNumber = 1;
+        jsonData.commandType = 1;
+        jsonData.clusterId = 0x0102;
+        jsonData.commandId = commandId;
+        if (parameter) {
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData, function () {})
+    }
+
+    var iphoneX = {
+        sysFunc: "getItem:",
+        room: "iphoneX",
+        id: "iphoneX",
+        data: ""
+    };
+    var iStr = '';
+    if (!window.v6sysfunc) {
+        iStr = prompt(JSON.stringify(iphoneX))
+    }
+    if (iStr == "iphoneX") {
+        $(".header")[0].style.paddingTop = "4.8rem";
+        $(".secPlayRandom")[0].style.top = "8.8rem";
+        $(".playerHeader")[0].style.paddingTop = "4.4rem";
+        $(".secSingingNeedle")[0].style.top = "8.8rem";
+        $("#refreshContainer").css("marginTop", "2.4rem");
+    }
+</script>
+
+</html>

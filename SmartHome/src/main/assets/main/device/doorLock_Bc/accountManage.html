@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>金指码门锁</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="js/mui.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/set.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" href="javascript:;" key="accountManage">用户管理</a>
+				<!--<a class="add"></a>-->
+			</div>
+		</header>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="margin-top: 6.4rem;">
+			<div class="mui-scroll">
+				<ul class="mui-table-view mui-table-view-chevron account_set">
+					<li class="mui-li-view">
+						<h4 style="width: 100%;">
+							<div class="li_title" style="overflow:hidden">
+								<span class="autoSwitchLanguager" key="device_bc_txt_09">临时用户</span><span>( <em>0</em>/5 )</span>
+							</div>
+							<strong class="autoSwitchLanguager" key="device_bc_num_03">临时用户最多可设5人</strong>
+							<i class="addSTime"></i>
+						</h4>
+						<p id="accountManage_None" class="no_user autoSwitchLanguager" style="color: red;" key="device_bctxt_05" style="margin-top: 3rem;text-align: center;display: none;">
+							暂无临时用户，请添加
+						</p>
+						<ul class="list" id="stime_list">
+						</ul>
+					</li>
+					<li class="mui-li-view">
+						<h4 class="autoSwitchLanguager">
+							<div class="li_title" style="overflow:hidden">
+								<span class="autoSwitchLanguager" key="device_bc_txt_07">管理员</span><span>( <em>0</em>/5 )</span>
+							</div>
+							<strong class="autoSwitchLanguager" key="device_bc_num_01">管理员账号只可在锁体上设置</strong>
+						</h4>
+						<ul class="list" id="acc_list">
+						</ul>
+					</li>
+					<li class="mui-li-view" style="margin-bottom:2rem;">
+						<h4>
+							<div class="li_title" style="overflow:hidden">
+								<span class="autoSwitchLanguager" key="device_bc_txt_08">普通用户</span><span>( <em>0</em>/50 )</span>
+							</div>
+							<strong class="autoSwitchLanguager" key="device_bc_num_02">普通用户 只可在锁体上设置，最多可设50人</strong>
+						</h4>
+						<ul class="list" id="comm_list">
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!--编辑弹框-->
+		<section class="changeName" style="display: none;">
+			<div class="nameToast">
+				<span class="autoSwitchLanguager" key="deleteAcount" style="padding-top: 3rem;padding-left:7rem;text-align: center;">确定删除此用户</span>
+				<div class="choose_1 choose_2">
+					<a href="javascript:;" onclick="disMiss()" class="autoSwitchLanguager" key="searchScene_cancal">取消</a>
+					<a href="javascript:;" onclick="sureDelete()" class="autoSwitchLanguager" key="addDevice_know">删除</a>
+				</div>
+			</div>
+		</section>
+		<!--<section id="fail" class="toast" style="display:none;">-->
+			<!--<p class="autoSwitchLanguager" id="toastText"></p>-->
+		<!--</section>-->
+	</body>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+        var info = window.sysfun;
+        info.init("Token_Bc");
+		initlan();
+		var Ac_1 = document.getElementsByClassName("li_title")[0].getElementsByTagName("em")[0];
+		var Ac_2 = document.getElementsByClassName("li_title")[1].getElementsByTagName("em")[0];
+		var Ac_3 = document.getElementsByClassName("li_title")[2].getElementsByTagName("em")[0];
+		/*
+		 * 实现下拉刷新业务
+		 */
+		function pulldownRefresh() {
+			setTimeout(function() {
+				getMgEAStatus()
+				mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+			}, 1500);
+		}
+
+		function getMgEAStatus() {
+			var data = {};
+			data.tk = token;
+			data.f = "1";
+			send520Cmd(1, data); //查询所有列表
+		}
+
+		function bindTap(liData, name) {
+			document.getElementById(liData.uid).addEventListener("tap", function() {
+                info.setItem("liData",JSON.stringify(liData));
+                console.log(liData);
+				jumpToSet(liData.uid, liData.pwd, ' ', ' ', name, liData.ut);
+			})
+		}
+
+		function bindTap_det(liData, name) {
+			document.getElementById(liData.uid).addEventListener("tap", function() {
+				jumpToSet(liData.uid, liData.pwd, liData.st, liData.et, name)
+			})
+		}
+
+		function bindTap_del(liData, ut) {
+			document.getElementById(liData.uid + "_del").addEventListener("tap", function(event) {
+				event.stopPropagation();
+				deleteAccount(liData.uid, ut)
+			})
+		}
+		/*
+		 * 判断是否支持临时用户
+		 */
+		function judgeTem() {
+			var jsonData = {
+				"cmd": "501",
+				"gwID": GWID,
+				"devID": DEVICEID,
+				"endpointNumber": endpointNumber,
+				"clusterId": 257,
+				"commandType": 1,
+				"commandId": 32778,
+			};
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result" + result);
+			})
+		}
+
+		function create(liData) {
+		    // alert(liData);
+			$("#acc_list").html("");
+			$("#comm_list").html("");
+			$("#stime_list").html("");
+			Ac_1.innerHTML = 0
+			Ac_2.innerHTML = 0
+			Ac_3.innerHTML = 0
+			for(var i in liData) {
+				var li = '';
+				var uid = liData.uid;
+
+				if(liData[i].ut == "0") {
+					if(liData[i].name == '') {
+						liData[i].name = alarmSet_js_28 + liData[i].uid;
+					}
+					li = '<li id="' + liData[i].uid + '" class="mui-table-view-cell">' +
+						'<div class="mui-slider-right mui-disabled">' +
+						'</div>' +
+						'<div>' + liData[i].name + '</div>' +
+						'</li>';
+					$("#acc_list").append(li)
+                    Ac_2.innerHTML = Number(Ac_2.innerHTML) + 1;
+					bindTap(liData[i], liData[i].name);
+				} else if(liData[i].ut == "1") {
+					if(liData[i].name == '') {
+						liData[i].name = alarmSet_js_29 + liData[i].uid;
+					}
+					li = '<li id="' + liData[i].uid + '" class="mui-table-view-cell">' +
+						'<div class="mui-slider-handle"><h5>' + liData[i].name + '</h5><i></i></div>' +
+						'</li>'
+					$("#comm_list").append(li)
+                    Ac_3.innerHTML = Number(Ac_3.innerHTML) + 1;
+					bindTap(liData[i], liData[i].name);
+				} else if(liData[i].ut == "2") {
+					if(liData[i].name == '') {
+						liData[i].name = alarmSet_js_30 + liData[i].uid;
+					}
+					var es = new Date(timeSub(liData[i].et)).getTime()
+					var now = new Date().getTime()
+					var txt = '';
+					//overdue
+					if(es > now) {
+						txt = account_txt_11
+					} else {
+						txt = account_txt_12
+					}
+					li = '<li id="' + liData[i].uid + '" class="mui-table-view-cell">' +
+						'<div class="mui-slider-right mui-disabled">' +
+						'<a id="' + liData[i].uid + '_del" class="mui-btn mui-btn-red" >' + alarmSet_js_31 + '</a>' +
+						'</div>' +
+						'<div class="mui-slider-handle"><h5>' + liData[i].name + '</h5><em>' + txt + '</em><i></i></div>' +
+						'</li>'
+					$("#stime_list").append(li);
+					if($("#" + liData[i].uid).find("em").html() == "过期") {
+						$("#" + liData[i].uid).find("em").addClass("overdue")
+					} else {
+						$("#" + liData[i].uid).find("em").removeClass("overdue")
+					}
+                    Ac_1.innerHTML = Number(Ac_1.innerHTML) + 1;
+					if(Number(Ac_1.innerHTML) >5){
+                        Ac_1.innerHTML = 5
+					}
+					bindTap_del(liData[i], "2");
+					bindTap_det(liData[i], liData[i].name)
+				}
+			}
+			if(Number(Ac_1.innerHTML) == 0) {
+				document.getElementById("accountManage_None").style.display = "block";
+			} else {
+				document.getElementById("accountManage_None").style.display = "none";
+			}
+		}
+
+		function timeSub(t) {
+			return t.substring(0, 4) + "/" + t.substring(4, 6) + "/" + t.substring(6, 8) + " " + t.substring(8, 10) + ":" + t.substring(10, 12)
+		}
+		var DEVICEID;
+		var GWID;
+		var DELETEDATA;
+		var endpointNumber;
+        var isSTimeAdd = true;
+		var token;
+		token = info.getItem("Token_Bc");
+		plus.plusReady(function() {
+			//下拉刷新
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						contentrefresh: alarmSet_js_27,
+						callback: pulldownRefresh
+					}
+				}
+			});
+			$("#back").on("click", function() {
+				plus.tools.back(function() {})
+			});
+			plus.gatewayCmd.getDeviceInfo(function(result) {
+				DEVICEID = result.devID;
+				GWID = result.gwID;
+				endpointNumber = result.endpoints[0].endpointNumber;
+				rush_cmd(result.devID, result.gwID);
+				judgeTem();
+				var data = {};
+				data.tk = token;
+				data.f = "2";
+				send520Cmd(1, data); //查询所有列表
+			});
+            $(".addSTime").unbind("touchstart").bind("touchstart",function(){
+                if(!isSTimeAdd) {
+                    alert(languageUtil.getResource("device_bc_temporary_off"));
+                }else {
+                    window.location = "createTemporaryUser.html?type=Bg";
+                }
+            })
+		})
+		/*
+		 * operType:1:表示获取用户列表  2：新增用户 3: 删除用户 4：修改用户信息 5：一键清除 6：设置防胁迫信息
+		 */
+		function send520Cmd(operType, data) {
+			var jsonData = {};
+			jsonData.cmd = "520";
+			jsonData.gwID = GWID;
+			jsonData.devID = DEVICEID;
+			jsonData.operType = operType;
+			jsonData.data = data;
+			plus.gatewayCmd.controlDevice(jsonData, function(resutl) {
+
+			})
+		}
+		/*
+		 * 获取到520cmd 刷新列表
+		 */
+		function get_520cmd(result) {
+			if(result.data.code != "0") {
+				errorCode(result.data.code)
+				return;
+			}
+			if(result.operType == 1) { //查询所有
+				create(result.data.list)
+			} else if(result.operType == 2) { //新增
+				//				create(result.list)
+			} else if(result.operType == 3) { //删除
+				if(Number(Ac_3.innerHTML) == 0){
+					return;
+				}
+				var deID = result.data.uid;
+				$('#' + deID).remove();
+			    Ac_3.innerHTML = Number(Ac_3.innerHTML) - 1;
+				if(Number(Ac_3.innerHTML) < 0){
+					Ac_3.innerHTML = 0;
+				}
+
+				if(Number(Ac_3.innerHTML) == 0) {
+					document.getElementById("accountManage_None").style.display = "block";
+				} else {
+					document.getElementById("accountManage_None").style.display = "none";
+				}
+			}
+		}
+
+		/*
+		 * 删除单条
+		 */
+		function deleteAccount(uid, ut) {
+			var data = {};
+			data.tk = token;
+			data.uid = uid;
+			data.ut = ut;
+			DELETEDATA = data;
+			document.getElementsByClassName("changeName")[0].style.display = "block";
+		}
+
+		function sureDelete() {
+			send520Cmd(3, DELETEDATA); //删除
+			disMiss();
+		}
+
+		function disMiss() {
+			document.getElementsByClassName("changeName")[0].style.display = "none";
+		}
+		/*
+		 * 临时用户跳转jumpToSet(00,999999,,,,0)
+		 */
+		function jumpToSet(uid, pwd, st, et, name, ut) {
+			if(ut) {
+				window.location = "changeUser.html?pwd=" + pwd + "&st=" + st + "&et=" + et + "&name=" + name + "&ut=" + ut + "&uid=" + uid;
+			} else {
+				window.location = "TemporaryUser.html?pwd=" + pwd + "&st=" + st + "&et=" + et + "&name=" + name;
+			}
+		}
+		/*
+		 * 数据回调
+		 */
+		function rush_cmd(dID, gID) {
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				if(result.cmd == "520" && result.devID == DEVICEID) {
+				    // alert(result)
+					get_520cmd(result);
+				} else if(result.cmd == "500" && result.devID == DEVICEID) {
+					//checkTemporarySwitch
+					var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+                    	var attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+                    	switch (attributeId){
+                    		case 0x8005: {
+                    			if (attributeValue.substr(0,1) == "1"){
+                    				var switchStatus = attributeValue.substr(9,2);
+                    				if(switchStatus == "00") {
+                                        isSTimeAdd = false;
+                    				} else {
+                                        isSTimeAdd = true;
+                    				}
+                    			}
+                    			
+                    		}
+                    			break;
+                    		default:
+                    			break;
+                    	}
+					
+				}
+			})
+		}
+	</script>
+
+</html>

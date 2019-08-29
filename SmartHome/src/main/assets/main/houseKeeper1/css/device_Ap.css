@@ -1,0 +1,94 @@
+body {
+    background-color: #f1f4f8;
+}
+
+header {
+    width: 100%;
+    height: 6.4rem;
+    padding-top: 2rem;
+    background-color: #8dd652;
+}
+
+.mainTop {
+    width:100%;
+    height:4.4rem;
+    margin-top: 6.4rem;
+    padding:0 4%;
+    line-height:4.4rem;
+    font-size:1.4rem;
+    background-color: white;
+}
+.switch {
+    position:relative;
+    float:right;
+    width:4.4rem;
+    height:2.2rem;
+    padding:0.5rem;
+    margin:0.75rem 0;
+    background:#aaa;
+    border-radius:1.5rem;
+}
+.switch i{
+    position:absolute;
+    left:10%;
+    top:20%;
+    display:block;
+    width:1.5rem;
+    height:1.5rem;
+    background:#fff;
+    border-radius:50%;
+}
+.mainTop .switch i.open{
+    left:60%;
+}
+
+.mainBottom {
+    position:relative;
+    width:100%;
+    height:4.4rem;
+    margin-top: 0.1rem;
+    padding:0 4%;
+    line-height:4.4rem;
+    font-size:1.4rem;
+    background-color: white;
+    border-bottom: 1px solid #f1f4f8;
+}
+.currentTemp {
+    display: inline-block;
+    position: absolute;
+    color: #999999;
+    right: 4.5rem;
+}
+.iconRight {
+    display: inline-block;
+    position: absolute;
+    top: 30%;
+    right: 2rem;
+    width: 2rem;
+    height: 2rem;
+    background:url(../fonts/icon_right.png) no-repeat center center;
+    background-size: 100% auto;
+}
+
+/*************************************************************************************************************/
+/*************************************************************************************************************/
+
+.mui-poppicker-body{
+    height:120px;
+}
+
+.mui-backdrop{
+    background-color:transparent;
+}
+/* 选择器头部颜色 */
+.mui-poppicker-header{
+    background-color: #f7f7f7;
+}
+.mui-btn {
+    background: transparent;
+    border: none;
+    color: #8dd652;
+}
+.mui-picker{
+    background:#fff;
+}

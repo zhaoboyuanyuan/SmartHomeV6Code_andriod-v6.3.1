@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>RoadTranslator_A2</title>
+	<link rel="stylesheet" type="text/css" href="css/base.css" />
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+	<link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+	
+
+	<style>
+		.content {
+			width: 100%;
+		}
+
+		.switch-box {
+			font-size: 0;
+			margin-top: 2%;
+			height: 14%;
+		}
+
+		.switch-box li {
+			font-size: 2rem;
+			display: inline-block;
+			width: 50%;
+			box-sizing: border-box;
+			text-align: center;
+		}
+		
+		.switch-box li p{
+			color: #333;
+		}
+
+		.switch-box li img {
+			width: 50%;
+		}
+
+		.addremote {
+			margin-top: 2rem;
+			width: 100%;
+			height: 38rem;
+			/* background-color: red; */
+			overflow: auto;
+		}
+
+		.addremoteUl {
+			width: 100%；
+		}
+
+		.addremote ul li {
+			float: left;
+			width: 38%;
+			margin-left: 8%;
+			margin-bottom: 2rem;
+			height: 4rem;
+			border: 0.05rem solid #8DD652;
+			border-radius: 2rem;
+			text-align: center;
+			line-height: 4rem;
+			color: #8DD652;
+			font-size: 2rem;
+			background-color: #fff;
+			lighting-color: #e3e3e3;
+			text-overflow:ellipsis; 
+			white-space:nowrap; 
+			overflow:hidden;
+		}
+
+		.addremote ul li:first-child,
+		.addremote ul li:nth-child(2){
+			margin-top: 2rem;
+		}
+
+		.addBtnContent{
+			position: fixed;
+			height: 6rem;
+			width: 100%;
+			bottom: 0%;
+			background-color: #fff;
+		}
+
+		.addremoteBtn {
+			margin-top: 1rem;
+			background-color: #8DD652;
+			width: 90%;
+			margin-left: 5%;
+			height: 4rem;
+			font-size: 1.7rem;
+			text-align: center;
+			line-height: 4rem;
+			border-radius: 0.4rem;
+			color: white;
+		}
+		
+		.mui-table-view li p{
+			color: #868686;
+			font-size: 1.7rem;
+		}
+		.mui-table-view li a:last-child{
+			color: #8DD652;
+			font-size: 1.7rem;
+		}
+	</style>
+
+</head>
+
+<body>
+	<header class="header">
+		<div class="header_top">
+			<a class="back" href="javascript:;"></a>
+			<a href="javascript:;" class="autoSwitchLanguager deviceName" id="device_A2_name">二路输出翻译器</a>
+			<a class="more" href="javascript:;"></a>
+		</div>
+	</header>
+	<div class="content">
+		<ul class="switch-box">
+			<li>
+				<p>1</p>
+				<img class="imghandle" data-state="off" src="fonts/icon_close.png" alt="" />
+			</li>
+			<li>
+				<p>2</p>
+				<img class="imghandle" data-state="off" src="fonts/icon_close.png" alt="" />
+			</li>
+		</ul>
+
+
+
+		<div class="addremote">
+			<ul class="addremoteUl">
+				<!--<li>
+					add1
+				</li>
+				<li>
+					add2
+				</li>-->
+			</ul>
+		</div>
+
+		<div class="addBtnContent">
+			<div class="autoSwitchLanguager addremoteBtn" id="device_A2_add_button">
+				添加控制按键
+			</div>
+		</div>
+		
+
+	</div>
+
+	<section class="mask_layer" style="display:none;">
+		<i></i>
+		<span class="autoSwitchLanguager" id="device_A2_Offline">设备已离线</span>
+	</section>
+
+	<div class="send_toast autoSwitchLanguager" id="device_A2_sent">命令发送成功</div>
+	
+    <div id="sheet1" class="mui-popover mui-popover-bottom mui-popover-action ">
+    <!-- 可选择菜单 -->
+    <ul class="mui-table-view">
+      <li class="mui-table-view-cell">
+        <p class="autoSwitchLanguager sheet_reEdit" id="device_A2_re_edit" href="#">重新编辑</p>
+      </li>
+      <li class="mui-table-view-cell">
+        <p class="autoSwitchLanguager sheet_delete" id="device_A2_delete" href="#">删除</p>
+      </li>
+    </ul>
+    <!-- 取消菜单 -->
+    <ul class="mui-table-view">
+      <li class="mui-table-view-cell">
+        <a class="autoSwitchLanguager" id="device_A2_cancel" href="#sheet1"><b>取消</b></a>
+      </li>
+    </ul>
+</div>
+	
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="../../source/mui/js/mui.min.js"></script>
+<script type="text/javascript">
+
+	initlan();
+    var info = window.sysfun;
+    info.init("device_A2");
+    var remoteArr = new Array();
+    var gwID;
+    var devID
+    var appID;
+    mui.init({
+        gestureConfig:{
+            longtap:true,
+            hold:true,
+            release:true
+        }
+    });
+	// window.onload = new function() {
+	// 	remoteArr = [{"index":"1","name":"gagagagagagagagaga","epData":"010"},{"index":"2","name":"tutu","epData":"120"},{"index":"3","name":"gaga","epData":"010"},{"index":"1","name":"gaga","epData":"010"},{"index":"2","name":"tutu","epData":"120"},{"index":"3","name":"gaga","epData":"010"},{"index":"1","name":"gaga","epData":"010"},{"index":"2","name":"tutu","epData":"120"},{"index":"3","name":"gaga","epData":"010"},{"index":"1","name":"gaga","epData":"010"},{"index":"2","name":"tutu","epData":"120"},{"index":"3","name":"gaga","epData":"010"},{"index":"1","name":"gaga","epData":"010"},{"index":"2","name":"tutu","epData":"120"},{"index":"3","name":"gaga","epData":"010"},{"index":"1","name":"gaga","epData":"010"},{"index":"2","name":"tutu","epData":"120"},{"index":"3","name":"gaga","epData":"010"},{"index":"1","name":"gaga","epData":"010"},{"index":"2","name":"tutu","epData":"120"},{"index":"3","name":"gaga","epData":"010"}]
+	// 	drawDeviceList(remoteArr);
+	// }
+
+	plus.plusReady(function () {
+		
+		plus.gatewayCmd.getCurrentAppID(function(result){
+            appID = result;
+        });
+		
+		plus.gatewayCmd.getDeviceInfo(function (data) {
+			devID = data.devID;
+			getMoreConfig(devID)
+			gwID = data.gwID;
+			info.setItem("devID", devID);
+			info.setItem("gwID", gwID);
+			if (data.mode == 2) {
+				$(".mask_layer").show();
+			} else {
+				$(".mask_layer").hide();
+				sendControlOrder(0x0105, null);
+				send518ControlOrder(4, null);
+			}
+			var name = data.name.indexOf("#$default$#") != -1 ? addDevice_A2_name + data.name.split("#")[2] : data.name
+			$(".deviceName").html(name);
+		})
+
+		plus.gatewayCmd.newDataRefresh(function (data) {
+			if (data.cmd == "502") {
+				if (data.name != undefined || data.name != '') {
+					$(".deviceName").html(data.name);
+				}
+			} else if (data.cmd == "500" && devID == data.devID) {
+				if (data.mode == 2) {
+					$(".mask_layer").show();
+				} else {
+					$(".mask_layer").hide();
+					refreshHtml(data);
+				}
+				var name = data.name.indexOf("#$default$#") != -1 ? addDevice_A2_name + data.name.split("#")[2] : data.name
+				$(".deviceName").html(name)
+			} else if(data.cmd == "518" && devID == data.devID) {
+				if(data.operType == 4) {
+					remoteArr = data.data;
+				} else if(data.operType == 2) {
+					for(var i = 0; i < remoteArr.length; i++) {
+						var item = remoteArr[i];
+						var backItem = data.data[0];
+						if(item.index == backItem.index) {
+							remoteArr.splice(i,1);
+						}
+					}
+				}
+				drawDeviceList(remoteArr);
+			}
+		})
+	})
+
+	$(".back").on("click", function () {
+		plus.tools.back(function () { })
+	})
+	$(".more").on("click", function () {
+		plus.tools.more(moreConfig, function () { })
+	})
+	
+	$(".addremoteBtn").on("click", function () {
+		info.removeItem("name");
+		info.removeItem("index");
+		info.removeItem("epData");
+		window.location = "addRemote.html"
+	})
+
+	function sendControlOrder(commandId, cmdValue) {
+		var deviceData = {};
+        	deviceData.cmd = "501";
+        	deviceData.gwID = gwID;
+        	deviceData.devID = devID;
+        		
+        	deviceData.endpointNumber = 1;
+        	deviceData.clusterId = 0x0201;
+        	deviceData.commandType = 01;
+        	deviceData.commandId = commandId;
+        	if(cmdValue != undefined) {
+        		deviceData.parameter = cmdValue;
+        	}
+		plus.gatewayCmd.controlDevice(deviceData, function (data) { });
+	}
+	
+	function send518ControlOrder(operType, data) {
+		var jsonData = {};
+        		jsonData.cmd = "518";
+        		jsonData.gwID = gwID;
+        		jsonData.devID = devID;
+        		jsonData.operType = operType;
+        		if(data) {
+        			jsonData.data = data;
+        		}
+       		plus.gatewayCmd.controlDevice(jsonData,function(){  });
+	}
+	
+	function drawDeviceList(data){
+         $(".saveToast").hide();
+         $(".addremoteUl").html("");
+         var count = 0;
+         for (var i = 0; i < data.length; i++) {
+            var index = data[i].index;
+            var name = data[i].name;
+            var epData = data[i].epData;
+            var str = '<li id="'+index+'">' + '<span data-name="'+name+'"data-epData="' + epData + '">'+ name +'</span>'+
+                '</li>';
+            	$(".addremoteUl").append(str);
+         }
+     }
+	
+    	mui(".addremoteUl").on("tap", 'li', function(){
+            event.stopPropagation();
+            var index = $(this).attr("id");
+            var name = $(this).find("span:first-child").attr("data-name");
+            var epData = $(this).find("span:first-child").attr("data-epData");
+			sendControlOrder(0x0103, [epData]);
+				
+			$(".send_toast").show()
+            setTimeout(function () {
+                $(".send_toast").hide()
+            }, 3000)
+         })
+         mui(".addremoteUl").on("longtap", 'li', function(event){
+         	event.stopPropagation();  
+         	var index = $(this).attr("id");
+            var name = $(this).find("span:first-child").attr("data-name");
+            var epData = $(this).find("span:first-child").attr("data-epData");
+			mui('#sheet1').popover('show');
+			
+			// $('body').on('tap', '.sheet_reEdit', function (event) {
+			// $(".sheet_reEdit").unbind().click(function () {
+			mui('body').on('tap','.sheet_reEdit',function(){
+				
+				mui('#sheet1').popover('hide');
+				info.setItem("name",name);
+				info.setItem("index",index);
+				info.setItem("epData",epData);
+				window.location = "addRemote.html";
+			})
+			
+			// $('body').on('tap', '.sheet_delete', function (event) {
+			// $(".sheet_delete").unbind().click(function () {
+			mui('body').on('tap','.sheet_delete',function(){
+				
+				mui('#sheet1').popover('hide');
+				var data = [];
+				var dataDic = {};
+				dataDic.index = index;
+				dataDic.name = name;
+				dataDic.epData = epData;
+				data.push(dataDic);
+				send518ControlOrder(2, data);
+			})
+        })
+// }
+	
+	function refreshHtml(data) {
+		//更新开关图片
+		 $.each(data.endpoints, function (i, endpoints) {
+		 	var attributes = endpoints.clusters[0].attributes;
+		 	for (var j = 0; j < attributes.length; j++) {
+		 		var status = attributes[j].attributeValue;
+				var attributeId = attributes[j].attributeId;
+				if(attributeId == 0x8105 || attributeId == 0x8103) {
+					reloadUI(endpoints.endpointNumber, status);
+				}
+		 	}
+		})
+	}
+	
+	function reloadUI(i, status) {
+		if(status == "0" || status == "3") {
+			$(".imghandle").eq(i-1).attr("data-state", "off")
+			$(".imghandle").eq(i-1).attr("src", "fonts/icon_open.png")
+		} else if(status == "1" || status == "4") {
+			
+			$(".imghandle").eq(i-1).attr("data-state", "on")
+			$(".imghandle").eq(i-1).attr("src", "fonts/icon_close.png")
+		}
+	}
+</script>
+
+</html>

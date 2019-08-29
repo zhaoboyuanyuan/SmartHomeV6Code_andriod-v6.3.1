@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>设置设备状态</title>
+  <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+  <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+  <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+  <style type="text/css">
+    body,html {
+      width: 100%;
+      height: 100%;
+      background-color: #f1f4f8;
+    }
+    .list {
+      margin-top: 1.6rem;
+    }
+    .list li {
+      box-sizing:border-box;
+      width:100%;
+      height:4rem;
+      line-height:4rem;
+      padding:0 1.6rem;
+      border-bottom:1px solid #f1f4f8;
+      background-color: white;
+      font-size:1.6rem;
+      color:#000;
+    }
+  </style>
+</head>
+<body>
+<header  class="header">
+  <div class="header_top">
+    <a href="javascript:window.history.back(-1);"></a>
+    <a class="deviceName autoSwitchLanguager" key="airsystem_Oj_set_Wind_speed" href="javascript:;">设置风速</a>
+  </div>
+</header>
+<section>
+  <ul class="list">
+    <li class="autoSwitchLanguager" key="airsystem_Oj_Wind_speed_low">低风</li>
+    <li class="autoSwitchLanguager" key="airsystem_Oj_Wind_speed_high">高风</li>
+  </ul>
+</section>
+</body>
+<script>
+    initlan();
+    var info = window.sysfun;
+    info.init("V6Scene");
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+    });
+
+    $('.list li').on('click', function () {
+        // console.log($(this).html());
+        switch ($(this).index()) {
+            case 0:
+                console.log('低风');
+                info.setItem('epData', '1,01,');
+                info.setItem("deviceState", languageUtil.getResource("open") + " " + languageUtil.getResource("airsystem_Oj_Wind_speed_low"));
+                window.location = "addDelay.html";
+                break;
+            case 1:
+                console.log('高风');
+                info.setItem('epData', '1,02,');
+                info.setItem("deviceState", languageUtil.getResource("open") + " " + languageUtil.getResource("airsystem_Oj_Wind_speed_high"));
+                window.location = "addDelay.html";
+                break;
+        }
+    })
+</script>
+</html>

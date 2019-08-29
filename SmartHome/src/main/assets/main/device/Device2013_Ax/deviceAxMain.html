@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>六件开关模组</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/device.css">
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="device_Ax_name"
+           href="javascript:;"></a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<section class="content">
+    <ul class="left_switchKey">
+        <li>
+            <div>
+                <div id="switchImg1" openState = off></div>
+                <em id="keySwitchImgLoading1"></em>
+            </div>
+            <section class="rename">
+                <span id="switchState1"></span>
+                <i id="1"></i>
+            </section>
+        </li>
+        <li>
+            <div>
+                <div id="switchImg2" openState = off></div>
+                <em id="keySwitchImgLoading2"></em>
+            </div>
+            <section class="rename">
+                <span id="switchState2"></span>
+                <i id="2"></i>
+            </section>
+        </li>
+        <li>
+            <div>
+                <div id="switchImg3" openState = off></div>
+                <em id="keySwitchImgLoading3"></em>
+            </div>
+            <section class="rename">
+                <span id="switchState3"></span>
+                <i id="3"></i>
+            </section>
+        </li>
+    </ul>
+    <ul class="right_sceneKey">
+        <li>
+            <div id="sceneBg4">
+                <i id="sceneImg4"></i>
+            </div>
+            <section >
+                <span id="sceneName4" class="autoSwitchLanguager" key="device_Ax_Unbound"></span>
+            </section>
+        </li>
+        <li>
+            <div id="sceneBg5">
+                <i id="sceneImg5"></i>
+            </div>
+            <section >
+                <span id="sceneName5" class="autoSwitchLanguager" key="device_Ax_Unbound"></span>
+            </section>
+        </li>
+        <li>
+            <div id="sceneBg6">
+                <i id="sceneImg6"></i>
+            </div>
+            <section >
+                <span id="sceneName6" class="autoSwitchLanguager" key="device_Ax_Unbound"></span>
+            </section>
+        </li>
+    </ul>
+</section>
+<section class="mask_layer " style="display:none; ">
+    <i></i>
+    <span id="offline" class="autoSwitchLanguager" key='device_Ax_Offline'></span>
+</section>
+</body>
+<script type="text/javascript" src="../../source/js/rem.js"></script>
+<script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="lang/lang.js"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/alert1.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    initlan();
+    var deviceId;
+    var gwId;
+    var appId;
+    var SceneList = [];
+    //初始化绑定关系
+    var bindMap = {
+        "4": "-1",
+        "5": "-1",
+        "6": "-1"
+    };
+    plus.plusReady(function () {
+        $("#back").on("click", function () {
+            plus.tools.back(function () {})
+        });
+        $(".more").on("click", function () {
+            plus.tools.more(moreConfig,function () {})
+        });
+        $("#sceneBg4").on("click",function(){
+            if (SceneList != undefined && SceneList.length == 0){
+                window.location = "SceneEmpty.html";
+            }else {
+                var sceneId = $("#sceneImg4").attr("data-sceneid");
+                window.location = "bindScene.html?endpointNum="+ 4 + "&sceneId=" + bindMap["4"];
+            }
+        });
+        $("#sceneBg5").on("click",function(){
+            if (SceneList != undefined && SceneList.length == 0){
+                window.location = "SceneEmpty.html";
+            }else {
+                var sceneId = $("#sceneImg5").attr("data-sceneid");
+                window.location = "bindScene.html?endpointNum="+ 5 + "&sceneId=" + bindMap["5"];
+            }
+        });
+        $("#sceneBg6").on("click",function(){
+            if (SceneList != undefined && SceneList.length == 0){
+                window.location = "SceneEmpty.html";
+            }else {
+                var sceneId = $("#sceneImg6").attr("data-sceneid");
+                window.location = "bindScene.html?endpointNum="+ 6 + "&sceneId=" + bindMap["6"];
+            }
+        });
+        $("#switchImg1").on("click",function(){
+            $("#keySwitchImgLoading1").show().addClass("rotate");
+            var state = $("#switchImg1").attr("openState");
+            if (state == "on"){
+                var data = deviceControl(gwId, deviceId, 1, 3);
+                plus.gatewayCmd.controlDevice(data, function(result) {})
+            }else{
+                var data = deviceControl(gwId, deviceId, 1, 4);
+                plus.gatewayCmd.controlDevice(data, function(result) {})
+            }
+        });
+        $("#switchImg2").on("click",function(){
+            $("#keySwitchImgLoading2").show().addClass("rotate");
+            var state = $("#switchImg2").attr("openState");
+            if (state == "on"){
+                var data = deviceControl(gwId, deviceId, 2, 3);
+                plus.gatewayCmd.controlDevice(data, function(result) {})
+            }else{
+                var data = deviceControl(gwId, deviceId, 2, 4);
+                plus.gatewayCmd.controlDevice(data, function(result) {})
+            }
+        });
+        $("#switchImg3").on("click",function(){
+            $("#keySwitchImgLoading3").show().addClass("rotate");
+            var state = $("#switchImg3").attr("openState");
+            if (state == "on"){
+                var data = deviceControl(gwId, deviceId, 3, 3);
+                plus.gatewayCmd.controlDevice(data, function(result) {})
+            }else{
+                var data = deviceControl(gwId, deviceId, 3, 4);
+                plus.gatewayCmd.controlDevice(data, function(result) {})
+            }
+        });
+        $(".rename i").on("click",function(){
+            var $this = $(this);
+            editPopup({
+                "num": 5,
+                "titTxt": device_rename,
+                "placeTxt": device_input_name,
+                "isClick": 2,
+                "aTxt1": device_cancal,
+                "aTxt2": device_sure
+            })
+            $(".inputDiv i").on("click", function () {
+                $(this).siblings("input").val("")
+                $(this).siblings("input").attr("placeholder", device_input_name)
+            });
+            $(".popup input").on("blur",function(){
+                var value = $(this).val();
+                var valueFace = noFace(value);
+                console.log(valueFace);
+                $(this).val(valueFace);
+            });
+            $(".alertBtn a").on("click", function () {
+                var index = $(this).index()
+                if (index == 0) {
+                    cancel()
+                } else {
+                    if ($(".popup input").val().trim() != ""){
+                        if ($this.attr("id") == "1") {
+                            rename(1, $(".popup input").val())
+                            cancel()
+                        } else if($this.attr("id") == "2") {
+                            rename(2, $(".popup input").val())
+                            cancel()
+                        }else{
+                            rename(3, $(".popup input").val())
+                            cancel()
+                        }
+                    }
+                }
+            })
+        });
+        plus.gatewayCmd.getSceneList(function(result) {
+            SceneList = result;
+        });
+        plus.gatewayCmd.getDeviceInfo(function (result) {
+            deviceId = result.devID;
+            gwId = result.gwID;
+            appId = result.appID;
+            var name = result.name.indexOf("#$default$#") != -1 ? device_Ba_name + result.name.split("#")[2]:result.name
+            $(".deviceName").html(name)
+            getMoreConfig(deviceId);
+            refereshState(result.mode);
+            refereshSwitch(result);
+            refereshData(deviceId);
+            var dev = deviceControl(gwId, deviceId, 1, 0x8008);
+            plus.gatewayCmd.controlDevice(dev, function (data) {});
+        })
+    });
+
+    //更新设备状态
+    function refereshState(mode) {
+        switch (mode){
+            case 0:
+                $(".mask_layer").hide();
+                send_514();
+                break;
+            case 1:
+                $(".mask_layer").hide();
+                send_514();
+                break;
+            case 2:     //离线
+                $(".mask_layer").show();
+                break;
+            case 3:     //主动退网
+                $(".mask_layer").show();
+                break;
+            case 4:
+                $(".mask_layer").hide();
+                send_514();
+                break;
+            default:
+                break;
+
+        }
+    }
+    function send_514(){
+        var param = {
+            "cmd":"514",
+            "gwID":gwId,
+            "appID":appId,
+            "devID":deviceId
+        };
+        plus.gatewayCmd.controlDevice(param,function(){})
+    }
+    function refereshData(devId) {
+        plus.gatewayCmd.newDataRefresh(function(result){
+            if(result.cmd == "514" && result.devID == devId){
+                refereshScene(result.data)
+            }else if(result.cmd == "500" && result.devID == devId){
+                var name = result.name.indexOf("#$default$#") != -1 ? device_name_Ax + result.name.split("#")[2] : result.name;
+                $(".deviceName").html(name)
+                refereshState(result.mode);
+                refereshSwitch(result);
+            }else if(result.cmd == "502" && result.devID == devId){
+                if (result.name != undefined && result.name != '') {
+                    var deviceName = result.name.indexOf("#$default$#") != -1 ? device_name_Ax + result.name.split("#")[2] : result.name;
+                    $(".deviceName").html(deviceName)
+                }
+                var name = result.endpointName;
+                if (name == '' || name == undefined || name == null) {
+                    name = device_switch + result.endpointNumber;
+                }
+                $("#switchState"+result.endpointNumber).html(name);
+            }else if(result.cmd == "513" && devId == result.devID) {
+                send_514();
+            }
+        })
+    }
+    //更新开关状态
+    function refereshSwitch(data){
+
+        for (var i= 0; i<data.endpoints.length; i++){
+            if (data.endpoints[i].endpointType == 2){
+                var endpointNum = data.endpoints[i].endpointNumber;
+                var endpointName = data.endpoints[i].endpointName;
+                if (endpointName == '' || endpointName == undefined || endpointName == null) {
+                    endpointName = device_switch + endpointNum;
+                }
+                for (var j = 0; j < data.endpoints[i].clusters.length; j++){
+                    if (endpointNum == 1 ||endpointNum == 2|| endpointNum == 3){
+                        $("#switchState" + endpointNum).html(endpointName);
+                        var value = data.endpoints[i].clusters[j].attributes[0].attributeValue;
+                        $("#keySwitchImgLoading" + endpointNum).removeClass("rotate").hide();
+                        if (value == 1){
+                            $("#" + "switchImg" + endpointNum).attr("openState", "on");
+                            $("#" + "switchState" + endpointNum).css("color", "#8dd652");
+                        }else {
+                            $("#" + "switchImg" + endpointNum).attr("openState", "off");
+                            $("#" + "switchState" + endpointNum).css("color", "gray");
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //更新场景状态
+    function refereshScene(data) {
+        if (data){
+            for(var i=0;i<data.length;i++){
+                var sceneId = data[i].sceneID;
+                var endpointNumber = data[i].endpointNumber;
+                bindMap[endpointNumber + ""] = sceneId;
+                for(var j = 0; j < SceneList.length; j++) {
+                    var scene = SceneList[j];
+                    if (scene.sceneID == sceneId){
+                        $("#sceneName" + endpointNumber).html(scene.sceneName)
+                        $("#sceneName" + endpointNumber).css("color", "#54bf00");
+
+                        var imageName = "scene_normal_pre_" + scene.sceneIcon + ".png";
+                        imageName = "url(../../source/sceneIcon/" + imageName + ")";
+                        $("#sceneImg" + endpointNumber).css("display", "block");
+                        $("#sceneImg" + endpointNumber).css("background", imageName + 'no-repeat center center');
+                        $("#sceneImg" + endpointNumber).css("backgroundSize", "30%");
+                        $("#sceneImg" + endpointNumber).attr("data-sceneid",scene.sceneID)
+
+                        var keyImageName = "url(./fonts/keybg.png)";
+                        $("#sceneBg" + endpointNumber).css("background", keyImageName + 'no-repeat center center');
+                        $("#sceneBg" + endpointNumber).css("backgroundSize", "60%");
+                    }
+                }
+            }
+        }
+    }
+    //设备控制
+    function deviceControl(gwID, devID, endpointNumber, state) {
+        var deviceData = {
+            "cmd": "501",
+            "gwID": gwID,
+            "devID": devID,
+            "endpointNumber": endpointNumber,
+            "clusterId": 6,
+            "commandType": 1,
+            "commandId": state
+        }
+        return deviceData;
+    }
+
+    function doTimeout() {
+        var timer = setTimeout(function() {
+            $("#keySwitchImgLoading1").removeClass("rotate").hide();
+            $("#keySwitchImgLoading2").removeClass("rotate").hide();
+            $("#keySwitchImgLoading3").removeClass("rotate").hide();
+        }, 15000)
+    }
+
+    function rename(endpointNumber,endpointName){
+        var jsonData = {
+            "cmd":"502",
+            "appID":appId,
+            "gwID":gwId,
+            "mode":2,
+            "devID":deviceId,
+            "endpointNumber":endpointNumber,
+            "endpointName":endpointName
+        };
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+    function cancel() {
+        if ($(".sect_content")) {
+            $(".sect_content").remove();
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <title></title>
+    <link href="css/scale.css" rel="stylesheet">
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a href="add-scale-index.html"></a>
+        <a href="javascript:;" key="Balanec_45_title" class="deviceName autoSwitchLanguager remove">体重分析</a>
+    </div>
+</header>
+<div class="scale_analysis_header">
+    <h5></h5>
+    <h5 key="Balanec_content_2" class="autoSwitchLanguager"></h5>
+    <h5></h5>
+</div>
+<h5 class="scale_analysis_title_record autoSwitchLanguager" key="Balanec_heading_45">近30次保存体重</h5>
+<div class="if_show">您还没有保存体重哦</div>
+<ul id="scale_analysis_record_detail">
+    <!--<li><span>67.04kg</span><span>2018-03-06 16:00</span></li>
+    <li><span>67.04kg</span><span>2018-03-06 16:00</span></li>
+    <li><span>67.04kg</span><span>2018-03-06 16:00</span></li>
+    <li><span>67.04kg</span><span>2018-03-06 16:00</span></li>
+    <li><span>67.04kg</span><span>2018-03-06 16:00</span></li>
+    <li><span>67.04kg</span><span>2018-03-06 16:00</span></li>
+    <li><span>67.04kg</span><span>2018-03-06 16:00</span></li>-->
+</ul>
+
+<script>
+    initlan();
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.getWeightRecords(function(result){
+            var pinjie = "";
+            var date;
+            if(JSON.stringify(result.data) == "[]"|| result.data.length == 1){
+                $(".scale_analysis_header").children().remove();
+            }
+            if(result.data.length > 1){
+                var firstWeight = parseFloat(result.data[0].weight);
+                var secondWeight = parseFloat(result.data[1].weight);
+                var firstTime = timestampToTime(result.data[0].createTime);
+                if(firstWeight == 00){
+                    $(".scale_analysis_header").children("h5").first().html(firstTime+'  0.0kg');
+                }else{
+                    $(".scale_analysis_header").children("h5").first().html(firstTime+'  '+firstWeight+'kg');
+                }
+                if(firstWeight > secondWeight){
+                    $("div.scale_analysis_header").toggleClass("abnormal");
+                    $(".scale_analysis_header").children("h5").eq(1).html(Balanec_content_6);
+                    $(".scale_analysis_header").children("h5").last().html(((firstWeight-secondWeight).toFixed(1))+'<span>kg</span>');
+                }else if(firstWeight < secondWeight){
+                    $("div.scale_analysis_header").toggleClass("normal");
+                    $(".scale_analysis_header").children("h5").eq(1).html(Balanec_content_2);
+                    $(".scale_analysis_header").children("h5").last().html(((secondWeight-firstWeight).toFixed(1))+'<span>kg</span>');
+                }else if(firstWeight == secondWeight){
+                    $("div.scale_analysis_header").toggleClass("normal");
+                    $(".scale_analysis_header").children("h5").eq(1).html(Balanec_content_2);
+                    $(".scale_analysis_header").children("h5").last().html('0.0'+'<span>kg</span>');
+                }
+            }
+            for (var i in result.data){
+                date = timestampToTime(result.data[i].createTime);
+                if(result.data[i].weight == 00){
+                    pinjie = pinjie+"<li>"+
+                        "<span>0.0kg</span>"+
+                        "<span>"+date+"</span>"+
+                        "</li>";
+                }else{
+                    pinjie = pinjie+"<li>"+
+                        "<span>"+result.data[i].weight+"kg</span>"+
+                        "<span>"+date+"</span>"+
+                        "</li>";
+                }
+            }
+            document.getElementById("scale_analysis_record_detail").innerHTML = pinjie;
+        })
+    })
+
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
+        h = (date.getHours() <10 ? '0' + date.getHours() :date.getHours()) + ':';
+        m = (date.getMinutes() < 10 ? '0'+ date.getMinutes() :date.getMinutes())+ ':';
+        s = (date.getSeconds() <10 ? '0' + date.getSeconds() :date.getSeconds());
+        return Y+M+D+h+m+s;
+    }
+</script>
+</body>
+</html>

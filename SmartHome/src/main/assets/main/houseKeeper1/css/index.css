@@ -1,0 +1,180 @@
+@charset "utf-8";
+b,strong{font-weight:500;}
+/*无任务*/
+.noMission{
+	width:100%;
+	padding-top:70%;
+	text-align:center;
+	font-size:1.6rem;
+	color:#929292;
+	background:#fff;
+}
+/*创建场景*/
+.createMission{
+	position:absolute;
+	left:0;
+	top:0;
+	z-index:300;
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0,.2);
+}
+.createMission div{
+	width:100%;
+	height:18.2rem;
+	background:#fff;
+}
+.createMission .icon_del{
+	margin-top:2rem;
+	width:100%;
+	height:4.4rem;
+	background:none;
+}
+.createMission .icon_del i{
+	display:block;
+	float:right;
+	width:13.5%;
+	height:4.4rem;
+	background:url(../fonts/icon_del.png) no-repeat center center;
+	background-size:2.1rem auto;
+}
+.createMission .create{
+	padding:0 11.2%;
+	width:77.6%;
+}
+.createMission .create span{
+	display:block;
+	width:100%;
+	height:5.5rem;
+	line-height:5.5rem;
+	text-align:center;
+	color:#646975;
+	font-size:1.5rem;
+}
+.createMission .create a{
+	display:block;
+	float:left;
+	width:50%;
+	height:11.25rem;
+	padding-top:1.25rem;
+	text-align:center;
+}
+.createMission .create a i{
+	display:inline-block;
+	width:5.8rem;
+	height:5.8rem;
+}
+.createMission .create a:nth-child(2) i{
+	background:url(../fonts/icon_time1.png) no-repeat center center;
+	background-size:5.8rem auto;
+}
+.createMission .create a:last-child i{
+	background:url(../fonts/icon_11.png) no-repeat center center;
+	background-size:5.8rem auto;
+}
+.createMission .create a em{
+	display:block;
+	width:100%;
+	height:1.6rem;
+	line-height:1.6rem;
+	margin-top:1rem;
+	font-size:1.5rem;
+	color:#646975;
+}
+/*管家任务*/
+.getMission{
+	margin-top:7.9rem;
+	overflow:hidden;
+	background:#fff;
+	border-top:1px solid #d9d9d9;
+}
+.getMission dl{
+	width:133%;
+	height:6rem;
+	padding-left:5%;
+	border-bottom:1px solid #d9d9d9;
+}
+.getMission dl dt,.getMission dl dd{
+	float:left;
+	height:6rem;
+}
+.getMission dl dt{
+	width:57.8%;
+}
+.getMission dl dt a{
+	display:block;
+	height:6rem;
+	padding-left:3.9rem;
+	background:url(../fonts/icon_time.png) no-repeat left center;
+	background-size:2.9rem auto;
+	font-size:1.5rem;
+	color:#000;
+}
+.getMission dl dt .one_txt{
+	/*margin-top:0.5rem;*/
+	line-height:6rem;
+	background:url(../fonts/icon_.png) no-repeat left center;
+	background-size:2.9rem auto;
+}
+.getMission dl dt a span{
+	display:block;
+	width:100%;
+	height:2.2rem;
+	line-height:2.2rem;
+	padding-top:1rem;
+	font-size:1.5rem;
+	color:#000;
+}
+.getMission dl dt a em{
+	margin-right:1rem;
+	font-size:1.2rem;
+	color:#96999e;
+}
+.getMission dl dd{
+	width:10%;
+	height:4.3rem;
+	padding-top:1.7rem;
+}
+.getMission dl dd:nth-child(3){
+	width:25%;
+	margin-left:4%;
+	padding:0;
+}
+.getMission dl dd b{
+	display:block;
+	float:left;
+	width:50%;
+	height:6rem;
+	line-height:6rem;
+	text-align:center;
+	font-size:1.3rem;
+	color:#fff;
+	background:#c0c2c6;
+}
+.getMission dl dd b:last-child{
+	background:#f64a4a;
+}
+.getMission dl dd i{
+	position:relative;
+	display:block;
+	width:100%;
+	height:2.5rem;
+	border-radius:2.5rem;
+	background:#ccc;
+}
+.getMission dl dd i em{
+	position:absolute;
+	top:0.5rem;
+	left:0.5rem;
+	display:block;
+	width:1.5rem;
+	height:1.5rem;
+	border-radius:50%;
+	background:#fff;
+}
+.getMission dl dd i.on{
+	background:#8dd652;
+}
+.getMission dl dd i.on em{
+	left:3rem;
+}

@@ -1,0 +1,33 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.SphygmomanometerMonitor_group_text = "未分区";
+$lang.Sphygmomanometer_Range_1 = "高压：90-140mmHg";
+$lang.Sphygmomanometer_Range_2 = "低压：60-90mmHg";
+$lang.Sphygmomanometer_Range_3 = "血氧：90%以上";
+$lang.Sphygmomanometer_Range_4 = "脉率：60-100次/分";
+$lang.Sphygmomanometer_text_1 = "高压";
+$lang.Sphygmomanometer_text_2 = "低压";
+$lang.Sphygmomanometer_text_3 = "平均";
+$lang.Sphygmomanometer_text_4 = "脉率";
+$lang.Sphygmomanometer_text_5 = "血氧";
+$lang.Sphygmomanometer_Level_1 = "正常";
+$lang.Sphygmomanometer_Level_2 = "偏高";
+$lang.Sphygmomanometer_Level_3 = "偏低";
+$lang.Sphygmomanometer_Level_4 = "高";
+$lang.Sphygmomanometer_Level_5 = "低";
+$lang.Sphygmomanometer_Name_1 = "用户1";
+$lang.Sphygmomanometer_Name_2 = "用户2";
+$lang.Sphygmomanometer_Name_3 = "用户3";
+$lang.Sphygmomanometer_48_title = "历史数据";
+$lang.Sphygmomanometer_date_1 = "前一月";
+$lang.Sphygmomanometer_date_2 = "后一月";
+$lang.Device_OffLine = "设备已离线";
+$lang.Sphygmomanometer_name_04 = "智能血压计";
+$lang.Sphygmomanometer_text_01 = "各指标正常范围";
+$lang.Sphygmomanometer_text_02 = "通过账号登录后才可查看";
+$lang.Sphygmomanometer_48_log = "日志";
+$lang.Sphygmomanometer_loading_48 = "正在加载…";
+$lang.Sphygmomanometer_text_31 = "加载超时";

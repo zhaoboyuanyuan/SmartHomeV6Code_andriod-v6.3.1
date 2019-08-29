@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="../../source/js/rem.js"></script>
+    <script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+</head>
+<body style="width:100%;height:100%;">
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_Ba_name" href="javascript:;">两位插座</a>
+            <a class="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section class="main_con">
+        <div class="socket_div">
+            <div class="handle">
+                <div class="handle_icon socket_loading_icon1"></div>
+                <i id="socket_icon1" switch_state="off"></i>
+            </div>
+            <div id="switch_btn1" class="handle_btn handle_color" data-id="0"></div>
+        </div>
+        <div class="socket_div">
+            <div class="handle">
+                <div class="handle_icon socket_loading_icon2"></div>
+                <i id="socket_icon2" switch_state="off"></i>
+            </div>
+            <div id="switch_btn2" class="handle_btn handle_color" data-id="0"></div>
+        </div>
+        <div id="statistics_btn"></div>
+    </section>
+    <section class="bottom_etc">
+        <ul class="handle-data">
+            <li><b class="autoSwitchLanguager" key="device_Ba_RealtimePower">实时功率</b><span>--<em>W</em></span></li>
+            <li><b class="autoSwitchLanguager" key="device_Ba_electricity">累计电量</b><span>--<em>kw.h</em></span></li>
+        </ul>
+    </section>
+    <section class="overload_mask_layer">
+    <div class="dialog">
+        <span class="autoSwitchLanguager" key="device_Ba_Prompt"></span>
+        <span class="autoSwitchLanguager" key="device_Ba_content"></span>
+        <div></div>
+        <span id="Iknow" class="autoSwitchLanguager" key="device_Ba_Button"></span>
+    </div>
+    </section>
+    <section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="device_Ba_Offline">设备已离线</span></section>
+</body>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script type="text/javascript" src="js/plus.js"></script>
+    <script type="text/javascript" src="js/gatewayCmd.js"></script>
+    <script type="text/javascript" src="js/tools.js"></script>
+    <script type="text/javascript" src="js/alert.js"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/more.js"></script>
+    <script type="text/javascript">
+        var gwID,dID;
+        var switchState1;
+        var switchState2;
+        var power = "0";
+        var electricity = "0";
+        initlan()
+        plus.plusReady(function(){
+            $("#back").click(function(){
+                plus.tools.back(function(){})
+            })
+
+            $("#statistics_btn").on("click",function(){
+                window.location.href = "history.html";
+                plus.tools.getLoginType(function(data) {
+                    if(data == "100") {
+                        window.location.href = "history.html";
+                    } else {
+                        $(".gw_toast").show()
+                        setTimeout(function() {
+                            $(".gw_toast").hide()
+                        }, 3000)
+                    }
+                })
+            })
+
+            $("#Iknow").on("click",function(){
+                $(".overload_mask_layer").hide();
+            })
+            plus.gatewayCmd.getDeviceInfo(function(data){
+                gwID = data.gwID;
+                dID = data.devID;
+                var name = data.name.indexOf("#$default$#") != -1 ? device_Ba_name + data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+                if(data.mode === 2){
+                    $(".mask_layer").show()
+                }else if(data.mode === 3){
+                    //原生做的操作
+                }else{
+                    $(".mask_layer").hide()
+                }
+                modeState(data)
+                sendCmd(gwID,dID,0,6,2,'')
+                control(gwID,dID)
+                $(".more").on("click",function(){
+                    var moreData = getMoreConfig(dID,gwID)
+                    plus.tools.more(moreData,function(){})
+                })
+            })
+
+            plus.gatewayCmd.newDataRefresh(function(data){
+                if(data.cmd == "500" && data.devID == dID){
+                    var name = data.name.indexOf("#$default$#") != -1 ? device_Ba_name + data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+                    modeState(data)
+                    isSendCmd = false;
+                }else if(data.cmd == "502" && data.devID == dID){
+                    if(data.name != undefined || data.name != ''){
+                        $(".deviceName").html(data.name)
+                    }
+                }
+                gwID = data.gwID;
+                dID = data.devID;
+            })
+        })
+
+        function control(gwID,dID){
+            $("#switch_btn1").on("click",function(){
+                $(".socket_loading_icon1").addClass("scale")
+                if($(this).attr("data-id") == 1){
+                    sendCmd(gwID,dID,1,6,0,'')
+                }else if($(this).attr("data-id") == 0){
+                    sendCmd(gwID,dID,1,6,1,'')
+                }
+            })
+
+            $("#switch_btn2").on("click",function(){
+                $(".socket_loading_icon2").addClass("scale")
+                if($(this).attr("data-id") == 1){
+                    sendCmd(gwID,dID,2,6,0,'')
+                }else if($(this).attr("data-id") == 0){
+                    sendCmd(gwID,dID,2,6,1,'')
+                }
+            })
+        }
+        function sendCmd(gwID,dID,endpointNumber,clusterId,commandId,parameter){
+            var jsonData = {}
+            jsonData.cmd = "501";
+            jsonData.gwID = gwID;
+            jsonData.devID = dID;
+            if(endpointNumber != 0){
+                jsonData.endpointNumber = endpointNumber;
+            }
+            jsonData.clusterId = clusterId;
+            jsonData.commandType = 1;
+            jsonData.commandId = commandId;
+            if(parameter != ''){
+                jsonData.parameter = [parameter]
+            }
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+        }
+        function modeState(result){
+            if(result.mode === 2){
+                $(".mask_layer").show()
+            }else if(result.mode === 3){
+                //原生做的操作
+            }else{
+                $(".mask_layer").hide()
+                for(var i = 0;i<result.endpoints.length;i++){
+                    if(result.endpoints[i].clusters[0].clusterId == 6){
+                        var attributes = result.endpoints[i].clusters[0].attributes;
+                        for(var j = 0;j<attributes.length;j++){
+                            if(result.endpoints[i].endpointNumber == 1){
+                                if(attributes[j].attributeId == 0){//开关状态
+                                    $(".socket_loading_icon1").removeClass("scale")
+                                    switchState1 = attributes[j].attributeValue;
+                                }
+                            }else if(result.endpoints[i].endpointNumber == 2){
+                                if(attributes[j].attributeId == 0){//开关状态
+                                    $(".socket_loading_icon2").removeClass("scale")
+                                    switchState2 = attributes[j].attributeValue;
+                                }
+                            }
+                            switch (attributes[j].attributeId){
+                                case 32774://当前电压
+                                    break;
+                                case 32775://当前电流
+                                    break;
+                                case 32776://当前功率
+                                    power = attributes[j].attributeValue;
+                                    break;
+                                case 32777://累计电量
+                                    electricity = attributes[j].attributeValue;
+                                    break;
+                                case 32772://为设置的主动上报的功率阀值，单位W，默认为10W
+                                    break;
+                                case 32770://01：功率过载
+                                    var value = attributes[j].attributeValue;
+                                    /*00：表示消除报警
+                                      01：功率过载
+                                      10：电流过载*/
+                                    //只监听消除报警和功率过载
+                                    //功率过载时弹出alert
+                                    //消除过载消失alert
+                                    if(value == "00"){
+                                        $(".overload_mask_layer").hide();
+                                    }else if(value == "10"){
+                                        $(".overload_mask_layer").show();
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
+                reloadUI();
+            }
+        }
+
+        function reloadUI(){
+            //插座1
+            if(switchState1 == "0"){
+                $("#switch_btn1").addClass("handle_color")
+                $("#switch_btn1").attr("data-id","0")
+                $("#socket_icon1").attr("switch_state", "off")
+            }else if(switchState1 == "1"){
+                $("#switch_btn1").removeClass("handle_color")
+                $("#switch_btn1").attr("data-id","1")
+                $("#socket_icon1").attr("switch_state", "on")
+            }
+            //插座2
+            if(switchState2 == "0"){
+                $("#switch_btn2").addClass("handle_color")
+                $("#switch_btn2").attr("data-id","0")
+                $("#socket_icon2").attr("switch_state", "off")
+            }else if(switchState2 == "1"){
+                $("#switch_btn2").removeClass("handle_color")
+                $("#switch_btn2").attr("data-id","1")
+                $("#socket_icon2").attr("switch_state", "on")
+            }
+
+            if(switchState1 == "0" && switchState2 == "0"){
+                $(".handle-data li").eq(0).find("span").html("--<em>W</em>")
+            }else{
+                $(".handle-data li").eq(0).find("span").html(power + "<em>W</em>")
+            }
+            if(electricity > 1000){
+                var value = (electricity / 1000) + "";
+                var index = value.indexOf(".", 0) + 2;
+                value = value.substring(0, index);
+                $(".handle-data li").eq(1).find("span").html(value + "<em>kw.h</em>")
+            }else{
+                $(".handle-data li").eq(1).find("span").html(electricity + "<em>w.h</em>")
+            }
+        }
+    </script>
+</html>

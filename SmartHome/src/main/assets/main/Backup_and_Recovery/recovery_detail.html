@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css?v=1" />
+    <link rel="stylesheet" type="text/css" href="../source/mui/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+    <link rel="stylesheet" type="text/css" href="css/backupsRecovery.css?v=1.2" />
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:window.history.back(-1);"></a>
+        <a href="javascript:;" class="autoSwitchLanguager" key="Backup_recovery">恢复至本网关</a>
+        <!--<a class="more" href="javascript:;"></a>-->
+    </div>
+</header>
+<p class="recovery_explain autoSwitchLanguager" key="Recovery_Account_password">
+    您要恢复哪个网关的数据，就请填写哪个网关的账号和密码
+</p>
+<div class="verification">
+    <ul>
+        <li>
+            <span class="autoSwitchLanguager" key="Recovery_account">网关账号</span>
+            <input type="text" class="autoSwitchLanguager" placeholder="请输入账号" key="Recovery_enter_account" id="account" value="">
+        </li>
+        <li>
+            <span class="autoSwitchLanguager" key="Recovery_password">网关密码</span>
+            <input type="password" class="autoSwitchLanguager" placeholder="请输入密码" key="Recovery_enter_password" id="pass" value="">
+            <i class="eyes" data-type="hidden"></i>
+        </li>
+    </ul>
+</div>
+<button class="complete complete_location autoSwitchLanguager" key="device_Backup_ok" id="gatewaySure">确定</button>
+</body>
+<script src="../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var info = window.sysfun;
+    info.init("gateway_Recover");
+    plus.plusReady(function(){
+        $(".eyes").unbind("click").on("click",function(){
+            if($(this).attr("data-type") === "hidden"){
+                $("#pass").attr("type","text");
+                $(this).attr("data-type","visible");
+            }else if($(this).attr("data-type") === "visible"){
+                $("#pass").attr("type","password");
+                $(this).attr("data-type","hidden");
+            }
+        });
+        $("#gatewaySure").unbind("click").on("click",function(){
+            if($("#account").val().trim() === ""){
+                window.showDialog.show(lang_admin_pwd);
+            }else if($("#pass").val().trim() === ""){
+                window.showDialog.show(lang_admin_pwd);
+            }else{
+                var param = {
+                    "gatewayId":$("#account").val().trim(),
+                    "password":$("#pass").val().trim()
+                };
+                info.setItem("gatewayId",$("#account").val().trim());
+                plus.gatewayCmd.verifyGateway(param,function(data){
+                    if(data){
+                        var num = parseInt(data);
+                        switch(num){
+                            case 1:
+                                window.showDialog.show(languageUtil.getResource("Backup_note_this"),3000);
+                                break;
+                            case 2:
+                                window.showDialog.show(languageUtil.getResource("Recovery_Different_models"),3000);
+                                break;
+                            case 3:
+                                window.showDialog.show(languageUtil.getResource("Backup_is_online"),3000);
+                                break;
+                            case 4:
+                                window.showDialog.show(languageUtil.getResource("Recovery_password_error"),3000);
+                                break;
+                            case 5:
+                                window.location = "recovery_start.html";
+                                break;
+                        }
+                    }
+                })
+            }
+        });
+    })
+</script>
+</html>

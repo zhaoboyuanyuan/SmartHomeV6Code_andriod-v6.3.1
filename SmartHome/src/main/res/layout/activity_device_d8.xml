@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="cc.wulian.smarthomev6.main.device.gateway_mini.device_d8.DeviceD8Activity"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <RadioGroup
+            android:id="@+id/rg_switch_d8_control"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_tab_light"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/selector_device_d8_left"
+                android:button="@null"
+                android:checked="true"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:lines="1"
+                android:padding="10dp"
+                android:text="@string/Minigateway_Tab_Lighting"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <RadioButton
+                android:id="@+id/rb_tab_voice"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/selector_device_d8_center"
+                android:button="@null"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:lines="1"
+                android:padding="10dp"
+                android:text="@string/Minigateway_Tab_Voice"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"/>
+
+            <RadioButton
+                android:id="@+id/rb_tab_count"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/selector_device_d8_right"
+                android:button="@null"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:lines="1"
+                android:padding="10dp"
+                android:text="@string/Minigateway_Tab_Givetime"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"/>
+
+        </RadioGroup>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/device_d8_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+</LinearLayout>

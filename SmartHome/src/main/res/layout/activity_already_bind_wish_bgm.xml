@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_camera_guide_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/bg_add_xw01"
+            android:layout_marginTop="@dimen/default_padding_large" />
+
+        <TextView
+            android:layout_marginLeft="@dimen/default_padding_normal"
+            android:id="@+id/tv_add_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/default_padding_small"
+            android:text="该设备已被130****5689绑定，继续添加将解绑并重新绑定"
+            android:textColor="@color/device_config_wifi_tips_color"
+            android:textSize="16sp" />
+
+        <Button
+            android:text="@string/Cateyemini_Adddevice_Continue"
+            android:id="@+id/btn_continue_add"
+            style="@style/config_next_button"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+
+</LinearLayout>

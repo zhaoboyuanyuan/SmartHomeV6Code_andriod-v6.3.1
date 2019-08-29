@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:id="@+id/tv_zone_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_alignParentLeft="true"
+            android:textColor="@color/umeng_socialize_list_item_textcolor"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:id="@+id/iv_zone_check"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:visibility="invisible"
+            android:src="@drawable/theme_select" />
+    </RelativeLayout>
+
+</LinearLayout>

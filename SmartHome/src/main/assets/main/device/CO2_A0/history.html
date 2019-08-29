@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>二氧化碳监测器</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/history.css" />
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+<header class="header">
+    <a href="carbonDioxide.html"></a>
+    <a href="javascript:;" class="autoSwitchLanguager deviceName" id="device_A0_name">二氧化碳监测器</a>
+    <a data-id="1" href="javascript:;" style="background:none;"></a>
+</header>
+<section class="content" style="padding-top: 2.4rem;">
+    <section class="title autoSwitchLanguager" id="CO2_level_statistics">最近二十四个小时数据记录</section>
+    <section id="line"></section>
+    <section id="level">
+        <section class="level_text autoSwitchLanguager" id="CarbonDioxide_grade">CO2等级：</section>
+        <section class="level_text1 autoSwitchLanguager" id="CO2_Statistics_grade_1">优：<=800 </section>
+        <section class="level_text2 autoSwitchLanguager" id="CO2_Statistics_grade_2">良：800~1500 </section>
+        <section class="level_text3 autoSwitchLanguager" id="CO2_Statistics_grade_3">差：>=1500 </section>
+    </section>
+</section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/echarts.js"></script>
+<script src="js/createLine.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var start = new Date();
+    var endTime = start.getTime();
+    var startTime = (start.getTime() - 86400000);
+    var timeArr = [];
+    var ppmArr = []
+    var devData = {
+        "startTime": startTime + '',
+        "endTime": endTime + ''
+    }
+    plus.plusReady(function() {
+
+        plus.gatewayCmd.getDeviceInfo(function(data){
+
+            var name = data.name.indexOf("#$default$#") != -1 ? title_name +data.name.split("#")[2]:data.name
+            $(".deviceName").html(name)
+        })
+
+        plus.gatewayCmd.getStatistic(devData, function(list) {
+            if(list.resultCode != "0" || list.resultCode != 0) {
+                list.data = new Array();
+            }
+            for(var i = 1; i < 25; i++) {
+                if(list.data[i] == undefined) {
+                    var time = new Date(startTime - (i - 1) * 3600000)
+                    var hour = time.getHours().toString().length == 1 ? ("0" + time.getHours()) : time.getHours()
+                    var min = time.getMinutes().toString().length == 1 ? ("0" + time.getMinutes()) : time.getMinutes()
+                    timeArr[24 - i] = hour + ':' + min;
+                    ppmArr[24 - i] = "-";
+                } else {
+                    var time = new Date(startTime - (i - 1) * 3600000)
+                    var hour = time.getHours().toString().length == 1 ? ("0" + time.getHours()) : time.getHours()
+                    var min = time.getMinutes().toString().length == 1 ? ("0" + time.getMinutes()) : time.getMinutes()
+                    timeArr[24 - i] = hour + ':' + min;
+                    ppmArr[24 - i] = list.data[i];
+                }
+            }
+            editLine(timeArr, ppmArr)
+        })
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header")[0].style.paddingTop = "4.8rem";
+        }
+    })
+
+</script>
+
+</html>

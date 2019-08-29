@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/item_front_edge"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/white"
+        android:tag="front">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/device_Cc_mode_fpc" />
+
+        <ImageView
+            android:id="@+id/iv_front_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:src="@drawable/theme_select"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_after_edge"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:tag="after">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/device_Cc_mode_rpc" />
+
+        <ImageView
+            android:id="@+id/iv_after_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:src="@drawable/theme_select"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_tip1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/default_padding_small"
+        android:layout_marginRight="@dimen/default_padding_small"
+        android:layout_marginTop="20dp"
+        android:text="@string/device_Cc_mode_set_1" />
+
+    <TextView
+        android:id="@+id/tv_tip2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/default_padding_small"
+        android:layout_marginRight="@dimen/default_padding_small"
+        android:text="@string/device_Cc_mode_set_2" />
+
+
+</LinearLayout>

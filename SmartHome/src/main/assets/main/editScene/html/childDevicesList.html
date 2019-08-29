@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设置设备状态</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/editok.css" />
+
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:window.history.back(-1);"></a>
+				<a href="javascript:;" class="autoSwitchLanguager" key="setDeviceStatus">设置设备状态</a>
+				<a href="javascript:;" id="finishDelay"></a>
+			</div>
+		</header>
+		<section>
+			<ul class="set_list" id="set_list">
+				<li><i></i></li>
+				<li><i></i></li>
+				<li><i></i></li>
+			</ul>
+		</section>
+	</body>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan();
+		var info = window.sysfun;
+		info.init("V6Scene");
+		var deviceID = info.getItem("deviceID");
+		var arrEpNum = new Array();
+		var arrEpName = new Array();
+		var devType = "";
+		var devName = "";
+		//金属开关类设备选择开关
+
+		plus.plusReady(function() {
+		    plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+		    });
+			plus.gatewayCmd.getDeviceInfo(info.getItem("deviceID"), function(result) {
+				devID = result.devID;
+				gwID = result.gwID;
+				devType = result.type;
+				devName = result.name;
+				var name = "";
+				var htmlStr = "";
+				if(result.endpoints != null) {
+					for(var i = 0; i < result.endpoints.length; i++) {
+						var epNum = result.endpoints[i].endpointNumber;
+						var endpointType = result.endpoints[i].endpointType;
+						var displayEpName = getEpDisplayName(epNum, result.endpoints[i].endpointName);
+						console.log("epNum=" + epNum + " endpointType=" + endpointType + " displayEpName=" + displayEpName);
+						if(endpointType == 0x0002) { /*开关模式*/
+							htmlStr = htmlStr + '<li>' + displayEpName + '<i></i></li>'
+						} else { /*非开关模式*/
+							htmlStr = htmlStr + '<li>' + displayEpName + '<i style="color: #E2E2E2;">' + switch_AoEs_03 + '</i></li>';
+						}
+						arrEpNum.push(epNum);
+						arrEpName.push(displayEpName);
+					}
+					document.getElementById("set_list").innerHTML = htmlStr;
+				} else {
+					document.getElementById("set_list").innerHTML = "";
+				}
+				$(".set_list li").on("click", function() {
+					if($(this).find("i").html() == "") {
+						$(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+						var index = $(this).index();
+						console.log("index=" + index);
+						var curEpnum = arrEpNum[index];
+						console.log("curEpnum=" + curEpnum);
+						//存储开关名称
+						info.setItem("switchName", arrEpName[index]);
+						//存储开关对应的endpointNumber
+						info.setItem("num", curEpnum);
+						window.location = "setDoorState.html";
+					}
+				})
+			});
+
+		})
+
+		function getEpDisplayName(epNum, epName) {
+			var displayName = (epName == undefined) ? "" : epName;
+			if(epName.length == 0 || devType == "Ax") {
+				displayName = device_switch + " " + epNum; //若无名称，则前缀为开关
+			}
+			return displayName;
+		}
+	</script>
+
+</html>

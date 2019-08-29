@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>普通密码</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/set.css" />
+		<link rel="stylesheet" type="text/css" href="css/device.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" key="DoorLookOrdinaryPassword" href="javascript:;">普通密码</a>
+			</div>
+		</header>
+		<section class="content">
+			<strong class="autoSwitchLanguager" key="DoorLookOrdinaryPasswordtip">普通密码任何时间、不限次数使用</strong>
+			<div class="createInput">
+				<span class="autoSwitchLanguager" key="device_op_normal_04">密码</span>
+				<input id="pwd" type="password" value=""><i class="look"></i>
+			</div>
+		</section>
+		<section class="createBtn addSensorBtn">
+			<a href="javascript:;" style="opacity:0.6" class="autoSwitchLanguager" id="createNormalUser" key="DoorLookMoreSetup">创建</a>
+		</section>
+		<section class="clearnBtn">
+			<a href="javascript:;" style="opacity:0.6;line-height: 2rem;" class="autoSwitchLanguager" key="DoorLookMoreDeletePassword">删除已创建的密码须至锁体操作</a>
+		</section>
+		<!--<section id="fail" class="toast" style="display:none">-->
+			<!--<p class="autoSwitchLanguager" id="toastText" style="color:#fff;"></p>-->
+		<!--</section>-->
+	</body>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/completeToast.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/onceUser.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan()
+		var isCreate = false;
+		var isSending = false;
+		$("#pwd").on("input propertychange", function() {
+			if($(this).val().length >= 9) {
+				$(this).val($(this).val().substr(0, 9))
+			}
+		})
+		$("#back").on("click", function() {
+			plus.tools.goBack(function() {})
+		})
+		var PWD, DEVICEID, GWID, APPID;
+		var endpointNumber;
+		var token;
+		var info = window.sysfun;
+		info.init("Token_OW");
+		token = info.getItem("Token_OW")
+
+		plus.plusReady(function() {
+			$("#createNormalUser").on("click", function() {
+				if($("#pwd").val() == '') {
+				    window.showDialog.show(lang_DoorLookMoreValidatePassword1,2000);
+				} else {
+					var reg = new RegExp("^[0-9]*$");
+					if($("#pwd").val().length < 6 || $("#pwd").val().length > 9 || !reg.test($("#pwd").val())) {
+                        window.showDialog.show(lang_DoorLookMoreValidatePassword1,2000);
+					} else {
+						createToast()
+						PWD = $("#pwd").val()
+						createNormalUser(PWD)
+						setTimeout(function() {
+							if(!isSending) {
+								return;
+							}
+							$(".comToast").hide();
+                            window.showDialog.show(lang_DoorLookMoreValidatePassword4,2000);
+						}, 60000)
+					}
+				}
+			})
+
+			plus.gatewayCmd.getDeviceInfo(function(result) {
+				DEVICEID = result.devID;
+				GWID = result.gwID;
+				endpointNumber = result.endpoints[0].endpointNumber;
+				endpointType = result.endpoints[0].endpointType;
+				rush_500(DEVICEID, GWID)
+			})
+
+			plus.gatewayCmd.getCurrentAppID(function(result) {
+				APPID = result;
+			})
+		})
+
+		/*
+		 * 设备控制
+		 */
+		function createNormalUser(pwd) {
+			if(isCreate) {
+				return;
+			}
+			isCreate = true;
+			isSending = true;
+			setTimeout(function() {
+				isCreate = false;
+			}, 500)
+			var jsonData = {
+				"cmd": "501",
+				"gwID": GWID,
+				"devID": DEVICEID,
+				"endpointNumber": endpointNumber,
+				"clusterId": 257,
+				"commandType": 01,
+				"commandId": 32784,
+				"token": token,
+			};
+			var parameterData = [
+				pwd,
+				"000000000000",
+				"000000000000"
+			];
+			jsonData.parameter = parameterData;
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result" + result);
+			})
+		}
+
+		function rush_500(dID, gID) {
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				if(dID == result.devID && gID == result.gwID && result.cmd == "500") {
+					var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+					var attributeValueStr = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+					var attributeValue = parseInt(attributeValueStr);
+					isSending = false;
+					switch(attributeId) {
+						case 0x0000:
+							{
+								switch(attributeValue) {
+									case 4:
+										{
+											//反锁
+										}
+										break;
+									case 5:
+										{
+											//解除反锁
+										}
+										break;
+									case 10:
+										{
+											//普通用户添加已满
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword3,2000);
+										}
+										break;
+									case 11:
+										{
+											//单次用户添加已满
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword3,2000);
+											//分享
+										}
+										break;
+									case 12:
+										{
+											//临时用户添加已满
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword3,2000);
+										}
+										break;
+									case 14:
+										{
+											//时钟同步成功
+										}
+										break;
+								}
+							}
+							break;
+						case 0x8001:
+							{
+								switch(attributeValue) {
+									case 1:
+										{
+											//入侵报警
+										}
+										break;
+									case 2:
+										{
+											//报警解除
+										}
+										break;
+									case 3:
+										{
+											//破坏报警
+										}
+										break;
+									case 4:
+										{
+											//密码连续出错
+										}
+										break;
+									case 5:
+										{
+											//欠压报警
+										}
+										break;
+								}
+							}
+							break;
+						case 0x8006:
+							{
+								switch(attributeValue) {
+									case 7:
+										{
+											//密码重复
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword2,2000);
+										}
+										break;
+									case 8:
+										{
+											//密码非法
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword4,2000);
+										}
+										break;
+									case 9:
+										{
+											//时钟无效
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword4,2000);
+										}
+										break;
+									case 10:
+										{
+											//操作失败
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword4,2000);
+										}
+										break;
+								}
+							}
+							break;
+						case 0x8007:
+							{
+								switch(attributeValue) {
+									case 01:
+										{
+											//管理员认证通过
+										}
+										break;
+									case 02:
+										{
+											//(普通、单次)用户添加成功
+											$(".comToast").hide();
+											var shareinfo = window.sysfun;
+											shareinfo.init("Share_OW");
+											shareinfo.clear();
+											shareinfo.setItem("state", "0");
+											shareinfo.setItem("password", PWD);
+
+											window.location = "createdSuccess.html"
+										}
+										break;
+									case 03:
+										{
+											//删除单次有效用户成功
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookDeleteSuccessed,2000);
+										}
+										break;
+								}
+							}
+							break;
+						default:
+							{
+
+							}
+							break;
+					}
+				}
+			})
+		}
+	</script>
+
+</html>

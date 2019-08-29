@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:fitsSystemWindows="false"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+    <TextView
+        android:id="@+id/account_info_setting_textView"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="left"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="@drawable/dialog_background"
+        android:paddingLeft="5dp"
+        android:singleLine="true"
+        android:textColor="@color/black" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/transparent" />
+    <View
+        android:id="@+id/line_fifteen"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:background="@color/transparent"
+        android:visibility="gone"/>
+    <View
+        android:id="@+id/line_five"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/transparent"
+        android:visibility="gone"/>
+
+</LinearLayout>

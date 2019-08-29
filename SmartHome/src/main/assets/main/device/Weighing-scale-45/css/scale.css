@@ -1,0 +1,115 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  /*padding: 0rem @scale_header_font_size;*/
+  padding: 0rem 0rem;
+}
+.scale_analysis_header {
+  margin: 3.48rem auto;
+  width: 34.4rem;
+  border-radius: 1.12rem;
+  font-size: 0;
+  letter-spacing: 0;
+}
+.scale_analysis_header h5:first-child {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1.68rem;
+  text-align: center;
+  padding-top: 1.68rem;
+}
+.scale_analysis_header h5:nth-child(2) {
+  font-size: 1.38rem;
+  color: #ffffff;
+  text-align: center;
+  margin-top: 1.68rem;
+}
+.scale_analysis_header h5:nth-child(3) {
+  color: #ffffff;
+  text-align: center;
+  margin-top: 1.02rem;
+  font-size: 4.5rem;
+  font-weight: bold;
+  line-height: 3.75rem;
+  padding-bottom: 3rem;
+}
+.scale_analysis_header h5:nth-child(3) span {
+  font-size: 1.68rem;
+}
+.normal {
+  background-image: -webkit-linear-gradient(top left, #93ffbe, #0ddf75 55%);
+}
+.abnormal {
+  background-image: -webkit-linear-gradient(top left, #ec846d, #ef5a58 55%);
+}
+.scale_analysis_title_record {
+  color: #000000;
+  font-weight: bold;
+  font-size: 1.62rem;
+  line-height: 1.875rem;
+  padding: 0rem 1.5rem;
+}
+#scale_analysis_record_detail li {
+  margin: 2.7rem 0rem;
+  list-style-type: none;
+  font-size: 0;
+  padding: 0rem 1.5rem;
+}
+#scale_analysis_record_detail li span:first-child {
+  color: #000000;
+  font-size: 1.38rem;
+}
+#scale_analysis_record_detail li span:nth-child(2) {
+  font-size: 1.38rem;
+  color: #999999;
+  float: right;
+}
+.progress {
+  width: 100%;
+  text-align: center;
+  margin-top: 10rem;
+}
+.progress div {
+  margin-top: 0rem;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+}
+.progress button {
+  width: 11rem;
+  height: 3.4rem;
+  font-size: 1.4rem;
+  border-radius: 0.5rem;
+  outline: none;
+}
+.progress button:first-child {
+  background-color: #ffffff;
+  border: 1px solid #333333;
+  color: #333333;
+  margin-right: 3rem;
+}
+.progress button:nth-child(2) {
+  color: #ffffff;
+  border: none;
+}
+.keep_record {
+  background-color: #8dd652;
+}
+.finish_keep {
+  background-color: #999999;
+}
+.remove {
+  text-decoration: none;
+}
+.if_show {
+  width: 100%;
+  color: #eeeeee;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: none;
+}

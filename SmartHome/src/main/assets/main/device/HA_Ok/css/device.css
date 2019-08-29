@@ -1,0 +1,523 @@
+@charset "utf-8";
+
+html,body{
+	width:100%;
+	height:100%;
+	position:fixed;
+	left:0;
+	top:0;
+	background:#fff;
+}
+button{
+	border:0;
+}
+b,strong{
+	font-weight:normal!important;
+}
+
+.detail{
+	width: 100%;
+	height: calc(100% - 6.4rem);
+}
+
+.top{
+	width: 100%;
+	height: 17%;
+}
+
+.switch{
+	width: 5rem;
+	height: auto;
+	text-align: center;
+	float: left;
+	margin-left: 3rem;
+	margin-top: 1rem;
+}
+
+.switch i{
+	display: inline-block;
+	height: 4rem;
+	width: 4rem;
+	background: url(../fonts/icon_on.png) no-repeat center center;
+	background-size: 4rem;
+}
+.top span{
+	font-size: 1.5rem;
+	color: #040404;
+	width: 5rem;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.temperature{
+	float: right;
+	width: 5rem;
+	height: auto;
+	text-align: center;
+	margin-right: 4rem;
+	margin-top: 1.6rem;
+}
+
+.temperature div{
+	height: 4rem;
+	line-height: 4rem;
+}
+
+#temperature_value{
+	font-size: 3.5rem;
+	height: 4rem;
+	line-height: 4.2rem;
+}
+
+#temperature_unit{
+	width: 2rem;
+	height: 2rem;
+	position: absolute;
+	background: url(../fonts/icon_temperature_unit_small.png) no-repeat center center;
+	background-size: 2rem;
+	margin-top: -0.5rem;
+}
+.temperature_desc{
+	display: inline-block;
+}
+.middle{
+	width: 100%;
+	height: 55%;
+	text-align: center;
+}
+
+.bottom{
+	position: relative;
+	width: 100%;
+	height: 28%;
+	background-color: #F3F3F3;
+}
+
+.bottom ul{
+	font-size: 0;
+	position: absolute;
+}
+
+.bottom ul:nth-child(1){
+	top: 1.5rem;
+	width: 100%;
+	line-height: 0;
+}
+
+.bottom ul:nth-child(2){
+	bottom: 1.5rem;
+	width: 100%;
+	line-height: 0;
+}
+
+.mode{
+	display: inline-block;
+	width: 34%;
+	height: auto;
+	text-align: center;
+}
+
+.wind_speed{
+	display: inline-block;
+	width: 32%;
+	height: auto;
+	text-align: center;
+}
+
+.wind_direction{
+	display: inline-block;
+	width: 34%;
+	height: auto;
+	text-align: center;
+}
+
+.timing{
+	display: inline-block;
+	width: 34%;
+	height: auto;
+	text-align: center;
+}
+
+.fast_cold_hot{
+	display: inline-block;
+	width: 32%;
+	height: auto;
+	text-align: center;
+}
+
+.mute{
+	display: none;
+	width: 34%;
+	height: auto;
+	text-align: center;
+}
+
+.bottom i{
+	display: inline-block;
+	height: 3.2rem;
+	width: 3.2rem;
+}
+
+.bottom span{
+	font-size: 1.5rem;
+	height: 2.4rem;
+	line-height: 3rem;
+	color: #050505;
+	display: block;
+	width: 100%;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.mode i{
+	background: url(../fonts/icon_mode.png) no-repeat center center;
+	background-size: 3.2rem;
+}
+
+.wind_speed i{
+	background: url("../fonts/icon_wind_speed.png") no-repeat center center;
+	background-size: 3.2rem;
+}
+
+.wind_direction i{
+	background: url("../fonts/icon_wind_direction.png") no-repeat center center;
+	background-size: 3.2rem;
+}
+
+.timing i{
+	background: url("../fonts/icon_timing.png") no-repeat center center;
+	background-size: 3.2rem;
+}
+
+.fast_cold_hot i{
+	background: url("../fonts/icon_fast_heat_cold.png") no-repeat center center;
+	background-size: 3.2rem;
+}
+
+.mute i{
+	background: url("../fonts/icon_mute.png") no-repeat center center;
+	background-size: 3.2rem;
+}
+
+.temperature_selector{
+	display: inline-block;
+	overflow: hidden;
+	height: 15rem;
+	width: 50%;
+}
+
+.temperature_invalid{
+	display: none;
+	height: 15rem;
+	line-height: 15rem;
+	font-size: 10rem;
+}
+
+.select_value{
+	display:block;
+	font-size: 3rem;
+	color: #000000;
+	font-family: serif;
+	height: 3rem;
+	line-height: 3rem;
+}
+
+.current_value{
+	display:block;
+	font-size: 10rem;
+	color: #000000;
+	font-family: serif;
+	height: 15rem;
+	line-height: 15.8rem;
+}
+
+.temperature_selector_unit{
+	width: 4rem;
+	height: 4rem;
+	position: absolute;
+	background: url(../fonts/icon_temperature_unit_big.png) no-repeat center center;
+	background-size: 4rem;
+	margin-top: 2rem;
+	margin-left: -3rem;
+}
+
+.info{
+	display: inline-block;
+	width: 48%;
+	border-radius: 0.4rem;
+	background: #E7E7E7;
+	padding: 1.6rem 1.5rem 1.6rem 1.5rem;
+}
+
+.middle_top{
+	line-height: 0;
+}
+
+.info div{
+	display: inline-block;
+	font-size: 1.5rem;
+	color: #181818;
+	height: 2.2rem;
+	line-height: 2.5rem;
+	text-align: left;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.info span{
+	display: inline-block;
+	height: 2.2rem;
+	line-height: 2.5rem;
+	vertical-align:middle;
+}
+
+.info_title,.info_value{
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.timing_info span:nth-child(1){
+	font-size: 1.6rem;
+}
+
+.timing_info span:nth-child(2){
+	color: #8DD652;
+	font-size: 1.6rem;
+	margin-left: 1.5rem;
+}
+
+/**********************************************************************
+ *                              重写 picker样式
+ **********************************************************************/
+.mui-poppicker-body{
+	height:20rem;
+	clear: both;
+	border-top: solid 0px #ddd;
+}
+.mui-poppicker{
+	 border-top: solid 0px #ccc;
+	background-color: #F7F7F7;
+}
+.mui-poppicker-clear{
+	overflow: hidden;
+	text-align: center;
+	position: absolute;
+	left: 50%;
+	padding: 3px 0 0 0;
+	-webkit-transform: translate(-50%);
+	-moz-transform: translate(-50%);
+	-ms-transform: translate(-50%);
+	-o-transform: translate(-50%);
+	transform: translate(-50%);
+	color: #373737;
+	height: inherit;
+	line-height: inherit;
+	font-size: 1.6rem;
+}
+
+.mui-backdrop{
+	background-color:transparent;
+}
+.mui-btn {
+	background: transparent;
+	border: none;
+	color: #8dd652;
+	font-size: 1.6rem!important;
+}
+.mui-picker{
+	background:#fff;
+}
+
+.mui-pciker-rule{
+	font-size: 1.8rem!important;
+}
+
+/*遮罩层*/
+.confirm_bg{
+	display:none;
+	position:fixed;
+	z-index:2000;
+	left:0;
+	top:6.4rem;
+	width:100%;
+	height: calc(100% - 6.4rem);
+	text-align:center;
+	background:rgba(0,0,0,0.3)
+}
+
+.confirm_dialog{
+	width: 65%;
+	background-color: #ffffff;
+	border-radius: 0.3rem;
+	display: inline-block;
+	top: 40%;
+	position: absolute;
+	left: 50%;
+	-webkit-transform: translate(-50%);
+	-moz-transform: translate(-50%);
+	-ms-transform: translate(-50%);
+	-o-transform: translate(-50%);
+	transform: translate(-50%);
+	font-size: 0;
+	line-height: 0;
+}
+
+.cancel_tip{
+	height: 2rem;
+	line-height: 2.4rem;
+	font-size: 1.6rem;
+	color: #181818;
+	margin: 3rem 0 3rem 0;
+}
+
+#cancel{
+	font-size: 1.6rem;
+	display: inline-block;
+	width: 49%;
+	height: 4.2rem;
+	line-height: 4.6rem;
+	border-right: 1px solid #c1c1c1;
+}
+
+#confirm{
+	color: #8DD652;
+	font-size: 1.6rem;
+	display: inline-block;
+	width: 49%;
+	height: 4.2rem;
+	line-height: 4.6rem;
+}
+
+.dialog_line{
+	display: inline-block;
+	height: 0.1rem;
+	width: 100%;
+	background-color: #C1C1C1;
+}
+
+/*正在加载*/
+.loadToast{
+	position:fixed;
+	left:0;
+	top: 6.4rem;
+	width:100%;
+	height: calc(100% - 6.4rem);
+	z-index:555;
+	background:rgba(0,0,0,0.3)
+}
+
+.loadToast div{
+	position: absolute;
+	left: 35%;
+	top: 50%;
+	width: 30%;
+	height: 8rem;
+	text-align: center;
+	background: rgba(0,0,0,0.4);
+	border-radius: 5px;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+	padding-top: 2rem;
+}
+.loadToast div i{
+	display: inline-block;
+	height: 5rem;
+	line-height: 5rem;
+	font-size: 1.4rem;
+	color: #fff;
+}
+.loadToast div p{
+	color:#fff;
+}
+@-webkit-keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+@keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+.loadToast div em{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	background: url(../fonts/icon_loading.png) no-repeat center center;
+	background-size: 20px auto;
+}
+.loadToast div em.rotate{
+	-webkit-animation: rotate 0.7s linear infinite;
+	animation: rotate 0.7s linear infinite;
+}
+
+/**********************************************************************
+ *                              自定义 picker样式
+ **********************************************************************/
+#selector{
+	display: inline-block;
+	overflow: hidden;
+	height: 15rem;
+	width: 50%;
+	padding-top: 2rem;
+}
+
+.my-poppicker{
+	position: relative;
+	z-index: 1;
+	border-top: solid 0px #ccc;
+	bottom: 0;
+	-webkit-transform: translateY(300px);
+	background: none;
+	height: 10rem;
+	box-shadow:none;
+}
+
+.my-mui-picker{
+	background: none;
+}
+
+.my-mui-poppicker-body{
+	height: 12rem;
+	clear: both;
+	border-top: none;
+}
+
+.my-mui-pciker-rule-ft {
+	z-index: 2;
+	border-top: none;
+	border-bottom: none;
+	margin: -50px 0 0;
+	height: 10rem;
+	line-height: 10rem;
+}
+
+.my-mui-pciker-rule-bg{
+	margin: -50px 0 0;
+	height: 10rem;
+	line-height: 10rem;
+}
+
+.my-mui-pciker-list{
+	margin: -50px 0 0;
+	height: 10rem;
+	line-height: 10rem;
+}
+
+.my-mui-pciker-list li{
+	font-size: 10rem;
+	font-family: serif;
+	line-height: 10.8rem;
+}

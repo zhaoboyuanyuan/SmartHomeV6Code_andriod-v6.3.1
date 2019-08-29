@@ -1,0 +1,200 @@
+@charset "utf-8";
+body, button, select, textarea, input, label, option, fieldset, legend{font-family: "微软雅黑",Tahoma,Verdana;}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, legend, input, textarea, button, p, blockquote, th, td{margin: 0;padding: 0;}
+textarea{resize: none}
+textarea, input{outline: none;}
+.clear{height:1px;overflow:hidden;clear:both;}
+a,img{border:0;}
+a{color: #666;text-decoration: none;}
+li{list-style-type:none;}
+i,em{font-style: normal;}
+.fl{float:left;}
+.fr{float:right;}
+.ds{display:block;}
+.hid{overflow:hidden;}
+.clearfix{*zoom:1}
+.clearfix:after{display:block;visibility:hidden;clear:both;height:0;content:'.';font-size:0}
+html,body{width:100%;height:100%;}
+
+/*header*/
+header{
+    width:100%;
+    background:#8dd652;
+    overflow: hidden;
+}
+.header_top{
+    padding-top:2rem;
+    width:100%;
+    height:4.4rem;
+}
+header a{
+	float:left;
+	display:block;
+	width:73.2%;
+	height:4.4rem;
+	text-align:center;
+	line-height:4.4rem;
+	font-size:1.7rem;
+	color:#fff;
+}
+header a:nth-child(1),header a:nth-child(3){
+	width:13.4%;
+}
+header a:nth-child(1){
+	background:url(../fonts/icon_back_1.png) no-repeat center center;
+	background-size:2.2rem auto;
+}
+header a:nth-child(3){
+	background:url(../fonts/icon_more.png) no-repeat center center;
+	background-size:2rem auto;
+}
+header a:nth-child(2){
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-webkit-tap-highlight-color: #FFFFFF;
+}
+
+
+/*提示*/
+.tooltip{
+	position:relative;
+	padding-top:3.8rem;
+	text-align:center;
+	overflow:hidden;
+}
+.tooltip a{
+	display:block;
+	position:absolute;
+	right:4%;
+	top:1rem;
+	width:3.1rem;
+	height:3.1rem;
+	background:url(../fonts/cartogram.png) no-repeat left top;
+	background-size:3.1rem auto;
+}
+/*优背景图*/
+.tooltip .img_bg{
+	display:inline-block;
+	width:20.5rem;
+	height:20.5rem;
+	text-align:center;
+	line-height:20.5rem;
+	font-size:4rem;
+	color:#8dd652;
+	background:url(../fonts/icon_better.png) no-repeat center center;
+	background-size:20.5rem auto;
+}
+/*良背景图*/
+.tooltip .img_bg_01{
+	color:#ff8212;
+	background:url(../fonts/icon_general.png) no-repeat center center;
+	background-size:20.5rem auto;
+}
+/*差背景图*/
+.tooltip .img_bg_02{
+	color:#48a0dc;
+	background:url(../fonts/icon_bad.png) no-repeat center center;
+	background-size:20.5rem auto;
+}
+.tooltip span{
+	display:block;
+	width:100%;
+	/*height:5.5rem;*/
+	margin-top:1rem;
+	line-height:3rem;
+	text-align:center;
+	font-size:1.8rem;
+	color:#727272;
+}
+/*底部*/
+.carbonDioxideMonitor{
+	position:fixed;
+	left:0;
+	bottom:0;
+	width:100%;
+	height:28rem;
+	/*background:url(../fonts/icon_bg.png) no-repeat left top;*/
+	background-size:100% auto;
+}
+
+.carbonDioxideMonitor .ht_data{
+	width:100%;
+	height:16rem;
+	margin-top:9rem;
+}
+.carbonDioxideMonitor .ht_data dt{
+	display:block;
+	width:100%;
+	height:8.5rem;
+	font-size:4.5rem;
+	color:#333;
+	padding-left: 0;
+	text-align: center;
+	/*background:url(../fonts/icon_hot.png) no-repeat left top;*/
+	background-size:1.8rem auto;
+}
+/*.carbonDioxideMonitor .ht_data dl dt em{
+	font-size:2.4rem;
+}*/
+.carbonDioxideMonitor .ht_data dl:nth-child(2) dt{
+	background:url(../fonts/icon_water.png) no-repeat left top;
+	background-size:2.2rem auto;
+}
+.carbonDioxideMonitor .ht_data dl dd{
+	width:100%;
+	height:5rem;
+	text-align:center;
+	font-size:1.7rem;
+	color:#737373;
+}
+
+/*遮罩层*/
+.mask_layer{
+	display:none;
+	position:absolute;
+	left:0;
+	top:6.4rem;
+	z-index:1000;
+	width:100%;
+	height:calc(100% - 6.4rem);
+	z-index:100;
+	text-align:center;
+	background:rgba(0,0,0,0.7)
+}
+.mask_layer i{
+	display:inline-block;
+	width:8rem;
+	height:8rem;
+	margin-top:15rem;
+	background:url(../fonts/icon_new.png) no-repeat center center;
+	background-size:8rem auto;
+}
+.mask_layer span{
+	display:block;
+	width:100%;
+	height:5rem;
+	line-height:5rem;
+	text-align:center;
+	font-size:1.6rem;
+	color:#fff;
+}
+
+/*toast提示*/
+.gw_toast{
+	display:none;
+	position:fixed;
+	left:20%;
+	top:50%;
+	z-index:1000;
+	width:60%;
+	height:3rem;
+	line-height:3rem;
+	text-align:center;
+	background:rgba(0,0,0,.3);
+	font-size:1.4rem;
+	color:#fff;
+	border-radius: 4rem;
+}
+
+

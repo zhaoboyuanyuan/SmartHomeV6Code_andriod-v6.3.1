@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>设备操作</title>
+</head>
+<link rel="stylesheet" type="text/css" href="css/base.css" />
+<link rel="stylesheet" type="text/css" href="css/deviceList.css" />
+<link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+
+<script type="text/javascript" charset="UTF-8" src="../source/js/jquery-3.1.1.min.js"></script>
+<script src="../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/deviceList.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/waiting.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/model.js" type="text/javascript" charset="UTF-8"></script>
+<link rel="stylesheet" type="text/css" href="css/waiting.css" />
+
+<body>
+	<header class="header">
+		<div class="header_top">
+			<a class="back" href="javascript:history.back(-1)"></a>
+			<a class="deviceName autoSwitchLanguager" href="javascript:;" langKey="Fog_calculation_Sub_machine_device">子机内设备</a>
+			<a href="javascript:;"></a>
+		</div>
+	</header>
+	<div style="text-align: right; margin-right: 2rem; height: 3rem; line-height: 3rem;">
+		<span id="deviceNum">0</span>
+		<span langKey='Fog_calculation_Number' class="autoSwitchLanguager">个</span>
+	</div>
+	<div class="get_list">
+		<ul>
+		</ul>
+	</div>
+	<section class="waiting" style="display: none">
+		<i></i>
+		<span class="autoSwitchLanguager" langKey="Fog_calculation_Bind_ing">处理中...</span>
+	</section>
+</body>
+<script>
+	var subGWID = getUrlParam("subgwid");
+	initlan();
+	var alldeviceList = [];
+	plus.plusReady(function () {
+		plus.gatewayCmd.getSubGWDevices(subGWID, function (data) {
+			console.log(data);
+			if (data.length > 0) {
+				$(".get_list ul").html('');
+				$("#deviceNum").text(data.length);
+				for (var i = 0; i < data.length; i++) {
+					var device = data[i];
+					if (!device.roomName) {
+						device.roomName = languageUtil.getResource("Fog_calculation_New_10");
+					}
+					var deviceModel = GetDeviceModel(device.name, device.type, device.mode, device.roomName);
+					createDeviceCell(deviceModel);
+				}
+			}
+		});
+	});
+</script>
+
+</html>

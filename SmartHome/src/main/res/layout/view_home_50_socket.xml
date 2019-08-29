@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/widget_padding_vertical"
+    android:paddingLeft="@dimen/widget_padding_horizontal"
+    android:paddingRight="@dimen/widget_padding_horizontal"
+    android:paddingTop="@dimen/widget_padding_vertical">
+
+    <include layout="@layout/view_widget_title" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/widget_padding_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="63dp"
+                android:layout_height="63dp">
+
+                <ImageView
+                    android:id="@+id/one_switch_image"
+                    android:layout_width="63dp"
+                    android:layout_height="63dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/home_widget_circle_gray"
+                    android:padding="18dp"
+                    android:src="@drawable/switch_off" />
+
+                <cc.wulian.smarthomev6.support.customview.ProgressRing
+                    android:id="@+id/one_switch_progress"
+                    android:layout_width="63dp"
+                    android:layout_height="63dp"
+                    android:layout_gravity="center"
+                    android:visibility="invisible"
+                    app:ringEndColor="@color/colorPrimary"
+                    app:ringStartColor="#F7FAF5"
+                    app:ringWidth="1.5dp" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/state_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:text="@string/Device_switch_Widget_Off"
+                android:textColor="#535353"
+                android:textSize="@dimen/widget_secondary_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

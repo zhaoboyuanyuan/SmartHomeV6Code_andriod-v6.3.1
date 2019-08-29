@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>金指码门锁</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../css/setState.css">
+    <link rel="stylesheet" type="text/css" href="../css/goldLock.css">
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+    <header class="header">
+        <div class="header_top">
+            <a href="javascript:history.back(-1);"></a>
+            <a href="javascript:;" class="autoSwitchLanguager deviceName" id="addDevice_op_name">添加门锁</a>
+            <a href="javascript:;"></a>
+        </div>
+    </header>
+    <section class="goldLock">
+        <span class="autoSwitchLanguager" id="addDevice_op_txt_07" style="line-height:3rem;height:6rem;">正在加网<br />请耐心等待屏幕提示加网结果  </span>
+        <div class="add_loading">
+            <i></i>
+            <i>
+                <em></em>
+                <em></em>
+                <em></em>
+                <em></em>
+            </i>
+            <i></i>
+        </div>
+    </section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/success.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan()
+    //正在加网动画
+    var time;
+    var num = 0;
+    var info = window.sysfun;
+    info.init("V6addDevice");
+    info.clear();
+    info.setItem("type", "OP");
+    function loading(){
+        if(num <= 3) {
+            $(".add_loading i").eq(1).find("em").eq(num).css({"background":"url(../fonts/icon_cicle.png) no-repeat center center","background-size":"0.55rem 0.55rem"})
+        }
+        num = num + 1;
+        if(num == 5) {
+            num = 0;
+            $(".add_loading i").eq(1).find("em").css({"background":"url(../fonts/icon_circle_01.png) no-repeat center center","background-size":"0.55rem 0.55rem"})
+        }
+    }
+    plus.plusReady(function(){
+        info.setItem("name", languageUtil.getResource("addDevice_op_title"));
+        time = setInterval(function(){
+            loading()
+        },400)
+        setTimeout(function(){
+            window.location = "addDevice_fail.html";
+        },60000)
+    })
+
+</script>
+</html>

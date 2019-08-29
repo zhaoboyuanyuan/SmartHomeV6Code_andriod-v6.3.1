@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>离家/回家场景</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/device.css">
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="Device_Bk_details_name" href="javascript:;">睡觉/起床场景开关</a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<section class="content">
+    <div class="theOne theScene">
+        <img id="1" data-sceneid="" src="fonts/icon_sleep.png" />
+        <span class="autoSwitchLanguager" key="Device_Bk_sleep_Unbound">睡觉未绑定</span>
+    </div>
+    <div class="theTwo theScene">
+        <img id="2" data-sceneid="" src="fonts/icon_getup.png" />
+        <span class="autoSwitchLanguager" key="Device_Bk_getup_Unbound">起床未绑定</span>
+    </div>
+    <section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="offLine">设备已离线</span></section>
+</section>
+<script type="text/javascript" src="../../source/js/rem.js"></script>
+<script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="lang/lang.js"></script>
+<script type="text/javascript">
+    initlan();
+    var deviceId;
+    var gwId;
+    var appId;
+    plus.plusReady(function(){
+        $("#back").on("click",function(){
+            plus.tools.back(function(){})
+        });
+        $(".more").on("click", function() {
+            plus.tools.more("", function(){});
+        });
+        plus.gatewayCmd.getDeviceInfo(function(result){
+            deviceId = result.devID;
+            gwId = result.gwID;
+            appId = result.appID;
+            //判断设备当前状态
+            modeState(result.mode,deviceId,gwId,appId);
+            rush_514(deviceId)
+        })
+        $(".theScene img").on("click",function(){
+            var num = $(this).attr("id");
+            var sceneId = $(this).attr("data-sceneid");
+            window.location = "sceneList.html?num="+num+"&sceneID="+sceneId;
+        });
+    });
+    function modeState(mode,devID,gwID,appID){
+        switch (mode){
+            case 0:
+                $(".mask_layer").hide();
+                send_514(devID,gwID,appID);
+                break;
+            case 1:
+                $(".mask_layer").hide();
+                send_514(devID,gwID,appID);
+                break;
+            case 2:
+                //设备离线
+                $(".mask_layer").show();
+                break;
+            case 3:
+                //设备主动退网
+                $(".mask_layer").show();
+                break;
+            case 4:
+                //设备第一次上线
+                $(".mask_layer").hide();
+                send_514(devID,gwID,appID);
+                break;
+            default:
+                break;
+        }
+    }
+    function send_514(devID,gwID,appID){
+        var param = {
+            "cmd":"514",
+            "gwID":gwID,
+            "appID":appID,
+            "devID":devID
+        };
+        plus.gatewayCmd.controlDevice(param,function(){})
+    }
+    function rush_514(devID){
+        plus.gatewayCmd.newDataRefresh(function(result){
+            if(result.cmd == "514" && result.devID == devID){
+                drawUI(result.data)
+            }else if(result.cmd == "500" && result.devID == devID){
+                var name = result.name.indexOf("#$default$#") != -1 ? device_Bk_name + result.name.split("#")[2]:result.name;
+                $(".deviceName").html(name)
+                modeState(result.mode,result.devID,result.gwID,result.appID);
+            }else if(result.cmd == "502" && result.devID == devID){
+                var deviceName = result.name.indexOf("#$default$#") != -1 ? device_Bk_name + result.name.split("#")[2]:result.name;
+                $(".deviceName").html(deviceName)
+            }
+        })
+    }
+    function drawUI(list){
+        if(list.length > 0){
+            for(var i=0;i<list.length;i++){
+                var imgSrc = '';
+                var str = '';
+                if(list[i].endpointNumber == 1){
+                    imgSrc = "fonts/icon_sleep_pre.png";
+                    str = device_sleep_bind
+                }else{
+                    imgSrc = "fonts/icon_getup_pre.png";
+                    str = device_getup_bind
+                }
+                $("#"+list[i].endpointNumber).attr("src",imgSrc);
+                $("#"+list[i].endpointNumber).attr("data-sceneid",list[i].sceneID)
+                $("#"+list[i].endpointNumber).siblings("span").html(str);
+                $("#"+list[i].endpointNumber).siblings("span").css("color","#8dd652")
+            }
+        }else{
+            $(".theOne").find("img").attr("src","fonts/icon_sleep.png");
+            $(".theOne").find("img").attr("data-sceneid","")
+            $(".theOne").find("span").html(device_sleep_unBind);
+            $(".theOne").find("span").css("color","#999")
+            $(".theTwo").find("img").attr("src","fonts/icon_getup.png");
+            $(".theTwo").find("span").html(device_getup_unBind)
+            $(".theTwo").find("span").css("color","#999")
+            $(".theTwo").find("img").attr("data-sceneid","")
+        }
+    }
+</script>
+</body>
+</html>

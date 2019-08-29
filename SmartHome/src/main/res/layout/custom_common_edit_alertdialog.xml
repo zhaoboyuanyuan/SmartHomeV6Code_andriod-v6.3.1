@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="title"
+            android:textColor="@color/v6_text_gray"
+            android:textSize="@dimen/default_text_size" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/v6_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/default_padding_normal"
+        android:layout_height="@dimen/config_device_btn_height"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_input"
+            android:layout_width="match_parent"
+            android:paddingLeft="@dimen/default_padding_small"
+            android:layout_height="@dimen/default_button_height"
+            android:layout_gravity="center_vertical"
+            android:background="@color/v6_bg"
+            android:gravity="center_vertical"
+            android:inputType="text"
+            android:maxLength="32"
+            android:textColor="@color/black"
+            android:textSize="@dimen/default_text_size" />
+    </LinearLayout>
+
+
+    <View
+        android:background="@color/v6_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_positive"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="@string/Sure"
+            android:gravity="center"
+            android:background="@color/white"
+            android:textColor="@color/v6_green"
+            android:textSize="@dimen/default_text_size" />
+        <View
+            android:background="@color/v6_line"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"/>
+
+        <Button
+            android:id="@+id/btn_negative"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:text="@string/Cancel"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+    </LinearLayout>
+
+</LinearLayout>

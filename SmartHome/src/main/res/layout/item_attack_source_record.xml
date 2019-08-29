@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/text_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:background="@drawable/shape_attack_record_date"
+        android:text="2017-5-01"
+        android:textColor="#6B6B6B"/>
+
+    <TextView
+        android:id="@+id/attack_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_date"
+        android:text="10:50"
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/attack_source"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:ellipsize="end"
+        android:text="DOS攻击"
+        android:layout_alignStart="@+id/attack_date"
+        android:layout_below="@+id/attack_date"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="15dp"/>
+
+    <TextView
+        android:id="@+id/attack_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:ellipsize="end"
+        android:text="攻击源距离0.1km"
+        android:layout_alignStart="@+id/attack_source"
+        android:layout_below="@+id/attack_source"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="15dp"/>
+
+    <ImageView
+        android:id="@+id/icon_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_alarm_detail_time_node"
+        android:layout_alignBottom="@id/attack_source"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"/>
+
+    <View
+        android:id="@+id/line_top"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:background="#C4C4C4"
+        android:layout_marginStart="22dp"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/icon_point"
+        android:layout_marginTop="-1dp"
+        android:layout_alignBaseline="@id/icon_point"/>
+
+    <View
+        android:id="@+id/divider_line"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#EDEDED"
+        android:layout_alignStart="@id/attack_distance"
+        android:layout_below="@id/attack_distance"/>
+
+    <View
+        android:id="@+id/line_bottom"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#C4C4C4"
+        android:layout_below="@id/icon_point"
+        android:layout_above="@id/divider_line"
+        android:layout_marginStart="22dp"/>
+
+    <View
+        android:id="@+id/link_point"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:background="#C4C4C4"
+        android:layout_below="@id/line_bottom"
+        android:layout_marginStart="22dp"/>
+</RelativeLayout>

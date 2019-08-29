@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>普通密码</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/set.css" />
+		<link rel="stylesheet" type="text/css" href="css/device.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" key="createTemAc" href="javascript:;">创建临时用户</a>
+			</div>
+		</header>
+		<section class="content">
+			<div style="width: 100%;height: 30%;text-align: center;">
+				<img style="width: 10rem;height: 10rem;margin-top: 5rem;" src="fonts/icon_circle.png" />
+
+			</div>
+			<div style="width: 100%;text-align: center;margin-top: 1rem;">
+				<a id="noticeTitle" style="width: 100%;margin-top: 10rem;color: #000000;font-size: 1.5rem;" class="autoSwitchLanguager" key="DoorLook_More_Created_successfully">创建成功</a><br>
+			</div>
+			<div style="width: 100%;text-align: center;margin-top: 6.5rem;">
+				<a id="noticeType" class="autoSwitchLanguager" key="DoorLook_More_Created_Password" style="color: #676767;font-size: 1.5rem;">密码为：</a>
+			</div>
+			<div style="width: 100%;text-align: center;margin-top: 1.5rem;">
+				<a id="noticeContent" style="width: 100%;color: #757575;font-size: 4.5rem;">3333</a>
+			</div>
+		</section>
+		<section class="shareBtn addSensorBtn">
+			<a href="javascript:;" class="autoSwitchLanguager" id="sharepassword" key="DoorLook_More_Send">发送给Ta</a>
+		</section>
+		<section class="doneBtn">
+			<a href="javascript:;" class="autoSwitchLanguager" id="sharedone" key="DoorLook_More_Send_ok">完成</a>
+		</section>
+		<!--<section id="fail" class="toast" style="display:none;">-->
+			<!--<p class="autoSwitchLanguager" id="toastText" style="color:#fff;"></p>-->
+		<!--</section>-->
+	</body>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/completeToast.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan();
+		var info = window.sysfun;
+		info.init("Share_Bc");
+		var sharepassword = info.getItem("password");
+        var startTime = info.getItem("startTime");
+        var endTime = info.getItem("endTime");
+        var type = getUrlParam("type");
+		$("#back").on("click", function() {
+			plus.tools.goBack(function() {})
+		})
+
+		$("#sharedone").on("click", function() {
+		    if(type === "Bf"){
+                window.location = "accountManageForBf.html"
+			}else if(type === "Bg"){
+                window.location = "accountManageForBg.html"
+			}else if(type === "Bq"){
+                window.location = "accountManageForBq.html"
+			}else {
+                window.location = "accountManage.html"
+			}
+		});
+
+		plus.plusReady(function() {
+			document.getElementById("noticeContent").textContent = sharepassword;
+
+			$("#sharepassword").on("click", function() {
+				var sharepasswordStr = device_bc_send_content_1 + sharepassword + "," + device_bc_send_content_2 + startTime + device_bc_send_content_3 + endTime +"," + device_bc_send_content_4;
+				plus.gatewayCmd.openShare(sharepasswordStr, function(result) {
+
+				})
+			})
+		})
+	</script>
+
+</html>

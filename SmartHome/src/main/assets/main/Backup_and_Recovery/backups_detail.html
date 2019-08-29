@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <title>Title</title>
+    <script src="../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="css/base.css?v=1" />
+    <link rel="stylesheet" type="text/css" href="../source/mui/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+    <link rel="stylesheet" type="text/css" href="css/backupsRecovery.css?v=1.1" />
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:window.history.back(-1);"></a>
+        <a href="javascript:;" class="autoSwitchLanguager" key="Backup_Manual">手动备份</a>
+        <!--<a class="more" href="javascript:;"></a>-->
+    </div>
+</header>
+<div class="content_top">
+    <img src="./img/backups_first.png">
+</div>
+<h5 class="backups_record autoSwitchLanguager" key="Backup_recording">备份记录</h5>
+<ul class="backups_num">
+    <!--<li>自动备份：2018/10/02  10:50</li>-->
+    <!--<li>自动备份：2018/10/02  10:50</li>-->
+    <!--<li>自动备份：2018/10/02  10:50</li>-->
+</ul>
+<h5 class="backups_record_null autoSwitchLanguager" key="Backup_no_recording">未找到此网关的备份数据</h5>
+<div class="add_backups">
+    <button id="add_backups" class="autoSwitchLanguager" key="Backup_add">新增备份</button>
+</div>
+<!--遮罩-->
+<div class="mask">
+    <!--弹窗-->
+    <div class="popUp">
+        <p class="autoSwitchLanguager" key="Backup_Manual_3">系统会保留最近的3次手动备份数据，继续操作则较早数据将被覆盖</p>
+        <div>
+            <div>
+                <div id="backups_cancel" class="autoSwitchLanguager" key="device_Backup_Cancel">取消</div>
+                <div id="backups_start" class="autoSwitchLanguager" key="device_Backup_ok">确定</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="js/more.js"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("gateway_Recover");
+    initlan();
+    var manual = 0;
+    plus.plusReady(function(){
+        plus.gatewayCmd.getGatewayBackupData("",function(data){
+            // alert(data);
+            var pingjie=''; 
+            if(data){
+                var result = JSON.parse(data);
+                if(result.backupData){
+                    var newData = result.backupData;
+                    for(var i=0;i<newData.length;i++){
+                        var type = newData[i].type === "0" ? lang_Backup_automatic : lang_Backup_Manual;
+                        pingjie = pingjie +'<li>'+type+':'+newData[i].time+'</li>';
+                        if(newData[i].type === "1"){
+                            manual ++;
+                        }
+                    }
+                    $(".backups_num").html(pingjie);
+                    $(".backups_num").show();
+                    $(".backups_record_null").hide();
+                }
+            }else{
+                $(".backups_num").hide();
+                $(".backups_record_null").show();
+            }
+        });
+        $("#add_backups").on("click",function () {
+            if(manual >= 3){
+                $(".mask").show();
+                $(".popUp").show();
+            }else{
+                plus.gatewayCmd.backupGatewayData(function(data){
+                    if(data=="success"){
+                        window.location.href="backupsing.html?choose=backups";
+                    }
+                });
+            }
+        });
+        $("#backups_cancel").on("click",function () {
+            $(".mask").hide();
+            $(".popUp").hide();
+        });
+        $("#backups_start").on("click",function () {
+            $(".mask").hide();
+            $(".popUp").hide();
+            plus.gatewayCmd.backupGatewayData(function(data){
+                if(data=="success"){
+                    window.location.href="backupsing.html?choose=backups";
+                }
+            });
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/jzm_lock_linear_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/widget_padding_vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/widget_padding_horizontal"
+        android:paddingStart="@dimen/widget_padding_horizontal">
+        <include layout="@layout/view_lock_widget_title"/>
+    </LinearLayout>
+
+    <include layout="@layout/view_home_expand_lock_input" />
+
+    <LinearLayout
+        android:id="@+id/jzm_lock_linear_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/newDivider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/jzm_lock_image_lock"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.618"
+                android:src="@drawable/icon_op_lock_off" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/newDivider" />
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:id="@+id/jzm_lock_relative_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/jzm_lock_text_lock_main"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toStartOf="@+id/view"
+                            android:ellipsize="start"
+                            android:gravity="end"
+                            android:singleLine="true"
+                            android:text="@string/Device_Lock_Widget_MainLock"
+                            android:textColor="@color/newPrimaryText" />
+
+                        <TextView
+                            android:id="@+id/jzm_lock_text_lock_state_main"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@+id/view"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="@string/Device_Lock_Widget_MainLockstatusa"
+                            android:textColor="@color/newPrimaryText" />
+
+                        <android.support.v4.widget.Space
+                            android:id="@+id/view"
+                            android:layout_width="8dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/jzm_lock_second_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/jzm_lock_text_lock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toStartOf="@+id/view2"
+                            android:ellipsize="start"
+                            android:gravity="end"
+                            android:singleLine="true"
+                            android:text="@string/widget_double_lock"
+                            android:textColor="@color/newPrimaryText" />
+
+                        <TextView
+                            android:id="@+id/jzm_lock_text_lock_state"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@+id/view2"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="@string/widget_double_lock_unlock"
+                            android:textColor="@color/newPrimaryText" />
+
+                        <android.support.v4.widget.Space
+                            android:id="@+id/view2"
+                            android:layout_width="8dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/jzm_lock_text_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/Device_Lock_Widget_Statusd"
+                    android:visibility="invisible" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/newDivider"/>
+
+        <include layout="@layout/view_home_expand_lock_message"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/jzm_lock_linear_handle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/widget_padding_horizontal"
+        android:paddingLeft="@dimen/widget_padding_horizontal"
+        android:paddingRight="@dimen/widget_padding_horizontal"
+        android:paddingTop="@dimen/widget_margin_component">
+
+        <TextView
+            android:id="@+id/jzm_lock_text_handle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="@string/Device_Lock_Widget_Spread"
+            android:textColor="@color/v6_text_gray" />
+
+        <ImageView
+            android:id="@+id/jzm_lock_image_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_arrow_downward" />
+    </LinearLayout>
+</LinearLayout>

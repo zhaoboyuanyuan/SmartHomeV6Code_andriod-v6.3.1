@@ -1,0 +1,52 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Backup_and_recovery = "Copia de Seguridad y Recuperación";
+$lang.Backup_and_recovery_hint = "El sistema realiza una copia de seguridad automática de los dispositivos， escenas y Ama de llaves del Gateway a la nube (también se puede hacer una copia de seguridad manual). Cuando la puerta de enlace está defectuosa o necesita ser reemplazada， la función de recuperación puede ayudarlo a recuperar rápidamente los datos de la nueva puerta de enlace.";
+$lang.Backup_recovery = "Restaurar a este Gateway";
+$lang.Backup_Manual = "Manual";
+$lang.Backup_recording = "Registro de copia de seguridad";
+$lang.Backup_no_recording = "No se encontraron datos de copia de seguridad para este Gateway";
+$lang.Backup_add = "Añadir copia de seguridad";
+$lang.Backup_automatic = "Automatico ";
+$lang.Backup_Manual_3 = "El sistema conservará los ultimos 3 datos de copia de seguridad manual， si continúa los datos se sobreescribirán";
+$lang.Backup_Backuping = "Copia de seguridad ";
+$lang.Backup_Backup_device = "Copia de seguridad de su dispositivo ";
+$lang.Backup_Backup_editScene = "Realizando copia de seguridad de la Escena， Ama de llaves...";
+$lang.Backup_time = "Demorará de 1 a 2 minutos ";
+$lang.Backup_Manual_hint = "No apague ni desconecte el dispositivo durante el proceso de copia de seguridad ";
+$lang.Backup_success = "Copia de seguridad manual exitosa ";
+$lang.Backup_failure = "Copia de seguridad manual fallida";
+$lang.Backup_failure_hint = "Confirme su conexión de red por favor ";
+$lang.Recovery_Account_password = "¿Qué cuenta de acceso y contraseña quiere restaurar?";
+$lang.Recovery_account = "Numero de cuenta ";
+$lang.Recovery_enter_account = "Por favor ingrese un número de cuenta";
+$lang.Recovery_password = "Contraseña ";
+$lang.Recovery_enter_password = "Por favor ingrese su contraseña ";
+$lang.Recovery_password_error = "La cuenta o contraseña son incorrectas， por favor intente de nuevo";
+$lang.Recovery_Different_models = "El gateway  que ingresó no coincide con el modelo de Gateway actual， por lo no se puede restaurar.";
+$lang.Recovery_choose_data = "Seleccione los datos que se restaurarán de acuerdo con el tiempo de copia de seguridad.";
+$lang.Recovery_no_data_reason = "Las posibles razones son:";
+$lang.Recovery_no_data_reason_1 = "1. Esta puerta de enlace es una nueva puerta de enlace， y aún no se generan datos de respaldo.";
+$lang.Recovery_no_data_reason_2 = "2. Esta puerta de enlace puede no ser compatible con la copia de seguridad";
+$lang.Recovery_no_data_reason_3 = "3. Compruebe si los datos de esta puerta de enlace se han restaurado en otras puertas de enlace.";
+$lang.Recovery_Start = "Iniciar la recuperación";
+$lang.Recovery_Start_hint = "Continúe operando， los datos de copia de seguridad se migrarán a la puerta de enlace， y los datos originales de la puerta de enlace se vaciarán o sobrescribirán.";
+$lang.Recovery_recoverying = "Recuperación ...";
+$lang.Recovery_recovery_device = "Dispositivo de restauración ...";
+$lang.Recovery_recovery_editScene = "Restaurando la escena， ama de llaves ...";
+$lang.Recovery_recoverying_hint = "No apague ni desconecte el dispositivo durante el proceso de recuperación.";
+$lang.Recovery_success = "Recuperación de datos exitosa";
+$lang.Recovery_failure = "Recuperación de datos fallida";
+$lang.Recovery_Tips = "Consejos:";
+$lang.Recovery_success_hint = "Si desea continuar utilizando el gateway original， primero restaurelo a valores de fábrica， de lo contrario， los datos de la puerta de enlace pueden ser anormales.";
+$lang.device_Backup_Cancel = "Cancelar";
+$lang.device_Backup_ok = "OK";
+$lang.Complete = "Completo";
+$lang.Music_Scan_Retry = "Inténtelo de nuevo";
+$lang.addGateway3_toast_00 = "La cuenta o la contraseña no pueden estar vacías";
+$lang.addDevice_sure = "Confirmar";
+$lang.Backup_note_this = "No entrar en la cuenta del Gateway actualmente registrada";
+$lang.Backup_is_online = "La entrada que ingresó se encuentra en estado normal en línea. Si necesita continuar， apague o mande a valores de fábrica primero.";

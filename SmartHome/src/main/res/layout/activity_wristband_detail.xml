@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <FrameLayout
+            android:id="@+id/text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="6">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/top_state_tip_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical"
+                    android:text="@string/Band_Bluetooth_DataContracting"
+                    android:textColor="#ffffff"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/top_tip_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Band_Phone_Distance"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+            <RelativeLayout
+                android:id="@+id/ring_layout"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/ring_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:padding="20dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/pic_wristband" />
+
+                <cc.wulian.smarthomev6.support.customview.AnimationRing
+                    android:id="@+id/connecting_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cirqueColor="#ffffff"
+                    app:cirqueWidth="1.5dp" />
+
+                <cc.wulian.smarthomev6.support.customview.PercentProgressRing
+                    android:id="@+id/percent_connecting_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="20dp"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"
+                    app:cirqueColor="#ffffff"
+                    app:cirqueGroundColor="#E4F9D5"
+                    app:cirqueGroundWidth="1.5sp"
+                    app:cirqueWidth="4dp"
+                    app:text="@string/Band_Dumpenergy"
+                    app:textColor="#ffffff"
+                    app:textSize="70dp"/>
+            </RelativeLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <RelativeLayout
+            android:id="@+id/version_num_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_ripper_effect"
+            android:paddingBottom="8dp"
+            android:paddingTop="9dp">
+
+            <TextView
+                android:id="@+id/version_num_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:text="@string/Cateyemini_Setup_FirmwareVersion"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/version_num_right_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/system_intent_right" />
+
+            <TextView
+                android:id="@+id/version_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/version_num_right_image"
+                android:ellipsize="end"
+                android:gravity="center_vertical|right"
+                android:text="4.16.11.15"
+                android:textSize="@dimen/mine_text_size" />
+            <View
+                android:id="@+id/update_warn_icon"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginRight="4dp"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/version_num"
+                android:background="@drawable/shape_val_bg"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <RelativeLayout
+            android:id="@+id/mac_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_ripper_effect"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/mac_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:text="@string/Band_Mac_Address"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <TextView
+                android:id="@+id/mac"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toEndOf="@id/mac_name"
+                android:ellipsize="end"
+                android:gravity="center_vertical|right"
+                android:text="c8:05:e4:u6"
+                android:textSize="@dimen/mine_text_size" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <RelativeLayout
+            android:id="@+id/alarm_notice_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_ripper_effect"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/alarm_notice_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="@string/Band_Alarm_Vibration"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/mine_text_size" />
+
+                <TextView
+                    android:id="@+id/alarm_notice_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="@string/Band_Alarm_tips"
+                    android:textColor="#A3A6AA"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+
+
+            <ToggleButton
+                android:id="@+id/alarm_notice_switch"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/selector_togglebutton"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:textOff=""
+                android:textOn="" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <RelativeLayout
+            android:id="@+id/smart_control_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_ripper_effect"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/smart_control_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Band_Smart_Control"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/system_intent_right" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+    </LinearLayout>
+</LinearLayout>

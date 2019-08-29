@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_marginTop="20dp"
+        android:id="@+id/rl_linkage_snapshot"
+        style="@style/device_setting_item">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingLeft="10dp"
+            android:layout_centerVertical="true"
+          style="@style/device_setting_text_left"
+            android:text="@string/Cateye_Snapshot"/>
+        <ImageView
+            android:id="@+id/iv_linkage_snapshot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:visibility="gone"
+            android:background="@drawable/icon_choose"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_marginTop="1dp"
+        android:id="@+id/rl_linkage_video"
+        style="@style/device_setting_item">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:paddingLeft="10dp"
+            android:layout_centerVertical="true"
+            style="@style/device_setting_text_left"
+            android:text="@string/Cateye_Video"/>
+        <ImageView
+            android:id="@+id/iv_linkage_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:visibility="gone"
+            android:background="@drawable/icon_choose"/>
+    </RelativeLayout>
+
+</LinearLayout>

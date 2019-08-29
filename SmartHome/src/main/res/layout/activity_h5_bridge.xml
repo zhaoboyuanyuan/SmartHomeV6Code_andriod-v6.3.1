@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_h5_bridge"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cc.wulian.smarthomev6.main.h5.H5BridgeActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <cc.wulian.smarthomev6.main.h5.WWebView
+                android:id="@+id/bridge_webview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/bridge_space_bottom"/>
+            <android.support.v4.widget.Space
+                android:id="@+id/bridge_space_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bridge_loss_network"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/error_back"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="15dp"
+                android:scaleType="center"
+                android:clickable="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/icon_arrows_left_primary"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/icon_network_error"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/imageView6"/>
+            <TextView
+                android:id="@+id/error_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Network_Wrong"
+                android:layout_below="@+id/imageView6"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/retry_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="45dp"
+                android:paddingRight="45dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="4dp"
+                android:text="@string/Refresh"
+                android:textColor="@color/v6_green"
+                android:background="@drawable/shape_config_btn_retry_bg"
+                android:layout_below="@+id/error_tip"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="26dp"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/loading_view"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:background="#ffffff"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_loading_house"/>
+
+            <cc.wulian.smarthomev6.support.customview.LoadingView
+                android:id="@+id/loading_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/tipTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Page_Loading" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <cc.wulian.smarthomev6.support.customview.WLProgressBar
+        android:id="@+id/bridge_progress"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="2dp" />
+</FrameLayout>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_padding_large"
+            android:layout_marginLeft="@dimen/default_padding_small"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:layout_marginTop="@dimen/config_wifi_margin_top"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_prompt"
+                style="@style/config_wifi_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/Config_Binding_To_Account"
+                android:textColor="@color/device_config_wifi_tips_color" />
+
+            <TextView
+                android:id="@+id/tv_wait_tip"
+                style="@style/config_wifi_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_padding_small"
+                android:gravity="center_vertical"
+                android:text="@string/Setting_Wifi_Prompt"
+                android:textColor="@color/device_config_wifi_tips_color" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_config_wifi_img"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin_normal">
+
+            <ImageView
+                android:id="@+id/iv_oval_left_device"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_camera_1_bind_left" />
+
+            <ImageView
+                android:id="@+id/iv_oval_rigth_device"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_cloud" />
+
+            <ImageView
+                android:id="@+id/iv_config_wifi_step_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/wifi_config_anim" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_wifi_config_next_step"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btn_wifi_config_next_step"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/config_device_btn_height"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/default_padding_large"
+                android:layout_marginLeft="@dimen/config_default_padding"
+                android:layout_marginRight="@dimen/config_default_padding"
+                android:background="@drawable/shape_config_btn_bg"
+                android:gravity="center"
+                android:text="@string/Config_Next_Step"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_cylincam"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btn_connect_success"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/config_device_btn_height"
+                android:layout_above="@+id/btn_connect_fail"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="@dimen/config_default_padding"
+                android:layout_marginRight="@dimen/config_default_padding"
+                android:background="@drawable/shape_config_btn_bg"
+                android:gravity="center"
+                android:text="@string/Minigateway_ConfiguringwiFi_Success"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn_connect_fail"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/config_device_btn_height"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/default_padding_normal"
+                android:layout_marginLeft="@dimen/config_default_padding"
+                android:layout_marginRight="@dimen/config_default_padding"
+                android:background="@drawable/shape_config_btn_retry_bg"
+                android:gravity="center"
+                android:text="@string/Minigateway_ConfiguringwiFi_Fail"
+                android:textColor="@color/v6_green"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

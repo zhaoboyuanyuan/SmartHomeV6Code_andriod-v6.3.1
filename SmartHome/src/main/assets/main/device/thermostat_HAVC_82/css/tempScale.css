@@ -1,0 +1,41 @@
+body {
+    background-color: #f1f4f8;
+}
+
+.mainTop {
+    height:4.4rem;
+    margin-top: 3rem;
+    padding: 0 2rem;
+    line-height:4.4rem;
+    font-size:1.4rem;
+    background-color: white;
+}
+.mainBottom {
+    position:relative;
+    height:4.4rem;
+    padding: 0 2rem;
+    margin-top: 0.1rem;
+    line-height:4.4rem;
+    font-size:1.4rem;
+    background-color: white;
+}
+.mainView span {
+    font-size: 1rem;
+    color: #999999;
+    margin-left: 0.5rem;
+}
+
+.iconRight {
+    display: none;
+    position: relative;
+    float:right;
+    top: 30%;
+    /*margin-right: 4rem;*/
+    width: 2rem;
+    height: 2rem;
+    background:url(../img/icon_5.png) no-repeat center center;
+    background-size: 100% auto;
+}
+.iconTop {
+    display: block;
+}

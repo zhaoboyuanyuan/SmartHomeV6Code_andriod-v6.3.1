@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>model search</title>
+		<script type="text/javascript" src="js/mui.min.js"></script>
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="css/custom.css" />
+		<script type="text/javascript" src="js/plus.js" charset="utf-8"></script>
+		<script type="text/javascript" src="js/gatewayCmd.js" charset="utf-8"></script>
+		<script type="text/javascript" src="js/tools.js" charset="utf-8"></script>
+		<script type="text/javascript" src="lang/lang.js" charset="utf-8"></script>
+	</head>
+
+	<style type="text/css">
+		.chatCell {
+			width: 100%;
+			float: left;
+			margin-top: 10px;
+		}
+		
+		.arrowImg {
+			width: 10px;
+			height: 10px;
+		}
+		
+		.arrowDiv {}
+		
+		.headImg {
+			display: block;
+			width: 40px;
+			height: 40px;
+		}
+		
+		.chatText {
+			border-radius: 8px;
+			padding: 8px;
+			word-wrap: break-word;
+			word-break: break-all;
+			max-width: 250px;
+			min-height: 40px;
+			font-size: 15px;
+		}
+		
+		#foot {
+			width: 100%;
+			position: fixed;
+			bottom: 0px;
+			background-color: white;
+			z-index: 999;
+		}
+		
+		#inputText {
+			overflow-y: hidden;
+			width: 100%;
+			float: left;
+			height: 40px;
+			min-height: 20px;
+		}
+		
+		.timeHint {
+			display: inline-block;
+			background: black;
+			opacity: 0.1;
+			color: white;
+			border-radius: 5px;
+			font-size: 12px;
+			padding: 2px 10px 2px 10px
+		}
+		
+		.sendBtn {
+			display: none;
+			width: 80%;
+			height: 40px;
+			border: 0px;
+			color: white;
+			background-color: #8dd652;
+			border-radius: 10px;
+			line-height: 40px;
+			font-size: 15px;
+		}
+		
+		.tools {
+			width: 40px;
+			height: 40px;
+			border: 1px solid darkgrey;
+			color: darkgray;
+			border-radius: 40px;
+			line-height: 30px;
+			font-size: 35px;
+			background: url(img/tianjia.png) no-repeat center center;
+			background-size: 40px auto;
+		}
+	</style>
+
+	<body style="background-color: aliceblue;">
+		<!--<header id="head" class="mui-bar mui-bar-nav custom-nav" style="background-color: #8dd652;position: fixed;top: 0px;padding-top: 20px;height: 64px;">
+			<button id="gobackBtn" style="color: white;" class="custom-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+				<span class="mui-icon mui-icon-left-nav"></span><span id="about_back"></span>
+			</button>
+			<h1 class="mui-title"><span key="OnlineService" class="autoSwitchLanguager">在线客服</span></h1>
+		</header>-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="top:0px;background-color:aliceblue;">
+			<div id="chat" class="mui-scroll">
+			</div>
+		</div>
+		<footer id="foot">
+			<div style="width: 80%;float: left;padding-top: 15px;padding-left: 5px;">
+				<textarea id="inputText" cols="10" onfocus="forBestInput()" oninput="uniKeyCode()"></textarea>
+			</div>
+			<div style="width: 20%;height: 40px;float: left;padding-top: 15px;" align="center">
+				<div class="tools" onclick="switchTool()"></div>
+				<div key="OnlineService_Send" class="sendBtn autoSwitchLanguager" onclick="sendMsg()">发送</div>
+			</div>
+			<div id="tools" style="width: 100%;margin-top:-3px;height: 100px;background-color: white;float: left;display: none;">
+				<div style="float: left;width: 50px;height: 70px;margin-left: 20px;" onclick="selectImg()">
+					<div style="width: 100%;height: 50px;background: url(img/icon_pic.png);background-size: 100%;"></div>
+					<p key="OnlineService_photo" class="autoSwitchLanguager" align="center">照片</p>
+				</div>
+				<div style="float: left;width: 50px;height: 70px;margin-left: 20px;" onclick="takePhoto()">
+					<div style="background: url(img/icon_photos.png);background-size: 100%;width: 100%;height: 50px;"></div>
+					<p key="OnlineService_Photograph" class="autoSwitchLanguager" align="center">拍照</p>
+				</div>
+			</div>
+		</footer>
+		<div class="selfBigChatimg" style="display: none;width: 100%;height: 100%;position: fixed;">
+			<img id="selfBigChatimg" onclick="removeBigPic()" style="max-width:100%;position: relative;top: 50%; transform: translateY(-50%);" src="img/arrows.png" />
+		</div>
+		<div id="resend" style="display: none;position: fixed;z-index: 999;width: 100%;height: 100%;top: 0px;background-color:rgba(0,0,0,0.5);">
+			<div style="position: relative;margin: 0 auto;transform: translateY(-50%);top: 50%;width: 250px;height: 150px;background-color: rgba(255,255,255,1);">
+				<div key="OnlineService_failsend" class="autoSwitchLanguager" style="width: 100%;border-bottom: 1px solid;height: 105px;padding:40px 10px 0px 10px">
+					消息未发送出去，请检查您的网络
+				</div>
+				<div style="width: 100%;border-bottom: 1px solid;height: 30%;">
+					<div onclick="cancelResend()" key="OnlineService_Cancel" class="autoSwitchLanguager" style="width: 124px;height: 50px;float: left;line-height: 50px;" align="center">取消</div>
+					<div style="width: 1px;height: 45px;float: left;background-color: darkgray;"></div>
+					<div onclick="resendMsg()" key="OnlineService_Resend2" class="autoSwitchLanguager" style="width: 50%;height: 50px;float: left;line-height: 50px;color:#719E19;" align="center">重新发送</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			var maxWidth = Number(document.getElementsByTagName("body")[0].offsetWidth) - 130;
+			initlan();
+			var timer;
+			var timeArr = new Array();
+			var num = 0; //消息个数
+			var reNum = 3; //重连次数  间隔8秒连接一次，最多重连3次
+			//			var wsUri = "wss://testv2.wulian.cc:50090/OSS/websocket/wuliancloud";//开发环境
+			//			var wsUri = "wss://testv6.wulian.cc/OSS/websocket/wuliancloud";
+			var wsUri = "wss://iot.wuliancloud.com:443/OSS/websocket/wuliancloud";
+			var chat = document.getElementById("chat");
+			var pullrefresh = document.getElementById("pullrefresh");
+			if(Number(window.innerHeight) < Number(screen.height)) {
+				pullrefresh.style.height = Number(window.innerHeight) - Number(document.getElementById("foot").offsetHeight) + "px"
+			} else {
+				pullrefresh.style.height = Number(screen.height) - Number(document.getElementById("foot").offsetHeight) + "px"
+			}
+			plus.plusReady(function() {
+				//下拉刷新
+				mui.init({
+					pullRefresh: {
+						container: '#pullrefresh',
+						down: {
+							contentrefresh: languageUtil.getResource("OnlineService_more"),
+							callback: pulldownRefresh,
+							color: 'aliceblue'
+						}
+					}
+				});
+				pullrefresh.addEventListener("tap", function() {
+					closeTool();
+					document.getElementById("inputText").blur();
+				})
+				achieveHistroyData();
+				init()
+			});
+
+			/*
+			 * 实现下拉刷新业务
+			 */
+			var lastMsg = "";
+
+			function pulldownRefresh() {
+				achieveHistroyData();
+				setTimeout(function() {
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+				}, 200);
+			}
+
+			function achieveHistroyData() {
+				//				var geturl = 'https://testv2.wulian.cc:50090/OSS/session/getChatHistory.do?customerId=' +
+				//					getUrlParam(decodeURI("uId")) //开发环境
+				//				var geturl = 'https://testv6.wulian.cc/OSS/session/getChatHistory.do?customerId=' +
+				//					getUrlParam(decodeURI("uId")) //测试环境
+				var geturl = 'https://iot.wuliancloud.com:443/OSS/session/getChatHistory.do?customerId=' +
+					getUrlParam(decodeURI("uId"))
+				if(lastMsg != "") {
+					geturl = geturl + '&lastMsgTime=' + lastMsg;
+				}
+				plus.gatewayCmd.WLHttpGet(geturl, function(result) {
+					Histroy(result);
+				})
+			}
+
+			function Histroy(chatData) {
+				try {
+					var first = document.getElementsByClassName("first")[0];
+					var data = chatData.retData;
+					if(chatData.retCode == "501000") {
+						for(var i = 0; i < data.length; i++) {
+							if(data[i].type == "2") {
+								if(data[i].pic != '') {
+									createSelfimg(data[i].pic, "", "first")
+								} else {
+									createSelf(data[i].content, "", "first")
+								}
+							} else if(data[i].type == "1") {
+								if(data[i].pic != '') {
+									createCustomimg(data[i].pic, "first")
+								} else {
+									createCustom(data[i].content, "1", "first")
+								}
+							}
+							lastMsg = data[i].time;
+						}
+					}
+				} catch(e) {
+					//TODO handle the exception
+				}
+			}
+
+			function init() {
+				testWebSocket(languageUtil.getResource("OnlineService_connecting"));
+			}
+
+			function reConnect() {
+				if(reNum <= 0) return;
+				reNum = reNum - 1;
+				setTimeout(function() {
+					testWebSocket(languageUtil.getResource("OnlineService_reconnect"))
+				}, 8000)
+			}
+
+			function testWebSocket(hint) {
+				createCustom(hint, "3", "first")
+				websocket = new WebSocket(wsUri);
+				websocket.onopen = function(evt) {
+					onOpen(evt)
+				};
+				websocket.onclose = function(evt) {
+					onClose(evt)
+				};
+				websocket.onmessage = function(evt) {
+					onMessage(evt)
+				};
+				websocket.onerror = function(evt) {
+					onError(evt)
+				};
+			}
+
+			function onOpen(evt) {
+				console.log("onOpen" + evt)
+				reNum = 3;
+				timer = window.setInterval("heartBeat()", 60000);
+				doSend();
+			}
+
+			function onClose(evt) {
+				window.clearInterval(timer);
+				console.log("onClose" + evt)
+				createCustom(languageUtil.getResource("OnlineService_disconnect"), "3")
+				reConnect()
+			}
+
+			function onMessage(evt) {
+				console.log("onMessage" + evt + evt.data)
+				var cmd = JSON.parse(evt.data).retData.cmd
+				if(cmd == "acceptMsg") {
+					createCustom(JSON.parse(evt.data).retData.msgContent, JSON.parse(evt.data).retData.type)
+				} else if(cmd == "acceptPic") {
+					createCustomimg(JSON.parse(evt.data).retData.url)
+				} else if(cmd == "sendPic") {
+					var serialNumber = JSON.parse(evt.data).retData.serialNumber;
+					var i = Number(serialNumber.split("_")[1])
+					clearTimeout(timeArr[i]);
+					if(JSON.parse(evt.data).retCode == "502009") {
+						var ele = document.getElementById(serialNumber);
+						msgSendError(ele, "img");
+					}
+				} else if(cmd == "heartBeat") {
+
+				} else if(cmd == "checkUserInfo" && JSON.parse(evt.data).retCode == "501000") {
+					createCustom(JSON.parse(evt.data).retData.msgContent, "3")
+				} else if(cmd == "isSend") {
+					var serialNumber = JSON.parse(evt.data).retData.serialNumber;
+					if(JSON.parse(evt.data).retData.isSend == "0") {
+						var i = Number(serialNumber.split("_")[1])
+						clearTimeout(timeArr[i]);
+						try {
+							document.getElementById(serialNumber).getElementsByClassName(serialNumber)[0].style.display = "none";
+						} catch(e) {
+							//TODO handle the exception
+						}
+					} else {
+						var i = Number(serialNumber.split("_")[1])
+						clearTimeout(timeArr[i]);
+						var ele = document.getElementById(serialNumber);
+						msgSendError(ele)
+					}
+				} else if(cmd == "sendMsg") {
+
+				} else {
+					createCustom(JSON.parse(evt.data).retData.msgContent, JSON.parse(evt.data).retData.type)
+				}
+			}
+
+			function onError(evt) {
+				console.log("onError" + evt)
+				window.clearInterval(timer);
+				createCustom(languageUtil.getResource("OnlineService_disconnect"), "3")
+				reConnect()
+			}
+
+			function doSend(message) {
+				var data = {
+					"cmd": "checkUserInfo",
+					"userId": getUrlParam(decodeURI("uId")),
+					"type": "2",
+					"token": getUrlParam(decodeURI("token")),
+					"appLang": window.sysfun.getLang()
+				}
+				websocket.send(JSON.stringify(data));
+			}
+
+			function removeBigPic() {
+				document.getElementsByClassName("selfBigChatimg")[0].style.display = "none";
+			}
+
+			function showBigPic(path) {
+				document.getElementById("selfBigChatimg").src = path;
+				document.getElementsByClassName("selfBigChatimg")[0].style.display = "block";
+			}
+
+			function switchTool() {
+				if(document.getElementById("tools").style.display == "none") {
+					showTool()
+				} else {
+					closeTool()
+				}
+			}
+
+			function showTool() {
+				document.getElementById("tools").style.display = "block";
+				document.getElementById("foot").style.bottom = "0px";
+			}
+
+			function closeTool() {
+				document.getElementById("tools").style.display = "none";
+				document.getElementById("foot").style.bottom = "0px";
+			}
+
+			function scrollTop() {
+				var y;
+				//				if(window.v6sysfunc) {
+				//					y = document.getElementById("chart").offsetHeight + 44 - document.getElementById("pullrefresh").offsetHeight
+				//				} else {
+				y = document.getElementById("chat").offsetHeight - document.getElementById("pullrefresh").offsetHeight
+				//				}
+
+				if(y < 0) {
+					y = 0;
+				}
+				document.getElementById("chat").style.webkitTransform = "translate3d(0px, -" + y + "px, 0px) translateZ(0px)"
+			}
+
+			function createCustom(textC, type, first) {
+				var img;
+				if(type == "1") {
+					img = "img/customHeader.png";
+				} else {
+					img = "img/WLRobot.png";
+				}
+				var str = '<img class="headImg" style="float: left;" src="' + img + '" />' +
+					'<div  style="width: 20px;float: left;text-align: right;">' +
+					'<img class="arrowImg" src="img/arrows_1.png" />' +
+					'</div>' +
+					'<div class="chatText" style="max-width:' +
+					maxWidth + 'px;' +
+					'color:#333333;float: left;background-color: white;">' +
+					textC +
+					'</div>'
+				if(first && first == "first") {
+					var cell = document.createElement("div");
+					cell.className = "chatCell first";
+					cell.style.padding = "10px 0px 0px 10px";
+					cell.innerHTML = str;
+					var firstEle = document.getElementsByClassName("first")[0];
+					chat.insertBefore(cell, firstEle);
+				} else {
+					var cell = document.createElement("div");
+					cell.className = "chatCell";
+					cell.innerHTML = str;
+					cell.style.padding = "10px 0px 0px 10px";
+					cell.setAttribute("time", new Date().format("yyyy-MM-dd hh:mm:ss"));
+					createTimeHint();
+					chat.appendChild(cell);
+					scrollTop();
+				}
+			}
+
+			function createSelf(data, serialNumber, first) {
+				var str = '<img class="headImg" src="img/selfHeader.png" style="float: right;" />' +
+					'<div  style="width: 20px;float: right;text-align: left;">' +
+					'<img class="arrowImg" src="img/arrows.png"/>' +
+					'</div>' +
+					'<div class="chatText" style="max-width:' +
+					maxWidth + 'px;' +
+					'color:white;float: right;background-color: #8dd652;">' +
+					data +
+					'</div>'
+				if(first && first == "first") {
+					var cell = document.createElement("div");
+					cell.className = "chatCell first";
+					cell.innerHTML = str;
+					var firstEle = document.getElementsByClassName("first")[0];
+					chat.insertBefore(cell, firstEle);
+				} else {
+					var cell = document.createElement("div");
+					cell.className = "chatCell";
+					cell.style.padding = "10px 10px 0px 0px";
+					cell.id = serialNumber;
+					cell.innerHTML = str;
+					cell.setAttribute("time", new Date().format("yyyy-MM-dd hh:mm:ss"));
+					createTimeHint();
+					chat.appendChild(cell);
+					setTimeOut(cell);
+					scrollTop();
+				}
+			}
+
+			function createCustomimg(path, first) {
+				var str = '<img class="headImg" style="float: left;" src="img/customHeader.png" />' +
+					'<div style="width: 20px;float: left;text-align: right;">' +
+					'<img class="arrowImg" src="img/arrows_1.png" />' +
+					'</div>' +
+					'<div class="chatText" style="float: left;background-color: white;">' +
+					'<img src="' + path + '" style="max-height: 240px;max-width: 180px;"/>' +
+					'</div>';
+				if(first && first == "first") {
+					var cell = document.createElement("div");
+					cell.className = "chatCell first";
+					cell.style.padding = "10px 0px 0px 10px";
+					cell.innerHTML = str;
+					var firstEle = document.getElementsByClassName("first")[0];
+					chat.insertBefore(cell, firstEle);
+					addLoadShowBigImg(cell, path);
+				} else {
+					var cell = document.createElement("div");
+					cell.className = "chatCell";
+					cell.innerHTML = str;
+					createTimeHint();
+					chat.appendChild(cell);
+					cell.setAttribute("time", new Date().format("yyyy-MM-dd hh:mm:ss"));
+					addLoadShowBigImg(cell, path);
+					setTimeout(function() {
+						scrollTop();
+					}, 300)
+				}
+			}
+
+			function createSelfimg(path, serialNumber, first) {
+				var str = '<img class="headImg" src="img/selfHeader.png" style="float: right;" />' +
+					'<div style="width: 20px;float: right;text-align: left;">' +
+					'<img class="arrowImg" src="img/arrows_white_right.png" />' +
+					'</div>' +
+					'<div class="chatText" style="float: right;background-color: white">' +
+					'<img src="' + path + '" style="max-height: 240px;max-width: 180px;"/>' +
+					'</div>'
+				if(first && first == "first") {
+					var cell = document.createElement("div");
+					cell.className = "chatCell first";
+					cell.style.padding = "10px 10px 0px 0px";
+					cell.innerHTML = str;
+					var firstEle = document.getElementsByClassName("first")[0];
+					chat.insertBefore(cell, firstEle);
+					addLoadShowBigImg(cell, path);
+				} else {
+					var cell = document.createElement("div");
+					cell.className = "chatCell";
+					cell.innerHTML = str;
+					cell.setAttribute("time", new Date().format("yyyy-MM-dd hh:mm:ss"));
+					createTimeHint();
+					chat.appendChild(cell);
+					cell.id = serialNumber;
+					setTimeOut(cell, "img");
+					addLoadShowBigImg(cell, path);
+					setTimeout(function() {
+						scrollTop();
+					}, 300)
+				}
+			}
+
+			function addLoadShowBigImg(cell, path) {
+				cell.getElementsByTagName("img")[2].addEventListener("load", function() {
+					addTapShowBigImg(cell.getElementsByClassName("chatText")[0], path)
+				})
+			}
+
+			function addTapShowBigImg(cell, path) {
+				console.log(cell)
+				cell.addEventListener("tap", function() {
+					showBigPic(path)
+				})
+			}
+			var lastMsgTime = {
+				"time": 0,
+				"timeFormat": "--"
+			}
+			var newMsgTime = {
+				"time": 0,
+				"timeFormat": "--"
+			}
+
+			function createTimeHint() {
+				newMsgTime.time = new Date().getTime()
+				newMsgTime.timeFormat = new Date().format("yyyy-MM-dd hh:mm:ss")
+				if(lastMsgTime.time == 0) {
+					lastMsgTime.time = newMsgTime.time;
+					lastMsgTime.timeFormat = newMsgTime.timeFormat;
+				}
+				timeRange = Number(newMsgTime.time) - Number(lastMsgTime.time);
+				if(timeRange >= 60000) {
+					//2017-10-10 10:10
+					var str = '<span class="timeHint">' +
+						lastMsgTime.timeFormat +
+						'</span>'
+					var cell = document.createElement("div");
+					cell.className = "chatCell";
+					cell.innerHTML = str;
+					cell.style.textAlign = "center"
+					chat.appendChild(cell);
+					scrollTop();
+				}
+				lastMsgTime.time = newMsgTime.time;
+				lastMsgTime.timeFormat = newMsgTime.timeFormat;
+			}
+
+			function msgSendError(ele, img) {
+				var strC = ele.id;
+				var strRedAlarm = '<div class="' + strC + '" style="margin-right: 15px;margin-top:5px;color: white;background-color: red;float: right;width: 25px;height: 25px;border-radius: 15px;line-height: 25px;text-align: center;">!</div>'
+				ele.innerHTML = ele.innerHTML + strRedAlarm;
+				if(img) {
+					return;
+				}
+				showResendBox(ele.getElementsByClassName(strC)[0], strC)
+			}
+
+			function showResendBox(ele, strC) {
+				ele.addEventListener("tap", function() {
+					document.getElementById("resend").style.display = "block";
+					document.getElementById("resend").className = strC;
+				})
+			}
+
+			function resendMsg() {
+				var idStr = document.getElementById("resend").className;
+				var value = document.getElementById(idStr).getElementsByClassName("chatText")[0].textContent;
+				serialNumber = document.getElementById("resend").className;
+				var data = {
+					"cmd": "sendMsg",
+					"type": "2",
+					"serialNumber": serialNumber,
+					"msgContent": value,
+				}
+				data = JSON.stringify(data)
+				websocket.send(data);
+				cancelResend()
+			}
+
+			function cancelResend() {
+				document.getElementById("resend").style.display = "none";
+			}
+
+			function setTimeOut(ele, img) {
+				var timerTmp = setTimeout(function() {
+					if(img) {
+						msgSendError(ele, img);
+					} else {
+						msgSendError(ele);
+					}
+
+				}, 5000)
+				timeArr.push(timerTmp);
+			}
+
+			function heartBeat() {
+				var data = {
+					"cmd": "heartBeat",
+					"userId": getUrlParam(decodeURI("uId")),
+				}
+				websocket.send(JSON.stringify(data));
+			}
+
+			function uniCharCode(event) {
+				var char = event.which || event.keyCode;
+			}
+
+			function forBestInput() {
+				var iphoneX = window.sysfun;
+				iphoneX.init("iphoneX");
+				if(iphoneX.getItem("iphoneX") == "iphoneX") {
+					return;
+				}
+				setTimeout(function() {
+					document.getElementsByTagName("body")[0].scrollTop = document.getElementsByTagName("body")[0].scrollHeight;
+				}, 500)
+			}
+
+			function uniKeyCode() {
+				closeTool();
+				var iphoneX = window.sysfun;
+				iphoneX.init("iphoneX");
+				if(iphoneX.getItem("iphoneX") == "iphoneX") {} else {
+					document.getElementsByTagName("body")[0].scrollTop = document.getElementsByTagName("body")[0].scrollHeight;
+				}
+				//				var key = event.keyCode;
+				var inputText = document.getElementById("inputText");
+				if(inputText.value.trim() == '') {
+					document.getElementById("inputText").value = "";
+					document.getElementById("inputText").innerHTML = "";
+					inputText.style.height = inputText.scrollHeight + 'px';
+				}
+				if(document.getElementById("inputText").value != '') {
+					document.getElementsByClassName("tools")[0].style.display = "none";
+					document.getElementsByClassName("sendBtn")[0].style.display = "block";
+				} else {
+					document.getElementsByClassName("tools")[0].style.display = "block";
+					document.getElementsByClassName("sendBtn")[0].style.display = "none";
+				}
+			}
+
+			/*
+			 * 发送消息
+			 */
+			function sendMsg() {
+				var iphoneX = window.sysfun;
+				iphoneX.init("iphoneX");
+				if(iphoneX.getItem("iphoneX") == "iphoneX") {} else {
+					document.getElementById("inputText").focus();
+				}
+				var value = document.getElementById("inputText").value;
+				var serialNumber = new Date().getTime() + '_' + num;
+				num = num + 1;
+				createSelf(value, serialNumber)
+				var data = {
+					"cmd": "sendMsg",
+					"type": "2",
+					"serialNumber": serialNumber,
+					"msgContent": value,
+				}
+				data = JSON.stringify(data)
+				websocket.send(data);
+				setTimeout(function() {
+					document.getElementsByClassName("tools")[0].style.display = "block";
+					document.getElementsByClassName("sendBtn")[0].style.display = "none";
+					document.getElementById("inputText").style.height = '40px'
+					document.getElementById("inputText").value = "";
+					document.getElementById("inputText").innerHTML = "";
+				}, 100)
+
+			}
+
+			function takePhoto() {
+				closeTool();
+				plus.tools.takePhotoForCus(function(result) {
+					var path, data;
+					if(!window.v6sysfunc) {
+						path = result.path
+						data = result.data
+					} else {
+						path = result;
+						data = result;
+					}
+					var serialNumber = new Date().getTime() + '_' + num;
+					num = num + 1;
+					createSelfimg(data, serialNumber);
+					plus.tools.uploadChatPic(path, function(ret) {
+						var i = Number(serialNumber.split("_")[1])
+						var data = {
+							"cmd": "sendPic",
+							"url": ret,
+							"type": "2",
+							"serialNumber": serialNumber,
+							"userId": getUrlParam(decodeURI("uId")),
+						}
+						websocket.send(JSON.stringify(data));
+					}, function(err1) {
+
+					});
+				}, function(result) {
+
+				})
+			}
+
+			function selectImg() {
+				closeTool();
+				plus.tools.selectPhotoForCus(function(result) {
+					var serialNumber = new Date().getTime() + '_' + num;
+					num = num + 1;
+					var path, data;
+					if(!window.v6sysfunc) {
+						path = result.path
+						data = result.data
+					} else {
+						path = result;
+						data = result;
+					}
+					createSelfimg(data, serialNumber);
+					plus.tools.uploadChatPic(path, function(ret) {
+						var i = Number(serialNumber.split("_")[1])
+						var data = {
+							"cmd": "sendPic",
+							"url": ret,
+							"type": "2",
+							"serialNumber": serialNumber,
+							"userId": getUrlParam(decodeURI("uId")),
+						}
+						websocket.send(JSON.stringify(data));
+					}, function(err1) {
+
+					});
+				}, function(result) {
+
+				})
+			}
+
+			Date.prototype.format = function(fmt) { //author: meizz
+				var o = {
+					"M+": this.getMonth() + 1, //月份
+					"d+": this.getDate(), //日
+					"h+": this.getHours(), //小时
+					"m+": this.getMinutes(), //分
+					"s+": this.getSeconds(), //秒
+					"q+": Math.floor((this.getMonth() + 3) / 3), //季度
+					"S": this.getMilliseconds() //毫秒
+				};
+				if(/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+				for(var k in o)
+					if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+				return fmt;
+			}
+		</script>
+	</body>
+
+</html>

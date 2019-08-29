@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>紧急按钮</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css"/>
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<a class="back" href="javascript:;"></a>
+			<a class="deviceName autoSwitchLanguager" id="addDevice_04_name" href="javascript:;">紧急按钮</a>
+			<a class="more" href="javascript:;"></a>
+		</header>
+		<section class="state_show">
+			<div class="img_state" style="position: relative;">
+				<div class="loading">
+					<i></i>
+					<i></i>
+					<i></i>
+				</div>
+				<span class="autoSwitchLanguager" id="normal">正常</span>
+			</div>
+		</section>
+		<section class="img_bottom">
+			<span class="reminder autoSwitchLanguager" id="remind" style='display:none;'>按一下设备上的SET键可消警</span>
+		</section>
+		<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" id="offLine">设备已离线</span></section>
+	</body>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var state = 0;
+		var num = 2; //动画数组长度
+		var timer; //定时器动画
+		var dId = '';
+        //国际化初始化函数
+        initlan()
+		plus.plusReady(function(){
+			//newDataRefresh(resultJson)
+			plus.gatewayCmd.getDeviceInfo(null, function(data){
+				if(data.mode == 2){
+					$(".mask_layer").show();
+				}else{
+					$(".mask_layer").hide();
+					editHtml(data)
+				}
+                var name = data.name.indexOf("#$default$#") != -1 ? lang_name_04+data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+				dId = data.devID;
+				getMoreConfig(dId);
+			})
+			plus.gatewayCmdRush.newDataRefresh(function(data){
+				if(data.cmd == "500" && dId == data.devID){
+					if(data.mode == 2){
+						$(".mask_layer").show();
+					}else{
+						$(".mask_layer").hide();
+						editHtml(data)
+					}
+                    var name = data.name.indexOf("#$default$#") != -1 ? lang_name_04+data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+				}else if(data.cmd == "502" && dId == data.devID){
+					if((data.name != undefined || data.name != '') && data.name.indexOf("#$default$#") == -1){
+						$(".deviceName").html(data.name)
+					}else{
+                        var name = data.name.indexOf("#$default$#") != -1 ? lang_name_04+data.name.split("#")[2]:data.name
+                        $(".deviceName").html(name)
+					}
+				}
+			})
+		})
+		//返回到设备详情页
+		$(".back").on("click",function(){
+			plus.tools.back(function() {})
+		})
+		//跳转到更多页面
+		$(".more").on("click",function(){
+			plus.tools.more(moreConfig, function() {})
+		})
+		function editHtml(data){
+			if(data.endpoints[0].endpointStatus == 1){
+				state = 1;
+				var attribute = data.endpoints[0].clusters[0].attributes[0]
+				//报警编辑
+				if(attribute.attributeValue == 1){
+					$("html,body").css("background","url(img/bg_3.png) repeat-x left top")
+					$(".img_state").find("span").html(lang_warn)
+					$(".loading").show()
+					$(".img_bottom").find("span").show()
+					clearInterval(timer)
+					timer = setInterval(beginCircle, 300);
+				//消警编辑
+				}else if(attribute.attributeValue === '0'){
+					$("html,body").css("background","url(img/bg_1.png) repeat-x left top")
+					$(".img_state").find("span").html(lang_normal)
+					$(".img_bottom").find("span").hide()
+					clearInterval(timer)
+					num = 2;
+					$(".loading i").hide()
+					$(".loading").hide()
+				}
+			}
+		}
+		/* 报警动画*/
+		function beginCircle() {
+			if(num >= 0) {
+				$(".loading i").eq(num).css("display","block")
+			}
+			num = num - 1;
+			if(num == -2) {
+				num = 2;
+				$(".loading i").css("display","none")
+			}
+		}
+	</script>
+</html>

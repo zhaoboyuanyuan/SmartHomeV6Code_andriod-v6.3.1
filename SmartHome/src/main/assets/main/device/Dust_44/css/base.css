@@ -1,0 +1,200 @@
+@charset "utf-8";
+body, button, select, textarea, input, label, option, fieldset, legend{font-family: "微软雅黑",Tahoma,Verdana;}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, legend, input, textarea, button, p, blockquote, th, td{margin: 0;padding: 0;}
+textarea{resize: none}
+textarea, input{outline: none;}
+.clear{height:1px;overflow:hidden;clear:both;}
+a,img{border:0;}
+a{color: #666;text-decoration: none;}
+li{list-style-type:none;}
+i,em{font-style: normal;}
+.fl{float:left;}
+.fr{float:right;}
+.ds{display:block;}
+.hid{overflow:hidden;}
+.clearfix{*zoom:1}
+.clearfix:after{display:block;visibility:hidden;clear:both;height:0;content:'.';font-size:0}
+html,body{width:100%;height:100%;}
+
+/*header*/
+header{
+    width:100%;
+    height:4.4rem;
+    padding-top:2rem;
+}
+header a{
+    float:left;
+    display:block;
+    width:73.2%;
+    height:4.4rem;
+    text-align:center;
+    line-height:4.4rem;
+    font-size:1.7rem;
+    color:#000;
+}
+header a:nth-child(1),header a:nth-child(3){
+    width:13.4%;
+}
+header a:nth-child(1){
+    background:url(../fonts/icon_back_01.png) no-repeat center center;
+    background-size:2.2rem auto;
+}
+header a:nth-child(3){
+    background:url(../fonts/icon_more_1.png) no-repeat center center;
+    background-size:2rem auto;
+}
+header a:nth-child(2){
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-tap-highlight-color: #FFFFFF;
+}
+
+.top_tip{
+    position: relative;
+    padding-top: 3.8rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+.top_tip a{
+    display: block;
+    position: absolute;
+    right: 4%;
+    top:1rem;
+    width: 3.1rem;
+    height: 3.1rem;
+    background: url(../fonts/cartogram.png) no-repeat left top;
+    background-size: 3.1rem auto;
+}
+
+/*背景：优*/
+.top_tip .tip_img{
+    display: inline-block;
+    width:20.5rem;
+    height:20.5rem;
+    text-align:center;
+    line-height:20.5rem;
+    font-size:4rem;
+    color:#8dd652;
+    background:url(../fonts/icon_better.png) no-repeat center center;
+    background-size:20.5rem auto;
+}
+/*背景:良*/
+.top_tip .tip_img_01{
+    color:#ff8212;
+    background:url(../fonts/icon_general.png) no-repeat center center;
+    background-size:20.5rem auto;
+}
+/*背景：差*/
+.top_tip .tip_img_02{
+    color:#F64A4A;
+    background:url(../fonts/icon_bad.png) no-repeat center center;
+    background-size:20.5rem auto;
+}
+
+.top_tip span{
+    display: block;
+    width:100%;
+    margin-top: 1rem;
+    line-height: 3rem;
+    text-align: center;
+    font-size: 1.8rem;
+    color: #727272;
+}
+
+/*优*/
+.device_details{
+    position:fixed;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:28rem;
+    background:url(../fonts/icon_bg.png) no-repeat left top;
+    background-size:100% auto;
+}
+/*良*/
+.device_details_01{
+    background:url(../fonts/icon_bg_01.png) no-repeat left top;
+    background-size:100% auto;
+}
+/*差*/
+.device_details_02{
+    background:url(../fonts/icon_bg_02.png) no-repeat left top;
+    background-size:100% auto;
+}
+
+.device_details .cd_data{
+    width:100%;
+    height:16rem;
+    margin-top:9rem;
+}
+
+.device_details .cd_data dt{
+    display:block;
+    width:100%;
+    height:6.5rem;
+    font-size:4.5rem;
+    color:#fff;
+    padding-left: 0;
+    text-align: center;
+}
+
+.device_details .cd_data .ppm dd{
+    width:100%;
+    height:5rem;
+    text-align:center;
+    font-size:1.7rem;
+    color:#fff;
+}
+
+/*离线遮罩*/
+.mask_layer {
+    display: none;
+    position:absolute;
+    z-index:1000;
+    left:0;
+    top:6rem;
+    width:100%;
+    bottom: 0rem;
+    text-align:center;
+    background:rgba(0,0,0,0.5)
+}
+
+.mask_layer i{
+    display: inline-block;
+    width: 8rem;
+    height: 8rem;
+    margin-top: 15rem;
+    background:url("../fonts/icon_new.png") no-repeat center;
+    background-size: 8rem auto;
+}
+
+.mask_layer span{
+    display: block;
+    color: white;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    font-size: 1.6rem;
+}
+
+/*toast提示*/
+.gw_toast{
+    display:none;
+    position:fixed;
+    left:20%;
+    top:50%;
+    z-index:1000;
+    width:60%;
+    height:3rem;
+    line-height:3rem;
+    text-align:center;
+    background:rgba(0,0,0,.3);
+    font-size:1.4rem;
+    color:#fff;
+    border-radius: 4rem;
+}
+
+

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/base.css"/>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<a class="back" href="javascript:;"></a>
+			<a id="InfraredTittle" class="deviceName autoSwitchLanguager" href="javascript:;"></a>
+			<a class="more" href="javascript:;"></a>
+		</header>
+		<section class="state_show">
+			<div id="InDefense" class="status autoSwitchLanguager"></div>
+			<div class="img_state" style="position: relative;">
+				<div class="loading">
+					<i></i>
+					<i></i>
+					<i></i>
+				</div>
+				<span id="IsNormal" class="autoSwitchLanguager"></span>
+			</div>
+		</section>
+		<section class="text_tips">
+			<div class="tips"></div>
+		</section>
+		<section class="img_bottom">
+			<!--<img src="fonts/bg_bottom.png" alt="" />-->
+			<div class="bottom_btn">
+				<a id="UnDefense" class="btn autoSwitchLanguager" href="javascript:;"></a>
+			</div>
+		</section>
+		<section class="mask_layer" style="display:none;"><i></i><span id="OffLine" class="autoSwitchLanguager"></span></section>
+	</body>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var state = 0;
+		var num = 2; //动画数组长度
+		var timer; //定时器动画
+		var dId = ''
+		plus.plusReady(function(){
+            initlan();
+			//newDataRefresh(resultJson)
+			plus.gatewayCmd.getDeviceInfo(null, function(data){
+				if(data.mode == 2){
+					$(".mask_layer").show();
+				}else{
+					$(".mask_layer").hide();
+					editHtml(data)
+				}
+                var name = data.name.indexOf("#$default$#") != -1 ? lang_InfraredTittle +data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+				dId = data.devID
+				getMoreConfig(dId)
+				contorl(data.gwID,data.devID,data.endpoints[0].endpointNumber);
+				getLastOpen();
+			})
+			plus.gatewayCmdRush.newDataRefresh(function(data){
+				if(data.cmd == "500" && dId == data.devID){
+					if(data.mode == 2){
+						$(".mask_layer").show();
+					}else{
+						$(".mask_layer").hide();
+						editHtml(data)
+					}
+                    var name = data.name.indexOf("#$default$#") != -1 ?  lang_InfraredTittle +data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+				}else if(data.cmd == "502" && dId == data.devID){
+					if(data.name != undefined){
+                        var name = data.name.indexOf("#$default$#") != -1 ? lang_InfraredTittle +data.name.split("#")[2]:data.name
+						$(".deviceName").html(name)
+					}
+					if(data.endpointStatus == 0){
+						//更换整个背景图片
+						$("html,body").css("background","url(fonts/bg_2.png) repeat-x left top")
+						//去掉状态图中的文字
+						$(".img_state").find("span").html('')
+						//修改控制按钮样式
+						$(".btn").addClass("btn_1")
+	                    $(".btn").html(lang_DoDefense)
+	                    //修改撤防设防图标
+	                    $(".status").addClass("status_no")
+	                    $(".status").html(lang_OutOfDefense)
+						state = 0;
+						clearInterval(timer)
+						$(".loading").hide()
+					}else if(data.endpointStatus == 1){
+						$("html,body").css("background","url(fonts/bg_1.png) repeat-x left top")
+						$(".img_state").find("span").html(lang_IsNormal)
+						$(".btn").removeClass("btn_1")
+	                    $(".btn").html(lang_UnDefense)
+	                    //修改撤防设防图标
+	                    $(".status").removeClass("status_no")
+	                    $(".status").html(lang_InDefense)
+						state = 1;
+						clearInterval(timer)
+						$(".loading").hide()
+					}
+				}
+			})
+		})
+		//返回到设备详情页
+		$(".back").on("click",function(){
+			plus.tools.back(function() {})
+		})
+		//跳转到更多页面
+		$(".more").on("click",function(){
+			plus.tools.more(moreConfig, function() {})
+		})
+		function editHtml(data){
+//			var name = data.name.indexOf("#$default$#") != -1 ? "红外入侵监测器"+data.name.split("#")[2]:data.name
+//			$(".deviceName").html(name)
+			//endpointStatus:0.撤防，1.设防
+			if(data.endpoints[0].clusters[0].attributes[0].attributeId != 2) {
+				return;
+			}
+			if(data.endpoints[0].endpointStatus == 0){
+				/*html,body{width:100%;height:100%;background:url(../fonts/bg_2.png) repeat-x left top;}*/
+				//更换整个背景图片
+				$("html,body").css("background","url(fonts/bg_2.png) repeat-x left top")
+				//去掉状态图中的文字
+				$(".img_state").find("span").html('')
+				//修改撤防设防图标
+				$(".status").addClass("status_no")
+                $(".status").html(lang_OutOfDefense)
+				//修改控制按钮样式
+				$(".btn").addClass("btn_1")
+				$(".btn").html(lang_DoDefense)
+				num = 2;
+				clearInterval(timer)
+				$(".loading").hide()
+                $(".tips").hide()
+				state = 0;
+			//设防
+			}else if(data.endpoints[0].endpointStatus == 1){
+				state = 1
+				var attribute = data.endpoints[0].clusters[0].attributes[0]
+				//设防状态下，报警编辑
+				if(attribute.attributeValue == 1){
+					$("html,body").css("background","url(fonts/bg_3.png) repeat-x left top")
+					$(".img_state").find("span").html(lang_SomeoneAfter)
+//					$(".tips").hide()
+					$(".tips").show();
+					var time = data.time;
+					$(".tips").html(getTime(time))
+					$(".loading").show()
+                    clearInterval(timer)
+					timer = setInterval(beginCircle, 300);
+				//设防状态下消警编辑
+				}else if(attribute.attributeValue === '0'){
+					$("html,body").css("background","url(fonts/bg_1.png) repeat-x left top")
+					$(".img_state").find("span").html(lang_IsNormal)
+//					$(".tips").show()
+//					$(".tips").html(getTime(data))
+					clearInterval(timer)
+					num = 2;
+					$(".loading").hide()
+				}
+                $(".btn").removeClass("btn_1")
+                $(".btn").html(lang_UnDefense)
+                $(".status").removeClass("status_no")
+                $(".status").html(lang_InDefense)
+			}
+		}
+		//设备设防撤防控制502
+		function deviceContorl(gwID,devID,endpointNumber,state){
+			var data = {
+				"cmd":"502",
+				"gwID":gwID,
+				"mode":0,
+				"devID":devID,
+				"endpointNumber":endpointNumber,
+				"endpointStatus":state
+			}
+			return data;
+		}
+		function contorl(gwID,devID,endpointNumber){
+			$(".btn").on("click",function(){
+				if(state == 0){
+					var deviceInfo = deviceContorl(gwID,devID,endpointNumber,'1');
+					plus.gatewayCmd.controlDevice(deviceInfo,function(){})
+				}else{
+					var deviceInfo = deviceContorl(gwID,devID,endpointNumber,'0');
+					plus.gatewayCmd.controlDevice(deviceInfo,function(){})
+				}
+			})
+		}
+		/*
+		 * 报警动画
+		 */
+		function beginCircle() {
+			if(num >= 0) {
+				$(".loading i").eq(num).css("display","block")
+			}
+			num = num - 1;
+			if(num == -2) {
+				num = 2;
+				$(".loading i").css("display","none")
+			}
+		}
+
+		function getTime(data) {
+		    if (data === undefined) {
+		        return '';
+			}
+			var time = parseInt(data);
+            var date = new Date(time);
+            var year1 = date.getFullYear();
+            var month1 = date.getMonth() + 1;
+            var day1 = date.getDate();
+            var hour1 = date.getHours();
+            var min1 = date.getMinutes();
+
+            var nowDate = new Date();
+            var year2 = nowDate.getFullYear();
+            var month2 = nowDate.getMonth();
+            var day2 = nowDate.getDate();
+
+            var nowDateZero = new Date(year2, month2, day2, 0,0,0,0);
+            var nowTimeLong = nowDateZero.getTime();
+
+            if (min1 < 10) {
+                min1 = '0' + min1;
+            }
+            if (hour1 < 10) {
+                hour1 = '0' + hour1;
+            }
+            if (day1 < 10) {
+                day1 = '0' + day1;
+            }
+            if (month1 < 10) {
+                month1 = '0' + month1;
+            }
+
+            if (time - nowTimeLong < 24 * 60 * 60 * 1000 && time - nowTimeLong > 0) {
+                return hour1 + ':' + min1 + ' ' + lang_SomeoneAfter;
+            } else if (nowTimeLong - time < 24 * 60 * 60 * 1000 && nowTimeLong - time > 0) {
+                return lang_Yesterday + ' ' + hour1 + ':' + min1 + ' ' + lang_SomeoneAfter;
+            } else {
+                return year1 + '.' + month1 + '.' + day1 + ' ' + hour1 + ':' + min1 + ' ' + lang_SomeoneAfter;
+            }
+        }
+		
+			// 调用云接口查询最近一次打开
+		function getLastOpen(){
+			var parm = {
+				"deviceId":dId,
+				"deviceType":"02",
+                "messageCode":"0102011"
+			}
+			plus.gatewayCmd.getLastAlarmTime(parm, function(data){
+					if(!data || data == ''){
+						return;
+					}
+					$(".tips").show()
+					$(".tips").html(getTime(data))
+			})
+		}
+	</script>
+</html>

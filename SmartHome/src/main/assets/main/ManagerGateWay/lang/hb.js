@@ -1,0 +1,51 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.GatewayCenter_Fog_calculation = "נתב מנהל נתבים";
+$lang.Fog_calculation_Introduction_title = "נתב מנהל נתבים";
+$lang.Fog_calculation_Introduction = "מנהל נתבים מיועד לרשתות גדולות";
+$lang.Fog_calculation_Tips = "טיפ:";
+$lang.Fog_calculation_Tips_1 = "נתב דור 4 יכול לשמש כנתב מנהל";
+$lang.Fog_calculation_Tips_2 = "אנא חבר נתב מנהל ונתבי משנה תחת אותו ראוטר";
+$lang.Fog_calculation_i_konw = "הבנתי";
+$lang.Fog_calculation_help = "עזרה";
+$lang.Fog_calculation_Sub_machine_mode = "תפקיד נוכחי: נתב משנה";
+$lang.Fog_calculation_Host_mode = "תפקיד נוכחי: נתב מנהל";
+$lang.Fog_calculation_Sub_machine_mode_no_Switch = "תוכל לנהל בקרים שמחוברים לנתב המשנה דרך נתב מנהל";
+$lang.Fog_calculation_Sub_machine_mode_can_Switch = "תוכל גם לשנות נתב מתפקיד נתב משנה לתפקיד נתב מנהל";
+$lang.Fog_calculation_Switch_Host = "החלף תפקיד לנתב מנהל";
+$lang.Fog_calculation_Switch_Sub_machine = "החלף תפקיד לנתב משנה";
+$lang.Fog_calculation_Switch_success = "החלפת תפקיד הצליחה";
+$lang.Fog_calculation_Switch_failure = "החלפת תפקיד נכשלה";
+$lang.Fog_calculation_Not_bound = "לחץ על קישוריות";
+$lang.Fog_calculation_LAN_under_machine = "נתבי משנה ברשת מקומית";
+$lang.Fog_calculation_no_Sub_machine = "אין נתבי משנה ברשת מקומית";
+$lang.Fog_calculation_no_Sub_machine_hinte = "";
+$lang.Fog_calculation_Bound = "מקושר";
+$lang.Fog_calculation_Bound_Sub_machine = "לקשר";
+$lang.Fog_calculation_Sub_machine_id = "נתב משנה";
+$lang.Fog_calculation_Sub_machine_password = "סיסמא";
+$lang.Fog_calculation_password_enter = "סימא";
+$lang.Fog_calculation_Bounding = "לקשר";
+$lang.Fog_calculation_Bounding_hint = "לקשר， דרך נתב מנהל של ההתקנים， ניהול ואיפוס תרחישים";
+$lang.Fog_calculation_Bound_Sub_machine_list = "קישר נתב משנה";
+$lang.Fog_calculation_Unbundled = "ניתוק נתב משנה";
+$lang.Fog_calculation_prompt = "הודעה";
+$lang.Fog_calculation_Unbundled_prompt = "אחרי ביטול קישוריות， ההגדרות של ההתקנים בנתבי המשנה בנתב המנהל לא יאופשרו";
+$lang.Fog_calculation_cancel = "בטל";
+$lang.Fog_calculation_Unbundled_success = "ניתוק הצליח";
+$lang.Fog_calculation_Unbundled_failure = "ניתוק נכשל";
+$lang.Fog_calculation_Unbundled_Left_slide = "הערה: אם תרצה לשנות את נתב המנהל לנתב משנה החלק תחילה שמאלה";
+$lang.Fog_calculation_Gateway_offline = "מנותק";
+$lang.Fog_calculation_Sub_machine_device = "בקר בידני";
+$lang.Fog_calculation_Number = "בקרים";
+$lang.Fog_calculation_log_in_Sub_machine = "נתב משנה זה נשלט על ידי נתב מנהל אחר， אנא נתק אותו לפני חיבור אחר";
+$lang.Fog_calculation_ok = "אשר";
+$lang.Fog_calculation_Bind_success = "קישוריות הצליחה";
+$lang.Fog_calculation_Bind_failure = "קישוריות הצליחה";
+$lang.Fog_calculation_Bind_password_error = "סיסמא שגוייה";
+$lang.Fog_calculation_Bind_ing = "מבצע ...";
+$lang.onLine = "מחובר";
+$lang.offLine = "מנותק";

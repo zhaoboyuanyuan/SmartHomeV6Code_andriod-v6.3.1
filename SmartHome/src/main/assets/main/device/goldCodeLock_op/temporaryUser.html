@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建临时用户</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="css/mui.min.css">
+    <!--<link rel="stylesheet" href="css/mui.picker.min.css">-->
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/set.css"/>
+      <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_op_detail_02" href="javascript:;">临时用户详情</a>
+            <a class="edit autoSwitchLanguager" key="device_op_txt_22" href="javascript:;">编辑</a>
+        </div>
+    </header>
+    <section class="content mui-content">
+        <div class="createInput" style="margin-top:2rem">
+            <span class="autoSwitchLanguager" key="device_op_normal_03" style="width:27%">用户名</span>
+            <input id="userName" class="autoSwitchLanguager" key="device_op_normal_05" maxlength="20" type="text" disabled="disabled" placeholder="请输入用户名" value="">
+        </div>
+        <div class="createInput">
+            <span class="autoSwitchLanguager" key="device_op_normal_04" style="width:27%">密码</span>
+            <input id="pwd" type="password" disabled="disabled" value=""><i class="look"></i>
+        </div>
+        <strong class="autoSwitchLanguager" key="device_op_temp_03">密码有效期</strong>
+        <div class="createInput mui-content-padded">
+            <span class="autoSwitchLanguager" key="device_op_temp_04" style="width:27%">开始</span>
+            <button id="pickDateBtn" type="button" disabled="disabled" class="btn mui-btn mui-btn-block"></button>
+        </div>
+        <div class="createInput">
+            <span class="autoSwitchLanguager" key="device_op_temp_05" style="width:27%">结束</span>
+            <button id="pickDateBtn1" type="button" disabled="disabled" class="btn mui-btn mui-btn-block"></button>
+        </div>
+    </section>
+    <!--<section id="fail" class="toast" style="display:none;">-->
+        <!--<p class="autoSwitchLanguager" id="toastText" style="color:#fff;"></p>-->
+    <!--</section>-->
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/completeToast.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/onceUser.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan()
+    var PWD, ST, ET, NAME, DEVICEID, GWID, APPID, UID, token;
+    var info = window.sysfun;
+    info.init("Token_OP")
+    token = info.getItem("Token_OP");
+    $("#userName").on("blur",function(){
+        var value = $(this).val();
+        var valueFace = noFace(value);
+        console.log(valueFace);
+        $(this).val(valueFace);
+    });
+    plus.plusReady(function() {
+        $("#back").on("click",function(){
+            plus.tools.goBack(function(){})
+        })
+        //点击编辑,只有用户名可编辑，密码及生效时间都不能编辑
+        $(".edit").on("click",function(){
+            if($(this).html() == account_txt_22){
+                $(this).html(normal_txt_05)
+                $("#userName").attr("placeholder","")
+                $("#userName").removeAttr("disabled");
+                $("#pwd").css("opacity","0.5")
+                $(".createInput").find("button").css("opacity","0.5")
+            }else{
+                if($("#userName").val() == ''){
+                    window.showDialog.show(normal_txt_02,2000);
+                }else{
+                    createToast()
+                    send520Cmd()
+                    setTimeout(function() {
+                        $(".comToast").hide();
+                        window.showDialog.show(normal_txt_04,2000);
+                    }, 60000)
+                }
+            }
+        })
+        plus.gatewayCmd.getCurrentAppID(function(result) {
+            APPID = result;
+            plus.gatewayCmd.getDeviceInfo(function(result) {
+                DEVICEID = result.devID;
+                GWID = result.gwID;
+                rush_cmd(4,DEVICEID,APPID);
+            })
+        })
+        PWD = info.getItem("pwd");
+        ST = info.getItem("st");
+        ET = info.getItem("et");
+        NAME = info.getItem("name");
+        UID = info.getItem("uid");
+        $("#pickDateBtn").html(time(ST))
+        $("#pickDateBtn1").html(time(ET))
+        $("#pwd").val(PWD)
+        $("#userName").val(NAME)
+    })
+    function time(t){
+        return	t.substring(0,4) + "/" + t.substring(4,6) +"/" + t.substring(6,8) +" "+  t.substring(8,10) + ":"+  t.substring(10,12)
+    }
+    function send520Cmd() {
+        var jsonData = {};
+        jsonData.cmd = "520";
+        jsonData.gwID = GWID;
+        jsonData.devID = DEVICEID;
+        jsonData.operType = 4;
+        jsonData.appID = APPID;
+        NAME = $("#userName").val();
+        var data = {
+            "tk": token,
+            "uid": UID,
+            "ut": "2",
+            "pwd": PWD,
+            "st": ST,
+            "et": ET,
+            "name": NAME
+        }
+        jsonData.data = data;
+        plus.gatewayCmd.controlDevice(jsonData, function(resutl) {
+
+        })
+    }
+
+    /*
+ * 数据回调
+ */
+    function rush_cmd(operType,DEVICEID,APPID) {
+        plus.gatewayCmd.newDataRefresh(function(result) {
+            if(result.cmd == "520" && result.devID == DEVICEID && result.appID == APPID) {
+                if(result.operType == operType) { //operType:2为新增，operType:4为修改
+                    if(result.data.code != 0) {
+                        $(".comToast").hide();
+                        errorCode(parseInt(result.data.code))
+                        return;
+                    }
+                    $(".comToast").hide();
+                    window.showDialog.show(alarm_txt_05,2000);
+                    setTimeout(function(){
+                        // window.location = "accountManage.html"
+                        var shareinfo = window.sysfun;
+                        shareinfo.init("Share_op");
+                        shareinfo.clear();
+                        shareinfo.setItem("state", "2");
+                        shareinfo.setItem("startTime", time(ST));
+                        shareinfo.setItem("endTime", time(ET));
+                        shareinfo.setItem("password", PWD);
+                        window.location = "createdSuccess.html"
+                    },1000)
+                }
+            }
+        })
+    }
+</script>
+</html>

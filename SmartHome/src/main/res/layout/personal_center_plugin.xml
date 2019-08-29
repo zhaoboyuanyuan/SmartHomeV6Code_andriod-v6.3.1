@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/setting_manager_item_name_ly"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_centerVertical="true">
+
+        <cc.wulian.smarthomev6.support.customview.CircleImageView
+            android:id="@+id/setting_manager_item_name_iv"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_launcher"
+            app:border_color="@color/transparent"
+            app:border_width="1dp" />
+
+        <TextView
+            android:id="@+id/setting_manager_item_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|left"
+            android:layout_marginLeft="10dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp">
+
+        <ToggleButton
+            android:id="@+id/setting_manager_item_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@android:color/transparent"
+            android:button="@drawable/button_toggle_switch"
+            android:checked="true"
+            android:text=""
+            android:textOff=""
+            android:textOn=""
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/setting_manager_item_info_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/system_intent_right"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</RelativeLayout>

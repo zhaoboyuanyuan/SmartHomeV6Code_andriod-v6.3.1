@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/jzm_lock_linear_container"
+    android:paddingTop="@dimen/widget_padding_vertical"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/widget_padding_horizontal"
+        android:paddingEnd="@dimen/widget_padding_horizontal">
+        <include layout="@layout/view_lock_widget_title"/>
+    </LinearLayout>
+
+    <include layout="@layout/view_home_expand_lock_input"/>
+
+    <LinearLayout
+        android:id="@+id/jzm_lock_linear_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/newDivider"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+            <ImageView
+                android:id="@+id/jzm_lock_image_lock"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.618"
+                android:src="@drawable/icon_op_lock_off"/>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/newDivider"/>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/jzm_lock_text_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible"
+                    android:text="@string/Device_Lock_Widget_Statusd"
+                    android:gravity="center"/>
+
+                <RelativeLayout
+                    android:id="@+id/jzm_lock_relative_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible"
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/jzm_lock_text_lock_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toStartOf="@+id/view"
+                        android:text="@string/Device_Lock_Widget_Gate"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:ellipsize="start"
+                        android:textColor="@color/newPrimaryText" />
+
+                    <TextView
+                        android:id="@+id/jzm_lock_text_lock_state_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/view"
+                        android:text="@string/Device_Lock_Widget_Gatestatusa"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textColor="@color/newPrimaryText" />
+
+                    <TextView
+                        android:id="@+id/jzm_lock_text_lock_main"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/jzm_lock_text_lock_door"
+                        android:layout_toStartOf="@+id/view"
+                        android:text="@string/Device_Lock_Widget_MainLock"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:ellipsize="start"
+                        android:textColor="@color/newPrimaryText" />
+
+                    <TextView
+                        android:id="@+id/jzm_lock_text_lock_state_main"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/jzm_lock_text_lock_state_door"
+                        android:layout_toEndOf="@+id/view"
+                        android:text="@string/widget_lock_3_key_tags_unlock"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textColor="@color/newPrimaryText" />
+
+                    <TextView
+                        android:id="@+id/jzm_lock_text_lock_second"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/jzm_lock_text_lock_main"
+                        android:layout_toStartOf="@+id/view"
+                        android:text="@string/Device_Lock_Widget_Doublelock"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:ellipsize="start"
+                        android:textColor="@color/newPrimaryText" />
+
+                    <TextView
+                        android:id="@+id/jzm_lock_text_lock_state_second"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/jzm_lock_text_lock_state_main"
+                        android:layout_toEndOf="@+id/view"
+                        android:text="@string/Device_Lock_Widget_Undoublelocked"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textColor="@color/newPrimaryText" />
+
+                    <android.support.v4.widget.Space
+                        android:id="@+id/view"
+                        android:layout_width="8dp"
+                        android:layout_height="0dp"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
+            </FrameLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/newDivider"/>
+
+        <include layout="@layout/view_home_expand_lock_message"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/jzm_lock_linear_handle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/widget_padding_horizontal"
+        android:paddingRight="@dimen/widget_padding_horizontal"
+        android:paddingTop="@dimen/widget_margin_component"
+        android:paddingBottom="@dimen/widget_padding_horizontal"
+        android:gravity="right">
+
+        <TextView
+            android:id="@+id/jzm_lock_text_handle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="@string/Device_Lock_Widget_Spread"
+            android:textColor="@color/v6_text_gray"/>
+        <ImageView
+            android:id="@+id/jzm_lock_image_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_arrow_downward"/>
+    </LinearLayout>
+</LinearLayout>

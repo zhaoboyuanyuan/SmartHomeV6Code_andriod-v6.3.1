@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cc.wulian.smarthomev6.main.device.device_22.CustomRemoteActivity">
+
+    <Button
+        android:id="@+id/btn_ac_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/transparent"
+        android:gravity="center_horizontal|top"
+        android:text="@string/InTrans_Airconditioner_Usehelp"
+        android:textColor="@color/v6_text_gray" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/custom_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="20dp" />
+</RelativeLayout>

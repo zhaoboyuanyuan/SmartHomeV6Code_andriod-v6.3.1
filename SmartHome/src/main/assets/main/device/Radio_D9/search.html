@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="../../source/mui/js/mui.min.js"></script>
+    <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header" style="height: 6.4rem;padding-top: 0rem;background-color: #8dd652;position: fixed;z-index: 104;box-sizing: content-box;">
+    <div class="header_top" style="box-sizing: content-box;-webkit-box-sizing: content-box">
+        <a class="back" href="hot.html"></a>
+        <div class="mui-input-row mui-search" style="width: 65%;float: left;clear: none;margin-top: 1rem;">
+            <input type="search" class="mui-input-clear" placeholder="" style="background-color:white">
+        </div>
+        <a class="serachBtn autoSwitchLanguager" key="Radio_Search" style="float: right">搜索</a>
+    </div>
+</header>
+<section class="searchResult_title" style="top: 6.4rem;height: 2rem;position: fixed;z-index: 104;box-sizing: content-box;background: #efeff4;width: 100%;padding-left: 2rem">
+    0个搜索结果
+</section>
+<div id="refreshContainer" class="mui-content mui-scroll-wrapper" style="top: 8.4rem;margin-bottom: 8rem;">
+    <div class="mui-scroll">
+        <form class="mui-input-group" >
+        </form>
+    </div>
+</div>
+<section class="addSensorBtn" style="position: fixed; bottom: 0rem; width: 100%;text-align: center;height: 8rem;">
+    <a class="submmit autoSwitchLanguager" key="Radio_Add_to_play_queue" style="color: white;">加入播放列表</a>
+</section>
+</body>
+<script>
+    //国际化初始化函数
+    initlan();
+    mui.init();
+    $(".submmit").on("click",function (){
+        selectedTracks();
+        if(selectedTrackList.length > 0){
+            requestSetTrackList();
+        }
+    });
+
+    $(".serachBtn").on("click",function (){
+        searchStr =  $("input[type=search]").val();
+        if (searchStr.length > 0){
+            searchMusicRequest(searchStr,1);
+        }
+    });
+</script>
+<script>
+    var devID;
+    var gwID;
+    var ep;
+    var currentPage = 1;
+    var searchStr;
+    var trackList = [];//所有歌曲列表
+    var selectedTrackList = [];//选中所有歌曲列表
+    var info = window.sysfun;
+    info.init("V6XMLY");
+    var categoryId = info.getItem("categoryId");
+
+    plus.plusReady(function () {
+        $(".searchResult_title").text(0+languageUtil.getResource("Radio_Search_search_results"));
+        plus.gatewayCmd.getDeviceInfo(null, function(data) {
+            devID = data.devID;
+            gwID = data.gwID;
+            ep = ~~(data.endpoints[0].endpointNumber);
+        });
+    });
+    //下拉刷新
+    mui.init({
+        pullRefresh: {
+            container: '#refreshContainer',
+            down: {
+                contentrefresh: '正在刷新',
+                callback: onRefresh
+            },
+            up: {
+                auto:false,
+                contentrefresh: '正在加载',
+                callback: onLoadMore
+            }
+        },
+        gestureConfig:{
+
+        }
+    });
+
+    function onRefresh() {
+        searchMusicRequest(searchStr,1);
+        setTimeout(function () {
+            //
+            mui('#refreshContainer').pullRefresh().endPulldownToRefresh(); //refresh completed
+        }, 1500);
+    }
+
+    function onLoadMore() {
+        searchMusicRequest(searchStr,currentPage+1);
+        setTimeout(function () {
+            mui('#refreshContainer').pullRefresh().endPullupToRefresh();// 加载数据最没有更多内容
+        }, 1500);
+    }
+
+    function searchMusicRequest(sendStr,pager){
+        if (sendStr.length <= 0){
+            return;
+        }
+        var paramToNative = {};
+        var urlStr = "/ent/music/search/tracks";
+        var paramToCilent = {};
+        paramToCilent.categoryId = categoryId;
+        paramToCilent.platformId = 0;
+        paramToCilent.q = sendStr;
+        paramToCilent.page = pager;
+        paramToNative.url = urlStr;
+        paramToNative.param = paramToCilent;
+
+        plus.gatewayCmd.WLHttpGetBase(paramToNative, function(result) {
+            if(result.resultCode == 0){
+                if (result.data){
+                    currentPage = parseInt(result.data.currentPage);
+                    if (pager == 1){
+                        mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+                        $(".mui-input-group")[0].innerHTML = "";
+                        refreshUI(result.data.tracks);
+                        trackList = result.data.tracks;
+                        $(".searchResult_title").text(result.data.totalCount+languageUtil.getResource("Radio_Search_search_results"));
+                    }else {
+                        mui('#refreshContainer').pullRefresh().endPullupToRefresh();
+                        trackList = trackList.concat(result.data.tracks);
+                        refreshUI(result.data.tracks);
+                    }
+                }
+            }
+        })
+    }
+
+    $(".mui-input-group")[0].innerHTML = "";
+
+    function refreshUI(data) {
+        for (var i = 0;i<data.length;i++){
+            var itemDiv=document.createElement("div");
+            itemDiv.className = "mui-input-row mui-checkbox";
+            var itemLbl = document.createElement("label");
+            itemLbl.innerHTML = data[i].trackTitle +" - "+ data[i].nickname;
+            var itemInput = document.createElement("input");
+            itemInput.name = "checkbox1";
+            itemInput.value = "Item";
+            itemInput.type = "checkbox";
+
+
+            itemDiv.appendChild(itemLbl);
+            itemDiv.appendChild(itemInput);
+
+            // $(".mui-input-group")[0].append(itemDiv);
+            document.getElementsByClassName('mui-input-group')[0].appendChild(itemDiv);
+        }
+    }
+
+    function requestSetTrackList(){
+        var paramToNative = {};
+
+        var urlStr = "/ent/music/add/music/list";
+        var paramToCilent = {};
+        paramToCilent.deviceId = devID;
+        paramToCilent.platformId = 0;
+        paramToCilent.tracks = selectedTrackList;
+
+        paramToNative.url = urlStr;
+        paramToNative.param = paramToCilent;
+        plus.gatewayCmd.WLHttpPostBase(paramToNative, function(result) {
+            console.log(result);
+            if(result.resultCode == 0){
+                mui.toast(languageUtil.getResource("Radio_Added_successfully"));
+            }else {
+                mui.toast(languageUtil.getResource("Radio_Added_failed"));
+            }
+        })
+    }
+
+    function selectedTracks() {
+        selectedTrackList.length = 0;
+        mui(".mui-input-group div").each(function(){
+            var divItem = this;
+            if(divItem.getElementsByTagName("input")[0].checked){
+                var songIndex = $(this).index();
+                var selectTrackId = trackList[songIndex].id;
+                if (selectTrackId){
+                    searchSelectedTrackWithId(selectTrackId);
+                }
+            }
+        })
+    }
+
+
+    function searchSelectedTrackWithId(trackId) {
+        if (trackId && trackId > 0){
+            var SongIndex = trackList.length;
+            while (SongIndex--){
+                if(trackList[SongIndex].id == trackId){
+                    var trackItem = {};
+                    trackItem.id = trackList[SongIndex].id;
+                    trackItem.trackTitle = trackList[SongIndex].trackTitle;
+                    trackItem.url = trackList[SongIndex].url;
+                    trackItem.duration = trackList[SongIndex].duration;
+                    trackItem.nickname = trackList[SongIndex].nickname;
+                    trackItem.avatarUrl = trackList[SongIndex].avatarUrl;
+                    trackItem.playUrl = trackList[SongIndex].playUrl;
+                    selectedTrackList.push(trackItem);
+                }
+            }
+        }
+    }
+
+    function searchSelectedTrack(trackTitle) {
+        if (trackTitle && trackTitle.length > 0){
+            var trankIndex = trackList.length;
+            while (trankIndex--){
+                if(trackList[trankIndex].trackTitle == trackTitle){
+                    var trackItem = {};
+                    trackItem.id = trackList[trankIndex].id;
+                    trackItem.trackTitle = trackList[trankIndex].trackTitle;
+                    trackItem.url = trackList[trankIndex].url;
+                    trackItem.duration = trackList[trankIndex].duration;
+                    trackItem.nickname = trackList[trankIndex].nickname;
+                    trackItem.avatarUrl = trackList[trankIndex].avatarUrl;
+                    trackItem.playUrl = trackList[trankIndex].playUrl;
+                    selectedTrackList.push(trackItem);
+                }
+            }
+        }
+    }
+
+    var iphoneX = {sysFunc: "getItem:", room: "iphoneX", id: "iphoneX", data: ""};
+    var iStr ='';
+    if(!window.v6sysfunc) {
+        iStr = prompt(JSON.stringify(iphoneX))
+    }
+    if(iStr == "iphoneX"){
+        mui(".iponeXclass").each(function () {
+            var item = this;
+            var oldItemTop = item.style.marginTop;
+
+        })
+        $(".searchResult_title")[0].style.top = "8.4rem";
+        $("#refreshContainer").style.top = "10.4rem";
+    }
+
+</script>
+</html>

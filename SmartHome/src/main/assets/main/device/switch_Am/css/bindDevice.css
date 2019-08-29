@@ -1,0 +1,184 @@
+@charset "utf-8";
+
+header a:nth-child(3){
+	background:none;
+}
+
+html{height:100%;background:#fff;}
+/*设备列表*/
+.get_list{
+	width:100%;
+	/*margin-top:8.4rem;*/
+	overflow:hidden;
+	background:#fff;
+}
+.get_list ul{
+	overflow:hidden;
+}
+.get_list ul li{
+	width:92%;
+	height:4.5rem;
+	padding:0.75rem 4%;
+	border-bottom:1px solid #ddd;
+}
+.get_list ul li a{
+	display:inline-block;
+	width:100%;
+	color:#000;
+	font-size:1.5rem;
+}
+.get_list ul li a p{
+	width:100%;
+	display:inline-block;
+	white-space:nowrap; 
+	overflow:hidden; 
+	text-overflow:ellipsis;
+}
+.get_list ul li i{
+	display:block;
+	float:left;
+	width:14%;
+	height:4.5rem;
+	background:url(../fonts/icon_an.png) no-repeat center center;
+	background-size:100% auto;
+}
+.get_list ul li .right{
+	float:right;
+	width:85%;
+}
+.get_list ul li:nth-child(2) i{
+	background:url(../fonts/icon_an.png) no-repeat center center;
+	background-size:4.5rem auto;
+}
+.get_list ul li:nth-child(3) i{
+	background:url(../fonts/icon_an.png) no-repeat center center;
+	background-size:4.5rem auto;
+}
+.get_list ul li i.left{
+	margin-right:1%;
+}
+.get_list ul li i.right{
+	float:right;
+	width:1rem;
+	background:url(../fonts/icon_right.png) no-repeat right center;
+	background-size:0.9rem auto;
+}
+.get_list ul li span{
+	font-size:1.2rem;
+	color:#96999e;
+	margin-right:1rem;
+}
+.get_list ul li em{
+	font-size:1.2rem;
+	color:#7bcb4b;
+	margin-right:1rem;
+}
+.no_list{
+	display:none;
+	width:100%;
+	padding-top:60%;
+	text-align:center;
+	font-size:1.6rem;
+	color:#929292;
+}
+.bindSwitch_Am {
+	display: none;
+}
+.bindSwitch_An {
+	display: none;
+}
+.bindSwitch_Ao {
+	display: none;
+}
+
+.showChoose {
+	background: url(../fonts/choose.png) no-repeat center right;
+	padding-right: 1.5rem;
+	background-size: 3rem auto;
+}
+.switchName {
+	color: #000000;
+	font-size: 1.6rem;
+}
+.switchItem {
+	padding: 1.5rem;
+}
+.notSwitch1 {
+	float: right;
+	text-align: right;
+	font-size: 1.5rem;
+	color: #888888;
+}
+.notSwitch2 {
+	float: right;
+	text-align: right;
+	font-size: 1.5rem;
+	color: #888888;
+}
+.notSwitch3 {
+	float: right;
+	text-align: right;
+	font-size: 1.5rem;
+	color: #888888;
+}
+
+/*正在保存toast*/
+.comToast{
+	display: block;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 60%;
+	text-align:center;
+	overflow: hidden;
+	text-align: center;
+	padding-top: 1rem;
+	padding-bottom:1rem;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+	border-radius: 5px;
+}
+.comToast i{
+	display:inline-block;
+	height:2rem;
+	line-height:2rem;
+	font-size:1.4rem;
+	color:#fff;
+}
+@-webkit-keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+@keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+.comToast i em{
+	display:block;
+	float:left;
+	width:2rem;
+	height:2rem;
+	margin-right:1rem;
+	background:url(../fonts/icon_loading.png) center center;
+	background-size: 2rem auto;
+}
+.comToast i em.rotate{
+	-webkit-animation: rotate 0.7s linear infinite;
+	animation: rotate 0.7s linear infinite;
+}

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title></title>
+
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/voiceSet.css" />
+
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="../../source/mui/js/mui.min.js"></script>
+    <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header" style="height: 6.4rem;padding-top: 0rem;background-color: #8dd652;position: fixed;z-index: 104;box-sizing: content-box;">
+    <div class="header_top">
+        <a class="back" href="hot.html"></a>
+        <a href="javascript:;" class="deviceName" key=""></a>
+        <a class="selectAll autoSwitchLanguager" key="Radio_set_all">全选</a>
+    </div>
+</header>
+<div id="refreshContainer" class="mui-content mui-scroll-wrapper" style="top: 6.4rem;margin-bottom: 8rem;">
+    <div class="mui-scroll">
+        <form class="mui-input-group" >
+            <div class="mui-input-row mui-checkbox">
+                <label></label>
+                <input name="checkbox1" value="Item 3" type="checkbox" >
+            </div>
+            <div class="mui-input-row mui-checkbox">
+                <label>checked：true</label>
+                <input name="checkbox1" value="Item 4" type="checkbox" checked>
+            </div>
+            <div class="mui-input-row mui-checkbox">
+                <label>disabled checkbox</label>
+                <input name="checkbox1" type="checkbox">
+            </div>
+        </form>
+    </div>
+</div>
+<section class="addSensorBtn" style="position: fixed; bottom: 0rem; width: 100%;text-align: center;height: 8rem;">
+    <a class="submmit autoSwitchLanguager" key="Radio_Add_to_play_queue" style="color: white;top: 2rem">加入播放列表</a>
+</section>
+</body>
+<script>
+    var info = window.sysfun;
+    info.init("V6XMLY");
+    var devID;
+    var gwID;
+    var ep;
+    var categoryId;
+    var tagName;
+    var albumId;
+    var trackList;//所有歌曲列表
+    var selectedTrackList = [];//所有歌曲列表
+    var currentPage = 1;
+    //国际化初始化函数
+    initlan();
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(null, function(data) {
+            devID = data.devID;
+            gwID = data.gwID;
+            ep = ~~(data.endpoints[0].endpointNumber);
+            albumId = info.getItem("albumId");
+            requestAlbums(1);
+        });
+    });
+
+    //下拉刷新
+    mui.init({
+        pullRefresh: {
+            container: '#refreshContainer',
+            down: {
+                contentrefresh: '正在刷新',
+                callback: onRefresh
+            },
+            up: {
+                auto:false,
+                contentrefresh: '正在加载',
+                callback: onLoadMore
+            }
+        },
+        gestureConfig:{
+
+        }
+    });
+
+    function onRefresh() {
+        requestAlbums(1);
+        setTimeout(function () {
+            //
+            mui('#refreshContainer').pullRefresh().endPulldownToRefresh(); //refresh completed
+        }, 1500);
+    }
+
+    function onLoadMore() {
+        requestAlbums(currentPage+1);
+        setTimeout(function () {
+            mui('#refreshContainer').pullRefresh().endPullupToRefresh();// 加载数据最没有更多内容
+        }, 1500);
+    }
+
+    function requestAlbums(pager){
+        var paramToNative = {};
+        var urlStr = "/ent/music/albums/browse";
+        var paramToCilent = {};
+        paramToCilent.albumId = albumId;
+        paramToCilent.deviceId = devID;
+        paramToCilent.platformId = 0;
+        paramToCilent.page = pager;
+        paramToNative.url = urlStr;
+        paramToNative.param = paramToCilent;
+
+        plus.gatewayCmd.WLHttpGetBase(paramToNative, function(result) {
+            if(result.resultCode == 0){
+                if(result.data){
+                    currentPage = parseInt(result.data.currentPage);
+                    if (pager == 1){
+                        mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+                        $(".deviceName").text(result.data.albumTitle);
+                        $(".mui-input-group")[0].innerHTML = "";
+                        refreshUI(result.data.tracks);
+                        trackList = result.data.tracks;
+                    }else {
+                        mui('#refreshContainer').pullRefresh().endPullupToRefresh();
+                        trackList = trackList.concat(result.data.tracks);
+                        refreshUI(result.data.tracks);
+                    }
+                }
+            }else{
+                mui.toast('');
+            }
+        })
+    }
+
+    function requestSetTrackList(){
+        var paramToNative = {};
+
+        var urlStr = "/ent/music/add/music/list";
+        var paramToCilent = {};
+        paramToCilent.deviceId = devID;
+        paramToCilent.platformId = 0;
+        paramToCilent.tracks = selectedTrackList;
+
+        paramToNative.url = urlStr;
+        paramToNative.param = paramToCilent;
+        plus.gatewayCmd.WLHttpPostBase(paramToNative, function(result) {
+            console.log(result);
+            if(result.resultCode == 0){
+                mui.toast(languageUtil.getResource("Radio_Added_successfully"));
+            }else {
+                mui.toast(languageUtil.getResource("Radio_Added_failed"));
+            }
+        })
+    }
+
+    mui.init();
+    mui('.mui-input-group').on('change', 'input', function() {
+        allselectedBtnUpdate();
+    });
+
+    $(".submmit").on("click",function (){
+        selectedTracks();
+        if(selectedTrackList.length > 0){
+            requestSetTrackList();
+        }
+    });
+
+    $(".selectAll").on("click",function () {
+        var cbknum = mui("input[name='checkbox1']").length;
+        var chknum=0;
+        mui("input[name='checkbox1']").each(function(){
+            if(this.checked){
+                chknum++;
+            }
+        })
+        mui("input[name='checkbox1']").each(function(){
+            if (chknum >= cbknum ){
+                allselectedBtnUpdate();
+                this.checked=false;
+            }else {
+                this.checked=true;
+                allselectedBtnUpdate();
+            }
+
+        })
+    });
+    function selectedTracks() {
+        selectedTrackList.length = 0;
+        mui(".mui-input-group div").each(function(){
+            var divItem = this;
+            if(divItem.getElementsByTagName("input")[0].checked){
+                var lblStr = divItem.getElementsByTagName("label")[0].innerHTML;
+                searchSelectedTrack(lblStr);
+            }
+        })
+    }
+
+    function searchSelectedTrack(trackTitle) {
+        if (trackTitle && trackTitle.length > 0){
+            var trankIndex = trackList.length;
+            while (trankIndex--){
+                if(trackList[trankIndex].trackTitle == trackTitle){
+                    var trackItem = {};
+                    trackItem.id = trackList[trankIndex].id;
+                    trackItem.trackTitle = trackList[trankIndex].trackTitle;
+                    trackItem.url = trackList[trankIndex].url;
+                    trackItem.duration = trackList[trankIndex].duration;
+                    trackItem.nickname = trackList[trankIndex].nickname;
+                    trackItem.avatarUrl = trackList[trankIndex].avatarUrl;
+                    trackItem.playUrl = trackList[trankIndex].playUrl;
+                    selectedTrackList.push(trackItem);
+                }
+            }
+        }
+    }
+    function allselectedBtnUpdate() {
+        var cbknum = mui("input[name='checkbox1']").length;
+        var chknum=0;
+        mui("input[name='checkbox1']").each(function(){
+            if(this.checked){
+                chknum++;
+            }
+        });
+//        var iconName = (chknum >= cbknum )?"checked":"uchecked";
+//        var ulrIconName =  "url(img/"+iconName+".png) no-repeat center center";
+//        $(".selectAll").css("background",ulrIconName);
+//        $(".selectAll").css("background-size","1.8rem auto");
+    }
+</script>
+<script>
+    var isALLSelected = false;
+    function refreshUI(data) {
+        for (var i = 0;i<data.length;i++){
+            var itemDiv=document.createElement("div");
+            itemDiv.className = "mui-input-row mui-checkbox";
+            var itemLbl = document.createElement("label");
+            itemLbl.innerHTML = data[i].trackTitle;
+            var itemInput = document.createElement("input");
+            itemInput.name = "checkbox1";
+            itemInput.value = "Item";
+            itemInput.type = "checkbox";
+
+
+            itemDiv.appendChild(itemLbl);
+            itemDiv.appendChild(itemInput);
+
+            // $(".mui-input-group")[0].append(itemDiv);
+            document.getElementsByClassName('mui-input-group')[0].appendChild(itemDiv);
+        }
+        allselectedBtnUpdate();
+    }
+    $(".mui-input-group")[0].innerHTML = "";
+
+    var iphoneX = {sysFunc: "getItem:", room: "iphoneX", id: "iphoneX", data: ""};
+    var iStr ='';
+    if(!window.v6sysfunc) {
+        iStr = prompt(JSON.stringify(iphoneX))
+    }
+    if(iStr == "iphoneX"){
+        mui(".iponeXclass").each(function () {
+            var item = this;
+            var oldItemTop = item.style.marginTop;
+        })
+        $("#refreshContainer")[0].style.top = "8.4rem";
+    }
+
+</script>
+</html>

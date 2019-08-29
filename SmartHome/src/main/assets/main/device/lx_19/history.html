@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+        <meta name="format-detection" content="telephone=no">
+		<title>光强监测器</title>
+		<link rel="stylesheet" type="text/css" href="css/history.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="hum_header header">
+			<a href="device_19.html"></a>
+			<a href="javascript:;" class="autoSwitchLanguager" id="device_19_Details_record"></a>
+			<a data-id="1" href="javascript:;" style="background:none;"></a>
+		</header>
+		<section class="content">
+			<div>
+				<section id="line"></section>
+			</div>
+		</section>
+	</body>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/echarts.common.min.js"></script>
+	<script type="text/javascript">
+		initlan();
+		var start = new Date();
+		var endTime = start.getTime();
+		var startTime = (start.getTime() - 86400000);
+		var timeArr = [];
+		var arr = []
+		var devData = {
+			"startTime": startTime + '',
+			"endTime": endTime + ''
+		}
+		plus.plusReady(function() {
+//            var x = document.getElementsByClassName("time_unit");
+//            var i;
+//            for (i = 0; i < x.length; i++) {
+//                if(browser.versions.android) {
+//                    x[i].style.marginTop = -(40 * 0.135) + "rem";
+//                    x[i].style.marginRight = (40 * 0.18) + "rem";
+//                } else if(browser.versions.ios) {
+//                    x[i].style.marginTop = -(40 * 0.07) + "rem";
+//                    x[i].style.marginRight = (40 * 0.07) + "rem";
+//                }
+//            }
+			plus.gatewayCmd.getStatistic(devData, function(list) {
+				for(var i = 1; i < 25; i++) {
+					if(list.data[i] == undefined) {
+						var time = new Date(startTime - (i - 1) * 3600000)
+						var hour = time.getHours().toString().length == 1 ? ("0" + time.getHours()) : time.getHours()
+						var min = time.getMinutes().toString().length == 1 ? ("0" + time.getMinutes()) : time.getMinutes()
+						timeArr[24 - i] = hour + ':' + min;
+                        arr[24 - i] = "-";
+					} else {
+						var time = new Date(startTime - (i - 1) * 3600000)
+						var hour = time.getHours().toString().length == 1 ? ("0" + time.getHours()) : time.getHours()
+						var min = time.getMinutes().toString().length == 1 ? ("0" + time.getMinutes()) : time.getMinutes()
+						timeArr[24 - i] = hour + ':' + min;
+                        arr[24 - i] = list.data[i];
+					}
+				}
+				editLine(timeArr, arr)
+			})
+
+            var iphoneX = {
+                sysFunc: "getItem:",
+                room: "iphoneX",
+                id: "iphoneX",
+                data: ""
+            };
+            var iStr = '';
+            if (!window.v6sysfunc) {
+                iStr = prompt(JSON.stringify(iphoneX))
+            }
+            if (iStr == "iphoneX") {
+                $(".header")[0].style.paddingTop = "4.8rem";
+                $(".content")[0].style.top = "10.6rem";
+            }
+
+        })
+		//		window.onload = function(){
+		//            editLine(['11:11','22:22','13:12','14:12','15:17','6:17','7:17','8:17','9:17','10:17','1:17','12:17','14:17','11:17','12:17','13:17','14:17','15:17','16:17','17:17','18:17','19:17','10:17','11:17'],[1,2,3,4,5,6,7,8,9,10,1,12,14],[1,2,3,4,5,6,7,8,9,10,1,12,14])
+		//		}
+        function editLine(timeArr, arr) {
+            // 基于准备好的dom，初始化echarts图表
+            var myChart = echarts.init(document.getElementById('line'));
+            var option = {
+                //点击提示的线条和文字
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        lineStyle: {
+                            color: 'pink',
+                            type: 'dashed',
+                            width: 1
+                        }
+                    }
+                },
+                //右上角温湿度提示
+                legend: {
+                    orient: 'horizontal',
+                    x: 'right',
+                    itemGap:20,
+                    data: [lang_strong2],
+                    textStyle:{
+                        fontSize:20/640*document.body.clientWidth
+                    }
+                },
+                calculable: false,
+                //x轴
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: false,
+                    name:lang_record2,
+                    splitLine: {show: true},
+                    nameTextStyle:{
+                        padding:[26,0,0,-15],
+                        fontSize: 18/640*document.body.clientWidth
+                    },
+                    axisLabel: {
+                        interval:5,
+                        textStyle: {
+                            color: '#aaa',
+                            fontSize:20/640*document.body.clientWidth
+                        }
+                    },
+                    //0刻度轴线
+                    axisLine: {
+                        lineStyle: {
+                            width: 0,
+                            color: '#aaa'
+                        }
+                    },
+                    //x轴刻度线
+                    axisTick:{
+                        show:false
+                    },
+                    data: timeArr
+                }],
+                //y轴
+                yAxis: [{
+                    type: 'value',
+                    name:"lx",
+                    nameTextStyle:{
+                        fontSize: 20/640*document.body.clientWidth
+                    },
+                    axisLabel: {
+                        formatter: '{value}',
+                        textStyle: {
+                            color: '#aaa',
+                            fontSize:16/640*document.body.clientWidth
+                        }
+                    },
+                    //刻度线
+                    axisTick:{
+                        show:false
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            width: 0,
+                            color: '#aaa'
+                        }
+                    },
+                    interval:160,
+                    min: 0,
+                    max: 800
+                }],
+                grid:{show:true, left: '12%',right:'12%'},
+                //折线数据
+                series: [{
+                    name: lang_strong2,
+                    smooth: true,
+                    symbol: 'none',
+                    type: 'line',
+                    data: arr,
+                    draggable:false,
+                    itemStyle: {
+                        normal: {
+                            color: '#54c9e8',
+                            lineStyle: {
+                                color: '#54c9e8'
+                            }
+                        }
+                    }
+                }]
+            };
+            // 为echarts对象加载数据
+            myChart.setOption(option);
+            window.onresize = myChart.resize;
+        }
+	</script>
+
+</html>

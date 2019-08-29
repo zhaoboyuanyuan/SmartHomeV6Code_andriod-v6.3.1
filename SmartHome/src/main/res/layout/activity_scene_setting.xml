@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/item_sudoku_3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/white"
+        android:tag="sudoku_3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="九宫格（3）" />
+
+        <ImageView
+            android:id="@+id/iv_selected_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:src="@drawable/theme_select"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_sudoku_4"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:tag="sudoku_4">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="九宫格（4）" />
+
+        <ImageView
+            android:id="@+id/iv_selected_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:src="@drawable/theme_select"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:tag="list">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="列表" />
+
+        <ImageView
+            android:id="@+id/iv_selected_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:src="@drawable/theme_select"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</LinearLayout>

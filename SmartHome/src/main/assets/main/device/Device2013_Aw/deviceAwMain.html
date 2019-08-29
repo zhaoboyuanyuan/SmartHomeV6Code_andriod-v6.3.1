@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>1/2模组（单零火通用）</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/device.css">
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <link rel="stylesheet" type="text/css" href="css/csshake-rotate.min.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_Aw_name" href="javascript:;"></a>
+            <a class="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section class="content">
+        <div>
+            <!-- 场景界面 -->
+            <div class="keyScene key">
+                <div id="keySceneBg">
+                    <i id="keySceneImg" data-sceneid=""></i>
+                </div>
+                <span class="autoSwitchLanguager" id="keySceneName" key="device_Aw_Unbound"></span>
+            </div>
+
+            <!-- 开关界面 -->
+            <div class="keySwitch key isHide" id = "keyView">
+                <div>
+                    <div id="keySwitchImg" openState=off></div>
+                    <em id="keySwitchImgLoading"></em>
+                </div>
+                <span class="autoSwitchLanguager" id="keySwitchState" key="device_Aw_off"></span>
+            </div>
+
+            <!--  响铃界面 -->
+            <div class="bellView" id = "bellView">
+	                <div id="bellShort" align="center">
+	                    <p id ="bell" class="bell bellNormal"></p>
+	                    <div class="beallTap">  
+            					<div id = "device_Aw_short" class="autoSwitchLanguager" key="device_Aw_short" onclick="controlBell(1)">短铃</div>  
+           					<div id = "device_Aw_long" class="autoSwitchLanguager" key = "device_Aw_long" onclick="controlBell(2)">响铃</div>  
+            					<div id = "device_Aw_stop" class="autoSwitchLanguager" key = "device_Aw_stop" onclick="controlBell(3)">停止</div>  
+        					</div>  
+	               </div>
+            	</div>
+
+        </div>
+    </section>
+    <section class="mask_layer " style="display:none; ">
+        <i></i>
+        <span id="offline" class="autoSwitchLanguager" key='device_Aw_Offline'></span>
+    </section>
+</body>
+<script type="text/javascript" src="../../source/js/rem.js"></script>
+<script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="lang/lang.js"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/bell.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    initlan();
+    var deviceId;
+    var gwId;
+    var appId;
+    var SceneList = [];
+    plus.plusReady(function() {
+        
+        plus.gatewayCmd.getSceneList(function(result) {
+            SceneList = result;
+        });
+        plus.gatewayCmd.getDeviceInfo(function(result) {
+            deviceId = result.devID;
+            gwId = result.gwID;
+            appId = result.appID;
+            var name = result.name.indexOf("#$default$#") != -1 ? device_Ba_name + result.name.split("#")[2] : result.name
+            $(".deviceName").html(name)
+            //安卓设置页  more
+            getMoreConfig(deviceId);
+            // 更新设备信息
+            refreshDeviceInfo(result);
+            // 更新设备状态
+            refereshState(result.mode);
+            // 状态刷新
+            refereshData(deviceId);
+            // 获取场景
+            send_514();
+        })
+    });
+    // 初始化事件
+    initEvent();
+    
+	// 判断当前模式
+	function refreshDeviceInfo(result){
+		var endpoints = result.endpoints;
+ 		// 处理 endpoints
+        // 遍历解析
+        endpoints.forEach(function (endpoint) {
+        		var endpointNum = endpoint.endpointNumber;
+        		if (endpointNum == 1){
+        			 var clusters = endpoint.clusters;
+	             clusters.forEach(function (cluster) {
+	                var attributes = cluster.attributes;
+	                attributes.forEach(function (attribute) {
+	                    var attributeId = attribute.attributeId;
+	                    var attributeValue = attribute.attributeValue;
+	                   	switch (attributeId){
+	                   		case 0:
+	                   		// 0表示关闭  1表示打开
+	                   		refereshSwitch(attributeValue);
+	                   		break;
+	                   		case 2:
+	                   		// 属性：0表示普通开关  1表示电铃
+	                   		dealBellMode(attributeValue);
+	                   		break;
+	                   		case 3:
+	                   		// 电铃状态：0表示不响 1表示响
+	                   		refreshBellState(attributeValue)
+	                   		break;
+	                   		default :
+	                   		break;
+	                   	}
+	                    console.log(attributeId + ":::" + attributeValue);
+	                })
+            })
+        		}
+           
+        });
+	}
+	
+	 // 判断当前模式  属性：0表示普通开关  1表示电铃
+     function  dealBellMode(attributeValue){
+     	if (attributeValue == "1"){
+     		// 电铃
+     		$("#bellView").removeClass("isHide");
+     		$("#bellView").addClass("isShow");
+     		$("#keyView").removeClass("isShow");
+     		$("#keyView").addClass("isHide");
+     	} else{
+     		// 开关
+     		$("#keyView").removeClass("isHide");
+     		$("#keyView").addClass("isShow");
+     		$("#bellView").removeClass("isShow");
+     		$("#bellView").addClass("isHide");
+     	}
+     }
+     
+	
+    //更新设备状态
+    function refereshState(mode) {
+        switch (mode) {
+            case 0:
+                $(".mask_layer").hide();
+                break;
+            case 1:
+                $(".mask_layer").hide();
+                send_514();
+                break;
+            case 2: //离线
+                $(".mask_layer").show();
+                break;
+            case 3: //主动退网
+                $(".mask_layer").show();
+                break;
+            case 4:
+                $(".mask_layer").hide();
+                send_514();
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    function send_514() {
+        var param = {
+            "cmd": "514",
+            "gwID": gwId,
+            "appID": appId,
+            "devID": deviceId
+        };
+        plus.gatewayCmd.controlDevice(param, function() {})
+    }
+
+    function refereshData(devId) {
+        plus.gatewayCmd.newDataRefresh(function(result) {
+            if (result.cmd == "514" && result.devID == devId) {
+                refereshScene(result.data)
+            } else if (result.cmd == "500" && result.devID == devId) {
+                var name = result.name.indexOf("#$default$#") != -1 ? device_name_Aw + result.name.split("#")[2] : result.name;
+                $(".deviceName").html(name)
+                refreshDeviceInfo(result);
+                refereshState(result.mode);
+            } else if (result.cmd == "502" && result.devID == devId) {
+                var deviceName = result.name.indexOf("#$default$#") != -1 ? device_name_Aw + result.name.split("#")[2] : result.name;
+                $(".deviceName").html(deviceName)
+            } else if (result.cmd == "513" && devId == result.devID) {
+                send_514();
+            }
+        })
+    }
+
+    //更新开关状态
+    function refereshSwitch(state) {
+        $("#keySwitchImgLoading").removeClass("rotate").hide();
+        if (state == 1) {
+            $("#keySwitchImg").attr("openState", "on");
+            $("#keySwitchState").html(Device_Aw_Switch_open);
+            $("#keySwitchState").css("color", "#8dd652");
+        } else {
+            $("#keySwitchImg").attr("openState", "off");
+            $("#keySwitchState").html(Device_Aw_Switch_close);
+            $("#keySwitchState").css("color", "gray");
+        }
+    }
+
+    //更新场景状态
+    function refereshScene(data) {
+        if (data && data.length > 0) {
+            for (var i = 0; i < data.length; i++) {
+                var sceneId = data[i].sceneID;
+                if (data[i].endpointNumber == 2) {
+                    for (var j = 0; j < SceneList.length; j++) {
+                        var scene = SceneList[j];
+                        if (scene.sceneID == sceneId) {
+                            $("#keySceneName").html(scene.sceneName)
+                            $("#keySceneName").css("color", "#54bf00");
+
+                            var imageName = "scene_normal_pre_" + scene.sceneIcon + ".png";
+                            imageName = "url(../../source/sceneIcon/" + imageName + ")";
+                            $("#keySceneImg").css("display", "block");
+                            $("#keySceneImg").css("background", imageName + 'no-repeat center center');
+                            $("#keySceneImg").css("backgroundSize", "50%");
+                            $("#keySceneImg").attr("data-sceneid", scene.sceneID)
+
+                            var keyImageName = "url(./fonts/keybg.png)";
+                            $("#keySceneBg").css("background", keyImageName + 'no-repeat center center');
+                            $("#keySceneBg").css("backgroundSize", "12rem");
+                        }
+                    }
+                }
+            }
+        } else {
+             $("#keySceneBg").css("background", "url(./fonts/icon_add_1.png) no-repeat center center");
+            $("#keySceneBg").css("backgroundSize", "12rem");
+             $("#keySceneImg").css("display", "none");
+             $("#keySceneName").html("");
+        }
+    }
+    
+    function doTimeout() {
+        var timer = setTimeout(function() {
+            $("#keySwitchImgLoading").removeClass("rotate").hide();
+        }, 15000)
+    }
+</script>
+
+</html>

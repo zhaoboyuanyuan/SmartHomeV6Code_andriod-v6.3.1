@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设置设备状态</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/editok.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<a id="canback" href="javascript:;"></a>
+			<a id="setDeviceState_tittle" class="autoSwitchLanguager" href="javascript:;">设置设备状态</a>
+			<a key="customScene_sure" class="complete autoSwitchLanguager" onclick="save()" href="javascript:;">确定</a>
+		</header>
+		<section style="margin-top:24rem;width: 100%;height: 5rem;background-color: white;padding-top: 1rem; text-align: center;">
+			<p id="ppmNum" style="font-size: 3rem;">500</p>
+		</section>
+		<section style="background-color: white; height: 3rem;"></section>
+		<section style="width: 100%;height: 5rem;background-color: white;margin-top: 0rem;">
+			<p id="min_value" style="width: 10%; float: left; font-size: 2rem; text-align: center; line-height: 5rem;">0</p>
+			<div style="float: left; width: 75%">
+				<div id="bar1" style="auto;width: 100%;background-color: none;height: 2rem;padding-top: 1rem;">
+					<div id="bar3" style="border-radius: 1rem;margin-left: 5%;width: 90%;height: 1rem;background-color: gainsboro;">
+						<div id="bar2" style=" width: 0%;float: left;background-color: #F9D92C;height: 1rem;border-radius: 3rem;">
+							<div id="Btn" style="box-shadow: 0rem 0rem 0.4rem 0.4rem gainsboro;position: absolute;width: 3rem;border-radius: 3rem;background-color: white;height: 3rem;margin-top: -1rem;margin-right: -1rem;">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<p id="max_value" style="width: 15%; float: right; font-size: 2rem; text-align: center; line-height: 5rem;">1000</p>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Housekeeper");
+		var arr = new Array();
+		var exp;
+		var deviceStateData;
+		initlan();
+		var bar = document.getElementById("Btn");
+		var bar1 = document.getElementById("bar1");
+		var bar2 = document.getElementById("bar2");
+		var bar3 = document.getElementById("bar3");
+        var max = 1000;
+        var min = 0;
+        var unit = "";
+
+		function showDefaultPpmNum() {
+			var bar2width = bar3.offsetWidth*0.5 + bar.offsetWidth;
+			bar.style.left = bar2width + "px";
+			bar2.style.width = bar3.offsetWidth*0.5 + "px"
+			var range = (Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2);
+
+        if(info.getItem("type") == "Og"){
+			    min = 0;
+                max = 300;
+                unit = "μg/m3"
+			} else if(info.getItem("type") == "44"){
+			    min = 0;
+                max = 200;
+                unit = "μg/m3"
+			}
+            document.getElementById("min_value").innerHTML = min;
+            document.getElementById("max_value").innerHTML = max;
+			document.getElementById("ppmNum").innerHTML = parseInt(range * max) + unit;
+		}
+		
+		plus.plusReady(function() {
+			
+			showDefaultPpmNum();
+
+			$("#canback").on("click", function() {
+				history.back(-1);
+			});
+            plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+            });
+		})
+
+		function save() {
+			var range = (Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2);
+			var ppmNum = parseInt(range * max);
+            if(info.getItem("deviceState") == lang_deviceIf2) {
+                deviceStateData = lang_deviceTxt5 + ppmNum + unit
+            } else {
+                deviceStateData = lang_deviceTxt6 + ppmNum + unit
+            }
+
+            if (info.getItem("taskType") == "conditionTask") {
+                //2.xxx>xxx>xxx = 1;
+                var object = info.getItem("deviceID") + ">" + info.getItem("num") + ">" + info.getItem("type")
+                var data = {
+                    "exp": '2.' + object + ' ' +info.getItem("morethan")  + ' '+ppmNum,
+                    "name": info.getItem("deviceName"),
+                    "deviceIcon": info.getItem("deviceIcon"),
+                    "deviceState": deviceStateData,
+                    "editUrl":info.getItem("editUrl")
+                }
+                if (info.getItem("conditionArray") == null) {
+                    arr.push(data)
+                    info.setItem("conditionArray", JSON.stringify(arr))
+                } else {
+                    arr = JSON.parse(info.getItem("conditionArray"));
+                    var exist = false;
+                    arr.map(function (list, i) {
+                        if (list.type != 0) {
+                            if (i == parseInt(info.getItem("index"))) {
+                                list.exp = '2.' + object + ' ' +info.getItem("morethan")  + ' '+ppmNum;
+                                list.name = info.getItem("deviceName");
+                                list.deviceState = deviceStateData;
+                                list.deviceIcon = info.getItem("deviceIcon");
+                                exist = true;
+                            }
+                        }
+                    });
+                    if (exist == false) {
+                        arr.push(data)
+                    }
+                    info.setItem("conditionArray", JSON.stringify(arr))
+                }
+            } else {
+                var data = {
+                    "type": "2",
+                    "object": info.getItem("deviceID") + ">" + info.getItem("num") + ">" + info.getItem("type"),
+                    "name": info.getItem("deviceName"),
+                    "deviceIcon": info.getItem("deviceIcon"),
+                    "deviceState": deviceStateData,
+                    "exp": info.getItem("morethan") + ppmNum,
+					"editUrl":info.getItem("editUrl")
+                }
+                if (info.getItem("ldArr") == null) {
+                    arr.push(data)
+                    info.setItem("ldArr", JSON.stringify(arr))
+                } else {
+                    arr = JSON.parse(info.getItem("ldArr"));
+                    var exist = false;
+                    arr.map(function (list, i) {
+                        if (list.type != 0) {
+                            if (i == parseInt(info.getItem("index"))) {
+                                list.exp = info.getItem("morethan") + ppmNum;
+                                list.object = info.getItem("deviceID")+">"+info.getItem("num")+">"+info.getItem("type");
+                                list.name = info.getItem("deviceName");
+                                list.deviceState = deviceStateData;
+                                list.deviceIcon = info.getItem("deviceIcon");
+                                exist = true;
+                            }
+                        }
+                    });
+                    if (exist == false) {
+                        arr.push(data)
+                    }
+                    info.setItem("ldArr", JSON.stringify(arr))
+                }
+            }
+			info.removeItem("deviceName")
+			info.removeItem("deviceIcon")
+			info.removeItem("deviceState")
+			info.removeItem("flag")
+			window.location = "circumstances.html"
+		}
+        function upDate() {
+            var range = (Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2);
+            document.getElementById("ppmNum").innerHTML = parseInt(range * max) + unit
+        }
+		bar.addEventListener("touchstart", function(evt) {
+			var openX = Number(bar3.offsetLeft);
+			var closeX = Number(bar3.offsetLeft + bar3.offsetWidth);
+			var touch = evt.touches[0];
+			var x = Number(touch.pageX)
+			var y = Number(touch.pageY)
+			bar1.addEventListener("touchmove", function(e) {
+				var touch1 = e.touches[0];
+				var xx = Number(touch1.pageX)
+				var yy = Number(touch1.pageY)
+				if(Math.abs(Number(bar.offsetLeft) - Number(touch1.pageX)) > 1) {
+					if(openX >= Number(touch1.pageX)) {
+						bar.style.left = openX + "px";
+						bar2.style.width = 0 + "px";
+                        upDate();
+						return;
+					}
+					if(closeX <= Number(touch1.pageX)) {
+						bar.style.left = closeX + "px";
+						bar2.style.width = bar3.offsetWidth + "px";
+                        upDate();
+						return;
+					}
+					bar.style.left = touch1.pageX + "px";
+					bar2.style.width = bar.offsetLeft - bar3.offsetLeft + "px";
+                    upDate();
+				}
+			})
+		})
+	</script>
+
+</html>

@@ -1,0 +1,145 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="cc.wulian.smarthomev6.main.device.gateway_mini.device_d8.DeviceD8LightFragment">
+
+    <RelativeLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <cc.wulian.smarthomev6.support.customview.EmulateCircleView
+            android:id="@+id/switch_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    <!--<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.6">
+
+        <View
+            android:id="@+id/view_main"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dp"
+            android:layout_marginTop="48dp"
+            android:background="#f00"
+            android:padding="8dp"/>
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignBottom="@id/view_main"
+            android:layout_toStartOf="@id/view_main"
+            android:background="#0af"/>
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignBottom="@id/view_main"
+            android:layout_toEndOf="@id/view_main"
+            android:background="#0af"/>
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/view_main"
+            android:layout_toStartOf="@id/view_main"
+            android:background="#999"/>
+    </RelativeLayout>-->
+
+    <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F1F4F8"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:text="@string/Minigateway_Lighting_Color"
+            android:textSize="14sp"
+            android:textColor="@color/newPrimaryText" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:minHeight="25dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <cc.wulian.smarthomev6.support.customview.ColorView
+                android:id="@+id/device_d8_color1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:colorColor="#EA3323"
+                app:colorRadiusLarge="25dp"
+                app:colorRadiusSmall="20dp" />
+
+            <cc.wulian.smarthomev6.support.customview.ColorView
+                android:id="@+id/device_d8_color2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:colorColor="#E34BEE"
+                app:colorRadiusLarge="25dp"
+                app:colorRadiusSmall="20dp" />
+
+            <cc.wulian.smarthomev6.support.customview.ColorView
+                android:id="@+id/device_d8_color3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:colorColor="#79F0F1"
+                app:colorRadiusLarge="25dp"
+                app:colorRadiusSmall="20dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:minHeight="25dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <cc.wulian.smarthomev6.support.customview.ColorView
+                android:id="@+id/device_d8_color4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:colorColor="#EF8F52"
+                app:colorRadiusLarge="25dp"
+                app:colorRadiusSmall="20dp" />
+
+            <cc.wulian.smarthomev6.support.customview.ColorView
+                android:id="@+id/device_d8_color5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:colorColor="#80ED7A"
+                app:colorRadiusLarge="25dp"
+                app:colorRadiusSmall="20dp" />
+
+            <cc.wulian.smarthomev6.support.customview.ColorView
+                android:id="@+id/device_d8_color6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:colorColor="#FFFFFF"
+                app:colorRadiusLarge="25dp"
+                app:colorRadiusSmall="20dp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

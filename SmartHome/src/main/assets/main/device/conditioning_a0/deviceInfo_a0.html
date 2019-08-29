@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../../source/js/rem.js"></script>
+    <script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/device.css" />
+</head>
+
+<body style="width:100%;">
+    <header class="header" style="position:fixed;left:0;top:0;z-index:10000;padding-top: 0.1rem">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_a0_name" href="javascript:;">中央空调</a>
+            <a class="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section id="content">
+        <ul class="device_list">
+            <!--<li><a href="javascript:;">-->
+            <!--<span>空调1空调1空调1空调1空调1空调1空调1</span>-->
+            <!--<span>-->
+            <!--<em>制冷</em>-->
+            <!--<em>28℃</em>-->
+            <!--</span>-->
+            <!--</a></li>-->
+            <!--<li><a href="javascript:;">-->
+            <!--<span>空调2</span>-->
+            <!--<span>-->
+            <!--<em>制冷</em>-->
+            <!--<em>28℃</em>-->
+            <!--</span>-->
+            <!--</a></li>-->
+            <!--<li><a href="javascript:;">-->
+            <!--<span>空调3</span>-->
+            <!--<span>-->
+            <!--<em>制冷制冷</em>-->
+            <!--<em>28℃</em>-->
+            <!--</span>-->
+            <!--</a></li>-->
+        </ul>
+    </section>
+    <section class="mask_btn">
+        <span id="refreshList" key="CD" class="autoSwitchLanguager">刷新列表</span>
+        <span id="allClick" key="CloseAll" class="autoSwitchLanguager" data-onOff="off">全部关闭</span>
+    </section>
+    <section class="mask_layer" style="display:none;">
+        <i></i>
+        <span class="autoSwitchLanguager" key="offLine">设备已离线</span>
+    </section>
+    <section class="mask_loading">
+        <div class="loading_main">
+            <img src="../../source/commonImg/loading_house.png" alt=""><br />
+            <img src="../../source/commonImg/loading.gif" alt="" />
+            <span key="Loading1" class="autoSwitchLanguager">设备准备中，请稍后...</span>
+        </div>
+    </section>
+    <section class="saveToast" style="display:none;">
+        <div>
+            <i><em class="rotate"></em></i>
+            <p key="Loading2" class="autoSwitchLanguager">正在加载...</p>
+        </div>
+    </section>
+    <section class="mask_name" id="mask_changeName"></section>
+    <div class="device_rename" id="rename">
+        <h5 key="Name1" class="autoSwitchLanguager name">名称</h5>
+        <input id="input_rename" type="text" maxlength="20" key="Name2" class="autoSwitchLanguager" placeholder="请输入空调名称">
+        <div class="device_btn">
+            <span id="rename_cancel" key="Cancel" class="autoSwitchLanguager">取消</span>
+            <span id="rename_ok" key="Confirm" class="autoSwitchLanguager">确认</span>
+        </div>
+    </div>
+    <section class="mask_name" id="mask_changeClick">
+        <div class="device_rename">
+            <h5 style="padding: 2rem 0 1rem;" id="confirmSecond" key="Device_OZ_Details_CloseAlltips" class="autoSwitchLanguager"></h5>
+            <div class="device_btn">
+                <span id="cancel" key="Cancel" class="autoSwitchLanguager">取消</span>
+                <span id="ok" key="Confirm" class="autoSwitchLanguager">确认</span>
+            </div>
+        </div>
+    </section>
+</body>
+<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="js/more.js"></script>
+<script type="text/javascript" src="../../source/mui/js/mui.min.js"></script>
+<!--<script type="text/javascript" src="js/handle.js"></script>-->
+<script type="text/javascript">
+    initlan();
+    var info = window.sysfun;
+    info.init("device_a0");
+    mui.init({
+        gestureConfig: {
+            longtap: true,
+            hold: true,
+            release: true
+        }
+    });
+    $(".mask_loading").show();
+    //返回到设备详情页
+    $("#back").on("click", function () {
+        plus.tools.back(function () {})
+    });
+    //跳转到更多页面
+    $(".more").on("click", function () {
+        plus.tools.more(moreConfig, function () {})
+    });
+    var devID;
+    var gwID;
+    var appID;
+    var hostNum = -1;
+    plus.plusReady(function () {
+        window.modeList = {
+            "0": lang_Details_Type1,
+            "1": lang_Details_Type2,
+            "2": lang_Details_Type3,
+            "3": lang_Details_Type4,
+            "7": lang_Details_Type5
+        };
+        plus.gatewayCmd.getCurrentAppID(function (result) {
+            appID = result;
+        });
+        plus.gatewayCmd.getDeviceInfo(null, function (data) {
+            if (data.mode == 2) {
+                $(".mask_loading").hide();
+                $(".mask_layer").show();
+            } else {
+                $(".mask_layer").hide();
+            }
+            var name = data.name.indexOf("#$default$#") != -1 ? lang_name_a0 + data.name.split("#")[2] :
+                data.name
+            $(".deviceName").html(name);
+            console.log(data);
+            devID = data.devID;
+            gwID = data.gwID;
+            sendCmd_510(gwID, devID, appID);
+
+            drawDeviceList(data);
+            getMoreConfig(devID);
+        });
+        plus.gatewayCmdRush.newDataRefresh(function (data) {
+            //                console.log(data);
+            if (data.cmd == "500" && devID == data.devID) {
+                plus.gatewayCmd.getDeviceInfo(null, function (data) {
+                    console.log(data);
+                    if (data.mode == 2) {
+                        $(".mask_layer").show();
+                    } else {
+                        $(".mask_layer").hide();
+                    }
+                    $(".mask_loading").hide();
+                    drawDeviceList(data);
+                });
+                $(".saveToast").hide();
+                if (data.mode == 2) {
+                    $(".mask_layer").show();
+                } else {
+                    $(".mask_layer").hide();
+                }
+                var name = data.name.indexOf("#$default$#") != -1 ? lang_name_a0 + data.name.split("#")[
+                    2] : data.name
+                $(".deviceName").html(name)
+                //                    drawDeviceList(data);
+            } else if (data.cmd == "502" && devID == data.devID) {
+                $(".saveToast").hide();
+                if (data.name) {
+                    if ((data.name != undefined || data.name != '') && data.name.indexOf("#$default$#") ==
+                        -1) {
+                        $(".deviceName").html(data.name)
+                    } else {
+                        var name = data.name.indexOf("#$default$#") != -1 ? lang_name_a0 + data.name.split(
+                            "#")[2] : data.name
+                        $(".deviceName").html(name)
+                    }
+                }
+                var endpointName = data.endpointName;
+                var endpointNumber = data.endpointNumber;
+                if (!endpointName) {
+                    endpointName = endpointNumber;
+                }
+                $("#" + endpointNumber).find("a").find(".name").html(endpointName);
+                $("#" + endpointNumber).find("a").find("span").eq(0).attr("data-name", endpointName);
+            }
+        });
+        $("#refreshList").on("click", function () {
+            $(".saveToast").show();
+            sendCmd(gwID, devID, 0, 0x800D);
+        })
+        $("#allClick").on("click", function () {
+            $("#mask_changeClick").show();
+        });
+        $("#cancel").on("click", function () {
+            $("#mask_changeClick").hide();
+        });
+        $("#ok").on("click", function () {
+            if ($("#allClick").attr("data-onOff") === "on") {
+                $(".saveToast").show();
+                sendCmd(gwID, devID, 0, 0x0101, ['1']);
+                $("#allClick").html(lang_Details_CloseAll)
+                $("#confirmSecond").html(lang_Details_CloseAlltips);
+            } else {
+                $(".saveToast").show();
+                sendCmd(gwID, devID, 0, 0x0101, ['0']);
+                $("#allClick").html(lang_Details_OpenAll)
+                $("#confirmSecond").html(lang_Details_OpenAlltips)
+            }
+            $("#mask_changeClick").hide();
+        })
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header")[0].style.paddingTop = "2.4rem";
+            $("#content")[0].style.paddingTop = "8.6rem";
+        }
+    });
+
+    function drawDeviceList(data) {
+        $(".saveToast").hide();
+        $(".device_list").html("");
+        var count = 0;
+        var allListStr = "";
+        var listStr = "";
+        var jump16 = false;
+        var jump32 = false;
+        var jump48 = false;
+        for (var i = 0; i < data.endpoints.length; i++) {
+            var endpoint = data.endpoints[i];
+            var param = listData(endpoint);
+            var em = '';
+            var isHost = param.isHost ? "(" + lang_host + ")" : "";
+            var numName = endpoint.endpointName ? endpoint.endpointName : (Device_a0_air + endpoint.endpointNumber);
+            var name = "";
+            if (param.isHost) {
+                name = '<i class="name" data-name="' + numName + '">' + numName +
+                    '</i><i style="color:red"' + isHost +
+                    '">' + isHost + '</i>'
+            } else {
+                name = '<i class="name" data-name="' + numName + '">' + numName + '</i>'
+            }
+            if (param.onOff == "1") {
+                em = '<em style="color:#8dd652">' + modeList[param.mode] + '</em><em style="color:#8dd652">' +
+                    param.temp +
+                    ' ' + "℃" + '</em>'
+            } else {
+                count++;
+                em = '<em>' + lang_Details_Closed + '</em>'
+            }
+            var str = '<li id="' + endpoint.endpointNumber + '"><a>' +
+                '<span>' + name + '</span>' +
+                '<span>' + em + '</span>' +
+                '</a></li>';
+
+            if (endpoint.endpointNumber >= 16 && jump16 == false) {
+                $(".device_list").append(allListStr);
+                $(".device_list").append(listStr);
+                allListStr = "";
+                listStr = "";
+                jump16 = true;
+            } else if (endpoint.endpointNumber >= 32 && jump32 == false) {
+                $(".device_list").append(allListStr);
+                $(".device_list").append(listStr);
+                allListStr = "";
+                listStr = "";
+                jump32 = true;
+            } else if (endpoint.endpointNumber >= 48 && jump48 == false) {
+                $(".device_list").append(allListStr);
+                $(".device_list").append(listStr);
+                allListStr = "";
+                listStr = "";
+                jump48 = true;
+            }
+
+            if (param.isHost) {
+                allListStr += str;
+            } else {
+                listStr += str;
+            }
+        }
+        $(".device_list").append(allListStr);
+        $(".device_list").append(listStr);
+
+        if (count === data.endpoints.length) {
+            $("#allClick").attr("data-onOff", "on");
+            $("#allClick").html(lang_Details_OpenAll);
+            $("#confirmSecond").html(lang_Details_OpenAlltips)
+        } else {
+            $("#allClick").attr("data-onOff", "off");
+            $("#allClick").html(lang_Details_CloseAll);
+            $("#confirmSecond").html(lang_Details_CloseAlltips);
+        }
+        mui(".device_list").on("tap", 'li', function () {
+            event.stopPropagation();
+            var endpointNumber = $(this).attr("id");
+            var name = $(this).find(".name").attr("data-name");
+            info.setItem("name", name);
+            window.location = "thermostat_a0.html?endpointNumber=" + endpointNumber
+        })
+        mui(".device_list").on("longtap", 'li', function (event) {
+            event.stopPropagation();
+            var endpointNumber = $(this).attr("id");
+            //                alert(endpointNumber);
+            deviceRename(endpointNumber)
+        })
+    }
+
+    function listData(list) {
+        var param = {};
+        if (list.clusters[0].attributes) {
+            for (var k = 0; k < list.clusters[0].attributes.length; k++) {
+                var attributes = list.clusters[0].attributes[k];
+                switch (attributes.attributeId) {
+                    case 0x8101:
+                        $(".mask_loading").hide();
+                        param.onOff = attributes.attributeValue
+                        break;
+                    case 0x8102:
+                        param.mode = attributes.attributeValue
+                        break;
+                    case 0x8103:
+                        param.temp = attributes.attributeValue
+                        break;
+                    case 0x8407:
+                        param.isHost = (attributes.attributeValue == "2")
+                        break;
+                    case 0x8301:
+                        {
+                            /*转换器状态：未就绪：0， 已就绪：1*/
+                            attributes.attributeValue == 0 ? false : true;
+                            if (attributes.attributeValue == "0") {
+                                $(".mask_loading").show();
+                                //                            sendCmd(gwID,devID,0,0x0301);
+                            }
+                        }
+                        break;
+
+                }
+            }
+        }
+        return param;
+    }
+    //发送设备控制命令
+    function sendCmd(gwID, dID, endpointNumber, commandId, parameter) {
+        var jsonData = {}
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = dID;
+        jsonData.endpointNumber = endpointNumber;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if (parameter) {
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData, function () {})
+    }
+    //请求设备详情列表
+    function sendCmd_510(gwID, devID, appID) {
+        var jsonData = {}
+        jsonData.cmd = "510";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        plus.gatewayCmd.controlDevice(jsonData, function () {})
+    }
+    //修改子设备名称命令
+    function sendCmd_502(endpointNumber, name) {
+        var param = {}
+        param.cmd = "502";
+        param.gwID = gwID;
+        param.appID = appID;
+        param.devID = devID;
+        param.mode = 2;
+        param.endpointNumber = endpointNumber;
+        param.endpointName = name;
+        console.log(param);
+        plus.gatewayCmd.controlDevice(param, function () {})
+    }
+    //子设备重命名
+    function deviceRename(endpointNumber) {
+        $("#content").css("overflow", "hidden");
+        $("#mask_changeName").attr("data-id", endpointNumber);
+        $("#mask_changeName").show();
+        $("#rename").show();
+    }
+    //重命名确认及取消click事件
+    mui(".device_btn").on("tap", "#rename_cancel", function (e) {
+        e.stopPropagation();
+        $("#mask_changeName").hide();
+        $("#rename").hide();
+        $("#content").css("overflow", "auto");
+        $("#mask_changeName").attr("data-id", "");
+        $("#input_rename").val("");
+        $("#input_rename").blur();
+    })
+    mui(".device_btn").on("tap", "#rename_ok", function (e) {
+        e.stopPropagation();
+        var endpointNumber = parseInt($("#mask_changeName").attr("data-id"));
+        if ($("#input_rename").val().trim() !== '') {
+            var value = $("#input_rename").val().replace(/(^\s*)|(\s*$)/g, '');
+            sendCmd_502(endpointNumber, value);
+            $(".saveToast").show();
+            $("#input_rename").val("");
+            $("#mask_changeName").hide();
+            $("#rename").hide();
+            $("#content").css("overflow", "auto");
+            $("#mask_changeName").attr("data-id", "");
+            $("#input_rename").blur();
+        }
+    })
+</script>
+
+</html>

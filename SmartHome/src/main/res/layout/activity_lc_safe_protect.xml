@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_move_detection"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/config_device_btn_height"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/deviceLC_Motion_detection" />
+
+        <ToggleButton
+            android:id="@+id/tb_move_detection"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/default_padding_small"
+            android:background="@drawable/selector_togglebutton"
+            android:paddingRight="@dimen/default_padding_small"
+            android:textOff=""
+            android:textOn="" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center_vertical"
+        android:paddingEnd="@dimen/default_padding_normal"
+        android:paddingStart="@dimen/default_padding_normal"
+        android:text="@string/deviceLC_Motion_detection_hint" />
+
+    <RelativeLayout
+        android:id="@+id/rl_alarm_push"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/config_device_btn_height"
+        android:background="@color/white"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            style="@style/device_setting_text_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/default_padding_normal"
+            android:text="@string/deviceLC_alarm" />
+
+        <ToggleButton
+            android:id="@+id/tb_alarm_push"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/default_padding_small"
+            android:background="@drawable/selector_togglebutton"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:textOff=""
+            android:textOn="" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_alarm_push"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center_vertical"
+        android:paddingEnd="@dimen/default_padding_normal"
+        android:paddingStart="@dimen/default_padding_normal"
+        android:text="@string/deviceLC_alarm_hint"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <RelativeLayout
+        android:id="@+id/rl_protect_time"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/deviceLC_Protection_time" />
+
+        <ImageView
+            android:id="@+id/iv_arrows_storage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/system_intent_right" />
+
+    </RelativeLayout>
+
+</LinearLayout>

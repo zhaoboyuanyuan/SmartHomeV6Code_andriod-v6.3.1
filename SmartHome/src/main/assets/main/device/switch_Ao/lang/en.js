@@ -1,0 +1,55 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.switch_Ao_01 = "Switch";
+$lang.switch_Ao_02 = "Are you sure this equipment is tied up?";
+$lang.switch_Ao_03 = "The binding equipment for curtain controller， unlasing one button all three unlasing， confirming that all unbound?";
+$lang.switch_Ao_04 = "Bind curtain controller， 1 keys to open， 2 keys for the pause， 3 keys for the pass， the current number of keys inadequate，please switch to all three binding mode and empty again?";
+$lang.switch_Ao_05 = "Are you sure you want to delete this scene?";
+$lang.switch_Ao_06 = "Unbound Device";
+$lang.switch_Ao_07 = "Unbound Dcene";
+$lang.switch_Ao_08 = "Modify Switch Name";
+$lang.swtich_Ao_09 = "Edit";
+$lang.swtich_Ao_10 = "Delete Scene";
+$lang.switch_Ao_11 = "Rebind";
+$lang.switch_Ao_12 = "Unbind";
+$lang.switch_Ao_13 = "Cancel";
+$lang.switch_Ao_14 = "Confirm";
+$lang.switch_Ao_15 = "Please rename";
+$lang.switch_Ao_On = "Open";
+$lang.switch_Ao_Off = "Close";
+$lang.switch_Ao_Stop = "Stop";
+$lang.switch_Ao_Binding = "Binding ";
+$lang.switch_Ao_BindingSuc = "Binding succeeds";
+$lang.switch_Ao_BindingFail = "Binding fails";
+$lang.switch_Ao_NoSwitchMode = "Non-switch Mode";
+$lang.switch_Ao_ChangeMode01 = "Change Modes";
+$lang.switch_Ao_ChangeMode02 = "Bound devices will be unbound after change modes";
+$lang.switch_Ao_ChangeMode03 = "Bound scenes will be unbound after change modes";
+$lang.switch_Ao_ChangeMode04 = "Present";
+$lang.switch_mode_01 = "Switch Mode";
+$lang.switch_mode_02 = "Bound Mode";
+$lang.switch_mode_03 = "Scene Mode";
+$lang.un_room = "Unclassified";
+$lang.offLine = "offLine";
+$lang.onLine = "offLine";
+$lang.switch_Ao_timeout = "Request timeout!";
+$lang.switch_Ao_saveSuc = "Save successfully";
+$lang.switch_Ao_ChooseScene = "Select Scene";
+$lang.swtich_Ao_Complete = "Finish";
+$lang.BindDeviceTitle = "Binding Device";
+$lang.switch_Ao_ChooseBtn = "Select Button";
+$lang.switch_Ao_Saving = "Saving";
+$lang.switch_Ao_UpdateSuc = "Modification succeeds";
+$lang.swich_Ao_UnbindSuc = "Unbinding succeeds";
+$lang.Log = "Log";
+$lang.Alarm = "Alarm Message";
+$lang.device_Am_name = "Smart Metallic Switch (1 gang)";
+$lang.device_An_name = "Smart Metallic Switch (2 gangs)";
+$lang.device_Ao_name = "Smart Metallic Switch (3 gangs)";
+$lang.device_Ar_Name = "Smart Metallic Curtain Switch";
+$lang.swich_Ao_Unbundling = "Unbundling…";
+$lang.device_Ao_NoScene = "No scene yet<br />can go to the home - all the scenes added";
+$lang.Share_No_Permission = "Share of the equipment， did not have the right to operate";

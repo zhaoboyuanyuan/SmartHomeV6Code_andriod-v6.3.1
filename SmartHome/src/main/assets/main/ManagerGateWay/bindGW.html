@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>添加网关第三步</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="css/bindGW.css" />
+		<link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+		<script src="js/waiting.js" type="text/javascript" charset="UTF-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/waiting.css" />
+		<script src="js/waiting.js" type="text/javascript" charset="UTF-8"></script>
+
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a class="back_addScene" href="javascript:history.back(-1)"></a>
+				<a href="javascript:;" class="autoSwitchLanguager" langKey = 'Fog_calculation_Bounding' id="addDevice_bind_01">绑定</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="add_gate1" style="margin-top:0.5rem;">
+			<ul>
+				<li><span class="autoSwitchLanguager" langKey = 'Fog_calculation_Sub_machine_id'>子机号</span><input class="gwId autoSwitchLanguager" langKey = '' type="text" /></li>
+				<li><span class="autoSwitchLanguager" langKey = 'Fog_calculation_Sub_machine_password'>密码</span><input class="gwPwd autoSwitchLanguager" langKey = '' type="password"/></li>
+			</ul>
+		</section>
+		<section class="addSensorBtn" style="margin-top:10rem;overflow: hidden;">
+			<a href="javascript:;"  style="position:static;margin-left:4%;" class="autoSwitchLanguager disableBtn" langKey = 'Fog_calculation_Bounding' id="addGateway">绑定</a>
+		</section>
+			<section class="waiting" style="display: none">
+			<i></i>
+			<span class="autoSwitchLanguager" langKey="Fog_calculation_Bind_ing">处理中...</span>
+		</section>
+	</body>
+	<script src="../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/managerDeal.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.md5.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+        initlan();
+        	var gwId;
+		var appId;
+        var subGWID = "";
+        plus.plusReady(function() {
+
+        		document.getElementsByClassName("gwPwd")[0].placeholder = languageUtil.getResource("Fog_calculation_password_enter");
+        	 	plus.gatewayCmd.getCurrentAppID(function(data){
+                appId = data;
+                plus.gatewayCmd.getCurrentGatewayID(function(data){
+                		gwId = data;
+                });
+     		});
+        	    subGWID = getUrlParam("gwid");
+        	     $(".gwId").val(subGWID)        	    
+            //获取扫描二维码
+            $("#getCode").on("click", function() {
+                var self = $(this)
+                plus.gatewayCmd.getQRCode(null, function(data) {
+                    $(self).siblings("input").val(data)
+                })
+            })
+            $(".gwPwd").on("focus",function(){
+//                $(this).attr("placeholder",addGateway_toast)
+                $(this).siblings("a").css("visibility","visible")
+            })
+            $("#auto").on("click",function(){
+                $(".gwPwd").val($(".gwId").val().substr($(".gwId").val().length-6,6))
+                $("#addGateway").removeClass("disableBtn")
+            })
+            $(".add_gate1 ul li input").on("input porpertychange",function(){
+                if($(".gwId").val().trim() !='' && $(".gwPwd").val().trim() !=''){
+                    $("#addGateway").removeClass("disableBtn")
+                }else{
+                    $(".login").addClass("disableBtn")
+                }
+            })
+            $("#addGateway").on("click", function() {
+                if($(this).attr("class").indexOf("disableBtn") == -1){
+                	        var gwID = $(".gwId").val();
+        					var gwPwd = $(".gwPwd").val();
+        					gwPwd = $.md5(gwPwd);
+                			bindGW(gwID,gwPwd);
+                }
+            })
+       });
+ 	
+ 	function bindResultDeal(result)
+ 	{
+ 		var mode = result.mode;
+		var code = result.code;
+		if (mode = 5){
+			if (code == 0){
+				// 成功 
+				toast(languageUtil.getResource("Fog_calculation_Bind_success"));
+				window.location = 'ManagerGWIndex.html?refrash=1';
+			} else if (code == 1) {
+				// 失败
+				toast(languageUtil.getResource("Fog_calculation_Bind_failure"));
+			} else if (code == 2) {
+				// 密码错误   
+				toast(languageUtil.getResource("Fog_calculation_Bind_password_error"));
+			} else if (code == 4) {
+				// 该网关不能作为子机
+			} else if (code == 7) {
+				// 当前网关已被其他网关管理
+			} else if (code == 255) {
+				// 其他错误
+			}
+		}
+ 	}
+	</script>
+</html>

@@ -1,0 +1,665 @@
+@charset "utf-8";
+b,strong{font-weight:500;}
+/*场景任务*/
+.circums{
+	width:100%;
+	overflow:hidden;
+}
+.circums h5{
+	width:91%;
+	padding:0 4% 0 5%;
+	line-height:4.4rem;
+	margin-top:1.5rem;
+	border-bottom:1px solid #d9d9d9;
+	background:#fff;
+	font-size:1.5rem;
+	color:#000;
+	font-weight: 500;
+}
+.circums h5 a{
+	display:block;
+	width:100%;
+	color:#000;
+}
+.circums h5 span,.circums h5 i{
+	float:right;
+}
+.circums h5 i{
+	display:block;
+	width:2.3rem;
+	height:4.4rem;
+	background:url(../fonts/icon_right.png) no-repeat right center;
+	background-size:0.9rem auto;
+}
+.circums h5 i.cir_add{
+	background:none;
+	background:url(../fonts/icon_add_01.png) no-repeat right center;
+	background-size:1.6rem auto;
+}
+.circums h5 a span{
+	color:#676767;
+}
+.circums .no_task{
+	width:100%;
+	height:2rem;
+	line-height:2rem;
+	text-align:center;
+	font-size:1.3rem;
+	color:#929292;
+}
+/*情景任务2*/
+.circums .quest{
+	display:block;
+	position:relative;
+	left:0;
+	padding:0;
+	width:100%;
+	overflow:hidden;
+	background:#fff;
+}
+.circums .quest li{
+	padding:0;
+	margin:0;
+	width:120%;
+	padding-left:4%;
+	border-bottom:1px solid #d9d9d9;
+	overflow:hidden;
+}
+.circums .quest li .delete{
+	float:left;
+	width:7rem;
+	height:7rem;
+	text-align:center;
+	line-height:7rem;
+	margin-left:5%;
+	background:#f64a4a;
+	font-size:1.4rem;
+	color:#fff;
+}
+.reorder-icon{
+	background: url("../fonts/reorder_icon.png") no-repeat center center;
+	background-size: 2.3rem auto;
+	height: 3rem;
+	width: 3rem;
+	float: right;
+	margin-top: -3.5rem;
+}
+.slip-reordering {
+	box-shadow: 0 2px 10px rgba(0,0,0,0.45);
+}
+.circums .quest li a{
+	display:block;
+	float:left;
+	width:65%;
+	height:5rem;
+	padding:1rem 0 1rem 5.3rem;
+	-webkit-tap-highlight-color:transparent;
+}
+.circums .quest li a:active{
+	-webkit-tap-highlight-color:transparent;
+}
+.circums .quest li a.timing{
+	width:69%;
+}
+.circums .quest li a.doorC{
+	background:url(../../source/deviceIcon/device_icon_03.png) no-repeat left center;
+	background-size:4.3rem auto;
+}
+.circums .quest li a.offline{
+	background:url(../fonts/icon_offline.png) no-repeat left center;
+	background-size:4.3rem auto;
+}
+.circums .quest li a.infD{
+	background:url(../fonts/icon_ganyingqi.png) no-repeat left center;
+	background-size:4.3rem auto;
+}
+.circums .quest li a.goHome{
+	background:url(../../source/sceneIcon/scene_normal_02.png) no-repeat left center;
+	background-size:4.3rem auto;
+}
+/*.circums .quest li a.hotLight{*/
+	/*background:url(../fonts/icon_2.png) no-repeat left center;*/
+	/*background-size:4.3rem auto;*/
+/*}*/
+.circums .quest li a i{
+	display:block;
+	float:right;
+	width:2.3rem;
+	height:5rem;
+	background:url(../fonts/icon_right.png) no-repeat right center;
+	background-size:0.9rem auto;
+}
+.circums .quest li a span{
+	display:block;
+	float:left;
+	width:100%;
+	line-height:1.8rem;
+	font-size:1.5rem;
+	color:#000;
+	overflow:hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.circums .meetTask li a span{
+	margin-top:0.8rem;
+}
+.circums .quest li a span strong{
+	display:block;
+	float:left;
+	max-width:60%;
+	line-height:1.8rem;
+	font-size:1.5rem;
+	color:#000;
+	overflow:hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-weight: 500;
+}
+.circums .quest li a span em.roomName{
+	display:block;
+	max-width:37%;
+	height:1.8rem;
+	overflow:hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.circums .quest li a span em{
+	display:inline-block;
+	font-size:1.2rem;
+	color:#868686;
+	max-width:40%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.circums .quest li a span em:nth-child(n+3){
+	display:block;
+	height:1.3rem;
+	line-height:1.3rem;
+}
+.circums .quest li.doTask a span em:nth-child(3),.circums .quest li.doTask a span em:nth-child(4){
+	float:left;
+}
+.circums .quest li.doTask a span em:nth-child(3){
+	max-width:50%;
+	margin-right:3%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.circums .quest li.doTask a span em:nth-child(4){
+	max-width: 47%;
+}
+.circums .quest li.doTask a span em:nth-child(5){
+	clear:both;
+}
+/*.timeQuest li a span em{*/
+	/*display:block;*/
+	/*float:left;*/
+/*}*/
+.timeQuest li a span em.week{
+	display:inline-block;
+	max-width:60%;
+	height:1.8rem;
+	line-height:2.4rem;
+}
+.addCondition a span em:nth-child(3){
+	display:block;
+	clear:both;
+}
+.cir_fix{
+	position:fixed;
+	left:0;
+	bottom:0;
+}
+/*生效时段*/
+.choose_date{
+	width:100%;
+	overflow:hidden;
+	margin-top:1.5rem;
+}
+.choose_date ul{
+	overflow:hidden;
+	border-top:1px solid #d9d9d9;
+}
+.choose_date ul li{
+	position:relative;
+	box-sizing: border-box;
+	width:100%;
+	height:4.4rem;
+	line-height:4.4rem;
+	text-align:center;
+	border-bottom:1px solid #d9d9d9;
+	background:#fff;
+	font-size:1.5rem;
+	color:#454749;
+}
+.choose_date ul li input{
+	position:absolute;
+	left:0;
+	top:0;
+	display:block;
+	width:100%;
+	height:4.4rem;
+	border:0;
+	background:pink;
+	opacity: 0;
+	font-size:0rem;
+}
+.choose_week{
+	width:100%;
+	margin-top:1.5rem;
+	overflow:hidden;
+}
+.choose_week span{
+	display:block;
+	width:96%;
+	padding-left:4%;
+	height:3rem;
+	line-height:3rem;
+	font-size:1.5rem;
+	color:#000;
+}
+.time_week span{
+	margin-top:1.5rem;
+	border-top:1px solid #d9d9d9;
+	background:#fff;
+}
+.choose_week ul{
+	padding:1.75rem 2%;
+	width:96%;
+	height:3.5rem;
+	background:#fff;
+}
+.choose_week ul li{
+	float:left;
+	width:3.5rem;
+	height:3.5rem;
+	text-align:center;
+	line-height: 3.5rem;
+	margin-left:1.35rem;
+	border:1px solid #cbd1d9;
+	border-radius: 50%;
+	font-size:1.2rem;
+	color:#acb5c0;
+}
+.choose_week ul li.on{
+	background:#8DD652;
+	border:1px solid #cbd1d9;
+	color:#fff;
+}
+/*定时任务*/
+/*.circums .quest .time_task{*/
+	/*padding-top:0.7rem;*/
+/*}*/
+.circums .quest .time_task em:nth-child(1){
+	display:block;
+	width:100%;
+	height:1px;
+	clear:both;
+}
+.circums .quest li a.timing{
+	padding-left:3.6rem;
+	background:url(../fonts/icon_time.png) no-repeat left center;
+	background-size:2.9rem auto;
+}
+/*延时*/
+.delay_btn{
+	width:92%;
+	height:4.4rem;
+	padding:0 4%;
+	line-height:4.4rem;
+	font-size:1.4rem;
+	color:#868686;
+}
+.reagain{
+	background:#fff;
+	border-top:1px solid #d9d9d9;
+	border-bottom:1px solid #d9d9d9;
+	color:#000;
+}
+.delay_btn .switch{
+	position:relative;
+	float:right;
+	width:4rem;
+	height:1.5rem;
+	padding:0.5rem;
+	margin:0.75rem 0;
+	background:#aaa;
+	border-radius:1.5rem;
+}
+.delay_btn .switch.switch_01{
+	/*background:#8dd652;*/
+}
+.delay_btn .switch i{
+	position:absolute;
+	left:10%;
+	top:20%;
+	display:block;
+	width:1.5rem;
+	height:1.5rem;
+	background:#fff;
+	border-radius:50%;
+}
+.delay_btn .switch i.open{
+	left:60%;
+}
+#demo{
+	display:block;
+	position:absolute;
+	right:4%;
+	top:7rem;
+	width:5rem;
+	height:2.5rem;
+	border:0;
+	opacity: 0;
+	font-size:0rem;
+}
+.mobiscroll_top{
+	top:8.8rem;
+}
+.slideDown{
+	position:relative;
+}
+.slideDown span{
+	display:block;
+	width:92%;
+	padding:0 4%;
+	margin-top:0.5rem;
+	line-height:2rem;
+	font-size:1.4rem;
+	color:#868686;
+}
+
+/*选择传感器*/
+.circums .sensor li a{
+	padding:0.5rem 0 0.5rem 5.3rem;
+}
+.circums .sensor li a span{
+	padding-top:0.7rem;
+}
+/*添加定时任务*/
+.addTask{
+	display:block;
+	overflow:hidden;
+	background:#fff;
+}
+.addTask li{
+	width:100%;
+	height:5rem;
+	line-height:4rem;
+	border-bottom:1px solid #d9d9d9;
+}
+.addTask li a{
+	float: left;
+	display:block;
+	width:92%;
+	padding:0 4%;
+	line-height:5rem;
+	font-size:1.4rem;
+	color:#000;
+}
+.addTask li i{
+	float: right;
+	display:block;
+	width:10%;
+	height:5rem;
+	background:url(../fonts/icon_right.png) no-repeat right center;
+	background-size:0.9rem auto;
+}
+#addTimeDelay_hint_1{
+	display:block;
+	float:left;
+	max-width:80%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+/*修改 点击区域问题*/
+#changeTaskName{
+	width:100%;
+	padding:0;
+}
+#changeTaskName a{
+	width:91%;
+	padding: 0 4% 0 5%;
+}
+#setTime{
+	width:100%;
+	padding:0;
+}
+#setTime a{
+	box-sizing: border-box;
+	padding-left:14%;
+	padding-right:4%;
+	width:100%;
+	height:7rem;
+	background: url(../fonts/icon_time.png) no-repeat 4% center;
+	background-size: 2.9rem auto;
+	-webkit-tap-highlight-color:rgba(169,169,169,0.66);
+}
+
+/*=========================================== 版本：6.1.5 *生效条件* =========================================*/
+.conditionTitle{
+	line-height: 4.4rem!important;
+	margin-top:0!important;
+}
+.conditionTitle i{
+	width:4.4rem!important;
+}
+.conditionTitle em{
+	display:none;
+	float:right;
+	width:4.4rem;
+	height:4.4rem;
+	line-height:4.4rem;
+	font-size:1.6rem;
+	color:#8dd652;
+	text-align:center;
+}
+.conditionList{
+	width:100%;
+	overflow:hidden;
+}
+.conditionList li{
+	width: 120%;
+	padding-left: 4%;
+	border-bottom: 1px solid #d9d9d9;
+	overflow: hidden;
+}
+.conditionList li span{
+	position:relative;
+	display:block;
+	float:left;
+	padding: 1rem 5.3rem 1rem 5.3rem;
+	width:52%;
+	height:5rem;
+	font-size:1.5rem;
+	color: #000;
+	/*background:url(../../source/deviceIcon/device_icon_01.png) no-repeat left center;*/
+	/*background-size:4.3rem auto;*/
+}
+.conditionList li span strong{
+	display:block;
+	padding-top:0.7rem;
+	height:2rem;
+	line-height:2rem;
+	font-size:1.5rem;
+	color: #000;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.conditionList li span em{
+	font-size:1.3rem;
+	color:#868686;
+}
+.conditionList li span i{
+	display:block;
+	position:absolute;
+	right:0;
+	top:1rem;
+	width:4rem;
+	height:5rem;
+	text-align:right;
+	line-height:5rem;
+	/*background:pink;*/
+	font-size:1.5rem;
+}
+.conditionList li .delete{
+	float:left;
+	width:7rem;
+	height:7rem;
+	text-align:center;
+	line-height:7rem;
+	margin-left:5%;
+	background:#f64a4a;
+	font-size:1.4rem;
+	color:#fff;
+}
+/*======================================与或关系弹窗====================================*/
+.relationDialog{
+	display:none;
+	position:fixed;
+	left:0;
+	top:6.4rem;
+	width:100%;
+	height:calc(100% - 6.4rem);
+	overflow:hidden;
+	background:rgba(0,0,0,.4);
+	z-index:100;
+}
+.relation{
+	position:absolute;
+	left:10%;
+	top:30%;
+	width:80%;
+	overflow:hidden;
+	background:#fff;
+	/*transform:translateY(-50%);*/
+	/*-webkit-transform:translateY(-50%);*/
+	border-radius:5px;
+}
+.relation strong{
+	display:block;
+	width:100%;
+	height:5rem;
+	line-height:5rem;
+	font-size:1.6rem;
+	text-align:center;
+}
+.relation .chooseRelative{
+	width:100%;
+	overflow:hidden;
+}
+.relation .chooseRelative li{
+	padding:0 4%;
+	WIDTH:92%;
+	line-height:2.4rem;
+	overflow:hidden;
+}
+.relation .chooseRelative li span,.relation .chooseRelative li i{
+	display:block;
+	float:left;
+}
+.relation .chooseRelative li span{
+	width:80%;
+	line-height:2.4rem;
+	font-size:1.5rem;
+}
+.relation .chooseRelative li i{
+	width:20%;
+	height:2.4rem;
+	background:url(../fonts/checkbox_2.png) no-repeat right center;
+	background-size:1.8rem auto;
+}
+.relation .chooseRelative li i[data-choose=yes]{
+	background:url(../fonts/checkbox_1.png) no-repeat right center;
+	background-size:1.8rem auto;
+}
+.relativeBtn{
+	margin-top:2rem;
+	width:100%;
+	height:4.4rem;
+	border-top:1px solid #ddd;
+}
+.relativeBtn li{
+	display:block;
+	box-sizing:border-box;
+	float:left;
+	width:50%;
+	height:4.4rem;
+	line-height:4.4rem;
+	font-size:1.6rem;
+	text-align:center;
+	border-right:1px solid #ddd;
+}
+.relativeBtn li:last-child{
+	border-right:0;
+}
+.conditionDialog{
+	display:none;
+	position:fixed;
+	left:0;
+	top:6.4rem;
+	width:100%;
+	height:calc(100% - 6.4rem);
+	overflow:hidden;
+	background:rgba(0,0,0,.4);
+}
+.conditionAlert{
+	position:absolute;
+	left:10%;
+	top:30%;
+	width:80%;
+	overflow:hidden;
+	background:#fff;
+	border-radius:5px;
+}
+.conditionAlert span{
+	display:block;
+	padding:2rem 4%;
+	width:92%;
+	line-height:3rem;
+	font-size:1.5rem;
+}
+.conditionBtn{
+	width:100%;
+	height:4.4rem;
+	line-height:4.4rem;
+	border-top:1px solid #ddd;
+	font-size:1.6rem;
+	text-align:center;
+}
+/*====================================老版本生效条件兼容==============================*/
+.conditionTime h5{
+	height:5.6rem;
+	padding-top:0.5rem;
+	line-height:3rem;
+	border-bottom:0;
+}
+.conditionTime h5 i{
+	height:5.6rem;
+}
+.conditionTime h5 em{
+	display:block;
+	/*float:left;*/
+	max-width:80%;
+	margin-right:1rem;
+	height:1.3rem;
+	line-height:1.3rem;
+	font-size:1.2rem;
+	color:#96999e;
+}
+/*6.1.6*/
+.timeTitle{
+	position:relative;
+	z-index:99999;
+	display:block;
+	padding:2rem 4% 0;
+	width:92%;
+	height:2rem;
+	font-size:1.4rem;
+	color:#333;
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/more.css" />
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/fail.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a onclick="returnBack()"></a>
+				<a href="javascript:;" class="addDoorC autoSwitchLanguager"></a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="more_list">
+			<ul id="list">
+				<!--<li>1111<i></i></li>-->
+			</ul>
+		</section>
+		<section class="add_fail">
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+        initlan()
+        var info = window.sysfun;
+		info.init("V6addDevice");
+		var room = info.getItem("roomID");
+//		var lang_txtContent = "未分区"
+		plus.plusReady(function () {
+
+        });
+		plus.gatewayCmd.getGroupList(function(data) {
+			console.log(data);
+			var list = document.getElementById("list");
+			list.addEventListener("click", function() {
+				console.log(event.target);
+				if(event.target.id != "noGroup"){
+				   info.setItem("roomID", event.target.id);
+				   info.setItem("roomName", event.target.textContent);
+				}else{
+					info.removeItem("roomID");
+					info.removeItem("roomName");
+				}
+				 window.location = "addDevice_succ.html?name="+ decodeURI(getUrlParam("name"));
+			})
+			
+			var li1 = document.createElement("li");
+			li1.id = "noGroup";
+			li1.textContent = lang_txtContent;
+			list.appendChild(li1);
+			if(!data || data.length==0 || !room || room =="" ||room == null){
+				li1.appendChild(document.createElement("i"));
+			}
+
+			for(var i = 0; i < data.length; i++) {
+				var li = document.createElement("li");
+				li.textContent = data[i].name;
+				li.id = data[i].roomID;
+				list.appendChild(li);
+				if(data[i].roomID == room) {
+					li.appendChild(document.createElement("i"));
+				}
+			}
+		})
+
+		$("#name").html(decodeURI(getUrlParam("name")));
+		//	    $("#group").html(decodeURI(getUrlParam("name")));
+		function returnBack(){
+			 window.location = "addDevice_succ.html?name="+ decodeURI(getUrlParam("name"));
+		}
+	</script>
+
+</html>

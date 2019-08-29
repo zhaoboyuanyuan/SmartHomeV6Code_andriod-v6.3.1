@@ -1,0 +1,91 @@
+@charset "utf-8";
+html{
+	background:#fff;
+}
+html,body{
+	height:100%;
+}
+/*添加设备失败*/
+.add_fail{
+	display:block;
+	width:100%;
+	text-align:center;
+	margin-top:9.5rem;
+	overflow:hidden;
+}
+.add_fail img{
+	display:inline-block;
+	width:7.75rem;
+	height:auto;
+}
+
+.add_fail span{
+	display:block;
+	width:100%;
+	height:5rem;
+	line-height:5rem;
+	text-align:center;
+	font-size:1.5rem;
+	color:#000;
+}
+.add_advise{
+	width:100%;
+	margin-top:2rem;
+	overflow:hidden;
+}
+.add_advise ul{
+	padding:0 4%;
+	overflow:hidden;
+}
+.add_advise ul li{
+	width:100%;
+	line-height:2.5rem;
+	font-size:1.5rem;
+	color:#535353;
+}
+.addSensorBtn{
+	overflow:hidden;
+}
+.addSensorBtn a{
+	display:block;
+	position:fixed;
+	left:4%;
+	bottom:12%;
+	width:92%;
+	height:5rem;
+	line-height:5rem;
+	text-align: center;
+	background:#8DD652;
+	color:#fff;
+	font-size:1.7rem;
+	border-radius: 5px;
+}
+.toBindGw{
+	overflow:hidden;
+}
+.toBindGw a {
+	display: block;
+	position: absolute;
+	left: 4%;
+	bottom: 4rem;
+	width: 92%;
+	height: 5rem;
+	line-height: 5rem;
+	text-align: center;
+	font-size: 1.7rem;
+	border-radius: 5px;
+	background: #fff;
+	border:1px solid #8dd652;
+	background-size: 100% 100%;
+	color: #333;
+}
+
+/*选择分区*/
+#list li i{
+	display:block;
+	float:right;
+	width:2.2rem;
+	height:4.4rem;
+	background:url(../fonts/icon_5.png) no-repeat center center;
+	background-size:2.2rem auto;
+}

@@ -1,0 +1,113 @@
+.emptyView{
+    position:absolute;
+    top:50%;
+    display:block;
+    width:100%;
+    text-align: center;
+    height:225px;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.emptyView span{
+    margin-top: 20px;
+    display:block;
+    width: auto;
+    /*text-align:center;*/
+    line-height:42px;
+    color:#999;
+    font-size:14px;
+}
+.emptyView img{
+    display:inline-block;
+    width:90px;
+    height:auto;
+}
+
+#chooseTapCount{
+    margin: 10px 20% 10px 20%;
+    width: 60%;
+    height: 3.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #efeff4;
+}
+#chooseTapCount p{
+    width:45%;
+    height: 3.2rem;
+    margin: 0;
+    background-color: white;
+    text-align: center;
+    line-height: 3.2rem;
+    color: black;
+    padding: 0 1px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.tapCountItemChoose{
+    background-color: #8cd451 !important;
+}
+
+/*正在保存toast*/
+.comToast{
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 60%;
+    text-align:center;
+    overflow: hidden;
+    padding-top: 1rem;
+    padding-bottom:1rem;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    border-radius: 5px;
+}
+.comToast i{
+    display:inline-block;
+    height:2rem;
+    line-height:2rem;
+    font-size:1.4rem;
+    color:#fff;
+}
+@-webkit-keyframes rotate{
+    from{
+        -webkit-transform: rotateZ(360deg);
+        transform: rotateZ(360deg);
+    }
+    to{
+        -webkit-transform: rotateZ(0);
+        transform: rotateZ(0);
+    }
+}
+@keyframes rotate{
+    from{
+        -webkit-transform: rotateZ(360deg);
+        transform: rotateZ(360deg);
+    }
+    to{
+        -webkit-transform: rotateZ(0);
+        transform: rotateZ(0);
+    }
+}
+.comToast i em{
+    display:block;
+    float:left;
+    width:2rem;
+    height:2rem;
+    margin-right:1rem;
+    background:url(../fonts/icon_toast_loading.png) center center;
+    background-size: 2rem auto;
+}
+.comToast i em.rotate{
+    -webkit-animation: rotate 0.7s linear infinite;
+    animation: rotate 0.7s linear infinite;
+}

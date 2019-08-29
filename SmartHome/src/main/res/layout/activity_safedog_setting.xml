@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/item_safedog_rename"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_ripper_effect">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@string/Device_Rename"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+
+        <ImageView
+            android:id="@+id/iv_safedog_rename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/system_intent_right" />
+
+        <TextView
+            android:id="@+id/tv_safedog_rename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@id/iv_safedog_rename"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textSize="@dimen/mine_wl_text_size" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_safedog_info"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/bg_ripper_effect">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@string/Device_Info"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/system_intent_right" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_safedog_alarm"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_ripper_effect">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@string/Device_Lock_Widget_Alertmessage"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/system_intent_right" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_safedog_reset"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        android:background="@drawable/bg_ripper_effect">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@string/Device_Bm_Details_Restore"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/system_intent_right" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_safedog_delete"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/white"
+        android:gravity="center"
+        style="?android:attr/borderlessButtonStyle"
+        android:text="@string/Device_DeleteDevice"
+        android:textColor="@color/red"
+        android:textSize="@dimen/default_text_size" />
+</LinearLayout>

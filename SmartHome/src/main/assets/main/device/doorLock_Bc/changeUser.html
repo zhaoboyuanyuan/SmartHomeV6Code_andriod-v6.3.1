@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>创建临时用户</title>
+		<!--<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />-->
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/mui.picker.min.css">
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/set.css" />
+		<link rel="stylesheet" type="text/css" href="css/scene.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName" href="javascript:;"></a>
+				<a class="autoSwitchLanguager" href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="content mui-content">
+			<div class="createInput" style="margin-top:2rem">
+				<span style="width:27%" class="autoSwitchLanguager" key="name">用户名</span><input id="inputName" key="inputName" readonly class="autoSwitchLanguager" type="text" maxlength="20" placeholder="请输入用户名">
+			</div>
+			<dl scene-id="" class="bindScene" onclick="bindingScene(this)">
+				<dt class="autoSwitchLanguager" id="lock_Scenes_bind">场景绑定</dt>
+				<dd class="sceneName"></dd>
+			</dl>
+		</section>
+		<!--<section id="fail" class="toast" style="display:none;">-->
+			<!--<p class="autoSwitchLanguager" id="toastText"></p>-->
+		<!--</section>-->
+		<section class="changeNamePopup iphoneX" style="top:6.4rem">
+			<div class="rename">
+				<strong class="autoSwitchLanguager" key="name">用户名</strong>
+				<input id="renameInput" type="text" key="inputName" class="autoSwitchLanguager" maxlength="20" placeholder="请输入用户名">
+				<div class="renameBtn">
+					<button class="cancel autoSwitchLanguager" key="cancel">取消</button>
+					<button class="sure autoSwitchLanguager" key="sure" onclick="$(this).parents('.changeNamePopup').hide();send520Cmd()">确定</button>
+				</div>
+			</div>
+		</section>
+	</body>
+	<script src="js/mui.min.js"></script>
+	<script src="js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan()
+		//时间选择器
+		var PWD, ST, ET, UT, UID, NAME, DEVICEID, GWID, APPID,sceneId;
+		var token;
+		var info = window.sysfun;
+		info.init("Token_Bc");
+		token = info.getItem("Token_Bc");
+        var type = getUrlParam("type");
+		plus.plusReady(function() {
+		    var liData = JSON.parse(info.getItem("liData"));
+			PWD = liData.pwd;
+			ST = liData.st;
+			ET = liData.et;
+			NAME = liData.name;
+			UT = liData.ut;
+			UID = liData.uid;
+            sceneId = liData.sceneId ? liData.sceneId:"";
+            console.log(liData);
+			var title = document.getElementsByClassName("deviceName")[0];
+			if(UT == "0"){
+			    $('.bindScene').show();
+			    $("#inputName").addClass("txt_right");
+				title.innerHTML = alarmSet_js_28;
+			}else if(UT == "1"){
+                $('.bindScene').show();
+                $("#inputName").addClass("txt_right");
+				title.innerHTML = alarmSet_js_29;
+			}else {
+				title.innerHTML = alarmSet_js_30;
+			}
+            document.getElementById("renameInput").placeholder = alarmSetting_js_16;
+			$("#inputName").val(NAME);
+			plus.gatewayCmd.getCurrentAppID(function(result) {
+				APPID = result;
+			})
+			plus.gatewayCmd.getDeviceInfo(function(result) {
+				DEVICEID = result.devID;
+				GWID = result.gwID;
+				rush_cmd(result.devID, result.gwID);
+			})
+            plus.gatewayCmd.getSceneList(function(result){
+                if(result){
+                    for(var i=0;i<result.length;i++){
+                        if(sceneId != ""){
+                            if(result[i].sceneID == sceneId){
+                                $(".sceneName").html(result[i].sceneName);
+                                $(".bindScene").attr("scene-id",sceneId);
+                            }
+                        }else{
+                            $(".sceneName").html(lock_Scenes_bind_no_bind);//lock_Scenes_bind_no_bind"未绑定"
+                            $(".bindScene").attr("scene-id","");
+						}
+                    }
+                }
+            });
+//            $("#back").on("click",function(){
+//                plus.tools.goBack(function(){})
+//            })
+		});
+		$("#back").on("click",function(){
+            if(type === "Bf"){
+                window.location = "accountManageForBf.html"
+            }else if(type === "Bg"){
+                window.location = "accountManageForBg.html"
+            }else if(type === "Bq"){
+                window.location = "accountManageForBq.html"
+            }else {
+                window.location = "accountManage.html"
+            }
+		});
+		$("#inputName").on("click",function(){
+		    $(".changeNamePopup").show();
+		});
+		$(".cancel").on("click",function(){
+            $(".changeNamePopup").hide();
+		});
+		function send520Cmd() {
+			var jsonData = {};
+			jsonData.cmd = "520";
+			jsonData.gwID = GWID;
+			jsonData.devID = DEVICEID;
+			jsonData.operType = 4;
+			jsonData.appID = APPID;
+			NAME = $("#renameInput").val();
+			if(NAME=="" || NAME.length==0) {
+				errorCode(19);
+				return;
+			}
+			var data = {
+				"tk": token,
+//				"pwd": PWD,
+				"name": NAME,
+				"ut": UT,
+				"uid": UID,
+				"sceneId": sceneId
+			}
+			jsonData.data = data;
+			plus.gatewayCmd.controlDevice(jsonData, function() {
+
+			})
+		}
+
+		/*
+		 *	绑定场景
+		 *"tk":"tk","uid":"uid","ut":"ut","pwd":"pwd","st":"st","et":"et",
+		 "name":"name","sceneId":"sceneId"
+		 */
+
+		function bindingScene(self){
+			var sceneID = $(self).attr("scene-id");
+			window.location = "sceneList.html?sceneID="+sceneID+"&tk="+token+"&pwd="+PWD+"&name="+NAME+"&ut="+UT+"&uid="+UID;
+		}
+
+		function timerModel(time) {
+			time = time.replace(" ", "");
+			time = time.replace("/", "");
+			time = time.replace("／", "");
+			time = time.replace("/", "");
+			time = time.replace("／", "");
+			time = time.replace(":", "");
+			return time;
+		}
+		/*
+		 * 数据回调
+		 */
+		function rush_cmd() {
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				if(result.cmd == "520" && result.devID == DEVICEID) {
+					if(result.operType == 4) { //修改
+						if(result.data.code != "0") {
+							errorCode(result.data.code)
+							return;
+						}
+//						window.location = "accountManage.html";
+                        $("#inputName").val(result.data.name);
+					}
+				}
+			})
+		}
+	</script>
+
+</html>

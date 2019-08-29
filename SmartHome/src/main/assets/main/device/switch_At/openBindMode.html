@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>内嵌式零火二路开关</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="css/mui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/set.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body style="width:100%;height:100%;">
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="moreName autoSwitchLanguager" key="device_more" href="javascript:;">更多</a>
+            <a id="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section class="choose">
+        <ul>
+            <li></li>
+            <li></li>
+        </ul>
+    </section>
+    <section class="toast autoSwitchLanguager" key="offLine">设备已离线</section>
+</body>
+    <script src="js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/plus.js"></script>
+    <script type="text/javascript" src="js/gatewayCmd.js"></script>
+    <script type="text/javascript" src="js/tools.js"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/alert.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/more.js"></script>
+    <script type="text/javascript">
+        initlan()
+        var gwID,dID;
+        plus.plusReady(function(){
+            $(".choose ul li").eq(0).html(device_switch + "1")
+            $(".choose ul li").eq(1).html(device_switch + "2")
+            $("#back").on("click",function(){
+                plus.tools.back(function(){})
+            })
+            plus.gatewayCmd.getDeviceInfo(function(data){
+                gwID = data.gwID;
+                dID = data.devID;
+                control(gwID,dID)
+            })
+//            plus.gatewayCmd.newDataRefresh(function(data){
+//                modeState(data)
+//            })
+        })
+//        editPopup({
+//            "num":4,
+//            "titTxt":"绑定/解绑模式已开启，请执行以下操作：",
+//            "txt":"1. 请于20S内长按绑定开关SET键，同时按一下需绑定/解绑按键，松开SET键.<br />2. 绑定开关指示灯闪烁3次表示绑定/解绑成功，闪烁6次绑定/解绑失败",
+//            "isClick":1,
+//            "aTxt1":"我知道了"
+//        })
+//        $(".alertBtn a").click(function(){
+//            cancel()
+//        })
+//        control("123","123")
+        function control(gwID,dID){
+            $(".choose ul li").on("click",function(){
+                if($(this).index() == 0){
+                    sendCmd(gwID,dID,1,6,32788)
+                }else{
+                    sendCmd(gwID,dID,2,6,32788)
+                }
+                editPopup({
+                    "num":4,
+                    "titTxt":device_explain_01,
+                    "txt":device_explain_02,
+                    "isClick":1,
+                    "aTxt1":device_explain_konw
+                })
+                $(".alertBtn a").click(function(){
+                    cancel()
+                })
+            })
+        }
+//        function modeState(result){
+//            if(result.mode === 2){
+//                $(".toast").show()
+//            }else if(result.mode === 3){
+//                //原生做的操作
+//            }else{
+//                for(var i = 0;i<result.endpoints.length;i++){
+//                    var num = result.endpoints[i].endpointNumber;
+//                    var name = result.endpoints[i].endpointName;
+//                    if(num == 1){
+//                        if(name == '' || name == undefined || name == null){
+//                            $(".choose ul li").eq(0).html(device_switch+"1")
+//                        }else{
+//                            $(".choose ul li").eq(0).html(name)
+//                        }
+//                    }else if(num == 2){
+//                        if(name == '' || name == undefined || name == null){
+//                            $(".choose ul li").eq(1).html(device_switch+"2")
+//                        }else{
+//                            $(".choose ul li").eq(1).html(name)
+//                        }
+//                    }
+//
+//                }
+//            }
+//        }
+        function sendCmd(gwID,dID,endpointNumber,clusterId,commandId){
+            var jsonData = {}
+            jsonData.cmd = "501";
+            jsonData.gwID = gwID;
+            jsonData.devID = dID;
+            jsonData.endpointNumber = endpointNumber;
+            jsonData.clusterId = clusterId;
+            jsonData.commandType = 1;
+            jsonData.commandId = commandId;
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+        }
+        function cancel(){
+            if($(".sect_content")){
+                $(".sect_content").remove();
+            }
+        }
+    </script>
+</html>

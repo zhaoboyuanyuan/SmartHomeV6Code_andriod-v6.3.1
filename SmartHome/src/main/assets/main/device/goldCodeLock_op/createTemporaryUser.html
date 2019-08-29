@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建临时用户</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="css/mui.min.css">
+    <link rel="stylesheet" href="css/mui.picker.min.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/set.css"/>
+     <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_op_temp_01" href="javascript:;">创建临时用户</a>
+            <a class="complete autoSwitchLanguager" key="device_op_save" href="javascript:;">保存</a>
+        </div>
+    </header>
+    <section class="content mui-content">
+        <strong class="autoSwitchLanguager" key="device_op_temp_02">临时用户密码仅在一段时间内有效</strong>
+        <div class="createInput">
+            <span class="autoSwitchLanguager" key="device_op_normal_03" style="width:27%">用户名</span>
+            <input id="acname" class="autoSwitchLanguager" key="device_op_normal_05" maxlength="20" type="text" placeholder="请输入用户名">
+        </div>
+        <div class="createInput">
+            <span class="autoSwitchLanguager" key="device_op_normal_04" style="width:27%">密码</span>
+            <input id="pwd" type="password" value=""><i class="look"></i>
+        </div>
+        <strong class="autoSwitchLanguager" key="device_op_temp_03">密码有效期</strong>
+        <div class="createInput mui-content-padded">
+            <span class="autoSwitchLanguager" key="device_op_temp_04" style="width:27%">开始</span>
+            <button id="pickDateBtn" type="button" class="btn mui-btn mui-btn-block">2016/05/24 05:30</button>
+        </div>
+        <div class="createInput">
+            <span class="autoSwitchLanguager" key="device_op_temp_05" style="width:27%">结束</span>
+            <button id="pickDateBtn1" type="button" class="btn mui-btn mui-btn-block">2016/05/24 10:30</button>
+        </div>
+    </section>
+    <!--<section id="fail" class="toast" style="display:none;">-->
+        <!--<p class="autoSwitchLanguager" id="toastText" style="color:#fff;"></p>-->
+    <!--</section>-->
+</body>
+<script src="js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/completeToast.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/onceUser.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $("#pwd").on("input propertychange",function(){
+        if($(this).val().length >= 6){
+            $(this).val($(this).val().substr(0,6))
+        }
+    });
+    $("#acname").on("blur",function(){
+        var value = $(this).val();
+        var valueFace = noFace(value);
+        console.log(valueFace);
+        $(this).val(valueFace);
+    });
+    $("#back").on("click",function(){
+        plus.tools.goBack(function(){})
+    })
+    initlan()
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+    //时间选择器
+    mui.init();
+    var time = new Date()
+    console.log(time)
+    var year = time.getFullYear()
+    var month = time.getMonth()+ 1
+    var month1 =  (month+"").length == 1 ? "0"+month : month;
+    var day =  (time.getDate() + "").length == 1 ? "0"+time.getDate() : time.getDate();
+    var hour = (time.getHours() + "").length == 1 ? "0"+time.getHours() : time.getHours();
+    var minute = (time.getMinutes() + "").length == 1 ? "0"+time.getMinutes() : time.getMinutes();
+    var minute1 = parseInt(minute)+1;
+    var minute2 = (minute1+"").length == 1 ? "0"+ minute1 : minute1+'';
+    var hour1 = hour
+    if(minute2 == 60){
+        minute2 = "00";
+        hour1 = hour1+1;
+    }
+    $("#pickDateBtn").html(year+"/"+month1+"/"+day+" "+hour+":"+minute)
+    $("#pickDateBtn1").html(year+"/"+month1+"/"+day+" "+hour1+":"+minute2)
+    document.getElementById("pickDateBtn").addEventListener("click", function() {
+        //初始化PopPicker组件
+        var picker = new mui.DtPicker({
+            type: "datetime",
+            labels: ['Year', 'Mon', 'Day', 'Hour', 'min'],
+            beginDate:new Date()
+        })
+        //console.log(time.toString())
+        console.log(year+"-"+month+"-"+day+"-"+hour+"-"+minute)
+        $(".mui-dtpicker").find(".btn-cancel").html(account_txt_14)
+        $(".mui-dtpicker").find(".btn-ok").html(account_txt_15)
+        //设置默认值
+        picker.setSelectedValue(year+"-"+month+"-"+day+"-"+hour+"-"+minute)
+        picker.show(function(item) {
+            console.log(item)
+            $("#pickDateBtn").html(item.text.replace(/-/g,"/"))
+            var ss = new Date(item.y.text+"/"+item.m.text+"/"+item.d.text+" "+item.h.text+":"+item.i.text)
+            var endDate = new Date(ss.getTime() + 60 * 1000).Format("yyyy/MM/dd hh:mm");
+            $("#pickDateBtn1").html(endDate)
+        })
+    })
+    document.getElementById("pickDateBtn1").addEventListener("click", function() {
+        var year1 = parseInt($("#pickDateBtn").html().substr(0,4))
+        var month1 = parseInt($("#pickDateBtn").html().substr(5,2))-1
+        var day1 =  parseInt($("#pickDateBtn").html().substr(8,2))
+        var hour1 = parseInt($("#pickDateBtn").html().substr(11,2))
+        var minute1 = parseInt($("#pickDateBtn").html().substr(14,2))+1
+        //初始化PopPicker组件
+        var picker1 = new mui.DtPicker({
+            type: "datetime",
+            labels: ['Year', 'Mon', 'Day', 'Hour', 'min'],
+            beginDate:new Date(year1,month1,day1,hour1,minute1)
+        })
+        //设置默认值
+        picker1.setSelectedValue(year1+"-"+month1+"-"+day1+"-"+hour1+"-"+minute1)
+        $(".mui-dtpicker").find(".btn-cancel").html(account_txt_14)
+        $(".mui-dtpicker").find(".btn-ok").html(account_txt_15)
+        picker1.show(function(item) {
+            console.log(item.text)
+            $("#pickDateBtn1").html(item.text.replace(/-/g,"/"))
+        })
+    })
+    var PWD, ST, ET, NAME, DEVICEID, GWID, APPID;
+    var token;
+    var info = window.sysfun;
+    info.init("Token_OP");
+    token = info.getItem("Token_OP")
+    plus.plusReady(function() {
+        $(".complete").on("click",function(){
+            if($("#acname").val() == '' && $("#pwd").val() == ''){
+                window.showDialog.show(normal_txt_01,2000);
+            }else if($("#acname").val() == ''){
+                window.showDialog.show(normal_txt_02,2000);
+            }else if($("#pwd").val() == ''){
+                window.showDialog.show(normal_txt_03,2000);
+            }else{
+                var reg = new RegExp("^[0-9]*$");
+                if($("#pwd").val().length <6 || !reg.test($("#pwd").val())){
+                    window.showDialog.show(normal_txt_03,2000);
+                }else{
+                    createToast()
+                    send520Cmd()
+                    setTimeout(function() {
+                        $(".comToast").hide();
+                        window.showDialog.show(normal_txt_04,2000);
+                    }, 60000)
+                }
+            }
+        })
+        plus.gatewayCmd.getCurrentAppID(function(result) {
+            APPID = result;
+            plus.gatewayCmd.getDeviceInfo(function(result) {
+                DEVICEID = result.devID;
+                GWID = result.gwID;
+                rush_cmd(DEVICEID,APPID);
+            })
+        })
+    })
+
+    function send520Cmd() {
+        var jsonData = {};
+        jsonData.cmd = "520";
+        jsonData.gwID = GWID;
+        jsonData.devID = DEVICEID;
+        jsonData.operType = 2;
+        jsonData.appID = APPID;
+        PWD = $("#pwd").val()
+        ST = timerModel($("#pickDateBtn").html());
+        ET = timerModel($("#pickDateBtn1").html());
+        NAME = $("#acname").val();
+        var data = {
+            "tk": token,
+            "ut": "2",
+            "pwd": PWD,
+            "st": ST,
+            "et": ET,
+            "name": NAME
+        }
+        jsonData.data = data;
+        plus.gatewayCmd.controlDevice(jsonData, function(resutl) {
+
+        })
+    }
+
+    function timerModel(time) {
+        time = time.replace(" ", "");
+        time = time.replace("/", "");
+        time = time.replace("／", "");
+        time = time.replace("/", "");
+        time = time.replace("／", "");
+        time = time.replace(":", "");
+        return time + "00";
+    }
+
+    /*
+ * 数据回调
+ */
+    function rush_cmd(DEVICEID,APPID) {
+        plus.gatewayCmd.newDataRefresh(function(result) {
+            if(result.cmd == "520" && result.devID == DEVICEID && result.appID == APPID) {
+                if(result.operType == 2) { //operType:2为新增，operType:4为修改
+                    if(result.data.code != 0) {
+                        $(".comToast").hide();
+                        errorCode(parseInt(result.data.code))
+                        return;
+                    }
+                    $(".comToast").hide();
+                    window.showDialog.show(alarm_txt_05,2000);
+                    setTimeout(function(){
+                        // window.location = "accountManage.html"
+                        var shareinfo = window.sysfun;
+                        shareinfo.init("Share_op");
+                        shareinfo.clear();
+                        shareinfo.setItem("state", "2");
+                        shareinfo.setItem("password", PWD);
+                        shareinfo.setItem("startTime", $("#pickDateBtn").html());
+                        shareinfo.setItem("endTime", $("#pickDateBtn1").html());
+                        window.location = "createdSuccess.html"
+                    },1000)
+                }
+            }
+        })
+    }
+</script>
+</html>

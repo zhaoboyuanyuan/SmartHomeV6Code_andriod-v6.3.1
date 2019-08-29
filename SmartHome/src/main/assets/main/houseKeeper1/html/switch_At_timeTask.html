@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>设置设备状态</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<a href="javascript:window.history.back(-1);"></a>
+			<a id="device_choose_switch" class="autoSwitchLanguager" href="javascript:;"></a>
+			<a class="complete" id="finishState" href="javascript:;"></a>
+		</header>
+		<section style="margin-top:6.4rem;">
+			<ul class="set_list">
+				<li><i></i></li>
+				<li><i></i></li>
+			</ul>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Housekeeper");
+		initlan();
+		plus.plusReady(function(){
+            plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+            });
+            if(info.getItem("type") == "Ax"){
+            	     document.getElementById("device_choose_switch").innerHTML = languageUtil.getResource("device_choose_switch");
+                $(".set_list li").eq(0).html((device_switch +'1')+"<i></i>")
+                $(".set_list li").eq(1).html((device_switch +'2')+"<i></i>")
+                $(".set_list").append("<li>"+ device_switch +'3' +"<i></i></li>")
+			}else if(info.getItem("type") == "81" || info.getItem("type") == "Bh"){
+				document.getElementById("device_choose_switch").innerHTML = languageUtil.getResource("housekeeper_choose_curtain");
+                $(".set_list li").eq(0).html((device_curtain +'1')+"<i></i>")
+                $(".set_list li").eq(1).html((device_curtain +'2')+"<i></i>")
+			}else if(info.getItem("type") == "A1"||
+                info.getItem("type") == "At" ||
+                info.getItem("type") == "62" ||
+                info.getItem("type") == "63"){
+                var list = JSON.parse(info.getItem("epNameList"+info.getItem("deviceID")));
+                for(var i=0;i<list.length;i++){
+                    $(".set_list li").eq(i).html(list[i]+"<i></i>");
+                    if(i >= 2){
+                        $(".set_list").append("<li>"+ list[i] +"<i></i></li>");
+                    }
+                }
+            }else if(info.getItem("type") == "B9"){
+                var list = JSON.parse(info.getItem("epNameList"+info.getItem("deviceID")));
+                var numList = JSON.parse(info.getItem("numList"));
+                for(var i=0;i<list.length;i++){
+                    if(numList[i]==1){
+                        $(".set_list li").eq(i).html(list[i]+"<i></i>")
+                    }else if(numList[i]==2){
+                        $(".set_list li").eq(i).attr("id","two");
+                        $(".set_list li").eq(i).html(list[i]+"<i></i>")
+                    }
+                }
+			}
+            $(".set_list li").on("click",function(e){
+                var index = $(this).index()+1;
+                $(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+                info.setItem("switchName",$(this).text())
+                info.setItem("num",index)
+                if (info.getItem("type") == "81") {
+                    info.setItem("switchName","");
+                		window.location = "curtain_81_timeTask.html";
+                } else if($(e.target).attr("id")=="two"){
+                    window.location ="device_A2.html";
+                } else {
+					window.location = "setDoorState.html"
+                }
+            })
+		})
+	</script>
+</html>

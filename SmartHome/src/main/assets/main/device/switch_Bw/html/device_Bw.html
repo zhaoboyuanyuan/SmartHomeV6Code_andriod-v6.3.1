@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智敬联排三路开关</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/device.css" />
+		<script src="../../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../../skinSource/css/skin.css" />
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" href="javascript:;" id="device_Bw_name">智敬联排三路开关</a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="socket" style="top: 20%;">
+			<div class="socket_pupop"><img class="switch_handle" data-state="off" src="../fonts/icon_close.png" alt="" /><i></i><em></em></div>
+			<div class="rename"><em id="name_1"></em><i id="1"></i></div>
+			<span key="socket_close"></span>
+		</section>
+		<section class="socket" style="top: 50%;left: 12%;">
+			<div class="socket_pupop"><img class="switch_handle" data-state="off" src="../fonts/icon_close.png" alt="" /><i></i><em></em></div>
+			<div class="rename"><em id="name_2"></em><i id="2"></i></div>
+			<span key="socket_close"></span>
+		</section>
+		<section class="socket" style="top: 50%;left: 58%;">
+			<div class="socket_pupop"><img class="switch_handle" data-state="off" src="../fonts/icon_close.png" alt="" /><i></i><em></em></div>
+			<div class="rename"><em id="name_3"></em><i id="3"></i></div>
+			<span key="socket_close"></span>
+		</section>
+		<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" id="offLine">设备已离线</span></section>
+		<section class="overTime autoSwitchLanguager" id="overtimeWarn" key="device_Bw_time_out">请求超时，请重试</section>
+		<section class="menuPopup" style="display:none;">
+			<div>
+				<li class="autoSwitchLanguager" key="device_Bw_Rename">重命名</li>
+				<li class="autoSwitchLanguager" key="unBind">取消绑定</li>
+				<li class="autoSwitchLanguager" key="edit">编辑</li>
+				<li>模式<em></em></li>
+				<li class="autoSwitchLanguager" key="device_Bw_Cancel">取消</li>
+			</div>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/more.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/alert1.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/controlDevice.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/deviceList.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/base64.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/toast.js" type="text/javascript" charset="utf-8"></script>
+
+</html>

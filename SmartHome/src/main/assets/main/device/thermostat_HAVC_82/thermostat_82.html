@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+ 		<meta name="format-detection" content="telephone=no">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/device.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		
+		<link rel="stylesheet" href="../../source/mui/css/mui.min.css" />
+  		<link rel="stylesheet" type="text/css" href="../../source/mui/css/app.css"/>
+  		<script src="../../source/mui/js/mui.min.js"></script>
+  		<script src="js/mui.picker.js"></script>
+  		<script src="../../source/mui/js/mui.poppicker.js"></script>
+  		<link href="../../source/mui/css/mui.picker.css" rel="stylesheet" />
+  		<link href="../../source/mui/css/mui.poppicker.css" rel="stylesheet" />
+  
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/sendCMD.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/device82Model.js" type="text/javascript" charset="utf-8"></script>
+
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a class="back" href="javascript:;"></a>
+				<a href="javascript:;" class="deviceName autoSwitchLanguager" key="Device_82_Details_Name">美标温控器</a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="topcontrl_show">
+			<div class="contrl_temp">
+				<p style="color: black">FF</p><i></i>
+				<span class="autoSwitchLanguager" key="Device_82_Details_Temperature1">当前室内温度</span>
+			</div>
+		</section>
+		<section class="num_scroll_Unit">
+		</section>
+		<!--最大值、最小值设置-->
+		<section class="numshow_mode_change" style="z-index: 999;">
+			<p class="numshow_mode_change_min autoSwitchLanguager" style="z-index: 1000;" key="Device_82_Min">最小值</p>
+			<p class="numshow_mode_change_max autoSwitchLanguager" style="z-index: 1000;" key="Device_82_Max">最大值</p>
+		</section>
+		<!--最大值、最小值设置-->
+		<section class="smartsection_show">
+			<div>
+				<p class="smartsection_mode autoSwitchLanguager" key="Device_82_Details_Type">模式</p>
+				<p class="smartsection_fan autoSwitchLanguager" key="Device_82_Details_Speed">风速</p>
+			</div>
+		</section>
+		<!--底部-->
+		<section class="bottomcontrl_show">
+			<div class="contrl_mode" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);-webkit-tap-highlight-color: transparent;">
+				<i></i>
+				<span class="autoSwitchLanguager" key="Device_82_Details_Type">模式</span> 
+			</div>
+			<div class="contrl_btn" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);-webkit-tap-highlight-color: transparent;">
+				<i></i>
+				<span class="autoSwitchLanguager" key="Device_82_Details_Open">开关</span>
+			</div>
+			<div class="contrl_fan" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);-webkit-tap-highlight-color: transparent;">
+				<i></i>
+				<span class="autoSwitchLanguager" key="Device_82_Details_Speed">风速</span>
+			</div>
+		</section>
+		<!--提醒设置HAVC-->
+		<section class="toSetMask_layer" style="display:none;">
+			<p class="autoSwitchLanguager" key="Device_82_Details_Front_Settings_Tips1">操作前请设置温控器</p>
+			<i class="toSet_Image"></i>
+			<p class="toSetMask_p">设置不正确会损坏HAVC系统<br>请在专业人员的协助下设置</p>
+			<div class="toSetMask_span"><a style="color: white;" class="autoSwitchLanguager" key="Device_82_Details_Front_Settings_Tips2">去设置</a></div>
+		</section>
+		<section class="mask_layer" style="display:none;">
+			<i></i>
+			<span class="autoSwitchLanguager" id="Device_82_Details_Offline">设备已离线</span>
+		</section>
+	</body>
+<style>
+  body{
+    background-color:#FFFFFF;
+  }
+  li{
+    height: 7rem;
+    text-align: center;
+    line-height: 7rem;
+  }
+  .mui-poppicker-header{
+    display: none;
+  }
+  .mui-poppicker{
+    top: 13.4rem;
+    height: 12rem;
+    background-color:rgba(1, 1, 1, 0);
+    border-top:solid 0px #ccc;
+    box-shadow:0px -5px 7px 0px rgba(0, 0, 0, 0);
+  }
+  .mui-pciker-rule-ft{
+    display: none;
+  }
+  .mui-picker{
+    background-color:rgba(1, 1, 1, 0);
+  }
+  .mui-backdrop{
+    display: none;
+  }
+  .mui-poppicker-body{
+    border-top:solid 0px #ddd;
+  }
+  .mui-pciker-list{
+    height:7rem;
+  }
+  .mui-poppicker{
+  	width:50%;
+  	left:25%;
+  }
+</style>
+<script src="js/handle.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/thermostat_exChangeForC.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/changeNum.js" type="text/javascript" charset="utf-8"></script>
+</html>

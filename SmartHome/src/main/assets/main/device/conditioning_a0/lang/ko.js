@@ -1,0 +1,50 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Host = "메인 장비";
+$lang.Slave = "보조 장비";
+$lang.Temp = "실내 온도";
+$lang.Type = "모드";
+$lang.Type2 = "냉방";
+$lang.Type3 = "난방";
+$lang.Type1 = "송풍";
+$lang.Type5 = "제습";
+$lang.Speed = "풍속";
+$lang.Speed1 = "고속";
+$lang.Speed2 = "중속";
+$lang.Speed3 = "저속";
+$lang.offLine                 = "장비 오프라인";
+$lang.Timing = "타임 설정";
+$lang.Timing_close = " %@시간 %@분 후 종료 ";
+$lang.Off = "종료";
+$lang.On = "시작";
+$lang.Timing_open = "% @ 시간 % @ 분 후  시작";
+$lang.Set_device_status = "장비 상태 설정";
+$lang.Switch = "스위치";
+$lang.Temperature = "온도";
+$lang.Save = "온도";
+$lang.Confirm = "확인";
+$lang.Cancel = "취소";
+$lang.CD = "새로고침";
+$lang.CloseAll = "모두 닫기";
+$lang.OpenAll = "모두 열기";
+$lang.Loading1 = "장비 준비 중， 잠시 기다려주십시오 ...";
+$lang.Loading2 = "로딩 중...";
+$lang.Name1 = "이름";
+$lang.Name2 = "이름 입력하십시오";
+$lang.Closed = "이미 닫힘";
+$lang.moreSettingLog          = "로그";
+$lang.moreSettingAlarm        = "알람 메시지";
+$lang.Device_OZ_Details_CloseAlltips = "모두 닫겠습니까?";
+$lang.Device_OZ_Details_OpenAlltips = "모두 열겠습니까?";
+$lang.device_a0_name = "중앙 냉난방 장비 (P 보드 + 변환기)";
+$lang.Type4 = "자동";
+$lang.Speed4 = "매우 낮음";
+$lang.Speed5 = "매우 높음";
+$lang.Time_close = "타임 설정 오프";
+$lang.Time_open = "타임 설정 온";
+$lang.Device_a0_aircondition = "에어컨";
+$lang.Device_a0_countdown = "취소하시겠습니까?";
+$lang.Cooling_and_heating = "냉방 및 난방 모드는 호스트 조절 만 허용";

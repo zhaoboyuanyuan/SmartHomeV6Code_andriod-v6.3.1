@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>联排一路开关</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/device.css" />
+    <script src="../../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../../skinSource/css/skin.css" />
+</head>
+
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" href="javascript:;" id=""></a>
+        <a class="" href="javascript:;"></a>
+    </div>
+</header>
+<section class="chooseSwitch">
+    <ul class="switchList">
+        <li data-id="4"><span class="autoSwitchLanguager" id="device_Bw_subordinate">被其他设备控制</span><i></i></li>
+    </ul>
+</section>
+<section class="hintPopup iphoneX" id="otherDeviceBind">
+    <div class="hintAlert">
+        <!--<span class="autoSwitchLanguager" id="device_Bw_Binding">正在绑定，请稍后...</span>-->
+        <p class="autoSwitchLanguager" id="device_Bw_Binding_0">请于20S内操作其他开关</p>
+        <p class="autoSwitchLanguager" id="device_Bw_Binding_1" style="padding: 0 3%;">1.按住SET键不动</p>
+        <p class="autoSwitchLanguager" id="device_Bw_Binding_2" style="padding: 0 3%;">2.快击1次需要控制的按键</p>
+        <p class="autoSwitchLanguager" id="device_Bw_Binding_3" style="padding: 0 3%;">3.松开SET键</p>
+        <p class="autoSwitchLanguager" id="device_Bw_Binding_5">注：绑定成功，指示灯闪烁3次，绑定失败，指示灯闪烁6次</p>
+        <button class="know autoSwitchLanguager" id="Add_batches_i_know">我知道了</button>
+    </div>
+</section>
+<!--<section class="overTime autoSwitchLanguager" key="device_Bw_time_out">请求超时，请重试</section>-->
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/more.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("device_Bt");
+    var devID = getUrlParam("devID");
+    var gwID;
+    var overtime, isovertime;
+    initlan();
+    plus.plusReady(function() {
+        plus.gatewayCmd.getDeviceInfo(devID,function(data) {
+            if(data){
+                if (devID === null)  devID = data.devID;
+                gwID = data.gwID;
+                var name = data.name.indexOf("#$default$#") != -1 ? device_Bt_name+data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+            }
+        });
+        // plus.gatewayCmd.newDataRefresh(function (data) {
+        //     if(data.cmd == "500" && devID == data.devID){
+        //         // 绑定回调
+        //         var attribute = data.endpoints[0].clusters[0].attributes[0]
+        //         if (attribute.attributeId === 4 && attribute.attributeValue === "4") {
+        //             // 绑定成功
+        //             // $("#otherDeviceBind").hide();
+        //             // clearOvertimeWarn()
+        //
+        //             isovertime = false
+        //         }
+        //     }
+        // })
+
+        var iphoneX = {sysFunc: "getItem:", room: "iphoneX", id: "iphoneX", data: ""};
+        var iStr ='';
+        if(!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if(iStr == "iphoneX") {
+            // $(".iphoneX").css("height","calc(100% - 8.5rem)")
+            // $(".iphoneX").css("top","8.5rem")
+        }
+    });
+
+    // 选择从绑定
+    $(".switchList li").on("click",function(){
+        var params = {
+            "cmd": "501",
+            "gwID": gwID,
+            "devID": devID,
+            "endpointNumber": 1,
+            "clusterId": 6,
+            "commandType": 1,
+            "commandId": 4
+        }
+        plus.gatewayCmd.controlDevice(params,function () {})
+        $("#otherDeviceBind").show();
+        // overtimeWarn();
+    });
+
+    // 返回
+    $("#back").on("click", function() {
+        plus.tools.back(function() {})
+    });
+
+    // 知道了
+    $(".know").on("click", function () {
+        $("#otherDeviceBind").hide();
+    })
+
+    // function overtimeWarn() {
+    //     isovertime = true
+    //     overtime = setTimeout(function () {
+    //         if (isovertime == true) {
+    //             $(".overTime").show();
+    //             setTimeout(function () {
+    //                 $(".overTime").hide();
+    //             }, 3000)
+    //         }
+    //         $("#otherDeviceBind").hide();
+    //     }, 20000);
+    // }
+
+    // function clearOvertimeWarn() {
+    //     clearTimeout(overtime);
+    // }
+</script>
+</html>

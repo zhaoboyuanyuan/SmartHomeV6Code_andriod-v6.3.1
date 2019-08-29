@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>绑定场景</title>
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/sceneRelate.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header" style="position:fixed;left:0;top:0;">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a href="javascript:;" class="autoSwitchLanguager" key='device_Ay_BindingScene'></a>
+    </div>
+</header>
+
+<section class="emptyView">
+    <div style="height: 6.4rem; width:100%;">
+        <img src="fonts/icon_empty.png">
+    </div>
+    <span id="container" class="autoSwitchLanguager" key='device_Ay_NoScene'>暂无场景<br>可前往首页-全部场景中添加</span>
+</section>
+</body>
+
+<script type="text/javascript">
+    initlan();
+    plus.plusReady(function () {
+        document.getElementById("back").addEventListener("click", function () {
+            window.location = "SceneKey.html"
+        });
+    });
+</script>
+</html>

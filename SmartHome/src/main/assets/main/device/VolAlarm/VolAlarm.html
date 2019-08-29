@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设备操作</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a id="VolAlarm_tittle" class="deviceName autoSwitchLanguager" href="javascript:;"></a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="alarmImg">
+			<div style="position: relative;">
+				<a></a>
+				<a></a>
+				<a></a>
+				<img src="fonts/icon_1.png" /><span id="IfAlarm" class="autoSwitchLanguager"></span>
+			</div>
+		</section>
+		<section class="alarmBtn" style="z-index:2;">
+			<div id="commonAl">
+				<img src="fonts/icon_bell_nor.png" />
+				<span id="normal_alarm" class="autoSwitchLanguager"></span>
+			</div>
+			<div id="fireAl">
+				<img src="fonts/icon_fire_pre.png" />
+				<span id="fire_alarm" class="autoSwitchLanguager"></span>
+			</div>
+		</section>
+		<section class="fix_bottom" style="z-index:2;">
+			<a id="stop_alarm" class="autoSwitchLanguager" href="javascript:;"></a>
+		</section>
+		<!--<canvas id="canvas" style="position:absolute;bottom: 0px;width: 100%;height: 60%;z-index:1;"></canvas>-->
+		<section class="mask_layer" style="display:none;">
+			<i></i>
+			<span id="offline" class="autoSwitchLanguager"></span>
+		</section>
+	</body>
+	<script>
+		var num = 2; //动画数组长度
+		var timer; //定时器动画
+		var GWID;
+		var DEVID;
+		var ENDPOINTNUMBER;
+		var DEVICEINFO;
+		var MVC = {};
+		var commonAl = document.getElementById("commonAl");
+		var fireAl = document.getElementById("fireAl");
+		var stopBtn = document.getElementsByClassName("fix_bottom")[0];
+		var circle = document.getElementsByClassName("alarmImg")[0].getElementsByTagName("a")[0];
+		var arr = document.getElementsByClassName("alarmImg")[0].getElementsByTagName("a");
+		var shadow = document.getElementsByClassName("mask_layer")[0];
+		var deviceName = document.getElementsByClassName("deviceName")[0];
+		/*
+		 * 国际化启动
+		 */
+		initlan();
+		/*
+		 * 页面启动完成入口
+		 */
+		plus.plusReady(function() {
+			MVC.C.initInfo();
+		});
+		//view    页面渲染
+		MVC.V = {
+			bindClick: function() {
+				document.getElementById("back").addEventListener("click", function() {
+					MVC.C.back();
+				});
+				document.getElementsByClassName("more")[0].addEventListener("click", function() {
+					MVC.C.more();
+				});
+				/*
+				 * 绑定报警按钮
+				 */
+				stopBtn.addEventListener("click", function() {
+					MVC.C.sendCmd(0);
+				});
+				commonAl.addEventListener("click", function() {
+					MVC.C.sendCmd(1);
+				});
+				fireAl.addEventListener("click", function() {
+					MVC.C.sendCmd(2);
+				});
+			},
+			/*
+			 * 停止报警
+			 */
+			stopAlarm: function() {
+				document.getElementById("IfAlarm").textContent = lang_noalarm;
+				MVC.V.clearTimer();
+				clearCircle();
+				circle.style.display = "none";
+				var urlB = "url(fonts/bg_1.png)";
+				document.getElementsByTagName("html")[0].style.backgroundImage = urlB;
+				fireAl.getElementsByTagName("img")[0].src = "fonts/icon_fire_pre.png"
+				commonAl.getElementsByTagName("img")[0].src = "fonts/icon_bell_nor.png"
+			},
+
+			/*
+			 * 通用报警
+			 */
+			norAlarm: function() {
+				commonAl.getElementsByTagName("img")[0].src = "fonts/icon_bell_pre.png"
+				fireAl.getElementsByTagName("img")[0].src = "fonts/icon_fire_pre.png"
+				MVC.V.reLoadAlarmUI();
+				timer = setInterval("beginCircle()", 300);
+			},
+			/*
+			 * 火灾报警
+			 */
+			fireAlarm: function() {
+				fireAl.getElementsByTagName("img")[0].src = "fonts/icon_fire_nor.png"
+				commonAl.getElementsByTagName("img")[0].src = "fonts/icon_bell_nor.png"
+				MVC.V.reLoadAlarmUI();
+				timer = setInterval("beginCircle()", 300);
+			},
+			/*
+			 * 发出报警跟新UI
+			 */
+			reLoadAlarmUI: function() {
+				document.getElementById("IfAlarm").textContent = lang_alarming;
+				var urlB = "url(fonts/bg_2.png)";
+				document.getElementsByTagName("html")[0].style.backgroundImage = urlB;
+				MVC.V.clearTimer();
+			},
+			clearTimer: function() {
+				if(timer) {
+					clearInterval(timer);
+				}
+			},
+		};
+		/*
+		 * 报警动画
+		 */
+		function beginCircle() {
+			if(num >= 0) {
+				arr[num].style.display = "block";
+			}
+			num = num - 1;
+			if(num == -2) {
+				num = 2;
+				clearCircle();
+			}
+		}
+
+		function clearCircle() {
+			var arr = document.getElementsByClassName("alarmImg")[0].getElementsByTagName("a");
+			arr[2].style.display = "none";
+			arr[1].style.display = "none";
+			arr[0].style.display = "none";
+		}
+	</script>
+	<!--<script src="js/canvas.js" type="text/javascript" charset="utf-8"></script>-->
+	<script src="model/VolAlarm.js" type="text/javascript" charset="utf-8"></script>
+	<script src="controll/VolAlarm.js" type="text/javascript" charset="utf-8"></script>
+
+</html>

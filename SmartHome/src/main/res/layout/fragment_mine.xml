@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/item_account_login"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:id="@+id/item_account_login_line"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <cc.wulian.smarthomev6.support.customview.CircleImageView
+                android:id="@+id/item_account_login_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/icon_head"
+                app:border_color="@color/transparent"
+                app:border_width="1dp" />
+
+            <ImageView
+                android:id="@+id/setting_manager_item_info_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <TextView
+                android:id="@+id/item_account_login_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@id/item_account_login_icon"
+                android:layout_toStartOf="@id/setting_manager_item_info_iv"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Mine_Login_Register"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@color/transparent" />
+
+
+        <RelativeLayout
+            android:id="@+id/item_gateway_center"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:id="@+id/item_gateway_center_line"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <ImageView
+                android:id="@+id/item_gateway_center_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/gateway_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/item_gateway_center_icon"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Mine_GatewayCenter"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_sharedevice"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <ImageView
+                android:id="@+id/item_sharedevice_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_mine_share" />
+
+            <TextView
+                android:id="@+id/tv_sharedevice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/item_sharedevice_icon"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Share_Manager"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/iv_sharedevice_newflag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toEndOf="@id/tv_sharedevice"
+                android:src="@drawable/icon_new_flag" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_customer_service"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:id="@+id/item_customer_service_line"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <ImageView
+                android:id="@+id/item_customer_service_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/customer_icon" />
+
+            <View
+                android:id="@+id/item_customer_service_icon_node"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignEnd="@+id/item_customer_service_icon"
+                android:layout_alignTop="@+id/item_customer_service_icon"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/shape_val_bg"
+                android:visibility="invisible" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/item_customer_service_icon"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/OnlineService"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@color/transparent" />
+
+
+        <RelativeLayout
+            android:id="@+id/item_explore_store"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <ImageView
+                android:id="@+id/item_explore_store_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/wl_store_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/item_explore_store_icon"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Find_WuLianMarket"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_member_center"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <ImageView
+                android:id="@+id/item_member_center_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/member_center_icon" />
+
+            <TextView
+                android:id="@+id/tv_member_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/item_member_center_icon"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/integral_tips14"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/iv_member_center_newflag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toEndOf="@id/tv_member_center"
+                android:src="@drawable/icon_new_flag" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/item_smart_life"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect"
+            android:visibility="visible">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+
+            <ImageView
+                android:id="@+id/item_smartlife_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_explore_smartlife" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/item_smartlife_icon"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Find_Intelligentlife"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/item_customer_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:id="@+id/item_customer_feedback_line"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <ImageView
+                android:id="@+id/item_customer_feedback_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_mine_feedback" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/item_customer_feedback_icon"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/Feedback_Theme"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_setting"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:id="@+id/item_setting_line"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <ImageView
+                android:id="@+id/item_setting_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/setting_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/item_setting_icon"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Mine_Setts"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_about"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+
+            <ImageView
+                android:id="@+id/item_about_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/about_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/item_about_icon"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Mine_About"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_test"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:id="@+id/item_test_line"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <ImageView
+                android:id="@+id/item_test_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/setting_icon" />
+
+            <TextView
+                android:id="@+id/item_test_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/item_test_icon"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="测试"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@id/item_test_text"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="仅开发环境开启"
+                android:textColor="@color/newSecondaryText"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@color/transparent" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

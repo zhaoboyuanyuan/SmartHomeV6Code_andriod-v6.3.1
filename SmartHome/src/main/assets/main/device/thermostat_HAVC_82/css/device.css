@@ -1,0 +1,300 @@
+
+/*遮罩层*/
+.mask_layer{
+	display:none;
+	position:absolute;
+	z-index:3000;
+	left:0;
+	top:6.4rem;
+	width:100%;
+	height:calc(100% - 6.4rem);
+	text-align:center;
+	background:rgba(0,0,0,0.7)
+}
+.mask_layer i{
+	display:inline-block;
+	width:8rem;
+	height:8rem;
+	margin-top:15rem;
+	background:url(../img/icon_new.png) no-repeat center center;
+	background-size:8rem auto;
+}
+.mask_layer span{
+	display:block;
+	width:100%;
+	height:5rem;
+	line-height:5rem;
+	text-align:center;
+	font-size:1.6rem;
+	color:#fff;
+}
+
+/*To Set*/
+.toSetMask_layer{
+	display:block;
+	position:absolute;
+	z-index:3000;
+	left:0;
+	top:6.4rem;
+	bottom: 0rem;
+	width:100%;
+	text-align:center;
+	background-color: white;
+}
+
+.toSetMask_layer p{
+	width:100%;
+	text-align:center;
+	font-size: 1.5rem;
+	color: #909192;
+}
+.toSetMask_layer p:nth-child(1){
+	margin-top: 10%;
+	margin-bottom: 10%;
+	height: 3rem;
+}
+
+.toSetMask_layer p:nth-child(4){
+	margin-top: 2rem;
+	line-height:3.2rem;
+}
+.toSet_Image{
+	display:inline-block;
+	width:20rem;
+	height:20rem;
+	background:url(../img/icon_82_01.png) no-repeat center center;
+	background-size: 100% auto;
+}
+.toSetMask_span{
+	margin-left: 5%;
+	width:90%;
+	line-height: 4.5rem;
+	height: 4.5rem;
+	text-align:center;
+	border-style: solid;
+	border-color: #FFFFFF;
+	border-width: 1px;
+	font-size: 1.5rem;
+	
+	border-radius:4px;
+	color:#FFFFFF;
+	background: #8DD652;
+	
+	position:absolute;
+	bottom: 23%;
+}
+.toSetMask_p{
+	position:absolute;
+	bottom: 10%;
+	color: #909192;
+}
+/*顶部---start*/
+.topcontrl_show{
+	width: 100%;
+	height: 11rem;
+	/*overflow:hidden;*/
+	/*position:absolute;*/
+	margin-top: 1.5rem;
+}
+.contrl_temp{
+	display:inline-block;
+	width: 9rem;
+	height: 8rem;
+	position:absolute;
+	left:1rem;
+	text-align: center;
+}
+
+.contrl_temp p{
+	display:inline-block;
+	width:7rem;
+	height:5rem;
+	font-size: 3.4rem;
+	line-height:5rem;
+}
+.contrl_temp i{
+	display:inline-block;
+	position:absolute;
+	top: 0px;
+	right: -0.5rem;
+	width:2.1rem;
+	height:2.25rem;
+	background:url(../img/icon_wenbiao.png) no-repeat center center;
+	background-size: 100% auto;
+}
+.contrl_temp span{
+	display:block;
+	width:100%;
+	height: 4rem;
+	margin-top: 0.5rem;
+	font-size: 1.5rem;
+}
+/*顶部---end*/
+/*中部字显---start*/
+.num_show{
+	width: 100%;
+	height: 11rem;
+	text-align: center;
+}
+.num_show div{
+	display:inline-block;
+	position: relative;
+	width: 80%;
+}
+.num_show div p{
+	font-size: 10rem;
+}
+.num_show div i{
+	display:inline-block;
+	position:absolute;
+	top: 0px;
+	right: 0.7rem;
+	width:4.2rem;
+	height:4.2rem;
+	background:url(../img/icon_wenbiao.png) no-repeat center center;
+	background-size: 100% auto;
+}
+/*中部字显---end*/
+/*中部块---start*/
+.smartsection_show{
+	margin-top: 16.5rem;
+	width: 50%;
+	margin-left: 25%;
+	background: #EEF0F1;
+	border-radius:0.8rem;
+}
+.smartsection_show div{
+	display: inline-block;
+	margin-top: 1.2rem;
+	margin-bottom: 1.2rem;
+	width: 100%;
+	
+}
+.smartsection_show div p{
+	margin-top: 0.5rem;
+	font-size: 1.5rem;
+	width: 50%;
+	margin-left: 25%;
+}
+/*中部块---end*/
+/*底部按钮---start*/
+.bottomcontrl_show{
+	text-align:center;
+	width: 100%;
+	left: 0%;
+	height: 9rem;
+	overflow:hidden;
+	position:absolute;
+	bottom:1.5rem;
+}
+
+.bottomcontrl_show div{
+	display:block;
+	float: left;
+	width:33.33333%;
+	height:9rem;
+	text-align: center;
+}
+.contrl_mode{
+
+}
+.contrl_fan{
+
+}
+.contrl_btn{
+}
+
+.contrl_mode i{
+	display:inline-block;
+	margin-top: 1.5rem;
+	background:url(../img/icon_mode.png) no-repeat center center;
+	width:4.5rem;
+	height:4.5rem;
+	background-size: 100% auto;
+}
+.contrl_fan i{
+	display:inline-block;
+	margin-top: 1.5rem;
+	background:url(../img/icon_fan.png) no-repeat center center;
+	width:4.5rem;
+	height:4.5rem;
+	background-size: 100% auto;
+}
+.contrl_btn i{
+	display:inline-block;
+	background:url(../img/icon_openbtn.png) no-repeat center center;
+	width:6rem;
+	height:6rem;
+	background-size: 100% auto;
+}
+.bottomcontrl_show span{
+	display:block;
+	width:100%;
+	height: 4rem;
+	margin-top: 0.5rem;
+	font-size: 1.6rem;
+}
+/*底部按钮---end*/
+/*中部滑动区域---start*/
+.num_scroll_show{
+	margin-top: -6rem;
+	width: 100%;
+	text-align: center;
+	height: 22rem;
+}
+.num_scroll_show div{
+	margin:0px;
+	text-align:center;
+	height:7rem;
+	display:block;
+	width: 100%;
+	position:absolute
+}
+.num_scroll_show p{
+	display: inline;
+	height:100%;
+	font-size: 8rem;
+	text-align: center;
+	line-height:7rem;
+	overflow:hidden;
+	font-weight: normal;
+}
+/*中部滑动区域---end*/
+.num_scroll_Unit{
+	display:inline-block;
+	position:absolute;
+	top: 20rem;
+	right: 5rem;
+	width:3.0rem;
+	height:3.0rem;
+	background:url(../img/icon_wenbiao.png) no-repeat center center;
+	background-size: 100% auto;
+}
+
+.numshow_mode_change{
+	display:none;
+	position:absolute;
+	top: 24rem;
+	left: 2rem;
+	width:8.0rem;
+	height:7rem;
+}
+
+.numshow_mode_change p{
+	display:inline-block;
+	font-size: 1.7rem;
+	font-weight: bold;
+	color:#999999;
+	width: 100%;
+}
+.numshow_mode_change p:nth-child(1){
+	margin-top: 0.5rem;
+	margin-bottom: 2rem;
+}
+.numshow_mode_change p:nth-child(2){
+
+
+}
+.numshow_mode_change_selected{
+	color: black;
+}

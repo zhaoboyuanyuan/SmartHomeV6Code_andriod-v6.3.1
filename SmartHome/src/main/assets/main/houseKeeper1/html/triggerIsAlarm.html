@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加延时</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/editok.css" />
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <header class="header">
+        <a href="javascript:window.history.go(-1);"></a>
+        <a id="" class="autoSwitchLanguager" key="setDeviceState_tittle" href="javascript:;">设置设备状态</a>
+        <a class="complete autoSwitchLanguager" id="finishDelay" href="javascript:;" style="display:inline-block;height: auto;line-height: 2rem;margin-top: 1.2rem;">完成</a>
+    </header>
+    <!--是否推送报警消息开关-->
+    <section style="margin-top:6.4rem;">
+        <div class="delay_btn">
+            <span key="Send_an_alarm" class="autoSwitchLanguager">同时向我发送报警信息</span>
+            <div class="switch alarmSwitch" id="switchControl" data-state="on">
+                <i class="on"></i>
+            </div>
+        </div>
+    </section>
+</body>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    plus.plusReady(function() {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.go(-1);
+        });
+    });
+
+    $("#switchControl").on("click",function(){
+        if($(this).attr("data-state") === "on"){
+            $(this).attr("data-state","off")
+        }else {
+            $(this).attr("data-state","on")
+        }
+    });
+
+    $(".complete").on("click",function(){
+        var arr = [];
+        var isAlarm = "";
+        if($("#switchControl").attr("data-state") === "off"){
+            isAlarm = "$";
+        }
+        var data = {
+            "type": "2",
+            "object": info.getItem("deviceID") + ">" + info.getItem("num") + ">" + info.getItem("type"),
+            "name": info.getItem("deviceName"),
+            "deviceIcon": info.getItem("deviceIcon"),
+            "deviceState": info.getItem("deviceState"),
+            "exp": info.getItem("exp") + isAlarm,
+            "editUrl":info.getItem("editUrl")
+        };
+        if(info.getItem("type") === "A1"){
+            data.epName = info.getItem("sceneSwitchName");
+        }
+        if(info.getItem("ldArr") == null) {
+            arr.push(data);
+            info.setItem("ldArr", JSON.stringify(arr))
+        } else {
+            arr = JSON.parse(info.getItem("ldArr"));
+            var exist = false;
+            arr.map(function (list, i) {
+                if (list.type != 0) {
+                    if (i == parseInt(info.getItem("index"))) {
+                        list.exp = info.getItem("exp") + isAlarm;
+                        list.object = info.getItem("deviceID") + ">" + info.getItem("num") + ">" + info.getItem("type");
+                        list.name = info.getItem("deviceName");
+                        list.deviceState = info.getItem("deviceState");
+                        list.deviceIcon = info.getItem("deviceIcon");
+                        if(info.getItem("sceneSwitchName")){
+                            list.epName = info.getItem("sceneSwitchName");
+                        }
+                        exist = true;
+                    }
+                }
+            });
+            if (exist == false) {
+                arr.push(data)
+            }
+            info.setItem("ldArr", JSON.stringify(arr))
+        }
+        info.removeItem("deviceName");
+        info.removeItem("deviceIcon");
+        info.removeItem("flag");
+        info.removeItem("sceneSwitchName");
+        window.location = "circumstances.html"
+    })
+</script>
+</html>

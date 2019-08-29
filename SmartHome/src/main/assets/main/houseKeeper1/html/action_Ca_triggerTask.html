@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/scene.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/switch.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <a id="back" href="triggerDeviceList.html"></a>
+    <a href="javascript:;" class="autoSwitchLanguager" id='setDeviceState_tittle'>设置设备状态</a>
+    <!--<a id="customScene_sure" class="saveSure autoSwitchLanguager" href="javascript:;">确定</a>-->
+</header>
+<section class="main iphoneXList" style="display:block;padding-top:6.4rem;">
+    <ul class="new_switch_list">
+        <!--<li>-->
+        <!--<p>开关1</p>-->
+        <!--<p><span>按压设备按键一次</span><i data-state="yes"></i></p>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<p>开关2</p>-->
+        <!--<p><span>按压设备按键一次</span><i data-state="no"></i></p>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<p>开关3</p>-->
+        <!--<p><span>按压设备按键一次</span><i data-state="no"></i></p>-->
+        <!--</li>-->
+    </ul>
+</section>
+<section class="main iphoneXList" style="display:none;padding-top:6.4rem;">
+    <p class="curtainView autoSwitchLanguager" key="device_Ca_mode_fail_02">请先将设备设为触发开关模式</p>
+</section>
+<!--<section class="switchToast autoSwitchLanguager" id="toast_switch_mode">请设置设备状态</section>-->
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var arr = [];
+    initlan();
+    var GwID, AppID;
+    var DevID = info.getItem("deviceID");
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.location = 'triggerDeviceList.html';
+        });
+        plus.gatewayCmd.getDeviceInfo(DevID, function (data) {
+            DevID = data.devID;
+            GwID = data.gwID;
+            AppID = data.appID;
+            //查询设备信息
+            send_501(DevID, GwID, AppID, 0x02, 1, "");
+        });
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            if (data.cmd === "500" && DevID === data.devID) {
+                drawUi(data);
+            }
+        });
+    });
+
+    function drawUi(data) {
+        if (data.endpoints) {
+            if (data.endpoints[0].clusters) {
+                var clusters = data.endpoints[0].clusters;
+                for (var i in clusters) {
+                    var attributes = data.endpoints[0].clusters[i].attributes[0];
+                    if (attributes.attributeId == 0x8002) {
+                        if (attributes.attributeValue === "0") {
+                            //触发开关模式
+                            $(".main").eq(0).show().siblings(".main").hide();
+                            $(".new_switch_list").html("");
+                            if (info.getItem("type") === "Ca") {
+                                $(".new_switch_list").append("<li id='1'><p>"+lang_Ca_up+"</p><p><span>" + lang_Press_button + "</span><i data-state='no'></i></p></li>");
+                                $(".new_switch_list").append("<li id='2'><p>"+lang_Ca_down+"</p><p><span>" + lang_Press_button + "</span><i data-state='no'></i></p></li>");
+                            }
+                        } else {
+                            //窗帘模式
+                            $(".main").eq(1).show().siblings(".main").hide();
+                        }
+                    }
+                }
+                $(".new_switch_list li").unbind("click").on("click", function () {
+                    $(this).siblings("li").find("i").attr("ata-state", "no");
+                    $(this).find("i").attr("data-state", "yes");
+                    var num = 1;
+                    var exp = $(this).attr("id");
+                    var deviceState = "";
+                    if(exp === "1"){
+                        deviceState = lang_Ca_up_btn;
+                    }else if(exp === "2"){
+                        deviceState = lang_Ca_down_btn;
+                    }
+                    var data = {
+                        "type": "2",
+                        "object": info.getItem("deviceID") + ">" + num + ">" + info.getItem("type"),
+                        "name": info.getItem("deviceName"),
+                        "deviceIcon": info.getItem("deviceIcon"),
+                        "deviceState": deviceState,
+                        "exp": "=" + exp,
+                        "editUrl": info.getItem("editUrl")
+                    };
+                    if (info.getItem("ldArr") == null) {
+                        arr.push(data);
+                        info.setItem("ldArr", JSON.stringify(arr))
+                    } else {
+                        arr = JSON.parse(info.getItem("ldArr"));
+                        var exist = false;
+                        arr.map(function (list, i) {
+                            if (list.type != 0) {
+                                if (i == parseInt(info.getItem("index"))) {
+                                    list.exp = "=" + exp;
+                                    list.object = info.getItem("deviceID") + ">" + num + ">" + info.getItem("type");
+                                    list.name = info.getItem("deviceName");
+                                    list.deviceState = deviceState;
+                                    list.deviceIcon = info.getItem("deviceIcon");
+                                    if (info.getItem("sceneSwitchName")) {
+                                        list.epName = info.getItem("sceneSwitchName");
+                                    }
+                                    exist = true;
+                                }
+                            }
+                        });
+                        if (exist == false) {
+                            arr.push(data)
+                        }
+                        info.setItem("ldArr", JSON.stringify(arr))
+                    }
+                    info.removeItem("deviceName");
+                    info.removeItem("deviceIcon");
+                    //info.removeItem("deviceState")
+                    info.removeItem("sceneSwitchName");
+                    info.removeItem("flag");
+                    if (info.getItem("epNameList" + info.getItem("deviceID"))) {
+                        info.removeItem("epNameList" + info.getItem("deviceID"));
+                    }
+                    window.location = "circumstances.html"
+                });
+            }
+        }
+    }
+
+    function send_501(devID, gwID, appID, commandId, num, parameter) {
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        jsonData.endpointNumber = num;
+        jsonData.clusterId = 0x0102;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if (parameter) {
+            jsonData.parameter = [parameter]
+        }
+        plus.gatewayCmd.controlDevice(jsonData, function () {
+        })
+    }
+</script>
+</html>

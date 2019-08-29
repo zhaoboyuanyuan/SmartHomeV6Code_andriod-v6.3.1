@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="css/base.css" />
+  <link rel="stylesheet" type="text/css" href="css/device.css" />
+  <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+  <link rel="stylesheet" href="../../source/mui/css/mui.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../source/mui/css/app.css"/>
+  <script src="../../source/mui/js/mui.min.js"></script>
+  <script src="js/mui.picker.js"></script>
+  <script src="../../source/mui/js/mui.poppicker.js"></script>
+  <link href="../../source/mui/css/mui.picker.css" rel="stylesheet" />
+  <link href="../../source/mui/css/mui.poppicker.css" rel="stylesheet" />
+
+  <script src="../../source/picker/picker.min.js"></script>
+
+  <script src="js/base64.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+  <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+  <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+  <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body>
+<header class="header">
+  <div class="header_top">
+    <a class="back" href="deviceInfo_Ol.html"></a>
+    <a href="javascript:;" class="deviceName"></a>
+    <a class="autoSwitchLanguager" key="device_Ol_set" href="thermostat_setting_Ol.html">设置</a>
+  </div>
+</header>
+
+<section class="topcontrl_show">
+  <div class="contrl_button" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);-webkit-tap-highlight-color: transparent;">
+    <i></i>
+    <span class="autoSwitchLanguager" key="device_Ol_power_off">已关机，点击开机</span>
+  </div>
+  <div class="contrl_temp">
+    <p style="color: black;margin-bottom:0rem;">FF</p><i></i>
+    <span class="autoSwitchLanguager" key="device_Ol_Room_Temp_1">室温</span>
+  </div>
+</section>
+
+<section class="num_scroll_Unit">
+  <i></i>
+</section>
+<section class="smartsection_show">
+  <div>
+    <p class="smartsection_mode autoSwitchLanguager" key="device_Ol_mode">模式：</p>
+    <p class="smartsection_fan autoSwitchLanguager" key="Device_Ol_Details_Speed">风速：</p>
+    <p class="smartsection_fd autoSwitchLanguager" style="color:#f77e25;text-align: center " key="device_Ol_Low_temperature_protection">低温保护开启中</p>
+  </div>
+</section>
+<!--倒计时-->
+<section class="theLast" style="display: none;"><span></span>
+  <i>&nbsp&nbsp&nbsp</i>
+  <i id="cancel" style="color: #8DD652;font-size:1.4rem " key="device_cancel"> 取消</i>
+</section>
+<!--倒计时取消确认框-->
+<section class="changeName" style="display:none;z-index: 1000" id="cancelCountDown">
+  <div class="nameToast">
+    <span class="autoSwitchLanguager" key="device_Ol_cancel_countdown">确定取消倒计时？</span>
+    <div class="choose_1">
+      <a class="autoSwitchLanguager" key="device_Ol_Cancel" href="javascript:;" onclick="btn_cancel()">取消</a>
+      <a class="autoSwitchLanguager sure_click" key="device_Ol_ok" >确定</a>
+    </div>
+  </div>
+</section>
+<!--底部-->
+<section class="bottomcontrl_show">
+  <div class="contrl_mode" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);-webkit-tap-highlight-color: transparent;">
+    <i></i>
+    <span class="autoSwitchLanguager" key="device_Ol_mode">模式</span> 
+  </div>
+  <div class="contrl_fan" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);-webkit-tap-highlight-color: transparent;">
+    <i></i>
+    <span class="autoSwitchLanguager" key="device_Ol_Wind_speed">风速</span>
+  </div>
+  <div class="contrl_ds" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);-webkit-tap-highlight-color: transparent;">
+    <i></i>
+    <span class="autoSwitchLanguager" key="device_Ol_Countdown">倒计时</span>
+  </div>
+</section>
+<section class="mask_layer" style="display:none;">
+  <i></i>
+  <span class="autoSwitchLanguager" id="device_Ol_Offline">设备已离线</span>
+</section>
+<section class="saveToast" style="display:none;">
+  <div>
+    <i><em class="rotate"></em></i>
+    <p key="Device_Ol_Details_Loading2" class="autoSwitchLanguager">正在加载...</p>
+  </div>
+</section>
+</body>
+<style>
+  body{
+    background-color:#FFFFFF;
+  }
+  li{
+    height: 7rem;
+    text-align: center;
+    line-height: 7rem;
+  }
+  .mui-poppicker-header{
+    display: none;
+  }
+  .mui-poppicker{
+    top: 16rem;
+    height: 14rem;
+    background-color:rgba(1, 1, 1, 0);
+    border-top:solid 0px #ccc;
+    box-shadow:0px -5px 7px 0px rgba(0, 0, 0, 0);
+  }
+  .mui-pciker-rule-ft{
+    display: none;
+  }
+  .mui-picker{
+    background-color:rgba(1, 1, 1, 0);
+  }
+  .mui-backdrop{
+    display: none;
+  }
+  .mui-poppicker-body{
+    border-top:solid 0px #ddd;
+  }
+  .mui-pciker-list{
+    height:7rem;
+  }
+  /*弹出框的样式修改*/
+  .wheel-item{
+    line-height:3rem;
+  }
+</style>
+<script src="js/handle.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/changeNum.js" type="text/javascript" charset="utf-8"></script>
+</html>

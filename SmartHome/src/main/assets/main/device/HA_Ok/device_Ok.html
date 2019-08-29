@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="../../source/js/rem.js"></script>
+    <script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+</head>
+<body style="width:100%;height:100%;">
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="Device_Ok_Details_Name" href="javascript:;">分体式智能空调</a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<div class="detail">
+    <section class="top">
+        <div class="switch">
+            <i></i>
+            <span class="autoSwitchLanguager" key="Device_Ok_Details_Open">开机</span>
+        </div>
+        <div class="temperature">
+            <div><span id="temperature_value">0</span><span id="temperature_unit"></span></div>
+            <span class="autoSwitchLanguager temperature_desc" key="Device_Ok_Details_Temperature">室温</span>
+        </div>
+    </section>
+    <section class="middle">
+        <div class="middle_top">
+            <div class="temperature_valid" style="text-align: center">
+                <!--<div class="temperature_selector" style="display: none"></div>-->
+                <div id="selector"></div>
+                <span class="temperature_selector_unit"></span>
+            </div>
+            <div class="temperature_invalid">--</div>
+            <div class="info">
+                <div><span class="autoSwitchLanguager info_title" key="Device_Ok_Details_Type">模式</span><span id="colon">：</span><span id="mode_value" class="autoSwitchLanguager info_value" key="Device_Ok_Details_Type1">制冷</span></div><br/>
+                <div><span class="autoSwitchLanguager info_title" key="Device_Ok_Details_Speed">风速</span><span>：</span><span id="wind_speed_value" class="autoSwitchLanguager info_value" key="Device_Ok_Details_Speed3">高风</span></div><br/>
+                <div><span class="autoSwitchLanguager info_title" key="Device_Ok_Details_Direction">风向</span><span>：</span><span id="wind_direction_value" class="autoSwitchLanguager info_value" key="Device_Ok_Details_Direction2">上下风</span></div><br/>
+                <div style="display: none"><span class="autoSwitchLanguager info_title" key="Device_Ok_Details_Type11">静音</span><span>：</span><span id="mute_value" class="autoSwitchLanguager info_value">已开启</span></div>
+            </div>
+        </div>
+        <div class="timing_info" style="display: none">
+            <span id="timing_msg">7小时30分钟后关闭</span>
+            <span id="cancel_btn" class="autoSwitchLanguager" key="Device_Ok_Details_Cancel">取消</span>
+        </div>
+    </section>
+    <section class="bottom">
+        <ul>
+            <li class="mode">
+                <i></i>
+                <span class="autoSwitchLanguager" key="Device_Ok_Details_Type">模式</span>
+            </li>
+            <li class="wind_speed">
+                <i></i>
+                <span class="autoSwitchLanguager" key="Device_Ok_Details_Speed">风速</span>
+            </li>
+            <li class="wind_direction">
+                <i></i>
+                <span class="autoSwitchLanguager" key="Device_Ok_Details_Direction">风向</span>
+            </li>
+        </ul>
+        <ul>
+            <li class="timing">
+                <i></i>
+                <span class="autoSwitchLanguager" key="Device_Ok_Details_Time">定时</span>
+            </li>
+            <li class="fast_cold_hot">
+                <i></i>
+                <span class="autoSwitchLanguager" key="Device_Ok_Details_Type9">快速冷热</span>
+            </li>
+            <li class="mute">
+                <i></i>
+                <span class="autoSwitchLanguager" key="Device_Ok_Details_Type11">静音</span>
+            </li>
+        </ul>
+    </section>
+</div>
+<section class="confirm_bg">
+    <div class="confirm_dialog">
+        <div class="cancel_tip autoSwitchLanguager" key="Device_Ok_Details_TIPS1">你确定取消倒计时吗</div>
+        <i class="dialog_line"></i>
+        <div>
+            <span id="cancel" class="autoSwitchLanguager" key="Device_Ok_Details_Cancel">取消</span>
+            <span id="confirm" class="autoSwitchLanguager" key="Device_Ok_Details_Confirm">确定</span>
+        </div>
+    </div>
+</section>
+<section class="loadToast" style="display:none;">
+    <div>
+        <em class="rotate"></em>
+        <p key="Device_Ok_Details_Loading2" class="autoSwitchLanguager">正在加载...</p>
+    </div>
+</section>
+<section class="mask_layer" style="display:none;">
+    <i></i>
+    <span class="autoSwitchLanguager" key="Device_Ok_Details_Offline">设备已离线</span>
+</section>
+</body>
+<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="js/more.js"></script>
+<script type="text/javascript" src="../../source/mui/js/mui.min.js"></script>
+<script type="text/javascript" src="../../source/mui/js/mui.picker.min.js"></script>
+<script type="text/javascript" src="js/picker.js"></script>
+<script type="text/javascript">
+    // var maxWidth = 0;
+    var gwID, dID;
+    var picker;
+    initlan();
+    var min = 16;
+    var max = 30;
+//    var selectorLength = 0;
+//    function initSelector(min ,max ,interval) {
+//        var i = min;
+//        while (true) {
+////            i = i.toFixed(1);
+//            $(".temperature_selector").append("<span>" + i + "</span>");
+//            selectorLength++;
+//            if (i == max) {
+//                break;
+//            }
+//            i = parseFloat(i) + interval;
+//        }
+//        setCurrent(parseInt(selectorLength / 2));
+//    }
+//    //初始化温度选择器
+//    initSelector(min, max, 1);
+//    //初始化温度选择器触摸事件
+//    var current_height = Math.round($(".current_value").height());
+//    var default_height = Math.round($(".current_value").siblings().height());
+//    var currentIndex = $(".temperature_selector span").index($(".current_value"));
+//    var current_height_rem = "15rem";
+//    var current_line_height_rem = "15.8rem";
+//    var default_height_rem = "3rem";
+//    var startY;
+//    var moveY;
+//    $('.temperature_selector').on('touchstart', function (e) {
+//        e.preventDefault();
+//        var touch = e.touches[0]; //获取第一个触点
+//        startY = touch.pageY;
+//    });
+//
+//    $('.temperature_selector').on('touchmove', function (e) {
+//        var touch = e.changedTouches[0]; //获取第一个触点
+//        if(Math.abs(touch.pageY - moveY) < 4){//防止抖动
+//            return;
+//        }
+//        var currentObj = $(".current_value");
+//        var prevObj = currentObj.prev();
+//        var nextObj = currentObj.next();
+//        moveY = touch.pageY;
+//        var d = (moveY - startY) * 3.6;
+//        console.log("touchmove:" + d);
+//        if(d > 0){
+//            currentObj.removeAttr("style");
+//            nextObj.removeAttr("style");
+//            if(currentIndex == 0){
+//                return;
+//            }
+//            if(d > current_height){
+//                d = current_height;
+//            }
+//            prevObj.height(current_height_rem);
+//            prevObj.css("lineHeight", current_line_height_rem);
+//            prevObj.css("margin-top",(d - current_height) + "px");
+//            prevObj.css("font-size",(3 + (d / current_height * 7)) + "rem");
+//        }else if(d < 0){
+//            prevObj.removeAttr("style");
+//            prevObj.css("margin-top","-" + default_height_rem);
+//            if(currentIndex == selectorLength - 1){
+//                return;
+//            }
+//            if(Math.abs(d) > current_height){
+//                d = -current_height;
+//            }
+//            nextObj.height(current_height_rem);
+//            nextObj.css("lineHeight", current_line_height_rem);
+//            nextObj.css("font-size",(3 + (-d / current_height * 7)) + "rem");
+//            currentObj.css("margin-top",d + "px");
+//        }else{
+//            currentObj.removeAttr("style");
+//            nextObj.removeAttr("style");
+//            prevObj.removeAttr("style");
+//            prevObj.css("margin-top","-" + default_height_rem);
+//        }
+//    });
+//
+//    $('.temperature_selector').on('touchend', function (e) {
+//        var touch = e.changedTouches[0]; //获取第一个触点
+//        var y = touch.pageY;
+//        var d = (y - startY) * 3.6;
+//        console.log("touchend:" + d);
+//        var currentObj = $(".current_value");
+//        var prevObj = currentObj.prev();
+//        var nextObj = currentObj.next();
+//        $(".temperature_selector span").removeAttr("style");
+//        currentObj.prevAll().css("margin-top", "-" + default_height_rem);
+//        if(Math.abs(d) < (current_height * 0.5)){//滑动过小回弹
+//            return;
+//        }
+//        if(d > 0){
+//            if(currentIndex == 0){
+//                return;
+//            }
+//            prevObj.removeAttr("style");
+//            prevObj.removeClass("select_value");
+//            prevObj.addClass("current_value");
+//        }else if(d < 0){
+//            if(currentIndex == selectorLength - 1){
+//                return;
+//            }
+//            currentObj.css("margin-top","-" + default_height_rem);
+//            nextObj.removeClass("select_value");
+//            nextObj.addClass("current_value");
+//        }
+//        currentObj.removeClass("current_value");
+//        currentObj.addClass("select_value");
+//        currentIndex = $(".temperature_selector span").index($(".current_value"));
+//        var param = [];
+//        var tempSend = "0105" + $(".current_value").html()//设置温度
+//        var fastSend = "010B0";//强力模式关
+//        param.push(tempSend + "," +  fastSend);
+//        sendCmd(514, param, true);
+//    });
+//
+//    $('.temperature_selector').on('touchcancel', function (e) {
+//        var touch = e.changedTouches[0]; //获取第一个触点
+//        var y = touch.pageY;
+//        var d = (y - startY) * 3.6;
+//        console.log("touchcancel:" + d);
+//        var currentObj = $(".current_value");
+//        var prevObj = currentObj.prev();
+//        var nextObj = currentObj.next();
+//        $(".temperature_selector span").removeAttr("style");
+//        currentObj.prevAll().css("margin-top", -default_height + "px");
+//        if(Math.abs(d) < (current_height * 0.5)){//滑动过小回弹
+//            return;
+//        }
+//        if(d > 0){
+//            if(currentIndex == 0){
+//                return;
+//            }
+//            prevObj.removeAttr("style");
+//            prevObj.removeClass("select_value");
+//            prevObj.addClass("current_value");
+//        }else if(d < 0){
+//            if(currentIndex == selectorLength - 1){
+//                return;
+//            }
+//            currentObj.css("margin-top", -default_height + "px");
+//            nextObj.removeClass("select_value");
+//            nextObj.addClass("current_value");
+//        }
+//        currentObj.removeClass("current_value");
+//        currentObj.addClass("select_value");
+//        currentIndex = $(".temperature_selector span").index($(".current_value"));
+//    });
+//
+//    function setCurrent(index) {
+//        $('.temperature_selector span').each(function (i, domEle){
+//            if(index == i){
+//                domEle.style.cssText = "";
+//                domEle.setAttribute("class", "current_value");
+//                currentIndex = index;
+//            }else{
+//                if(i < index){
+//                    domEle.style.cssText = "margin-top:-3rem;";
+//                }else{
+//                    domEle.style.cssText = "";
+//                }
+//                domEle.setAttribute("class", "select_value");
+//            }
+//        });
+////        currentIndex = $(".temperature_selector span").index($(".current_value"));
+//    }
+
+    //温度选择器
+    var temperatureSelector;
+
+    function initMidCss() {
+        //设置定时信息自适应上下居中
+        var middleH = $(".middle").height();
+        var middleTopH = $(".middle_top").height();
+        var timingInfo = middleH - middleTopH;
+        $(".timing_info").css("height", timingInfo + "px");
+        $(".timing_info").css("line-height", timingInfo  + "px");
+
+        //设置模式等信息自适应左右居中
+        // $('.info div').each(function (i, domEle){
+        //     if(domEle.offsetWidth > maxWidth){
+        //         maxWidth = domEle.offsetWidth;
+        //     }
+        // });
+        // maxWidth = maxWidth == 0 ? 90 : maxWidth;
+        // $('.info div').css("width", maxWidth+ "px");
+        var maxWidth = $('.info').width();
+        var colonWidth = $("#colon").width();
+        $('.info div').css("width", maxWidth+ "px");
+        $('.info_title').css("max-width", (maxWidth * 0.4)+ "px");
+        $('.info_title').each(function (i, domEle){
+            document.getElementsByClassName('info_value')[i].style.maxWidth = (maxWidth - domEle.offsetWidth - colonWidth)+ "px"
+        });
+    }
+
+    plus.plusReady(function () {
+        temperatureSelector = new mui.MyPopPicker(function (item) {
+            var param = [];
+            var tempSend = "0105" + item.text//设置温度
+            var fastSend = "010B0";//强力模式关
+            param.push(tempSend + "," +  fastSend);
+            sendCmd(514, param, true);
+        }, {parentId: "selector"});
+        temperatureSelector.setData(getArr(min,max));
+        temperatureSelector.show();
+
+        plus.gatewayCmd.getDeviceInfo(function (data) {
+            gwID = data.gwID;
+            dID = data.devID;
+            var name = data.name.indexOf("#$default$#") != -1 ? device_Ok_name + data.name.split("#")[2] : data.name
+            $(".deviceName").html(name)
+            if (data.mode === 2) {
+                $(".mask_layer").show()
+            } else if (data.mode === 3) {
+                //原生做的操作
+            } else {
+                $(".mask_layer").hide()
+                sendCmd(513);
+            }
+            modeState(data)
+            initBtn()
+        })
+
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            if (data.cmd == "500" && data.devID == dID) {
+                var name = data.name.indexOf("#$default$#") != -1 ? device_Ok_name + data.name.split("#")[2] : data.name
+                $(".deviceName").html(name)
+                modeState(data)
+            } else if (data.cmd == "502" && data.devID == dID) {
+                if (data.name != undefined || data.name != '') {
+                    $(".deviceName").html(data.name)
+                }
+            }
+            gwID = data.gwID;
+            dID = data.devID;
+        })
+    })
+
+    function showLoad(flag){
+        if(flag){
+            $(".loadToast").show();
+        }else{
+            $(".loadToast").hide();
+        }
+    }
+
+    function getArr(start, end) {
+        var arr = [];
+        for (var i = start; i <= end; i++) {
+            var obj = {
+                text:"",
+                children:[]
+            };
+            var h;
+            if (i < 10) {
+                h = "0" + i;
+            }else{
+                h = "" + i;
+            }
+            obj.text = h;
+            if(i == 0){
+                obj.children = ["30"]
+            }else if(i > 9){
+                obj.children = ["00"]
+            }else{
+                obj.children = ["00", "30"]
+            }
+            arr.push(obj)
+        }
+        return arr;
+    }
+
+    $("#back").click(function () {
+        plus.tools.back(function () {
+        })
+    })
+
+    function initBtn(gwID, dID) {
+        $(".more").on("click", function () {
+            var moreData = getMoreConfig(dID, gwID)
+            plus.tools.more(moreData, function () {
+            })
+        });
+
+        $(".switch").on("click", function () {
+            var p = [];
+            switch (onOff) {
+                case 0:
+                    p.push("01041,0107100");//开机 定时任务取消
+                    sendCmd(514, p);
+                    break;
+                case 1:
+                    p.push("01040,01020,010B0,0107100");//关机 睡眠模式关 快速冷热关 定时任务取消
+                    sendCmd(514, p);
+                    break;
+                default:
+                    p.push("01041,0107100");//开机 定时任务取消
+                    sendCmd(514, p);
+                    break;
+            }
+        });
+
+        $(".mode").on("click", function () {
+            if(onOff == 0){
+                return;
+            }
+            var p = [];
+            var send = "";
+            switch (mode){
+//                case 0:
+//                    send = "01031";//制热
+//                    if(speed == 1){//静音风速时设置风速为低风
+//                        send = send + ",01012";
+//                    }
+//                    p.push(send + ",01020,010B0");//睡眠模式关 快速冷热关
+//                    break;
+                case 0:
+                case 1:
+                    send = "01032";//制冷
+                    if(speed == 1){//静音风速时设置风速为低风
+                        send = send + ",01012";
+                    }
+                    p.push(send + ",01020,010B0");//睡眠模式关 快速冷热关
+                    break;
+                case 2:
+                    send = "01033,01012";//除湿 低风
+                    p.push(send + ",01020,010B0");//睡眠模式关 快速冷热关
+                    break;
+                case 3:
+                    send = "01034";//自动
+                    if(speed == 1){//静音风速时设置风速为低风
+                        send = send + ",01012";
+                    }
+                    p.push(send + ",01020,010B0");//睡眠模式关 快速冷热关
+                    break;
+                case 4:
+                    send = "01030";//送风
+                    if(speed == 0 ||speed == 1){//自动 静音风速时设置风速为低风
+                        send = send + ",01012";
+                    }
+                    p.push(send + ",01020,010B0");//睡眠模式关 快速冷热关
+                    break;
+                case 5:
+                    send = "01030";//送风
+                    if(speed == 0 ||speed == 1){//自动 静音风速时设置风速为低风
+                        send = send + ",01012";
+                    }
+                    p.push(send + ",01020,010B0");//睡眠模式关 快速冷热关
+                    break;
+                case 6:
+                    send = "01030";//送风
+                    if(speed == 0 ||speed == 1){//自动 静音风速时设置风速为低风
+                        send = send + ",01012";
+                    }
+                    p.push(send + ",01020,010B0");//睡眠模式关 快速冷热关
+                    break;
+                case 7:
+                    send = "01030";//送风
+                    if(speed == 0 ||speed == 1){//自动 静音风速时设置风速为低风
+                        send = send + ",01012";
+                    }
+                    p.push(send + ",01020,010B0");//睡眠模式关 快速冷热关
+                    break;
+            }
+            sendCmd(514, p);
+        });
+        $(".wind_speed").on("click", function () {
+            if(mode == 3 || onOff == 0){
+                return;
+            }
+            var p = [];
+            var send = "";
+            switch (speed){
+                case 0:
+                    if(mode == 4){
+                        send = "01012";
+                    }else{
+                        send = "01011";
+                    }
+                    break;
+                case 1:
+                    send = "01012";
+                    break;
+                case 2:
+                    send = "01013";
+                    break;
+                case 3:
+                    send = "01014";
+                    break;
+                case 4:
+                    if(mode == 0){
+                        send = "01011";
+                    }else{
+                        send = "01010";
+                    }
+                    break;
+            }
+            p.push(send + ",01020,010B0");//睡眠模式关 快速冷热关
+            sendCmd(514, p);
+        });
+        $(".wind_direction").on("click", function () {
+            if(onOff == 0){
+                return;
+            }
+            var p = [];
+            switch (direction){
+                case 0:
+                    p.push("1");//上下风开 左右风关
+                    sendCmd(265, p);
+                    break;
+                case 1:
+                    p.push("1");//左右风开 上下风关
+                    sendCmd(266, p);
+                    break;
+                case 2:
+                    p.push("0");//左右风关 上下风关
+                    sendCmd(266, p);
+                    break;
+            }
+        });
+        $(".timing").on("click", function () {
+            if(picker == null || picker == undefined){
+                picker = new mui.PopPicker({layer: 2});
+                picker.body.setAttribute('id', 'timePicker');
+                picker.setData(getArr(0,24));
+                $(".mui-backdrop").css("opacity", "0");
+                $(".mui-poppicker-btn-cancel").html(Device_Ok_Details_Cancel);//device_cancel
+                $(".mui-poppicker-btn-ok").html(Device_Ok_Details_Confirm);//device_sure
+                var left = $("#timePicker .mui-picker").eq(0).find(".mui-pciker-rule-ft");
+                var right = $("#timePicker .mui-picker").eq(1).find(".mui-pciker-rule-ft");
+                $(left).html(hours_unit);
+                $(right).html(minute_unit);
+                var width = $("#timePicker .mui-pciker-rule-ft").width();
+                $(left).css({
+                    "text-indent": width * 3/ 5 + "px"
+                });
+                $(right).css({
+                    "text-indent": width * 3/ 5 + "px"
+                });
+            }
+            if(onOff == 1){
+                $(".mui-poppicker-clear").html(count_down_off_title);
+            }else{
+                $(".mui-poppicker-clear").html(count_down_on_title);
+            }
+            picker.pickers[0].setSelectedIndex(12);
+            picker.pickers[1].setSelectedIndex(0);
+            picker.show(function (item) {
+                var h = parseInt(item[0].text);
+                var m = parseInt(item[1]);
+//                $("#timing_msg").html(count_down_off.replace("%@", h).replace("%@", m));
+//                $(".timing_info").show();
+                var time = h + m / 60.0;
+                var p = [];
+                var param;
+                var t;
+                if(time < 10){
+                    t = time * 2;
+                    param = "1" + (t < 10 ? "0" + t : t);
+                }else{
+                    t = 10 + time;
+                    param = "1" + t;
+                }
+                p.push( "" + param);
+                sendCmd(263, p);
+            })
+        })
+        $(".fast_cold_hot").on("click", function () {
+            if(onOff == 0 || (mode != 1 && mode != 2)){
+                return;
+            }
+            var p = [];
+            var send = "";
+            switch (fastMode){
+                case 0:
+                    send = "010B1";
+                    break;
+                case 1:
+                    send = "010B0";
+                    break;
+            }
+            if(mode == 2){
+                p.push(send + ",01014,01020");//高风速 睡眠模式关
+            }else{
+                p.push(send + ",01010,01020");//自动风速 睡眠模式关
+            }
+            sendCmd(514, p);
+        });
+    }
+
+    $("#cancel_btn").on("click", function () {
+        $(".confirm_bg").show();
+    })
+
+    $("#confirm").on("click", function () {
+        $(".confirm_bg").hide();
+        $(".timing_info").hide();
+        sendCmd(263, ["100"]);
+    })
+
+    $("#cancel").on("click", function () {
+        $(".confirm_bg").hide();
+    })
+
+    function sendCmd(commandId,parameter,isNotShow){
+        var jsonData = {}
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = dID;
+        jsonData.endpointNumber = 1;
+        jsonData.clusterId = 513;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter != undefined){
+            jsonData.parameter = parameter;
+        }
+        if(!isNotShow){
+            showLoad(true);
+        }
+        setTimeout(function() {
+            showLoad(false);
+        }, 10000);
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+
+    function modeState(result) {
+        if (result.mode === 2) {
+            $(".mask_layer").show()
+        } else if (result.mode === 3) {
+            //原生做的操作
+        } else {
+            if(result.endpoints[0].clusters[0].clusterId != 513){
+                return;
+            }
+            $(".mask_layer").hide();
+            var attributes = result.endpoints[0].clusters[0].attributes;
+            for (var i = 0; i < attributes.length; i++) {
+                var attributeId = attributes[i].attributeId;
+                var attributeValue = attributes[i].attributeValue
+                reloadUI(attributeId, attributeValue)
+            }
+        }
+    }
+
+    var onOff;
+    var mode;
+    var sleepMode;
+    var speed;
+    var direction;
+    var fastMode;
+    function reloadUI(id, value) {
+        if(id == 33284){//命令执行成功返回
+            return;
+        }
+        showLoad(false);
+        switch (id){
+            case 33025://风速模式上报
+                speed = parseInt(value);
+                switch (speed){
+                    case 0://自动风速
+                        $("#wind_speed_value").html(speed_auto);
+                        break;
+                    case 1://静音风速
+                        $("#wind_speed_value").html(speed_mute);
+                        break;
+                    case 2://低风风速
+                        $("#wind_speed_value").html(speed_low);
+                        break;
+                    case 3://中风风速
+                        $("#wind_speed_value").html(speed_medium);
+                        break;
+                    case 4://高风风速
+                        $("#wind_speed_value").html(speed_high);
+                        break;
+                }
+                break;
+            case 33026://睡眠模式
+//                0：睡眠模式关闭
+//                1：1#睡眠模式
+//                2：2#睡眠模式
+//                3：3#睡眠模式
+//                4：4#睡眠模式
+                sleepMode = parseInt(value);
+                break;
+            case 33027://工作模式上报
+                mode = parseInt(value);
+                switch (mode){
+                    case 0://送风
+                        $(".temperature_invalid").show();
+                        $(".temperature_valid").hide();
+                        $("#mode_value").html(mode_blowing);
+                        break;
+                    case 1://制热
+                        $(".temperature_invalid").hide();
+                        $(".temperature_valid").show();
+                        $("#mode_value").html(mode_heat);
+                        break;
+                    case 2://制冷
+                        $(".temperature_invalid").hide();
+                        $(".temperature_valid").show();
+                        $("#mode_value").html(mode_cold);
+                        break;
+                    case 3://除湿
+                        $(".temperature_invalid").show();
+                        $(".temperature_valid").hide();
+                        $("#mode_value").html(mode_dehumidification);
+                        break;
+                    case 4://自动下的送风
+                        $(".temperature_invalid").show();
+                        $(".temperature_valid").hide();
+                        $("#mode_value").html(mode_auto);
+                        break;
+                    case 5://自动下的制热
+                        $(".temperature_invalid").show();
+                        $(".temperature_valid").hide();
+                        $("#mode_value").html(mode_auto);
+                        break;
+                    case 6://自动下的制冷
+                        $(".temperature_invalid").show();
+                        $(".temperature_valid").hide();
+                        $("#mode_value").html(mode_auto);
+                        break;
+                    case 7://自动下的除湿
+                        $(".temperature_invalid").show();
+                        $(".temperature_valid").hide();
+                        $("#mode_value").html(mode_auto);
+                        break;
+                }
+                break;
+            case 33028://开停机数据上报
+                onOff = parseInt(value);
+                switch (onOff) {
+                    case 0://停机
+                        $(".switch i").css("background","url(fonts/icon_on.png) no-repeat center center");
+                        $(".switch span").html(Device_Ok_Details_Open);
+                        $(".temperature_invalid").show();
+                        $(".temperature_valid").hide();
+                        break;
+                    case 1://开机
+                        $(".switch i").css("background","url(fonts/icon_off.png) no-repeat center center");
+                        $(".switch span").html(Device_Ok_Details_Close);
+                        if(mode == 1 && mode == 2){
+                            $(".temperature_invalid").hide();
+                            $(".temperature_valid").show();
+                        }
+                        break;
+                }
+                $(".switch i").css("background-size","4rem");
+                break;
+            case 33029://室内温度设定值
+                var index = parseInt(value) - min;
+                if(index < 0 || index > 15){
+                    return;
+                }
+                temperatureSelector.pickers[0].setSelectedIndex(index);
+                break;
+            case 33030://室内实际温度值
+                $("#temperature_value").html(value);
+                break;
+            case 33033://普通定时开关机
+                var flag = value.substring(0,1);
+                var time = parseInt(value.substring(1,3));
+                var t;
+                if(flag == 1){
+                    if(time == 0){
+                        $(".timing_info").hide();
+                        return;
+                    }
+                    if(time < 20){
+                        t = parseFloat(time / 2.0) + "";
+                    }else{
+                        t = parseFloat(time - 10) + "";
+                    }
+                    var h = t.split(".")[0];
+                    var m = t.split(".")[1] == undefined ? "00" :  "" + (parseInt(t.split(".")[1]) * 6);
+                    if(onOff == 1){
+                        $("#timing_msg").html(count_down_off.replace("%@", h).replace("%@", m));
+                    }else{
+                        $("#timing_msg").html(count_down_on.replace("%@", h).replace("%@", m));
+                    }
+                    $(".timing_info").show();
+                }else{
+                    $(".timing_info").hide();
+                }
+                break;
+            case 33281://上下风风向状态
+                switch (value) {
+                    case "0"://停机
+                        if(direction == 2){
+                            //左右风开不更新UI
+                        }else{
+                            direction = 0;
+                            $("#wind_direction_value").html(direction_off);
+                        }
+                        break;
+                    case "1"://开机
+                        direction = 1;
+                        $("#wind_direction_value").html(up_down);
+                        break;
+                }
+                break;
+            case 33282://左右风风向状态
+                switch (value) {
+                    case "0"://停机
+                        if(direction == 1){
+                            //上下风开不更新UI
+                        }else{
+                            direction = 0;
+                            $("#wind_direction_value").html(direction_off);
+                        }
+                        break;
+                    case "1"://开机
+                        direction = 2;
+                        $("#wind_direction_value").html(left_right);
+                        break;
+                }
+                break;
+            case 33283://强力模式
+                fastMode = parseInt(value);
+                var modeStr = "";
+                switch (mode){
+                    case 0://送风
+                        modeStr = mode_blowing;
+                        break;
+                    case 1://制热
+                        modeStr = mode_heat;
+                        break;
+                    case 2://制冷
+                        modeStr = mode_cold;
+                        break;
+                    case 3://除湿
+                        modeStr = mode_dehumidification;
+                        break;
+                    case 4://自动下的送风
+                        modeStr = mode_auto;
+                        break;
+                    case 5://自动下的制热
+                        modeStr = mode_auto;
+                        break;
+                    case 6://自动下的制冷
+                        modeStr = mode_auto;
+                        break;
+                    case 7://自动下的除湿
+                        modeStr = mode_auto;
+                        break;
+                }
+                switch (fastMode) {
+                    case 0:
+                        // $('.info div').css("width", maxWidth+ "px");
+                        $("#mode_value").html(modeStr);
+                        break;
+                    case 1:
+                        // $('.info div').css("width", (maxWidth + 30)+ "px");
+                        $("#mode_value").html(fast_mode + modeStr);
+                        break;
+                }
+                break;
+        }
+    }
+</script>
+</html>

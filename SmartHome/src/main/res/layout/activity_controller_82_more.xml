@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/newBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/item_rename"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/left_rename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Device_Rename"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/right_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <TextView
+                android:id="@+id/item_device_more_rename_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/right_image"
+                android:layout_toEndOf="@id/left_rename"
+                android:ellipsize="end"
+                android:gravity="center_vertical|right"
+                android:lines="1"
+                android:textSize="@dimen/mine_wl_text_size" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_area"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/left_area"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Device_Area"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/right_image2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <TextView
+                android:id="@+id/item_device_more_area_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/right_image2"
+                android:layout_toEndOf="@id/left_area"
+                android:gravity="center_vertical|right"
+                android:ellipsize="end"
+                android:maxLength="15"
+                android:singleLine="true"
+                android:textSize="@dimen/mine_wl_text_size" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_info"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/left_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Device_Info"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/right_image3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_device_more_find"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <TextView
+                android:id="@+id/left_find"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/device_Find"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/right_image10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_alarm"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/left_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Message_Center_AlarmMessage"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/right_image9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_log"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/left_log"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Message_Center_Log"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/right_image8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_temperature_format"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/left_temperature_format"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Device_Ap_Details_Scale"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/right_image4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <TextView
+                android:id="@+id/item_temperature_format_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/right_image4"
+                android:layout_toEndOf="@id/left_temperature_format"
+                android:ellipsize="end"
+                android:gravity="center_vertical|right"
+                android:lines="1"
+                android:textSize="@dimen/mine_wl_text_size" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_equipment_setting"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/left_equipment_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Device_82_Details_Settings"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/right_image5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_differential_setting"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/left_differential_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Device_Bm_Details_Return"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/right_image6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_click_sound"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/left_click_sound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Device_Ap_Details_Sound"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ToggleButton
+                android:id="@+id/item_click_sound_btn"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@android:color/transparent"
+                android:button="@drawable/button_toggle_switch"
+                android:checked="false"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_vibrate"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/left_vibrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Device_Ap_Details_Shock"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ToggleButton
+                android:id="@+id/item_vibrate_btn"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@android:color/transparent"
+                android:button="@drawable/button_toggle_switch"
+                android:checked="false"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_emergency_heating"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/left_emergency_heating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Device_82_Details_Heating"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ToggleButton
+                android:id="@+id/item_emergency_heating_btn"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@android:color/transparent"
+                android:button="@drawable/button_toggle_switch"
+                android:checked="false"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_factory_reset"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_ripper_effect">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/left_factory_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/Device_Bm_Details_Restore"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/right_image7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/system_intent_right" />
+
+            <TextView
+                android:id="@+id/item_front_back_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/right_image7"
+                android:layout_toEndOf="@id/left_factory_reset"
+                android:ellipsize="end"
+                android:gravity="center_vertical|right"
+                android:lines="1"
+                android:textSize="@dimen/mine_wl_text_size" />
+        </RelativeLayout>
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/v6_line" />
+
+        <Button
+            android:id="@+id/item_device_more_delete"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_item_height"
+            android:background="@drawable/bg_ripper_effect"
+            android:text="@string/Delete"
+            android:textColor="@color/red" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

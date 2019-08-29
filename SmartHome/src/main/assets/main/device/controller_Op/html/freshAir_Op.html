@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="../../../source/js/rem.js"></script>
+    <script type="text/javascript" src="../../../source/js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="../../../source/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../../source/mui/css/mui.picker.min.css">
+    <script src="../js/base64.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/device.css"/>
+</head>
+<body style="width:100%;height:100%;">
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;window.history.back(-1)"></a>
+        <a class="deviceName autoSwitchLanguager" key="device_By_name" href="javascript:;">新风控制器</a>
+        <a class="changeName" href="javascript:;"></a>
+    </div>
+</header>
+<div class="detail">
+    <section class="top">
+        <strong>
+            <div class="topLeft">
+                <div><span class="temperature_value">30</span></div>
+                <span class="autoSwitchLanguager temperature_desc" key="Temp">PM2.5</span>
+            </div>
+            <div class="temperature">
+                <div><span class="temperature_value">30</span></div>
+                <span class="autoSwitchLanguager temperature_desc" key="Temp">VOC</span>
+            </div>
+        </strong>
+    </section>
+    <section class="middle">
+        <div class="middle_top">
+            <div style="text-align: center; background-color: white">
+                <strong>
+                    <div style="height: 8rem;">
+                        <p style="font-size: 1.5rem; height: 4rem; color: black">室外</p>
+                        <p style="color: black"><em style="font-size: 2.5rem">27</em>℃    <em style="font-size: 2.5rem; margin-left: 4rem">65</em>%RH</p>
+                    </div>
+                    <div style="height: 8rem;">
+                        <p style="font-size: 1.5rem; height: 4rem; color: black">室内</p>
+                        <p style="color: black"><em style="font-size: 2.5rem">27</em>℃   <em style="font-size: 2.5rem; margin-left: 4rem">65</em>%RH</p>
+                    </div>
+                </strong>
+            </div>
+            <div class="info" style="margin-top: 2rem">
+                <div><span class="autoSwitchLanguager info_title" key="Type">模式</span><span id="colon">：</span><span id="mode_value" class="autoSwitchLanguager info_value" key="Type1">制冷</span></div><br/>
+                <div><span class="autoSwitchLanguager info_title" key="Speed">风速</span><span>：</span><span id="wind_speed_value" class="autoSwitchLanguager info_value" key="Speed3">低</span></div><br/>
+            </div>
+        </div>
+        <div class="timing_info" style="display: none">
+            <span id="timing_msg">7小时30分钟后关闭</span>
+            <span id="cancel_btn" class="autoSwitchLanguager" key="Cancel">取消</span>
+        </div>
+    </section>
+    <section class="bottom">
+        <ul>
+            <li class="switch">
+                <i></i>
+                <span class="autoSwitchLanguager" key="On">开机</span>
+            </li>
+        </ul>
+        <ul>
+            <li class="mode">
+                <i></i>
+                <span class="autoSwitchLanguager" key="Type">模式</span>
+            </li>
+            <li class="wind_speed">
+                <i></i>
+                <span class="autoSwitchLanguager" key="Speed">风速</span>
+            </li>
+            <li class="timing">
+                <i></i>
+                <span class="autoSwitchLanguager" key="Timing">计时</span>
+            </li>
+        </ul>
+    </section>
+</div>
+<section class="loadToast" style="display:none;">
+    <div>
+        <em class="rotate"></em>
+        <p key="Device_By_Loading2" class="autoSwitchLanguager">正在加载...</p>
+    </div>
+</section>
+<section class="mask_layer" style="display:none;">
+    <i></i>
+    <span class="autoSwitchLanguager" key="offLine">设备已离线</span>
+</section>
+</body>
+<link rel="stylesheet" type="text/css" href="../../../skinSource/css/skin.css"/>
+<script type="text/javascript" src="../js/plus.js"></script>
+<script type="text/javascript" src="../js/gatewayCmd.js"></script>
+<script type="text/javascript" src="../js/tools.js"></script>
+<script type="text/javascript" src="../lang/lang.js"></script>
+<script type="text/javascript" src="../js/more.js"></script>
+<script type="text/javascript" src="../../../source/mui/js/mui.min.js"></script>
+<script type="text/javascript" src="../../../source/mui/js/mui.picker.min.js"></script>
+<script type="text/javascript" src="../js/picker.js"></script>
+<script type="text/javascript" src="../js/changeNum.js"></script>
+<script type="text/javascript" src="../js/alert.js"></script>
+<script type="text/javascript">
+    // var maxWidth = 0;
+    var gwID, dID;
+    var timePicker;
+    var isNeedHandleTemp = false;
+    var deviceState;//开关状态
+    var modeList = ["0","1","2","3","4","5"];
+    var windSpeedList = ["0","1","2","3","4","5"];
+    var sendMode;
+    var mode = "1";
+    var timer;
+    var num = decodeURI(getUrlParam("endpointNumber"));
+    var currentName = "新风" + num;
+    initlan();
+
+    function isOnOff(isOn) {
+        if(isOn) {
+            $(".info").show();
+            $(".timing_info").css("margin-top","0rem");
+            $(".timing_info").hide();
+            $(".mode").show();
+            $(".wind_speed").show();
+            $(".timing").css("width","33.3333%");
+        } else {
+            $(".info").hide();
+            $(".timing_info").css("margin-top","5rem");
+            $(".timing_info").show();
+            $(".mode").hide();
+            $(".wind_speed").hide();
+            $(".timing").css("width","100%");
+        }
+    }
+
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo("", function (data) {
+            gwID = data.gwID;
+            dID = data.devID;
+            modeState(data)
+            initBtn()
+            if (data.mode === 2) {
+                $(".mask_layer").show()
+            } else if (data.mode === 3) {
+                //原生做的操作
+            } else {
+                $(".mask_layer").hide()
+                //性能信息
+                sendCmd(0x800A,["1"]);
+                //设备状态
+                sendCmd(0x8006,["1"]);
+            }
+        })
+
+        plus.gatewayCmdRush.newDataRefresh(function (data) {
+            if (data.cmd == "500" && data.devID == dID) {
+                modeState(data)
+            } else if (data.cmd == "502" && data.devID == dID) {
+                if (data.endpointNumber != undefined && data.endpointNumber == num && data.endpointName != undefined) {
+
+                    $(".deviceName").html(data.endpointName)
+                }
+            }
+            gwID = data.gwID;
+            dID = data.devID;
+        })
+    })
+
+    function showLoad(flag){
+        if(flag){
+            $(".loadToast").show();
+        }else{
+            $(".loadToast").hide();
+        }
+    }
+
+    function getArr(start, end) {
+        var arr = [];
+        var hArr = [];
+        var mArr = [];
+        for(var j = 0; j < 60; j++) {
+            var h;
+            if (j < 10) {
+                h = "0" + j;
+            }else{
+                h = "" + j;
+            }
+            mArr.push(h);
+        }
+        for (var i = start; i < end; i++) {
+            var obj = {
+                text:"",
+                children:[]
+            };
+            var h;
+            if (i < 10) {
+                h = "0" + i;
+            }else{
+                h = "" + i;
+            }
+            obj.text = h;
+            if(i == 0){
+                var firstArr = mArr.slice(1,60)
+                obj.children = firstArr
+            }else {
+                obj.children = mArr
+            }
+            arr.push(obj)
+        }
+        return arr;
+    }
+
+    function rnd(min, max){
+        var random = Math.floor(Math.random()*(max-min+1)+min);
+        return random;
+    }
+
+    function initBtn(gwID, dID) {
+
+        $(".changeName").on("click", function () {
+            window.location = "changeName_Op.html?endpointNumber=" + num + "&name=" + currentName;
+        });
+
+        $(".switch").on("tap", function () {
+            var p = [];
+            switch (deviceState) {
+                case "0":
+                    p.push("11");//开机
+                    sendCmd(0x8001, p);
+                    break;
+                case "1":
+                    p.push("10");//关机
+                    sendCmd(0x8001, p);
+                    break;
+            }
+        });
+
+        //模式切换
+        $(".mode").on("click", function () {
+            if(deviceState == 0){
+                return;
+            }
+            var p = [];
+            if(sendMode != undefined && sendMode != mode){
+                var sendModeIndex = $.inArray(sendMode, modeList);
+                sendModeIndex = sendModeIndex == modeList.length - 1 ? 0 : sendModeIndex + 1;
+                sendMode = modeList[sendModeIndex];
+            }else{
+                var modeIndex = $.inArray(mode, modeList);
+                modeIndex = modeIndex == modeList.length - 1 ? 0 : modeIndex + 1;
+                sendMode = modeList[modeIndex];
+            }
+            p.push("1" + sendMode);
+            sendCmd(0x8002, p);
+        });
+
+        $(".wind_speed").on("click", function () {
+            if(deviceState == 0 || mode == "2"){//关机 除湿不可调节风速
+                return;
+            }
+            var p = [];
+            for(var i=0;i<windSpeedList.length;i++){
+                if(speed == windSpeedList[i]){
+                    if(i == windSpeedList.length - 1){
+                        p.push("1" + windSpeedList[0]);
+                    }else{
+                        p.push("1" + windSpeedList[i+1]);
+                    }
+                    break;
+                }
+            }
+            sendCmd(0x8004, p);
+        });
+
+        $(".timing").on("click", function () {
+            if(timePicker == null || timePicker == undefined){
+                timePicker = new mui.PopPicker({layer: 2});
+                timePicker.body.setAttribute('id', 'timePicker');
+                timePicker.setData(getArr(0,24));
+                $(".mui-backdrop").css("opacity", "0");
+                $(".mui-poppicker-btn-cancel").html(Device_Op_Cancel);//device_cancel
+                $(".mui-poppicker-btn-ok").html(Device_Op_OK);//device_sure
+                var left = $("#timePicker .mui-picker").eq(0).find(".mui-pciker-rule-ft");
+                var right = $("#timePicker .mui-picker").eq(1).find(".mui-pciker-rule-ft");
+                $(left).html("h");
+                $(right).html("m");
+                var width = $("#timePicker .mui-pciker-rule-ft").width();
+                $(left).css({
+                    "text-indent": width * 3/ 5 + "px"
+                });
+                $(right).css({
+                    "text-indent": width * 3/ 5 + "px"
+                });
+            }
+            if(deviceState == 0) {
+                $(".mui-poppicker-clear").html(Device_Op_Details_Time_TIPS3);
+            } else {
+                $(".mui-poppicker-clear").html(Device_Op_Details_Time_TIPS4);
+            }
+            timePicker.pickers[0].setSelectedIndex(12);
+            timePicker.pickers[1].setSelectedIndex(0);
+            timePicker.show(function (item) {
+                var h = parseInt(item[0].text);
+                var m = parseInt(item[1]);
+                var time = h * 3600 + m * 60;
+                var p = [];
+                p.push(time.toString());
+                if(deviceState == 0){
+                    sendCmd(0x8008, p);
+                }else{
+                    sendCmd(0x8007, p);
+                }
+            })
+        })
+    }
+
+    $("#cancel_btn").on("click", function () {
+        sendCmd(0x8009);
+    })
+
+    function sendCmd(commandId,parameter,isNotShow){
+        var jsonData = {}
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = dID;
+        jsonData.endpointNumber = commandId == 0x800A ? 0 : parseInt(num);
+        jsonData.clusterId = 513;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter != undefined){
+            jsonData.parameter = parameter;
+        }
+        if(!isNotShow){
+            showLoad(true);
+        }
+        setTimeout(function() {
+            showLoad(false);
+        }, 10000);
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+
+    function modeState(result) {
+        if (result.mode === 2) {
+            $(".mask_layer").show()
+        } else if (result.mode === 3) {
+            //原生做的操作
+        } else {
+            if(result.endpoints[0].clusters[0].clusterId != 513){
+                return;
+            }
+            $(".mask_layer").hide();
+            for(var i= 0; i < result.endpoints.length; i++) {
+                var endpoint = result.endpoints[i];
+                if (endpoint.endpointNumber == num) {
+                    currentName = (endpoint.endpointName == undefined || endpoint.endpointName == "") ? "新风" + num : endpoint.endpointName;
+                    $(".deviceName").html(currentName)
+                    var attributes = endpoint.clusters[0].attributes;
+                    if (attributes != undefined) {
+                        for (var ii = 0; ii < attributes.length; ii++) {
+                            var attributeId = attributes[ii].attributeId;
+                            var attributeValue = attributes[ii].attributeValue
+                            reloadUI(attributeId, attributeValue)
+                        }
+                    }
+                } else if (endpoint.endpointNumber == 0) {
+                    var attributes = endpoint.clusters[0].attributes;
+                    if (attributes != undefined) {
+                        for (var ii = 0; ii < attributes.length; ii++) {
+                            var attributeId = attributes[ii].attributeId;
+                            var attributeValue = attributes[ii].attributeValue;
+                            if (attributeId == 0x000A) {
+                                reloadUI(attributeId, attributeValue)
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    function reloadUI(id, value) {
+        showLoad(false);
+        switch (id){
+            case 1://开停机数据上报
+                deviceState = value;
+                switch (deviceState) {
+                    case "0"://停机
+                        $(".switch i").css("background","url(../fonts/icon_closebtn.png) no-repeat center center");
+                        $(".switch span").html(device_Op_off);
+                        isOnOff(false)
+                        break;
+                    case "1"://开机
+                        isOnOff(true)
+                        $(".switch i").css("background","url(../font/icon_openbtn.png) no-repeat center center");
+                        $(".switch span").html(device_Op_on);
+                        break;
+                }
+                $(".switch i").css("background-size","4rem");
+                break;
+            case 2://工作模式上报
+                if(value.length == 2) {
+                    mode = value.substring(1,2);
+                } else {
+                    mode = value;
+                }
+                switch (mode){
+                    case "0"://制冷
+                        $("#mode_value").html(device_Op_mode_auto);
+                        break;
+                    case "1"://制热
+                        $("#mode_value").html(device_Op_mode_Ventilation);
+                        break;
+                    case "2"://送风
+                        $("#mode_value").html(device_Op_mode_Exhaust);
+                        break;
+                    case "3"://预热
+                        $("#mode_value").html(device_Op_mode_smart);
+                        break;
+                    case "4"://除湿
+                        $("#mode_value").html(device_Op_mode_strong);
+                        break;
+                    case "5"://自动
+                        $("#mode_value").html(device_Op_mode_Power_saving);
+                        break;
+                }
+                break;
+            case 4:
+                //风速模式上报
+                speed = value;
+                switch (speed) {
+                    case "0"://自动
+                        $("#wind_speed_value").html(device_Op_mode_auto);
+                        break;
+                    case "1"://高风
+                        $("#wind_speed_value").html(airsystem_Op_Wind_speed_high);
+                        break;
+                    case "2"://中高风
+                        $("#wind_speed_value").html(device_Op_fan_Bias_High);
+                        break;
+                    case "3"://中风
+                        $("#wind_speed_value").html(airsystem_Op_Wind_speed_medium);
+                        break;
+                    case "4"://中低风
+                        $("#wind_speed_value").html(device_Op_fan_Bias_Low);
+                        break;
+                    case "5"://低风
+                        $("#wind_speed_value").html(airsystem_Op_Wind_speed_low);
+                        break;
+                }
+                break;
+            case 8://PM2.5
+                $(".topLeft .temperature_value").html(value);
+                break;
+            case 9://VOC
+                $(".temperature .temperature_value").html(value);
+                break;
+            case 13:
+                var mData = JSON.parse(new Base64().decode(value));
+                if(mData[0].endpointnumber == num) {
+                    if (parseInt(mData[0].delaySec) > 0) {
+                        countTime(parseInt(mData[0].delaySec))
+                    } else {
+                        closeCountTime()
+                    }
+                }
+            case 14:
+                if(value.length == 20) {
+                    var modeStr = value.substring(2,7)
+                    var wind = value.substring(7,12)
+                    var special = value.substring(12,20)
+                    // if (mode.length == 5){
+                    //     modeList.length = 0;
+                    //     for (var i = 0;i < mode.length;i++){
+                    //         var tempStr = mode.substring(i,i+1);
+                    //         if (tempStr == "1"){
+                    //             modeList.push((i+1).toString());
+                    //         }
+                    //     }
+                    // }
+                    //
+                    // if (wind.length == 5){
+                    //     windSpeedList.length = 0;
+                    //     for (var i = 0;i < wind.length;i++){
+                    //         var tempStr = wind.substring(i,i+1);
+                    //         if (tempStr == "1"){
+                    //             windSpeedList.push((i+1).toString());
+                    //         }
+                    //     }
+                    // }
+                }
+        }
+    }
+
+    function countTime(sec) {
+        $(".timing_info").show()
+        clearInterval(timer)
+        timer = setInterval(function () {
+            if (sec <= 0) {
+                closeCountTime()
+            }
+            sec--;
+            var minute = parseInt(sec)
+            var hour = (parseInt(minute / 3600) + '').length == 1 ? ("0" + parseInt(minute / 3600)) : (parseInt(minute / 3600) + '')
+            var min = (parseInt((minute % 3600) / 60) + '').length == 1 ? ('0' + parseInt((minute % 3600) / 60)) : (parseInt((minute % 3600) / 60) + '')
+            var second = parseInt((minute % 60) + '').length == 1 ? ('0' + parseInt(minute % 60)) : (parseInt(minute % 60) + '')
+            if (deviceState == 0) {
+                $(".timing_info span").eq(0).html(((hour + '').length == 1 ? "0" + hour : hour) + ":" + ((min + '').length == 1 ? "0" + min : min) + ":" + ((second + '').length == 1 ? "0" + second : second) + Device_Op_Details_Time_TIPS3)
+            } else {
+                $(".timing_info span").eq(0).html(((hour + '').length == 1 ? "0" + hour : hour) + ":" + ((min + '').length == 1 ? "0" + min : min) + ":" + ((second + '').length == 1 ? "0" + second : second) + Device_Op_Details_Time_TIPS4)
+
+            }
+        }, 1000)
+    }
+
+    function closeCountTime() {
+        $(".timing_info").hide()
+        clearInterval(timer)
+    }
+</script>
+</html>

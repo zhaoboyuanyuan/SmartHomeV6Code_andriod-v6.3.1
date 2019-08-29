@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加设备</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/setState.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a class="back_addScene" href="javascript:history.back(-1)"></a>
+				<a href="javascript:;" class="addDoorC autoSwitchLanguager" id="addDevice_09Self_title">添加独立式可燃气体探测器</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section style="width: 100%;">
+			<section style="width: 100%;text-align: center;">
+				<img style="width: 20rem;margin-top: 8rem;" src="../fonts/add_09self_01.png" />
+			</section>
+			<div class="addCommon_p addCommon_p_01" style="width: 80%;height: 15rem;margin-top: rem;">
+				<p class="autoSwitchLanguager" id="addDevice_09Self_02">上电后蜂鸣器连续响3声，【三色指示灯】呈绿色闪烁，快击【自检】1 下，进入快速自检模式，快速自检完成【三色指示灯】呈绿色长亮</p>
+			</div>
+		</section>
+
+		<section class="addSensorBtn">
+			<a href="javascript:;" class="autoSwitchLanguager disableBtn" id="addDevice_01_01_add" style="opacity:1;">开始添加</a>
+		</section>
+		<section id="succeed" class="toast" style="display:none;">
+			<i class="rotate"></i>
+			<p class="autoSwitchLanguager" id="addDoorContack2_starting">正在启动加网模式，请稍后...</p>
+		</section>
+		<!--<section id="fail" class="toast" style="display:none;">-->
+			<!--<p class="autoSwitchLanguager" id="addDevice_failing">加网模式启动失败，请重试</p>-->
+		<!--</section>-->
+		<!--编辑弹框-->
+		<section class="changeName" style="display: none;">
+			<div class="nameToast giveUp">
+				<span class="openFail autoSwitchLanguager" id="gatewayAddDevice_fail_01" style="display:block;height: 12rem;padding-top: 2rem;padding-bottom: 0px;line-height: 2rem;word-wrap:break-word;word-break:break-all;overflow: auto;">
+					加网模式开启失败，您可以手动打开加网模式，找到网关上的set键快速按4下。(如果您是首次启用添加新设备，可能设备正在建网，请3分钟后再试)
+				</span>
+				<div class="choose_1" style="width: 100%;">
+					<a href="javascript:;" style="width: 100%;" onclick="cancel()" class="autoSwitchLanguager" id="addDevice_sure">确定</a>
+				</div>
+			</div>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan()
+		
+		plus.plusReady(function() {
+            plus.gatewayCmd.getCurrentGWInfo(function(data){
+                if(JSON.parse(data).gwType === "GW08"){
+					$(".openFail").html(languageUtil.getResource("gatewayAddDevice_GW08fail_01"));
+                }else{
+                    $(".openFail").html(languageUtil.getResource("gatewayAddDevice_fail_01"));
+				}
+            });
+			var btn = document.getElementsByClassName("addSensorBtn")[0].getElementsByTagName("a")[0];
+			btn.style.backgroundImage = "url(../../skinSource/img/bigBtnEnable.png)";
+			plus.gatewayCmd.newDataRefresh(function(data) {
+				if(data.cmd == "511") {
+					$("#succeed").hide()
+					window.location = "addDevice_09Self_03.html";
+				}
+			});
+			$(".addSensorBtn").unbind("click").on("click", function() {
+				plus.gatewayCmd.isBindGw(function(result) {
+					if(result == "NO") {
+						$(".changeName").show();
+						return;
+					} else {
+						plus.gatewayCmd.gatewayAddDevice(function() {
+							$("#succeed").show()
+							setTimeout(function() {
+								$("#succeed").hide();
+								$(".changeName").show();
+							}, 10000)
+						});
+					}
+				})
+			})
+		})
+
+		function cancel() {
+			$(".changeName").hide();
+		}
+
+		function bingGateway() {
+			plus.gatewayCmd.goToBind(function() {})
+		}
+	</script>
+
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>管家首页</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/mobiscroll.custom-2.5.2.min.css"/>
+    <link rel="stylesheet" href="../css/humiture.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+<header class="header">
+    <a id="canback" href="javascript:;"></a>
+    <a href="javascript:;" class="autoSwitchLanguager" id="addHumiture1_title">选择温度</a>
+    <a id="customScene_sure" class="autoSwitchLanguager" href="circumstances.html" style="background:none;">确定</a>
+</header>
+<div style="margin-top:6.4rem;" class="dwbw" id="mobiscroll" readonly="readonly"
+     style="display:inline;overflow:hidden;"></div>
+</body>
+<script src="../js/mobiscroll.core-2.5.2.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/addDelay5.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var arr = new Array();
+    var exp;
+    var deviceState;
+
+    initlan();
+    plus.plusReady(function () {
+        $(".dwv").html("46");
+        $("#canback").on("click", function () {
+            history.back(-1);
+        });
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+    })
+    $("#customScene_sure").on("click", function () {
+        temp = $(".dwv").html();
+        if (temp < 20) {
+            temp = -(20 - temp)
+        } else {
+            temp = temp - 20
+        }
+        if (info.getItem("deviceState") == lang_deviceIf) {
+            deviceState = lang_deviceTxt1 + temp + "℃"
+        } else {
+            deviceState = lang_deviceTxt2 + temp + "℃"
+        }
+
+        if (info.getItem("taskType") == "conditionTask") {
+            //2.xxx>xxx>xxx = 1;
+            if(info.getItem("type") == "Ad" || info.getItem("type") == "C0"){
+                var object = info.getItem("deviceID") + ">" + 2 + ">" + info.getItem("type");
+            }else{
+                var object = info.getItem("deviceID") + ">" + info.getItem("num") + ">" + info.getItem("type");
+            }
+            var data = {
+                "exp": '2.' + object + ' ' + info.getItem("morethan") + ' ' + temp,
+                "name": info.getItem("deviceName"),
+                "deviceIcon": info.getItem("deviceIcon"),
+                "deviceState":deviceState,
+                "editUrl":info.getItem("editUrl")
+            }
+            if (info.getItem("conditionArray") == null) {
+                arr.push(data)
+                info.setItem("conditionArray", JSON.stringify(arr))
+            } else {
+                arr = JSON.parse(info.getItem("conditionArray"));
+                var exist = false;
+                arr.map(function (list, i) {
+                    if (list.type != 0) {
+                        if (i == parseInt(info.getItem("index"))) {
+                            list.exp = '2.'+object + ' ' + info.getItem("morethan") + ' ' + temp;
+                            list.name = info.getItem("deviceName");
+                            list.deviceState = deviceState;
+                            list.deviceIcon = info.getItem("deviceIcon");
+                            exist = true;
+                        }
+                    }
+                });
+                if (exist == false) {
+                    arr.push(data)
+                }
+                info.setItem("conditionArray", JSON.stringify(arr))
+            }
+        } else {
+            if(info.getItem("type") == "Ad" || info.getItem("type") == "C0"){
+                var object = info.getItem("deviceID") + ">" + 2 + ">" + info.getItem("type");
+            }else{
+                var object = info.getItem("deviceID") + ">" + info.getItem("num") + ">" + info.getItem("type");
+            }
+            var data = {
+                "type": "2",
+                "object": object,
+                "name": info.getItem("deviceName"),
+                "deviceIcon": info.getItem("deviceIcon"),
+                "deviceState": deviceState,
+                "exp": info.getItem("morethan") + temp,
+                "editUrl":info.getItem("editUrl")
+            }
+            if (info.getItem("ldArr") == null) {
+                arr.push(data);
+                info.setItem("ldArr", JSON.stringify(arr))
+            } else {
+                arr = JSON.parse(info.getItem("ldArr"));
+                var exist = false;
+                arr.map(function (list, i) {
+                    if (list.type != 0) {
+                        if (i == parseInt(info.getItem("index"))) {
+                            list.exp = info.getItem("morethan") + temp;
+                            list.object = object;
+                            list.name = info.getItem("deviceName");
+                            list.deviceState = deviceState;
+                            list.deviceIcon = info.getItem("deviceIcon");
+                            exist = true;
+                        }
+                    }
+                });
+                if (exist == false) {
+                    arr.push(data)
+                }
+                info.setItem("ldArr", JSON.stringify(arr))
+            }
+        }
+        info.removeItem("deviceName")
+        info.removeItem("deviceIcon")
+        info.removeItem("deviceState")
+        info.removeItem("flag")
+        window.location = "circumstances.html"
+    })
+</script>
+
+</html>

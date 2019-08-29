@@ -1,0 +1,31 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Device_Oi_Details_Name = "HVACコントローラ（VRV）";
+$lang.Device_Oi_Details_Open = "オン";
+$lang.Device_Oi_Details_Close = "オフ";
+$lang.Device_Oi_Details_Temperature = "室温";
+$lang.Device_Oi_Details_Type = "モード";
+$lang.Device_Oi_Details_Type1 = "冷房";
+$lang.Device_Oi_Details_Type2 = "暖房";
+$lang.Device_Oi_Details_Type3 = "送風";
+$lang.Device_Oi_Details_Type4 = "ドライ";
+$lang.Device_Oi_Details_Type5 = "予熱";
+$lang.Device_Oi_Details_Type6 = "自動";
+$lang.Device_Oi_Details_Type7 = "ドライ中";
+$lang.Device_Oi_Details_Type8 = "爽やか";
+$lang.Device_Oi_Details_Type9 = "睡眠";
+$lang.Device_Oi_Details_Type10 = "殺菌";
+$lang.Device_Oi_Details_Type11 = "ドライ除湿機";
+$lang.Device_Oi_Details_Type12 = "強力な除湿機";
+$lang.Device_Oi_Details_Speed = "ファン回転速度";
+$lang.Device_Oi_Details_Speed1 = "高い";
+$lang.Device_Oi_Details_Speed2 = "中";
+$lang.Device_Oi_Details_Speed3 = "低い";
+$lang.Device_Oi_Details_Speed4 = "自動";
+$lang.Device_Oi_Details_Direction = "風向";
+$lang.Device_Oi_Details_Offline = "デバイスのオフライン";
+$lang.moreSettingLog          = "ログ";
+$lang.moreSettingAlarm        = "アラーム";

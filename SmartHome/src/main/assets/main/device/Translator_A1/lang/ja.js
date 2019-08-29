@@ -1,0 +1,29 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_A1_name = "4回路入力変換器";
+$lang.device_A1_way = "回路";
+$lang.device_A1_Rename_hint = "注：名前を変更するには長押し";
+$lang.device_A1_Alarm = "アラームメッセージ";
+$lang.device_A1_more = "詳細";
+$lang.device_A1_out_of_time = "接続がタイムアウト";
+$lang.device_A1_know = "了解";
+$lang.device_A1_Rename = "名前を変更";
+$lang.device_A1_cancel = "取消";
+$lang.device_A1_ok = "確認";
+$lang.device_A1_fortify = "警備";
+$lang.device_A1_disarming = "警備解除";
+$lang.device_A1_fortifying = "警備中";
+$lang.device_A1_disarmed = "警備解除";
+$lang.device_A1_normal = "正常";
+$lang.device_A1_abnormal = "アラーム";
+$lang.device_A1_Offline = "デバイスがオフラインです";
+$lang.device_A1_set = "設定";
+$lang.device_A1_action_close = "クローズ";
+$lang.device_A1_action_open = "オープン";
+$lang.device_A1_normal_set = "正常状態設定";
+$lang.device_A1_normal_set_hint = "注：この状態ではアラームは発生しません";
+$lang.Device_A1_Details_Loading2 = "ロード中…";
+$lang.device_A1_noData = "データなし";

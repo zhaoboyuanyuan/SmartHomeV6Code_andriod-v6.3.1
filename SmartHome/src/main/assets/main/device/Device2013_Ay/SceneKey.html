@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>二键场景开关</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName" href="javascript:;"></a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<div class="wrap" style="margin-top: 35px;font-size: 1.4rem;">
+    <ul class="BoxLeft">
+        <li>
+            <div id="keyImg1" style="margin-top: 5rem">
+                <i id="scene1"></i>
+            </div>
+            <div id="key1" key="device_Ay_Unbound" class="autoSwitchLanguager">未绑定</div>
+        </li>
+        <li>
+            <div id="keyImg2">
+                <i id="scene2"></i>
+            </div>
+            <div id="key2" key="device_Ay_Unbound" class="autoSwitchLanguager">未绑定</div>
+        </li>
+    </ul>
+</div>
+
+<section class="mask_layer " style="display:none; ">
+    <i></i>
+    <span id="offline " class="autoSwitchLanguager" key='device_Ay_Offline'></span>
+</section>
+</body>
+<script>
+    var num = 2; //动画数组长度
+    var timer; //定时器动画
+    var GWID;
+    var DEVID;
+    var ENDPOINTNUMBER;
+    var DEVICEINFO;
+    var APPID;
+    var MVC = {};
+    var SceneList = [];
+    //初始化绑定关系
+    var bindMap = {
+        "1": "-1",
+        "2": "-1"
+    };
+
+    var key1 = document.getElementById("key1");
+    var key2 = document.getElementById("key2");
+
+    var keyImg1 = document.getElementById("keyImg1");
+    var keyImg2 = document.getElementById("keyImg2");
+
+    var shadow = document.getElementsByClassName("mask_layer")[0];
+    var deviceName = document.getElementsByClassName("deviceName")[0];
+
+    /*
+     * 页面启动完成入口
+     */
+    plus.plusReady(function () {
+        initlan();
+        MVC.C.initInfo();
+    });
+    //view    页面渲染
+    MVC.V = {
+        bindClick: function () {
+            document.getElementById("back").addEventListener("click", function () {
+                MVC.C.back();
+            });
+            document.getElementsByClassName("more")[0].addEventListener("click", function () {
+                MVC.C.more();
+            });
+            keyImg1.addEventListener("click", function () {
+                window.location = 'KeyBindingScene.html?endPointNum=1&&bindSceneID=' + bindMap["1"];
+            });
+            keyImg2.addEventListener("click", function () {
+                window.location = 'KeyBindingScene.html?endPointNum=2&&bindSceneID=' + bindMap["2"];
+            });
+        },
+    };
+</script>
+<script src="controll/index.js" type="text/javascript" charset="utf-8"></script>
+<script src="model/model.js" type="text/javascript" charset="utf-8"></script>
+
+</html>

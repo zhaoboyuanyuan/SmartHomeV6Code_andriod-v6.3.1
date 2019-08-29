@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/scene.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <a href="javascript:;" onclick="window.history.back(-1);"></a>
+    <a href="javascript:;" class="autoSwitchLanguager" id='setDeviceState_tittle'>设置设备状态</a>
+    <a id="customScene_sure" class="saveSure autoSwitchLanguager" href="javascript:;">确定</a>
+</header>
+<section style="padding-top:6.4rem;">
+    <ul class="switch_list">
+        <!--<li>-->
+        <!--<p>开关1</p>-->
+        <!--<p class="switchSelect">-->
+        <!--<span class="" data-id="1">开</span>-->
+        <!--<span data-id="0">关</span>-->
+        <!--<span data-id="3">切换</span>-->
+        <!--</p>-->
+        <!--</li>-->
+    </ul>
+</section>
+<!--<section class="toast">请至少选择一个开关状态</section>-->
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    initlan()
+
+    plus.plusReady(function(){
+        $(".switch_list").html("");
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        var lockThree = info.getItem("lockThree"+info.getItem("deviceID"));
+        var locktwo = info.getItem("locktwo"+info.getItem("deviceID"));
+        var lockone = info.getItem("lockone"+info.getItem("deviceID"));
+        var switchState = '<p class="switchSelect"> ' +
+            '<span data-id="1">'+lang_switch_on+'</span> ' +
+            '<span data-id="0">'+lang_switch_off+'</span> ' +
+            '<span data-id="3">'+lang_switch_cut+'</span> ' +
+            '</p>'
+        if(info.getItem("type") == "Ao" ||
+            info.getItem("type") == "An" ||
+            info.getItem("type") == "Am" ||
+            info.getItem("type") == "Bu" ||
+            info.getItem("type") == "Bv" ||
+            info.getItem("type") == "Bw" ||
+            info.getItem("type") == "Cl" ||
+            info.getItem("type") == "Cm" ||
+            info.getItem("type") == "Cn"){
+            var list = JSON.parse(info.getItem("epNameList"+info.getItem("deviceID")));
+            if(list){
+                for(var i=0;i<list.length;i++){
+                    if(i==0){
+                        if(lockThree.substr(1,1)=="非"){
+                            $(".switch_list").append("<li><p>"+list[i]+"</p><p>"+switch_Aohk_03+"</p></li>");
+                        }else{
+                            $(".switch_list").append("<li><p>"+list[i]+"</p>"+switchState+"</li>");
+                        }
+                    }else if(i==1){
+                        if(locktwo.substr(1,1)=="非"){
+                            $(".switch_list").append("<li><p>"+list[i]+"</p><p>"+switch_Aohk_03+"</p></li>");
+                        }else{
+                            $(".switch_list").append("<li><p>"+list[i]+"</p>"+switchState+"</li>");
+                        }
+                    }else if(i==2){
+                        if(lockone.substr(1,1)=="非"){
+                            $(".switch_list").append("<li><p>"+list[i]+"</p><p>"+switch_Aohk_03+"</p></li>");
+                        }else{
+                            $(".switch_list").append("<li><p>"+list[i]+"</p>"+switchState+"</li>");
+                        }
+                    }
+                }
+            }
+        }
+        $(".switchSelect span").on("click",function(){
+            if($(this).attr("class") == "select"){
+                $(this).removeClass("select")
+            }else{
+                $(this).addClass("select").siblings("span").removeClass("select")
+            }
+        });
+        $(".saveSure").on("click",function(e){
+            var switchLen = $(".switch_list li").length;
+            var epData = "";
+            var deviceState = "";
+            for(var i=0;i<switchLen;i++){
+                if($(".switch_list li").eq(i).find(".select").length != 0){
+                    var id = $(".switch_list li").eq(i).find(".select").attr("data-id");
+                    var value = $(".switch_list li").eq(i).find(".select").html();
+                    epData += id;
+                    deviceState += ((i+1)+":"+value+" ");
+                }else if($(".switch_list li").eq(i).find("p:last-child").text()==switch_Aohk_03 || $(".switch_list li").eq(i).find(".select").length==0){
+                    epData += "2";
+                }
+            }
+            if(epData == "2" || epData == "22" || epData == "222"){
+                showToast();
+            }else{
+                if(info.getItem("type") == "Ao" ||
+                   info.getItem("type") == "An" ||
+                   info.getItem("type") == "Am" ||
+                   info.getItem("type") == "Bu" ||
+                   info.getItem("type") == "Bv" ||
+                   info.getItem("type") == "Bw" ||
+                   info.getItem("type") == "Cl" ||
+                   info.getItem("type") == "Cm" ||
+                   info.getItem("type") == "Cn"){
+                    epData = "4" + epData;
+                }
+                info.setItem("epData",epData);
+                info.setItem("deviceState",deviceState);
+                window.location = "setDelay_sceneTask.html";
+            }
+//            console.log(epData);
+//            console.log(deviceState);
+        })
+    })
+
+    function showToast(){
+        window.showDialog.show(languageUtil.getResource("toast_switch_mode"),3000)
+    }
+
+</script>
+</html>

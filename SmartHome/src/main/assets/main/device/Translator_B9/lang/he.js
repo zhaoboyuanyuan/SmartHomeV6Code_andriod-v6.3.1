@@ -1,0 +1,49 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_B9_name = "קלט פלט פלט";
+$lang.device_B9_way_in = "דרך (הכנס)";
+$lang.device_B9_way_out = "דרך (הוצא)";
+$lang.device_B9_Rename_hint = "הערה: לחץ לחיצה ארוכה כדי לשנות את שמו";
+$lang.device_B9_Alarm = "התראה";
+$lang.device_B9_more = "עוד";
+$lang.device_B9_out_of_time = "התקשורת הופסקה";
+$lang.device_B9_know = "אני יודע";
+$lang.device_B9_Rename = "שנה שם";
+$lang.device_B9_cancel = "בטל";
+$lang.device_B9_ok = "אשר";
+$lang.device_B9_fortify = "הפעל";
+$lang.device_B9_disarming = "מבטל דריכה";
+$lang.device_B9_fortifying = "מחזק";
+$lang.device_B9_disarmed = "לא דרוך";
+$lang.device_B9_normal = "רגיל";
+$lang.device_B9_abnormal = "אזעקה";
+$lang.device_B9_add_button = "הוסף לחצן שליטה";
+$lang.device_B9_button_name_status = "שם מפתח ומצב";
+$lang.device_B9_name_1 = "השם";
+$lang.device_B9_enter_name = "הזן שם";
+$lang.device_B9_status = "סטטוס";
+$lang.device_B9_action = "פעולה";
+$lang.device_B9_action_close = "סגור";
+$lang.device_B9_action_open = "הפסקה";
+$lang.device_B9_action_close_open = "סגור תחילה ולאחר מכן נתק";
+$lang.device_B9_action_open_close = "סגור לפני הסגירה";
+$lang.device_B9_close_time = "שעת סגירה";
+$lang.device_B9_open_time = "נתק את הזמן";
+$lang.device_B9_s = "S";
+$lang.device_B9_save = "שמור";
+$lang.device_B9_re_edit = "ערוך מחדש";
+$lang.device_B9_delete = "מחק";
+$lang.device_B9_delete_sure = "האם אתה בטוח שברצונך למחוק?";
+$lang.device_B9_sent = "ההוראה נשלחה";
+$lang.device_B9_Offline = "התקן אינו מקוון";
+$lang.device_B9_set = "הגדרות";
+$lang.device_B9_normal_set_hint = "הערה: לא תהיה אזעקה במצב זה";
+$lang.Device_B9_Details_Loading2 = "טוען...";
+$lang.device_B9_normal_set = "הזן הגדרה רגילה";
+$lang.device_B9_initial_action = "פלט הגדרות פעולה ראשוניות";
+$lang.device_B9_initial_action_hint = "הערה: כאשר פעולת לחצן ההגדרות מנוגדת לתגובת ההתקן בפועל， היא יכולה להיות עקבית על ידי כוונון הפעולה הראשונית.";
+$lang.device_B9_noData = "איו מיידע";
+$lang.device_B9_1_way = "כנופיה אחת";

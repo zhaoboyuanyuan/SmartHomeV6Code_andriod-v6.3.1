@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <title>历史数据</title>
+    <link rel="stylesheet" type="text/css" href="css/history.css"/>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+<header class="hum_header header">
+    <div class="header_top">
+        <a href="device_48.html"></a>
+        <a href="javascript:;" class="autoSwitchLanguager" id="Sphygmomanometer_48_title">历史数据</a>
+    </div>
+    <div class="switch">
+        <span catagory_selected="true"  class="autoSwitchLanguager" key="Sphygmomanometer_Name_1">用户1</span>
+        <span catagory_selected="false" class="autoSwitchLanguager" key="Sphygmomanometer_Name_2">用户2</span>
+        <span catagory_selected="false" class="autoSwitchLanguager" key="Sphygmomanometer_Name_3">用户3</span>
+    </div>
+</header>
+<section class="content historyCon">
+    <div class="date_title">
+        <span id="last_month" class="autoSwitchLanguager" key="Sphygmomanometer_date_1">前一月</span>
+        <span id="current_month" >2018-03</span>
+        <span id="next_month" class="autoSwitchLanguager" key="Sphygmomanometer_date_2">后一月</span>
+    </div>
+    <ul class="data">
+    </ul>
+</section>
+<section class="loadToast" style="display:none;">
+    <div>
+        <i><em class="rotate"></em></i>
+        <p key="Sphygmomanometer_loading_48" class="autoSwitchLanguager">正在加载...</p>
+    </div>
+</section>
+<div class="loadResult autoSwitchLanguager" key="Sphygmomanometer_text_31" style="display:none;"></div>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var timer;
+    var userData = new Array();
+    var url = location.href; //获取url中"?"符后的字串
+    var userId = 1;
+    if (url.indexOf("?") != -1) {
+        userId = url.split("?")[1].split("=")[1];
+    }
+    Date.prototype.Format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+    Date.getPreMonth = function (dt) {//获取上个月最后一天
+        if (typeof dt == 'undefined') { dt = (new Date()); }
+        var y = dt.getFullYear();
+        var m = dt.getMonth();
+        var currrentM = new Date(y, m,1);
+//        var oneDay = 1000*60*60*24;
+        return new Date(currrentM-1);
+    }
+    Date.getNextMonth = function (dt) {//获取下个月最后一天
+        if (typeof dt == 'undefined') { dt = (new Date()); }
+        var y = (dt.getMonth() >= 10) ? (dt.getFullYear() + 1) : dt.getFullYear();
+        var m;
+        if(dt.getMonth() == 10){
+            m = 0;
+        }else if(dt.getMonth() == 11){
+            m = 1;
+        }else{
+            m = dt.getMonth() + 2;
+        }
+        var nextnextM = new Date(y, m,1);
+//        var oneDay = 1000*60*60*24;
+        return new Date(nextnextM-1);
+    }
+    Date.getMonthFirstDay = function (dt) {
+        if (typeof dt == 'undefined') { dt = (new Date()); }
+        var y = dt.getFullYear();
+        var m = dt.getMonth();
+        return new Date(y, m,1);
+    }
+    initlan();
+    var startTime,endTime;
+    var newTime = new Date();
+    var time = newTime.Format("yyyy-MM");
+    $("#current_month").html(time);
+    $(".switch span").each(function(i){
+        $(this).click(function(){
+            switch(i)
+            {
+                case 0:
+                    userId = 1;
+                    $(".data").html("");
+                    getHistory();
+                    break;
+                case 1:
+                    userId = 2;
+                    $(".data").html("");
+                    getHistory();
+                    break;
+                case 2:
+                    userId = 3;
+                    $(".data").html("");
+                    getHistory();
+                    break;
+            }
+            $(this).attr("catagory_selected", "true");
+            $(this).siblings().attr("catagory_selected", "false");
+        })
+        if(userId - 1 == i){
+            $(this).attr("catagory_selected", "true");
+            $(this).siblings().attr("catagory_selected", "false");
+        }
+    });
+    $("#last_month").click(function () {
+        newTime = Date.getPreMonth(newTime);
+        $("#current_month").html(newTime.Format("yyyy-MM"));
+        $(".data").html("");
+        getHistory()
+    });
+    $("#next_month").click(function () {
+        newTime = Date.getNextMonth(newTime);
+        $("#current_month").html(newTime.Format("yyyy-MM"));
+        $(".data").html("");
+        getHistory()
+    });
+    function getHistory(){
+        showLoad(true);
+        endTime = newTime.getTime();
+        startTime = Date.getMonthFirstDay(newTime).getTime();
+        var devData = {
+//            "url":"",
+//            "param":{
+                "startTime":startTime,
+                "endTime":endTime,
+                "pageSize":"10",
+                "userNumber":userId
+//            }
+        }
+        plus.gatewayCmd.getHistory(devData, function(result) {
+            clearTimeout(timer);
+            showLoad(false);
+            userData.splice(0,userData.length);
+            if(result != undefined){
+                var recordList = result.data;
+                for(var i=0; i<recordList.length; i++){
+                    var obj = recordList[i];
+                    //初始化
+                    var data = new Object();
+                    data.high_pressure = obj.hyperpiesia == undefined ?  -1 : parseInt(obj.hyperpiesia);
+                    data.low_pressure = obj.hypotension == undefined ?  -1 : parseInt(obj.hypotension);;
+                    data.pulse_rate = obj.pulse == undefined ?  -1 : parseInt(obj.pulse);;
+                    data.blood_oxygen = obj.bloodOxygen == undefined ?  -1 : parseInt(obj.bloodOxygen);;
+                    data.time = obj.time;
+                    userData.push(data);
+                }
+                initData(userData);
+            }
+        })
+    }
+
+    function initData(){
+        for(var i=0; i<userData.length; i++){
+            var time = new Date(userData[i].time).Format("yyyy-MM-dd hh:mm:ss");
+            console.log(i);
+            var high_pressure = userData[i].high_pressure;
+            var low_pressure = userData[i].low_pressure;
+            var pulse_rate = userData[i].pulse_rate;
+            var blood_oxygen = userData[i].blood_oxygen;
+            var high_pressure_state;
+            var high_pressure_style;
+            var low_pressure_state;
+            var low_pressure_style;
+            var pulse_rate_state;
+            var pulse_rate_style;
+            var blood_oxygen_state;
+            var blood_oxygen_style;
+            Sphygmomanometer_text_1 = Sphygmomanometer_text_1.length > 2 ? Sphygmomanometer_text_1.substring(0,2) + "..." : Sphygmomanometer_text_1;
+            Sphygmomanometer_text_2 = Sphygmomanometer_text_2.length > 2 ? Sphygmomanometer_text_2.substring(0,2) + "..." : Sphygmomanometer_text_2;
+            Sphygmomanometer_text_4 = Sphygmomanometer_text_4.length > 2 ? Sphygmomanometer_text_4.substring(0,2) + "..." : Sphygmomanometer_text_4;
+            Sphygmomanometer_text_5 = Sphygmomanometer_text_5.length > 2 ? Sphygmomanometer_text_5.substring(0,2) + "..." : Sphygmomanometer_text_5;
+            if(high_pressure < 90 && high_pressure >= 0){
+                high_pressure_state = Sphygmomanometer_low1;
+                high_pressure_style = "state_abnormal";
+            }else if(high_pressure > 140){
+                high_pressure_state = Sphygmomanometer_high1;
+                high_pressure_style = "state_abnormal";
+            }else{
+                high_pressure_style = "state_normal";
+            }
+            if(low_pressure < 60 && low_pressure >= 0){
+                low_pressure_state = Sphygmomanometer_low1;
+                low_pressure_style = "state_abnormal";
+            }else if(low_pressure > 90){
+                low_pressure_state = Sphygmomanometer_high1;
+                low_pressure_style = "state_abnormal";
+            }else{
+                low_pressure_style = "state_normal";
+            }
+            if(pulse_rate < 60 && pulse_rate >= 0){
+                pulse_rate_state = Sphygmomanometer_low1;
+                pulse_rate_style = "state_abnormal";
+            }else if(pulse_rate > 100){
+                pulse_rate_state = Sphygmomanometer_high1;
+                pulse_rate_style = "state_abnormal";
+            }else{
+                pulse_rate_style = "state_normal";
+            }
+            if (blood_oxygen <= 90  && blood_oxygen >= 0) {
+                blood_oxygen_state = Sphygmomanometer_low1
+                blood_oxygen_style = "state_abnormal";
+            } else {
+                blood_oxygen_style = "state_normal";
+            }
+            high_pressure = high_pressure == -1 ? "--": high_pressure;
+            low_pressure = low_pressure == -1 ? "--": low_pressure;
+            pulse_rate = pulse_rate == -1 ? "--": pulse_rate;
+            blood_oxygen = blood_oxygen == -1 ? "--": (blood_oxygen + "%");
+            var item = "<li class='item'><div class='time'>" + time + "</div><div class='info'><ul><li class='quota'><span class='quota_name'>" + Sphygmomanometer_text_1 + "</span><span class='"+ high_pressure_style +"'>" + high_pressure_state + "</span></li><li class='value'>"+high_pressure+"</li></ul><ul><li class='quota'><span class='quota_name'>" + Sphygmomanometer_text_2 + "</span><span class='"+low_pressure_style+"'>"+low_pressure_state+"</span></li><li class='value'>" + low_pressure + "</li></ul><ul><li class='quota'><span class='quota_name'>" + Sphygmomanometer_text_4 + "</span><span class='" + pulse_rate_style + "'>" + pulse_rate_state + "</span></li><li class='value'>" + pulse_rate + "</li></ul>" +
+//                "<ul><li class='quota'><span class='quota_name'>"+ Sphygmomanometer_text_5 +"</span><span class='" + blood_oxygen_style + "'>" + blood_oxygen_state + "</span></li><li class='value'>" + blood_oxygen+ "</li></ul>" +
+                "</div></li>";
+            $(".data").append(item);
+        }
+    }
+
+    function showLoad(flag){
+        if(flag){
+            $(".loadToast").show();
+        }else{
+            $(".loadToast").hide();
+        }
+    }
+
+    $(".loadToast").on('touchmove',function(e){
+        e.stopPropagation();
+        e.preventDefault();
+    })
+
+    function showLoadResultToast(msg){
+        $(".loadResult").html(msg);
+        $(".loadResult").show();
+        setTimeout(function() {
+            $(".loadResult").hide();
+        }, 1000);
+    }
+
+    function loadMore(){
+        if(userData.length > 0){
+            newTime = new Date(userData[userData.length - 1].time);
+            timer = setTimeout(function() {
+                showLoad(false);
+                showLoadResultToast(lang_timeout);
+            }, 15000);
+            getHistory();
+        }
+    }
+
+    plus.plusReady(function () {
+        $(".switch span").each(function( i){
+            if($(this).html().length > 3){
+                $(this).html($(this).html().substring(0,2) + "..." + (i + 1));
+            }
+        });
+        getHistory()
+    })
+
+    //滚动条到页面底部加载更多案例
+    $(window).scroll(function(){
+        var scrollTop = $(this).scrollTop();    //滚动条距离顶部的高度
+        var scrollHeight = $(document).height();   //当前页面的总高度
+        var clientHeight = $(this).height();    //当前可视的页面高度
+//         console.log("top:"+scrollTop+",doc:"+scrollHeight+",client:"+clientHeight);
+        if(scrollTop + clientHeight >= scrollHeight){   //距离顶部+当前高度 >=文档总高度 即代表滑动到底部 count++;         //每次滑动count加1
+            console.log("loadmore")
+            loadMore();
+        }else if(scrollTop<=0){
+            //滚动条距离顶部的高度小于等于0 TODO
+            //alert("下拉刷新，要在这调用啥方法？");
+        }
+    });
+</script>
+
+</html>

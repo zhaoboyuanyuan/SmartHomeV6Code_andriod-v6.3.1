@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title></title>
+
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="../../source/mui/js/mui.min.js"></script>
+    <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+
+    <link rel="stylesheet" href="css/custom.css" />
+    <script src="js/custom.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header" style="height: 6.4rem;padding-top: 0rem;background-color: #8dd652;position: fixed;z-index: 104;box-sizing: content-box;">
+    <div class="header_top">
+        <a class="back" href="xmly.html"></a>
+        <a href="javascript:;" class="deviceName autoSwitchLanguager" key="Radio_name_title">电台</a>
+        <a class="search" href="search.html"></a>
+    </div>
+</header>
+<section class="mui-content" style="padding-top: 6.4rem;z-index: 105;">
+    <div class="bar barNav">
+        <div id="bar" style="width: 10000px;">
+        </div>
+    </div>
+</section>
+<div id="albums_list_div" class="mui-content mui-scroll-wrapper" style="top: 10.4rem;bottom: 0rem;">
+    <div class="mui-scroll radio_list_div">
+        <!--数据列表-->
+        <ul class="custom-list" id="radio_list"></ul>
+    </div>
+</div>
+
+</body>
+<style>
+    /*右上角搜索按钮*/
+    .header_top a.search{
+        background:url(img/icon_search.png) no-repeat center center;
+        background-size:1.8rem auto;
+    }
+
+    .custom-list {
+        background-color: #fff;
+        list-style: none;
+        padding: 0px 0px 0px 8px;
+        margin: 0px;
+    }
+
+    .custom-list-cell {
+        height: 80px;
+        width: 100%;
+        border-bottom: 0.5px solid #c8c7cc;
+        overflow: hidden;
+        vertical-align: middle;
+    }
+
+    .custom-list-cell:active {
+        background-color: #c8c7cc;
+    }
+
+    .custom-list-object {
+        float: left;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        padding-right: 8px;
+        max-width: 80px;
+        height: 80px;
+    }
+
+    .custom-list-body {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        vertical-align: middle;
+    }
+
+    .custom-title {
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        color: #000000;
+    }
+
+    .custom-description {
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 12px;
+    }
+
+    .custom-play-info {
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 10px;
+    }
+
+    #releaseHint {
+        width: 100%;
+        height: 25px;
+        text-align: center;
+        line-height: 25px;
+        background: #e9f4f7;
+        display: none;
+    }
+
+    #releaseHint p {
+        margin: auto;
+        text-align: center;
+        font-size: 14px;
+        color: #37bbf5;
+    }
+
+    .bar::-webkit-scrollbar {
+        height: 0px;
+        width: 0px;
+    }
+
+    .barNav {
+        width: 100%;
+        height: 4rem;
+        border-bottom: 0.1rem solid gainsboro;
+        overflow-y: hidden;
+        overflow-x: scroll;
+    }
+    .lineGreen{
+        border-bottom: 0.5rem #8dd652 solid;
+        color: #8dd652;
+    }
+
+    .nav {
+        float: left;
+        padding-left: 10px;
+        padding-right: 10px;
+        height: 4rem;
+        line-height: 4rem;
+        font-size: 1.3rem;
+    }
+</style>
+<script>
+    var info = window.sysfun;
+    info.init("V6XMLY");
+    var devID;
+    var gwID;
+    var ep;
+    var categoryId;
+    var tagName;
+    var albumId;
+    var tag_name;
+    var currentPager = 1;
+    var albumsList = [];
+    var radioUl = document.getElementById("radio_list");
+    var lastNav;
+    //国际化初始化函数
+    initlan();
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(null, function(data) {
+            devID = data.devID;
+            gwID = data.gwID;
+            ep = ~~(data.endpoints[0].endpointNumber);
+            loadDataFromServiceForNav();
+        });
+    });
+    mui.init({
+        pullRefresh: {
+            container: '#albums_list_div',
+            up: {
+                auto:false,
+                contentrefresh: '正在加载',
+                callback: onLoadMore
+            }
+        },
+        gestureConfig:{
+
+        }
+    });
+    function onLoadMore() {
+        loadDataFromService(currentPager+1);
+        setTimeout(function () {
+            mui('#albums_list_div').pullRefresh().endPullupToRefresh();// 加载数据最没有更多内容
+        }, 1500);
+    }
+    /////////////
+    radioUl.innerHTML = "";
+
+    /////////////
+    function loadDataFromServiceForNav(){
+        categoryId = info.getItem("categoryId");
+        tagName = info.getItem("tagName");
+
+        var paramToNative = {};
+        var urlStr = "/ent/music/tags/list";
+        var paramToCilent = {};
+        paramToCilent.categoryId = categoryId;
+        paramToCilent.type = 0;
+        paramToCilent.deviceId = devID;
+        paramToCilent.platformId = 0;
+        paramToNative.url = urlStr;
+        paramToNative.param = paramToCilent;
+
+        plus.gatewayCmd.WLHttpGetBase(paramToNative, function(result) {
+            if(result.resultCode == 0){
+                currentPager = 1;
+                createRadioList(result.data);
+                if(tagName){
+                    document.getElementsByClassName("deviceName")[0].textContent = tagName;
+                    var narBar = document.getElementById("bar");
+                    for (var tagnameIndex in result.data){
+                        var dataModel = result.data[tagnameIndex];
+                        if (dataModel.tag_name == tagName){
+                            var currentNav = narBar.getElementsByClassName("nav")[tagnameIndex];
+                            lastNav.classList.remove("lineGreen");
+                            currentNav.classList.add("lineGreen");
+                            lastNav = currentNav;
+                        }
+                    }
+                    loadDataFromService(1);
+                }else{
+                    tagName = result.data[0].tag_name;
+                    loadDataFromService(1);
+                }
+            }
+        })
+    }
+    //创建导航栏
+    function createRadioList(data) {
+        var bar = document.getElementById("bar");
+        if(data == null || typeof(data) == "undefined" || data.length == 0) return;
+        for(var i = 0; i < data.length; i++) {
+            //TODO 创建列表项节点
+            if(i == 0) {
+                document.getElementsByClassName("deviceName")[0].textContent = data[0].tag_name;
+            }
+            var item = createItem(data[i],i);
+            bar.appendChild(item);
+        }
+    }
+
+    function createItem(itemData,index) {
+        var nav = document.createElement("div");
+        nav.className = "nav";
+        if(index == '0'){
+            lastNav = nav;
+            nav.classList.add("lineGreen");
+        }
+        nav.textContent = itemData.tag_name
+        nav.align = "center";
+        nav.addEventListener("click", function() {
+            tagName = itemData.tag_name;
+            document.getElementsByClassName("deviceName")[0].textContent = itemData.tag_name;
+            radioUl.innerHTML = "";
+            lastNav.classList.remove("lineGreen");
+            nav.classList.add("lineGreen");
+            lastNav = nav;
+            loadDataFromService(1);
+        }, true);
+        return nav;
+    }
+
+    //从服务端获取专辑列表数据
+    function loadDataFromService(pager) {
+        var paramToNative = {};
+        var urlStr = "/ent/music/albums/hot";
+        var paramToCilent = {};
+        paramToCilent.categoryId = categoryId;
+        paramToCilent.tagName = tagName;
+        paramToCilent.deviceId = devID;
+        paramToCilent.platformId = 0;
+        paramToCilent.page = pager;
+        paramToNative.url = urlStr;
+        paramToNative.param = paramToCilent;
+
+        plus.gatewayCmd.WLHttpGetBase(paramToNative, function(result) {
+            mui('#albums_list_div').pullRefresh().endPullupToRefresh();
+            if(result.resultCode == 0){
+                currentPager = parseInt(result.data.currentPage);
+                if (pager == 1){
+                    albumsList = result.data.albums;
+                    createList(result.data.albums);
+                }else {
+                    addCreateList(result.data.albums);
+                }
+
+            }
+        })
+    }
+
+    //绘制专辑列表
+    function createList(data) {
+        if(data.length > 0){
+            if(data == null || typeof(data) == "undefined" || data.length == 0) return;
+            for(var i = 0; i < data.length; i++) {
+                var item = createListItem(data[i]);
+                radioUl.appendChild(item);
+            }
+        }
+    }
+
+    //增加专辑列表
+    function addCreateList(data) {
+        if(data.length > 0){
+            if(data == null || typeof(data) == "undefined" || data.length == 0) return;
+            for(var i = 0; i < data.length; i++) {
+                var item = createListItem(data[i]);
+                radioUl.appendChild(item);
+            }
+        }
+    }
+
+    function createListItem(itemData) {
+        var item = document.createElement("li");
+        item.className = "custom-list-cell";
+        //img
+        var childImg = document.createElement("img");
+        childImg.className = "custom-list-object";
+        var iconSrc = itemData.url;
+        if(iconSrc == null || typeof(iconSrc) == "undefined" || iconSrc.length == 0) {
+            iconSrc = "img/icon120x120.png";
+        }
+        childImg.src = iconSrc;
+        //div
+        var childDiv = document.createElement("div");
+        childDiv.className = "custom-list-body";
+        var childDiv_p1 = document.createElement("p");
+        childDiv_p1.className = "custom-title";
+        childDiv_p1.textContent = itemData.albumTitle;
+        var childDiv_p2 = document.createElement("p");
+        childDiv_p2.className = "custom-description";
+        childDiv_p2.textContent = "by: " + itemData.nickname;
+        var childDiv_p3 = document.createElement("p");
+        childDiv_p3.className = "custom-play-info";
+        var playCount = (parseFloat(itemData.play_count) / 10000).toPrecision(3) + "万";
+        childDiv_p3.textContent = "播放:" + playCount + "  声音:" + itemData.avatarUrl;
+        childDiv.appendChild(childDiv_p1);
+        childDiv.appendChild(childDiv_p2);
+        childDiv.appendChild(childDiv_p3);
+        item.appendChild(childImg);
+        item.appendChild(childDiv);
+        //设置点击事件;
+        item.addEventListener("tap", function() {
+            albumId = itemData.id;
+            info.setItem("albumId",albumId);
+            window.location = "voice.html";
+        }, true);
+        return item;
+    }
+
+    var iphoneX = {sysFunc: "getItem:", room: "iphoneX", id: "iphoneX", data: ""};
+    var iStr ='';
+    if(!window.v6sysfunc) {
+        iStr = prompt(JSON.stringify(iphoneX))
+    }
+    if(iStr == "iphoneX"){
+        mui(".iponeXclass").each(function () {
+            var item = this;
+            var oldItemTop = item.style.marginTop;
+            item.style.marginTop = oldItemTop + "2.4rem";
+        })
+        $("#albums_list_div")[0].style.top = "12.6rem";
+    }
+</script>
+
+</html>

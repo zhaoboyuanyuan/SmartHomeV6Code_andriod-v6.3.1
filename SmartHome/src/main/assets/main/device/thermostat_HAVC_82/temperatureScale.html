@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>温标选择</title>
+	<link rel="stylesheet" type="text/css" href="css/base.css"/>
+	<link rel="stylesheet" type="text/css" href="css/tempScale.css"/>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+<header class="header">
+	<div class="header_top">
+		<a class="back" href="javascript:;"></a>
+		<a href="javascript:;" class="deviceName autoSwitchLanguager" key="Device_82_Details_Scale">温标</a>
+		<a></a>
+	</div>
+</header>
+<section class="mainView">
+	<div class="mainTop" onclick="chooseMe('.mainTop')">
+		℃<span class="autoSwitchLanguager" key="Device_82_Details_Scale1">(摄氏温度)</span>
+		<i class="iconRight iconTop"></i>
+	</div>
+	<div class="mainBottom" onclick="chooseMe('.mainBottom')">
+		℉<span class="autoSwitchLanguager" key="Device_82_Details_Scale2">(华氏温度)</span>
+		<i class="iconRight iconBottom"></i>
+	</div>
+</section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/sendCMD.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/device82Model.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    function chooseMe(ele) {
+        $(".mainView").find('i').hide();
+        $(ele).find('i').show();
+    }
+    //国际化初始化函数
+    initlan()
+    plus.plusReady(function(){
+        //返回到设备详情页
+        $(".back").on("click",function(){
+            back();
+        })
+		
+		$(".mainTop").on("click",function () {
+            sendCmd(gwID,devID,ep,0x8014,["0"]);
+            setTimeout(function () {
+				back();
+            },800);
+        })
+
+        $(".mainBottom").on("click",function () {
+            sendCmd(gwID,devID,ep,0x8014,["1"]);
+            setTimeout(function () {
+                back();
+            },800);
+        })
+
+		function back() {
+            plus.tools.back(function() {})
+        }
+        ////////////////////////////回调---start////////////////////////////
+        plus.gatewayCmd.getDeviceInfo(null, function(data){
+            devID = data.devID;
+            gwID = data.gwID;
+            ep = ~~(data.endpoints[0].endpointNumber);
+            handleData(data);
+        })
+
+        plus.gatewayCmdRush.newDataRefresh(function(data){
+            if(data.cmd == "500" && devID == data.devID){
+            }
+        })
+        ////////////////////////////回调---end////////////////////////////
+
+        function handleData(data){
+            for (var i = 0; i < data.endpoints.length; i++) {
+                var endpoint = data.endpoints[i];
+                var endpointNumber = endpoint.endpointNumber;
+                var endpointName = endpoint.endpointName;
+                var endpointType = endpoint.endpointType;
+                var clusters = endpoint.clusters;
+                var attributes = clusters[0].attributes;
+                for (var j = 0;j < attributes.length;j++){
+                    var attributeId = attributes[j].attributeId;
+                    var attributeValue = attributes[j].attributeValue;
+                    if(attributeId == 0x8001){
+                        updataModelWith(attributeValue);
+                        if (s_82_temperatureUnit == "01" ){
+                            //
+                            $(".mainView").find('i').hide();
+                            $(".mainBottom").find('i').show();
+                        } else {
+                            $(".mainView").find('i').hide();
+                            $(".mainTop").find('i').show();
+						}
+                    }
+                }
+
+            }
+        }
+        ////////
+    })
+</script>
+
+</html>

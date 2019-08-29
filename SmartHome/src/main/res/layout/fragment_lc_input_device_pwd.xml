@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/ll_img_tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:background="@drawable/bg_lc_input_pwd" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/add_deviceLC_set_password"
+                android:textColor="#000"
+                android:textSize="17sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_wifi_pwd_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_padding_normal">
+
+            <LinearLayout
+                android:id="@+id/ll_wifi_pwd_show"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/config_device_btn_height"
+                android:layout_alignParentEnd="true"
+                android:background="@color/white">
+
+                <ImageView
+                    android:id="@+id/iv_clear_pwd"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/icon_lc_delete" />
+
+                <CheckBox
+                    android:id="@+id/cb_wifi_pwd_show"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:button="@drawable/selector_checkbox_wifi_pwd"
+                    android:paddingStart="@dimen/default_padding_small"
+                    android:paddingEnd="@dimen/default_padding_small" />
+            </LinearLayout>
+
+
+            <EditText
+                android:id="@+id/et_wifi_pwd"
+                style="@style/config_wifi_text"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/config_device_btn_height"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_toLeftOf="@id/ll_wifi_pwd_show"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:hint="@string/add_deviceLC_enter_password"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:paddingStart="@dimen/default_padding_small"
+                android:paddingEnd="@dimen/default_padding_small"
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/default_editText_size" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_tip1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_padding_small"
+            android:layout_marginTop="8dp"
+            android:text="@string/add_deviceLC_password_8_32" />
+
+        <LinearLayout
+            android:id="@+id/ll_tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_tip2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_padding_normal"
+                android:paddingStart="@dimen/default_padding_small"
+                android:paddingEnd="@dimen/default_padding_small"
+                android:text="@string/Tip_Warm"
+                android:textColor="@color/black"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="4dp"
+                android:paddingStart="@dimen/default_padding_small"
+                android:paddingEnd="@dimen/default_padding_small"
+                android:text="@string/add_deviceLC_password_1"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:lineSpacingExtra="4dp"
+                android:paddingStart="@dimen/default_padding_small"
+                android:paddingEnd="@dimen/default_padding_small"
+                android:text="@string/add_deviceLC_password_2"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_next_step"
+        style="@style/config_next_button"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:text="@string/Sure" />
+</RelativeLayout>

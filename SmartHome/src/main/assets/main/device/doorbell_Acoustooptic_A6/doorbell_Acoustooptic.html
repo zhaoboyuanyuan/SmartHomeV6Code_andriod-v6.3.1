@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/device.css" />
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a class="back" href="javascript:;"></a>
+				<a href="javascript:;" class="deviceName autoSwitchLanguager" key="DoorbellAlarm_name">门铃声光器</a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="doorbell_show">
+			<i class="doorbell_img"></i>
+		</section>
+		<section class="doorbellbutton_show">
+			<div class="doorbellbutton_btn">
+				<a class="ringState autoSwitchLanguager" key="DoorbellAlarm_tips2" href="javascript:;">开启门铃</a>
+			</div>
+		</section>
+		<section class="doorbellcontrl_show">
+			<i class="ring"></i>
+			<i class="play"></i>
+			<i class="vol"></i>
+		</section>
+		<section class="mask_layer" style="display:none;">
+			<i></i>
+			<span class="autoSwitchLanguager" id="offLine">设备已离线</span>
+		</section>
+	</body>
+	<script type="text/javascript">
+		var state = 0;//0guan 1kai
+		var GWID = '';
+		var DEVID = '';
+		//国际化初始化函数
+        initlan()
+        plus.plusReady(function(){
+        		plus.gatewayCmd.getDeviceInfo(null, function(data){
+        			if(data.mode == 2){
+        				$(".mask_layer").show();
+				}else{
+					$(".mask_layer").hide();
+					//绘制UI
+					reFreshHtmlWithData(data);
+				}
+				var name = data.name.indexOf("#$default$#") != -1 ? lang_name_A6+data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+				DEVID = data.devID;
+				GWID = data.gwID;
+				getMoreConfig(DEVID);
+        		})
+        		plus.gatewayCmdRush.newDataRefresh(function(data){
+        			if(data.cmd == "500" && DEVID == data.devID){
+					if(data.mode == 2){
+						$(".mask_layer").show();
+					}else{
+						$(".mask_layer").hide();
+						reFreshHtmlWithData(data);
+					}
+					var name = data.name.indexOf("#$default$#") != -1 ? lang_name_A6+data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+				}else if(data.cmd == "502" && DEVID == data.devID){
+                    if((data.name != undefined || data.name != '') && data.name.indexOf("#$default$#") == -1){
+						$(".deviceName").html(data.name)
+					}else{
+                        var name = data.name.indexOf("#$default$#") != -1 ? lang_name_A6+data.name.split("#")[2]:data.name
+                        $(".deviceName").html(name)
+					}
+				}
+        		})
+        		 //返回到设备详情页
+			$(".back").on("click",function(){
+				plus.tools.back(function() {})
+			})
+			//跳转到更多页面
+			$(".more").on("click",function(){
+				plus.tools.more(moreConfig, function() {})
+			})
+			//
+			$(".ringState").on("click",function(){
+				if(state == 0){
+					var deviceInfo = deviceControllJson(GWID,DEVID,'41');
+					plus.gatewayCmd.controlDevice(deviceInfo,function(){})
+				}else{
+					var deviceInfo = deviceControllJson(GWID,DEVID,'40');
+					plus.gatewayCmd.controlDevice(deviceInfo,function(){})
+				}
+			})
+			$(".ring").on("click",function(){
+				var deviceInfo = deviceControllJson(GWID,DEVID,'21');
+					plus.gatewayCmd.controlDevice(deviceInfo,function(){})
+			})
+			$(".play").on("click",function(){
+				var deviceInfo = deviceControllJson(GWID,DEVID,'11');
+					plus.gatewayCmd.controlDevice(deviceInfo,function(){})
+			})
+			$(".vol").on("click",function(){
+				var deviceInfo = deviceControllJson(GWID,DEVID,'31');
+					plus.gatewayCmd.controlDevice(deviceInfo,function(){})
+			})
+			function reFreshHtmlWithData(data){
+				var attributeIdStr = data.endpoints[0].clusters[0].attributes[0].attributeId;
+				var attributeValueStr = data.endpoints[0].clusters[0].attributes[0].attributeValue;
+				if(attributeIdStr == "32769"){
+					var currentState= attributeValueStr.substr(0,2);
+					var RingState= attributeValueStr.substr(2,2);
+					if(RingState == "00"){
+						//
+						state = 0
+						$(".ringState").html(lang_DoorbellAlarm_tips2)
+						$(".doorbell_img").css("background","url(img/icon_pic_bell_nor.png) no-repeat center center")
+						$(".doorbell_img").css("background-size","20.8rem auto");
+					}else if(RingState == "01"){
+						state = 1
+						$(".ringState").html(lang_DoorbellAlarm_tips1)
+						$(".doorbell_img").css("background","url(img/icon_pic_bell_pre.png) no-repeat center center")
+						$(".doorbell_img").css("background-size","20.8rem auto");
+					}
+				}
+			}
+        		function deviceControllJson(gwID,devID,param){
+        			var jsonData = {
+					"cmd": "501",
+					"gwID": gwID,
+					"devID": devID,
+					"endpointNumber": 1,
+					"clusterId": 1280,
+					"commandType": 01,
+					"commandId": 32769,
+				};
+				if(param) {
+					jsonData.parameter = [parseInt(param) + ''];
+				}
+				return jsonData;
+        		}
+        })
+	</script>
+</html>

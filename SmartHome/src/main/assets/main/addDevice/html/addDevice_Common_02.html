@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>添加设备</title>
+	<link rel="stylesheet" type="text/css" href="../css/base.css" />
+	<link rel="stylesheet" type="text/css" href="../css/setState.css" />
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+	<header class="header">
+		<div class="header_top">
+			<a href="javascript:history.back(-1)"></a>
+			<a href="javascript:;"></a>
+			<a href="javascript:;"></a>
+		</div>
+	</header>
+	<section style="width: 100%;">
+		<section style="width: 100%;text-align: center;">
+			<img class="addImg" style="width: auto;height: auto;max-height:20rem ;max-width:75% ;margin-top: 6rem;" />
+		</section>
+		<p id="hint2" style="margin-top:5rem;padding: 0rem 3rem 0rem 3rem;font-size: 1.6rem;max-height: 12rem;overflow: scroll;">
+			快击SET键4次，指示灯快速闪烁4次。添加成功后，指示灯长亮2秒后熄灭
+		</p>
+		<p class="autoSwitchLanguager hintOF" key="addDevice_OF_step_2" style="display: none;margin-top:5rem; padding: 0rem 1rem 0rem 3rem;font-size: 1.6rem; text-align: center;max-height: 12rem;overflow: scroll;">
+			本产品上电后自动搜网
+		</p>
+		<p class="autoSwitchLanguager hintOF" key="addDevice_OF_step_3" style="display: none;margin-top:1rem; padding: 0rem 3rem 0rem 3rem;font-size: 1.6rem;max-height: 14rem;overflow: scroll;">
+			接通电源，晾衣机控制器发出“嘀嘀嘀”的持续蜂鸣声，表明设备正在搜网，待设备加入网关后，蜂鸣声停止
+		</p>
+		<p class="autoSwitchLanguager hintOk" key="device_Ok_Step02" style="display: none; margin-top:5rem;padding: 0rem 3rem 0rem 3rem;font-size: 1.6rem;max-height: 12rem;overflow: scroll;">
+			快击遥控器“上下风”4次，间隔时间不超过1秒
+		</p>
+		<p class="autoSwitchLanguager wkq_lp" key="addDevice_new_no10" style="display: none; margin-top:5rem;padding: 0rem 3rem 0rem 3rem;font-size: 1.6rem;max-height: 12rem;overflow: scroll;">
+			长按功能键5秒，网络指示灯闪烁后松开手指，设备开始搜索网络，加入网络后，指示灯常亮。
+		</p>
+		<p class="title_detail" style="display: none; padding: 2.4rem 3rem 0rem 3rem;font-size: 1.6rem;text-align: center;max-height: 15rem;overflow: scroll;">
+			<b class="autoSwitchLanguager" key="addDevice_91_step_1" style="font-weight: bold;display: inline-block;margin-bottom: 15px;" ></b>
+			<span class="autoSwitchLanguager" key="addDevice_91_step_2" style="font-weight: 300;display: inline-block;text-align: left;" ></span>
+		</p>
+	</section>
+	<section class="iphoneX9_4" style="position: absolute; top: 7rem;right: 10px">
+		<canvas id="canvas" style="width:8rem;height:8rem;right: 0px;">
+		</canvas>
+	</section>
+
+	<section class="addSensorBtn">
+		<a href="javascript:;" class="autoSwitchLanguager" id="searchScene_cancal">取消</a>
+	</section>
+	<section class="gatewayHint autoSwitchLanguager" id="addDevice_Bu_failure">多次操作仍无法入网</section>
+	<!--多次操作无法入网弹出框-->
+	<section class="hintPopup iphoneX" style="top:6.4rem">
+		<div class="hintAlert">
+			<span class="autoSwitchLanguager" id="addDevice_Bu_failure_1">提示</span>
+			<p class="autoSwitchLanguager" id="addDevice_Bu_failure_2">如果您多次操作后仍无法加入网络，建议先退网后加网</p>
+			<p class="returnNetwork autoSwitchLanguager" id="addDevice_Bu_failure_3">退网方式：长按图示区域10秒，指示灯先快闪后转入慢闪，此时松开手指，指示灯闪烁5次表示退网成功</p>
+			<button class="know autoSwitchLanguager" id="addDevice_Bu_failure_4">我知道了</button>
+		</div>
+	</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/timer_canvas.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/commonModel.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	initlan()
+	var info = window.sysfun;
+	info.init("V6addDevice");
+	info.setItem("type", "01");
+	var deviceType = info.getItem("deviceType");
+	var time_canvas = 60;
+	picture(60);
+	if (deviceType == 'Ok') {
+		$("#hint2").hide();
+		$('.hintOk').show();
+		$(".addImg").css("margin-top", "10rem");
+	}
+	if (deviceType == 'Br') {
+		$("#hint2").hide();
+		$(".wkq_lp").show();
+	}
+	var timer = setInterval(function () {
+		if (time_canvas <= 0) {
+			window.clearInterval(timer);
+			window.location = "addDevice_fail.html?name=" + languageUtil.getResource(window.Model[deviceType].name);
+		}
+		picture(60);
+		time_canvas = time_canvas - 1;
+	}, 1000);
+	plus.plusReady(function () {
+		if (deviceType == 'Bu' || deviceType == "Bt" || deviceType == "Bw" || deviceType == "Bv" || deviceType == 'Bu_01' || deviceType == "Bw_01" || deviceType == "Bv_01" || deviceType == "Cl" || deviceType == "Cm" || deviceType == "Cn") {
+			$(".gatewayHint").show();
+		}else if(deviceType == '38'){
+		    $(".returnNetwork").html(languageUtil.getResource("addDevice_38_failure_2"));
+            $(".gatewayHint").show();
+		}else if(deviceType == 'Ca' || deviceType == 'Cb' || deviceType == 'Cc'){
+            $(".returnNetwork").html(languageUtil.getResource("addDevice_Ca_step_2"));//"退网方式：两键同时长按10秒，指示灯先快速闪烁后慢闪3次，表示退网成功"
+            $(".gatewayHint").show();
+		} else if(deviceType == "Op"){
+			$(".gatewayHint").show();
+			$(".returnNetwork").html(languageUtil.getResource("addDevice_Op_Exit_net_02"));
+		} else if(deviceType == "Ck"){
+            $(".gatewayHint").show();
+            $(".returnNetwork").html(languageUtil.getResource("addDevice_Ck_Exit_network"));
+		}else if(deviceType == "Cp"){
+            $(".gatewayHint").show();
+            $(".returnNetwork").html(languageUtil.getResource("addDevice_Ca_step_2"));
+		}
+		$(".gatewayHint").on("click", function () {
+			$(".hintPopup").show();
+		});
+		$(".know").on("click", function () {
+			$(".hintPopup").hide();
+		});
+		$("#hint2").html(languageUtil.getResource(window.Model[deviceType].hint2))
+		if (deviceType == 'OF') {
+			$("#hint2").hide();
+			$('.hintOF').show();
+		}
+		if (deviceType == '91') {
+            $("#hint2").hide();
+		    $(".title_detail").show();
+		}
+		$(".addImg").attr("src", window.Model[deviceType].img2)
+		$(".header_top a").eq(1).html(languageUtil.getResource(window.Model[deviceType].title))
+		info.setItem("name", languageUtil.getResource(window.Model[deviceType].name));
+		plus.gatewayCmd.newDataRefresh(function (result) {
+			if (result.cmd == "500") {
+			    if(result.mode == 4){
+                    if( deviceType === "Bu_01" || deviceType === "Bv_01" || deviceType === "Bw_01" ||
+						deviceType === "Bu" || deviceType === "Bv" || deviceType === "Bw"){
+						if(result.type === "Bu" || result.type === "Bv" || result.type === "Bw"){
+                            info.setItem("decInfo", JSON.stringify(result));
+                            window.location = "addDevice_succ.html?name=" + languageUtil.getResource("device_"+result.type+"_02_name");
+						}
+                    }else if(result.type == deviceType){
+                        info.setItem("decInfo", JSON.stringify(result));
+                        window.location = "addDevice_succ.html?name=" + languageUtil.getResource(window.Model[deviceType].name);
+                    }
+				}
+
+				// if (result.mode == 4 && result.type == deviceType) {
+				// 	console.log(result);
+				// 	info.setItem("decInfo", JSON.stringify(result));
+				// 	window.location = "addDevice_succ.html?name=" + languageUtil.getResource(window.Model[deviceType].name);
+				// }
+			}
+		});
+		$(".addSensorBtn").on("click", function () {
+			window.location = "addDeviceNew.html";
+		})
+	})
+</script>
+
+</html>

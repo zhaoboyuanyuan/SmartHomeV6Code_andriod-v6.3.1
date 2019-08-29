@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>烟雾监测器</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<a class="back" href="javascript:;"></a>
+			<a class="deviceName autoSwitchLanguager" id="addDevice_43_name" href="javascript:;">烟雾监测器</a>
+			<a class="more" href="javascript:;"></a>
+		</header>
+		<section class="state_show">
+			<div class="status autoSwitchLanguager" id="fortifying">设防中</div>
+			<div class="img_state" style="position: relative;">
+				<div class="loading">
+					<i></i>
+					<i></i>
+					<i></i>
+				</div>
+				<img src="fonts/icon_smoke.png" alt="" />
+				<span class="autoSwitchLanguager" id="normal">正常</span>
+			</div>
+		</section>
+		<section class="img_bottom">
+			<!--<img src="fonts/bg_bottom.png" alt="" />-->
+			<div class="bottom_btn">
+				<a id="disarming" class="btn autoSwitchLanguager" href="javascript:;">撤防</a>
+			</div>
+		</section>
+		<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" id="offLine">设备已离线</span></section>
+	</body>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var state = 0;
+		var num = 2; //动画数组长度
+		var timer; //定时器动画
+		var dId = ''
+        initlan();
+		plus.plusReady(function() {
+			//newDataRefresh(resultJson)
+			plus.gatewayCmd.getDeviceInfo(function(data) {
+				if(data.mode == 2) {
+					$(".mask_layer").show();
+				} else {
+					$(".mask_layer").hide();
+					editHtml(data)
+				}
+                var name = data.name.indexOf("#$default$#") != -1 ? addDevice_43_name+data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+				rush_500(data.devID)
+				dId = data.devID
+                getMoreConfig(dId)
+				contorl(data.gwID, data.devID, data.endpoints[0].endpointNumber)
+			})
+		})
+		function rush_500(dID) {
+			plus.gatewayCmd.newDataRefresh(function(data) {
+				if(data.cmd == "500" && dID == data.devID) {
+					if(data.mode == 2) {
+						$(".mask_layer").show();
+					} else {
+						$(".mask_layer").hide();
+						editHtml(data)
+					}
+                    var name = data.name.indexOf("#$default$#") != -1 ? addDevice_43_name+data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+				} else if(data.cmd == "502" && dId == data.devID) {
+					if(data.name != undefined || data.name != "") {
+                        var name = data.name.indexOf("#$default$#") != -1 ? addDevice_43_name+data.name.split("#")[2]:data.name
+                        $(".deviceName").html(name)
+					}
+					if(data.endpointStatus == 0) {
+						//更换整个背景图片
+						$("html,body").css("background", "url(fonts/bg_2.png) repeat-x left top")
+						//去掉状态图中的文字
+						$(".img_state").find("span").html('')
+						//修改控制按钮样式
+						$(".btn").addClass("btn_1")
+						$(".btn").html(lang_fortify)
+						//修改撤防设防图标
+						$(".status").addClass("status_no")
+						$(".status").html(lang_disarmed)
+						state = 0;
+						clearInterval(timer)
+						$(".loading").hide()
+					} else if(data.endpointStatus == 1){
+						$("html,body").css("background", "url(fonts/bg_1.png) repeat-x left top")
+						$(".img_state").find("span").html(lang_normal)
+						$(".btn").removeClass("btn_1")
+						$(".btn").html(lang_disarming)
+						//修改撤防设防图标
+						$(".status").removeClass("status_no")
+						$(".status").html(lang_fortifying)
+						state = 1;
+						clearInterval(timer)
+						$(".loading").hide()
+					}
+				}
+			})
+		}
+		//返回到设备详情页
+		$(".back").on("click", function() {
+			plus.tools.back(function() {})
+		})
+		//跳转到更多页面
+		$(".more").on("click", function() {
+			plus.tools.more(moreConfig, function() {})
+		})
+		function editHtml(data) {
+//			var name = data.name.indexOf("#$default$#") != -1 ? lang_name_43 + data.name.split("#")[2] : data.name
+//			$(".deviceName").html(name)
+			//endpointStatus:0.撤防，1.设防
+			if(data.endpoints[0].endpointStatus == 0) {
+				/*html,body{width:100%;height:100%;background:url(../fonts/bg_2.png) repeat-x left top;}*/
+				//更换整个背景图片
+				$("html,body").css("background", "url(fonts/bg_2.png) repeat-x left top")
+				//去掉状态图中的文字
+				$(".img_state").find("span").html('')
+				//修改撤防设防图标
+				$(".status").addClass("status_no")
+				$(".status").html(lang_disarmed)
+				//修改控制按钮样式
+				$(".btn").addClass("btn_1")
+				$(".btn").html(lang_fortify)
+				num = 2;
+				clearInterval(timer)
+				$(".loading").hide()
+				state = 0;
+				//设防
+			} else if(data.endpoints[0].endpointStatus == 1) {
+				state = 1
+				var attribute = data.endpoints[0].clusters[0].attributes[0]
+				if(attribute.attributeId == 2){
+					//设防状态下，报警编辑
+                    if(attribute.attributeValue == 1) {
+                        $("html,body").css("background", "url(fonts/bg_3.png) repeat-x left top")
+                        $(".img_state").find("span").html(lang_warn)
+                        $(".loading").show()
+                        clearInterval(timer)
+                        timer = setInterval(beginCircle, 300);
+                        //设防状态下消警编辑
+                    } else if(attribute.attributeValue === '0') {
+                        $("html,body").css("background", "url(fonts/bg_1.png) repeat-x left top")
+                        $(".img_state").find("span").html(lang_normal)
+                        clearInterval(timer)
+                        num = 2;
+                        $(".loading").hide()
+                    }
+				}
+				$(".btn").removeClass("btn_1")
+				$(".btn").html(lang_disarming)
+				$(".status").removeClass("status_no")
+				$(".status").html(lang_fortifying)
+			}
+		}
+		//设备设防撤防控制502
+		function deviceContorl(gwID, devID, endpointNumber, state) {
+			var data = {
+				"cmd": "502",
+				"gwID": gwID,
+				"mode": 0,
+				"devID": devID,
+				"endpointNumber": endpointNumber,
+				"endpointStatus": state
+			}
+			return data;
+		}
+
+		function contorl(gwID, devID, endpointNumber) {
+			$(".btn").on("click", function() {
+				if(state == 0) {
+					var deviceInfo = deviceContorl(gwID, devID, endpointNumber, '1');
+					plus.gatewayCmd.controlDevice(deviceInfo, function() {})
+				} else {
+					var deviceInfo = deviceContorl(gwID, devID, endpointNumber, '0');
+					plus.gatewayCmd.controlDevice(deviceInfo, function() {})
+				}
+			})
+		}
+		/*
+		 * 报警动画
+		 */
+		function beginCircle() {
+			if(num >= 0) {
+				$(".loading i").eq(num).css("display", "block")
+			}
+			num = num - 1;
+			if(num == -2) {
+				num = 2;
+				$(".loading i").css("display", "none")
+			}
+		}
+	</script>
+
+</html>

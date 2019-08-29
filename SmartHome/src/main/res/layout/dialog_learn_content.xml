@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:paddingBottom="10dp"
+        android:text="@string/Infraredrelay_Custom_Learningpopups"
+        android:textColor="#454749"
+        android:textSize="@dimen/default_text_size" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/bg_if01_match" />
+
+    <TextView
+        android:id="@+id/tv_delay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/Infraredrelay_Custom_Matching"
+        android:textColor="#454749"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/dialog_btn_positive"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_btn_height"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/selector_dismiss_btn"
+        android:text="@string/Cancel"
+        android:textColor="@color/v6_text_green"
+        android:textSize="18sp" />
+</LinearLayout>

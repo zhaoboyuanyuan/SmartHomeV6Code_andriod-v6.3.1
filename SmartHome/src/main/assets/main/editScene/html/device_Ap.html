@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/device_Ap.css" />
+    <script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/mui/js/mui.picker.all.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+
+<body>
+    <header class="header" style="position:none">
+        <div class="header_top">
+            <a href="javascript:window.history.back(-1);"></a>
+            <a class="deviceName autoSwitchLanguager" key="setDeviceStatus" href="javascript:;">设置设备状态</a>
+            <a key="editScene_Ap_Confirm" class="complete autoSwitchLanguager" onclick="save()" href="javascript:;">确定</a>
+        </div>
+    </header>
+    <section>
+        <div class="mainTop">
+            <span class="autoSwitchLanguager" key="editScene_Ap_Open">开关</span>
+            <div class="switch" id="open"><i data-state="off" class="on"></i></div>
+        </div>
+    </section>
+    <section>
+        <div class="mainBottom" onclick="showPop()">
+            <span class="autoSwitchLanguager" key="editScene_Ap_Temperature">温度</span>
+            <span class="currentTemp">26℃</span>
+            <i class="iconRight"></i>
+        </div>
+    </section>
+</body>
+<script>
+    initlan();
+    var info = window.sysfun;
+    info.init("V6Scene");
+
+    var deviceID = info.getItem('deviceID');
+    info.setItem("type", "Ap");
+
+    turnOffSwitch();
+    var TEMP_ARR = [];
+    var tempScale = 0;
+    var state = 0; // 开关状态
+    var temp = 26; // 温度
+
+    // 摄氏度数组    10 - 32     步进 0.5   默认 26℃
+    var mainTempArrC = [];
+    var mainTempValC = 26;
+    // 华氏度数组    50 - 90     步进 1     默认 90℉
+    var mainTempArrF = [];
+    var mainTempValF = 79;
+    for (var i = 0; i <= 44; i++) {
+        var t = 10 + i / 2;
+        mainTempArrC.push(t + '℃')
+    }
+    for (var i = 0; i <= 40; i++) {
+        var t = (50 + i);
+        mainTempArrF.push(t + '℉');
+    }
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        info.setItem("epData", "20");
+        info.setItem("deviceState", languageUtil.getResource('closeSingle'));
+        plus.gatewayCmd.getDeviceInfo(deviceID, function (data) {
+            handleEp(data.endpoints)
+        })
+    });
+
+    // 处理 endpoints
+    // 遍历解析
+    function handleEp(endpoints) {
+        endpoints.forEach(function (endpoint) {
+            var endpointNumber = endpoint.endpointNumber;
+            var endpointName = endpoint.endpointName;
+            var endpointType = endpoint.endpointType;
+            var clusters = endpoint.clusters;
+            clusters.forEach(function (cluster) {
+                var clusterId = cluster.clusterId;
+                var attributes = cluster.attributes;
+                attributes.forEach(function (attribute) {
+                    var attributeId = attribute.attributeId;
+                    var attributeValue = attribute.attributeValue;
+                    handleAttribute(attributeId, attributeValue)
+                })
+            })
+        });
+    }
+
+    // 处理 attribute
+    function handleAttribute(attributeId, attributeValue) {
+        console.log("attributeId:\t\t" + attributeId.toString(16));
+        console.log("attributeValue:\t\t" + attributeValue);
+
+        if (attributeId == 0x8001) {
+            handleAttribute8001(attributeValue)
+        } else if (attributeId == 0x8006) {
+            handleAttribute8006(attributeValue)
+        }
+    }
+
+    function handleAttribute8001(value) {
+        tempScale = parseInt(value.substr(14, 2), 16); // zz:          温度标志位
+
+        if (tempScale != 0) {
+            $('.currentTemp').html(79 + getTempScale())
+        }
+    }
+
+    function handleAttribute8006(value) {
+        tempScale = parseInt(value.substr(0, 2), 16);
+
+        if (tempScale != 0) {
+            $('.currentTemp').html(79 + getTempScale())
+        }
+    }
+
+    function save() {
+        window.location = "addDelay.html";
+    }
+
+    function showTemp(t) {
+        temp = t;
+        $(".currentTemp").html(t + tempScale);
+    }
+
+    function setState(s) {
+        state = s;
+        if (state == 0) {
+            info.setItem('epData', '20');
+            info.setItem("deviceState", languageUtil.getResource('closeSingle'));
+        } else {
+            var ss = parseInt(temp * 100).toString();
+            info.setItem('epData', ('21,6' + ss));
+            info.setItem("deviceState", languageUtil.getResource('openSingle') + ' ' + temp + getTempScale());
+        }
+    }
+
+    function setTemp(t) {
+        temp = t;
+
+        if (state == 0) {
+            info.setItem('epData', '20');
+            info.setItem("deviceState", languageUtil.getResource('closeSingle'));
+        } else {
+            var ss = parseInt(temp * 100).toString();
+            info.setItem('epData', ('21,6' + ss));
+            info.setItem("deviceState", languageUtil.getResource('openSingle') + ' ' + temp + getTempScale());
+        }
+
+        $('.currentTemp').html(temp + getTempScale())
+    }
+
+    $("#open").on("click", toggleSwitch);
+
+    /**
+     * 切换开关
+     */
+    function toggleSwitch() {
+        var state = $("#open .on").attr("data-state");
+        if (state == "off") {
+            setState(1);
+            turnOnSwitch()
+        } else {
+            setState(0);
+            turnOffSwitch()
+        }
+    }
+
+    function turnOnSwitch() {
+        state = 1;
+        $("#open .on").attr("data-state", "on");
+        $("#open").css("background", "#8dd652");
+        $("#open i").animate({
+            left: '60%'
+        }, 200)
+
+        $('.mainBottom').show();
+    }
+
+    function turnOffSwitch() {
+        state = 0;
+        $("#open .on").attr("data-state", "off");
+        $("#open").css("background", "#aaa");
+        $("#open i").animate({
+            left: '10%'
+        }, 200)
+
+        $('.mainBottom').hide();
+    }
+
+    // 获取温度数组
+    function getTempArr() {
+        mainTempArrS = tempScale == 0 ? mainTempArrC : mainTempArrF;
+        return mainTempArrS;
+    }
+
+    function getTempScale() {
+        return tempScale == 0 ? '℃' : '℉';
+    }
+
+    function showPop() {
+        //初始化PopPicker组件
+        var picker = new mui.PopPicker({});
+
+        picker.setData(getTempArr());
+
+        $(".mui-backdrop").css("opacity", "0");
+        $(".mui-poppicker-btn-cancel").html(languageUtil.getResource('editScene_Ap_Cancel')); //"取消"
+        $(".mui-poppicker-btn-ok").html(languageUtil.getResource('editScene_Ap_Confirm')); //"确定"
+        picker.show(function (item) {
+            var st = item.toString();
+            setTemp(st.substring(0, st.length - 1))
+        });
+    }
+</script>
+
+</html>

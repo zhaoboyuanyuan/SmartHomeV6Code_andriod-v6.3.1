@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<!--<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />-->
+		<title>添加设备</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	</head>
+
+	<body>
+		<header class="header" style="position: fixed;z-index:9999;">
+			<div class="header_top">
+				<a class="returnScene" href="javascript:;"></a>
+				<a href="javascript:;" class="autoSwitchLanguager" id="addGateway4_addDevice">添加设备</a>
+				<a href="javascript:;"></a>
+			</div>
+			<div class="search_input">
+				<a href="searchScene.html">
+					<span style="background: none;"></span>
+					<input type="text" disabled="disabled" class="autoSwitchLanguager" id="searchScene_search" placeholder="搜索" />
+					<i></i>
+				</a>
+			</div>
+		</header>
+		<section class="scan_add" style="padding-top: 9.8rem;">
+			<a id="qrScan" href="javascript:;"><i></i><span class="autoSwitchLanguager" id="addScene_addCode">扫码添加</span></a>
+		</section>
+		<!--style="padding-top: 9.8rem;margin-top: -0.1rem;"-->
+		<section style="margin-top: -0.1rem;" class="all_scene autoSwitchLanguager" id="addScene_allDevice">全部设备</section>
+		<section class="sc_list sc_list_new">
+			<!--<a href="addDevice_gateway.html"><i></i><span class="autoSwitchLanguager" id="addScene_addgateway">网关</span></a>-->
+			<!--<a href="addDevice_lock.html"><i></i><span class="autoSwitchLanguager" id="addScene_Intelligentdoorlock">智能门锁</span></a>-->
+			<!--<a href="addDevice_camera.html"><i></i><span class="autoSwitchLanguager" id="addScene_Videocamera">摄像机</span></a>-->
+			<!--<a href="addDevice_switch.html"><i></i><span class="autoSwitchLanguager" id="Adddevice_Switchgear">开关照明</span></a>-->
+			<!--<a href="addDevice_socket.html"><i></i><span class="autoSwitchLanguager" id="addScene_addSocket">插座</span></a>-->
+			<!--<a href="addDevice_sensor.html"><i></i><span class="autoSwitchLanguager" id="Adddevice_Security_Equipment">安防设备</span></a>-->
+			<!--<a href="addDevice_environmentMonitoring.html"><i></i><span class="autoSwitchLanguager" id="Adddevice_Environmental_Monitoring">环境检测</span></a>-->
+			<!--<a href="addDevice_curtains.html"><i></i><span class="autoSwitchLanguager" id="addScene_Windowcurtains">窗帘</span></a>-->
+			<!--<a href="addDevice_infraredTransponder.html"><i></i><span class="autoSwitchLanguager" id="Adddevice_Remote_Control">智能遥控</span></a>-->
+			<!--<a href="addDevice_repeater01.html"><i></i><span class="autoSwitchLanguager" id="Adddevice_Relay">中继器</span></a>-->
+		</section>
+	</body>
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../build/navigator.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<!--<script src="../js/addDeviceModel.js" type="text/javascript" charset="utf-8"></script>-->
+	<script>
+		var reflag;
+		var info = window.sysfun;
+		info.init("V6addDevice");
+		info.clear();
+
+		//        getcategoryList("wulian",".sc_list");
+		plus.plusReady(function() {
+			if(reflag)return;
+			reflag = true;
+			plus.tools.getProject(function(result) {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                result = result || "wulian_app";
+                if(result == "smartRoom_app" || result == "ASH_app" || result == "Kamande_app"
+                    || result == "IOTX_app" || result == "B_Gaon_app" || result == "LAVO_app"){
+                    result = "wulian_app";
+                    script.src = "../deviceModel/addDeviceModel.js";
+                }else if(result == "Legrand_app"){
+                    result = "Legrand_app";
+                    script.src = "../deviceModel/Legrand_addDeviceModel.js";
+                }else if(result == "zmartplus_app"){
+                    result = "zmartplus_app";
+                    script.src = "../deviceModel/zmartplus_addDeviceModel.js";
+                }else if(result == "hubb_app"){
+                    result = "hubb_app";
+                    script.src = "../deviceModel/hubb_addDeviceModel.js";
+                }else if(result == "wulian_app"){
+                    script.src = "../deviceModel/addDeviceModel.js";
+				}
+                document.getElementsByTagName('head')[0].appendChild(script);
+                // script.onload = getcategoryList(result, ".sc_list");
+                script.onload=function(){
+                    $(".sc_list").html("");
+                    for (var i = 0; i < window.addDeviceModel[result].length; i++) {
+                        var a;
+                        if(window.addDeviceModel[result][i].categoryType == "smart_control"){
+                            a = '<a class="smart_click" href="javascript:;"><i style="background:url(../../source/deviceIcon/icon_' + window.addDeviceModel[result][i].categoryType + '.png) no-repeat center center;background-size:3.4rem auto;"></i><span class="autoSwitchLanguager" id="' + window.addDeviceModel[result][i].name + '"></span></a>';
+						}else{
+                            a = '<a href="addDevice_classify.html?type=' + window.addDeviceModel[result][i].categoryType + '&project=' + result + '"><i style="background:url(../../source/deviceIcon/icon_' + window.addDeviceModel[result][i].categoryType + '.png) no-repeat center center;background-size:3.4rem auto;"></i><span class="autoSwitchLanguager" id="' + window.addDeviceModel[result][i].name + '"></span></a>';
+						}
+                        $(".sc_list").append(a);
+                    }
+                    $(".smart_click").on("click",function(){
+                        plus.tools.startSmart(function(){});
+					});
+                    initlan();
+				}
+				// getcategoryList(result, ".sc_list");
+			});
+			$("#qrScan").on("click", function() {
+				plus.tools.qrScan(function(data) {
+					if(data) {
+						info.setItem("deviceType", data.type);
+						if(data.type == 'GW06'){
+							info.setItem("gwId", data.data);
+							window.location = "addDevice_gateway_02_01.html"
+						}else if(data.type == 'GW12'){
+							info.setItem("gwId", data.data);
+							window.location = "addDevice_gateway_12_01.html"
+						}else if(data.type == 'GW09' || data.type == 'GW10'){
+							info.setItem("gwId", data.data);
+                            window.location = "addDevice_gateway_09_01.html"
+						}else if(data.type == "GW11"){
+							info.setItem("gwId", data.data);
+							window.location = "addDevice_gateway_11_01.html"
+						}else if(data.type == 'GW01'){
+							info.setItem("gwId", data.data);
+							window.location = "addGateway01.html"
+						}else if(data.type == 'GW14'){
+							plus.tools.startLiteGW(data.type,function(){});
+						}else if(data.type == 'Bn'){
+                            window.location = "addDevice_Bn_01.html"
+						}else if(data.type == 'Bq'){
+                            window.location = "addDevice_Bq_01.html"
+                        }else if(data.type == 'GW15'){
+                            info.setItem("gwId", data.data);
+                            window.location = "addDevice_gateway_15_03.html"
+                        }
+					}
+				})
+			})
+			$(".returnScene").on("click", function() {
+				plus.tools.back(function() {})
+			})
+			plus.tools.getLoginType(function(data) {
+				if(data == "101") {
+					$(".scan_add").hide()
+					var iphoneX = { sysFunc: "getItem:", room: "iphoneX", id: "iphoneX", data: "" };
+					var iStr = '';
+					if(!window.v6sysfunc) {
+						iStr = prompt(JSON.stringify(iphoneX))
+					}
+					if(iStr == "iphoneX") {
+						$(".all_scene").css({
+							"padding-top": "12.8rem"
+						})
+					} else {
+						$(".all_scene").css({
+							"padding-top": "10.4rem"
+						})
+					}
+				} else {
+					$(".scan_add").show()
+					$(".all_scene").css({
+						"padding-top": "0rem",
+						"margin-top": "-0.1rem"
+					})
+				}
+			});
+			$(".addRing").on("click", function() {
+				plus.tools.addRing(function() {})
+			})
+		})
+	</script>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css?v=1" />
+    <link rel="stylesheet" type="text/css" href="../source/mui/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+    <link rel="stylesheet" type="text/css" href="css/backupsRecovery.css?v=1.4" />
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:window.history.back(-1);"></a>
+        <a href="javascript:;" class="autoSwitchLanguager" key="Backup_recovery">恢复至本网关</a>
+        <!--<a class="more" href="javascript:;"></a>-->
+    </div>
+</header>
+<div class="content_top">
+    <img src="./img/recovery_first.png">
+</div>
+<h5 class="backups_record autoSwitchLanguager" key="Recovery_choose_data">请根据时间选择要恢复的数据</h5>
+<ul class="backups_num">
+    <!--<li>自动备份：2018/10/02  10:50</li>-->
+    <!--<li>自动备份：2018/10/02  10:50</li>-->
+    <!--<li>自动备份：2018/10/02  10:50</li>-->
+</ul>
+<div class="result_tips">
+<h5 class="backups_record_null recovery_result autoSwitchLanguager" key="Backup_no_recording">未找到此网关的备份数据</h5>
+    <ul>
+        <li class="autoSwitchLanguager" key="Recovery_no_data_reason">温馨提示</li>
+        <li class="autoSwitchLanguager" key="Recovery_no_data_reason_1">1.此网关为新网关，暂未产生备份数据</li>
+        <li class="autoSwitchLanguager" key="Recovery_no_data_reason_2">2.此网关可能不支持备份</li>
+        <li class="autoSwitchLanguager" key="Recovery_no_data_reason_3">3.请检查是否将此网关数据恢复至其他网关中</li>
+    </ul>
+</div>
+<div class="add_backups">
+    <button id="start_recovery" class="autoSwitchLanguager" key="Recovery_Start" disabled="disabled" style="background:#aaa;">开始恢复</button>
+</div>
+<!--遮罩-->
+<div class="mask">
+    <!--弹窗-->
+    <div class="popUp">
+        <p class="autoSwitchLanguager" key="Recovery_Start_hint">继续操作，备份数据将迁移至本网关，同时本网关原有数据将被清空或覆盖</p>
+        <div>
+            <div>
+                <div id="backups_cancel" class="autoSwitchLanguager" key="device_Backup_Cancel">取消</div>
+                <div id="backups_start" class="autoSwitchLanguager" key="device_Backup_ok">确定</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("gateway_Recover");
+    initlan();
+    var gatewayId = info.getItem("gatewayId");
+    var param = {
+        "gatewayId":gatewayId
+    };
+    plus.plusReady(function(){
+        plus.gatewayCmd.getGatewayBackupData(param, function(data){
+            console.log(data);
+            if(data){
+                var newData = JSON.parse(data).backupData;
+                var str='';
+                for(var i=newData.length-1;i>=0;i--){
+                    var type = newData[i].type === "0" ? lang_Backup_automatic : lang_Backup_Manual;
+                    str = str +
+                        '<li>'+type+':'+newData[i].time+'<input type="radio" name="we" id="'+newData[i].bid+'"/></li>';
+                }
+                $(".backups_num").html(str);
+                $(".backups_num").show();
+                $(".result_tips").hide();
+                $("input").on("click",function () {
+                    $("#start_recovery").attr("disabled",false);
+                    $("#start_recovery").css("background","#8dd652");
+                });
+            }else{
+                $(".backups_num").hide();
+                $(".result_tips").show();
+            }
+        });
+        $("#start_recovery").on("click",function () {
+            $(".mask").show();
+        });
+        $("#backups_start").on("click",function(){
+            var bid = $("input:checked").attr("id");
+            var obj = {
+                bid:bid
+            };
+            plus.gatewayCmd.recoveryGatewayData(obj, function(data){
+                if(data == "success"){
+                    $(".mask").hide();
+                    window.location.href="backupsing.html?choose=recover";
+                }else{
+                    $(".mask").hide();
+                    window.showDialog.show(data,3000)
+                }
+            })
+        });
+        $("#backups_cancel").on("click",function(){
+            $(this).parents(".mask").hide();
+        })
+    })
+</script>
+</body>
+</html>

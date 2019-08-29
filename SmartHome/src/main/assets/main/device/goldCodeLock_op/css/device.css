@@ -1,0 +1,169 @@
+@charset "utf-8";
+
+html {
+	background: #8dd652;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+button {
+	border: 0;
+}
+
+/*头部*/
+.header {
+	background: #8dd652;
+}
+
+.content_bg {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 96%;
+	margin-top: 6.4rem;
+	background: #fff;
+}
+
+.lock_img {
+	width: 100%;
+	height: 7.5rem;
+	background: url(../fonts/icon_doorLock_off.png) no-repeat center center;
+	background-size: 3.5rem auto;
+}
+
+.pwd-show {
+	width: 70%;
+	height: 5rem;
+	margin: 1rem auto;
+	border: 2px solid #a6a6a6;
+	border-radius: 5rem;
+	text-align: center;
+}
+
+.pwd_toast {
+	width: 100%;
+	height: 3.2rem;
+	line-height: 3.2rem;
+	text-align: center;
+	font-size: 1.5rem;
+	color: #666;
+}
+
+.pwd-show i {
+	display: inline-block;
+	box-sizing: border-box;
+	width: 1.2rem;
+	height: 1.2rem;
+	margin-top: 1.9rem;
+	margin-right: 1rem;
+	/*background:pink;*/
+	border: 2px solid #a6a6a6;
+	border-radius: 1.2rem;
+	font-size: 0rem;
+}
+
+.pwd-show i.bgColor {
+	border: 0;
+	background: #a6a6a6;
+}
+
+.pwd-show i:last-child {
+	margin-right: 0;
+}
+
+.btn-i {
+	position: relative;
+	width: 80%;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+.btn-i span {
+	display: block;
+	float: left;
+	width: 33.3333333333333333%;
+	height: 6.5rem;
+	margin-top: 2rem;
+	text-align: center;
+}
+
+.btn-i span i {
+	display: inline-block;
+	box-sizing: border-box;
+	width: 6.5rem;
+	height: 6.5rem;
+	text-align: center;
+	line-height: 6.5rem;
+	border-radius: 50%;
+	background:#e5e5e5;
+	font-size: 2.8rem;
+	color: #000;
+	font-style: normal;
+}
+
+.btn-i span.not_click i {
+	color: #000;
+}
+
+.btn-i .noClick {
+	display: none;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.remove i em{
+	display:block;
+	width:100%;
+	height:100%;
+	background:url(../fonts/backspace.png) no-repeat center center;
+	background-size:3.15rem auto;
+}
+
+.btn-i .removeAll i {
+	color: #000;
+	font-size: 2.8rem;
+}
+
+.shareBtn {
+	overflow: hidden;
+}
+
+.shareBtn a {
+	display: block;
+	position: absolute;
+	left: 4%;
+	top: 47rem;
+	width: 92%;
+	height: 5rem;
+	line-height: 5rem;
+	text-align: center;
+	background: #8dd652;
+	color: #fff;
+	font-size: 1.7rem;
+	border-radius: 5px;
+}
+
+.doneBtn {
+	overflow: hidden;
+}
+
+.doneBtn a {
+	display: block;
+	position: absolute;
+	left: 4%;
+	top: 52rem;
+	width: 92%;
+	height: 5rem;
+	line-height: 5rem;
+	text-align: center;
+	color: #8dd652;
+	font-size: 1.7rem;
+	border-radius: 5px;
+}

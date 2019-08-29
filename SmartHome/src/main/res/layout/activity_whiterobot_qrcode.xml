@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_barcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/config_barcode_tips"
+        android:layout_marginLeft="@dimen/default_padding_large"
+        android:layout_marginRight="@dimen/default_padding_large"
+        android:layout_marginTop="80dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/default_padding_small">
+
+        <ImageView
+            android:id="@+id/iv_qrcode"
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/Config_Barcode_Link"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal"
+        android:onClick="onClick"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:text="@string/Small_White_Scan"
+        android:textColor="#474549"
+        android:textSize="@dimen/default_text_size" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/btn_done"
+            style="@style/config_next_button"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="30dp"
+            android:gravity="center"
+            android:text="@string/Done" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/device.css" />
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a class="back" href="javascript:;"></a>
+				<a href="javascript:;" class="deviceName autoSwitchLanguager" key="device_A5_name">门铃按钮</a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<!--门铃大图显示+光圈动画-->
+		<section class="state_show">
+			<div class="img_state" style="position: relative;">
+				<div class="loading">
+					<i></i>
+					<i></i>
+					<i></i>
+				</div>
+				<span id="disarming">正常</span>
+			</div>
+		</section>
+		<!--门铃状态显示-->
+		<section class="status_show">
+			<span class="status">
+				<i class="status_img" id="fortifying">设防中</i>
+			</span>
+		</section>
+		<!--门铃撤防/设防控制-->
+		<section class="img_bottom">
+			<div class="bottom_btn">
+				<a class="btn" id="contrlbtn" href="javascript:;">撤防</a>
+			</div>
+		</section>
+		<!--设备离线状态遮罩-->
+		<section class="mask_layer" style="display:none;">
+			<i></i>
+			<span class="autoSwitchLanguager" id="DoorbellButton_offLine">设备已离线</span>
+		</section>
+	</body>
+	<script type="text/javascript">
+		var state = 0;
+		var dId = '';
+		var num = 2; //动画数组长度
+		var timer; //定时器动画
+		//国际化初始化函数
+        initlan()
+        plus.plusReady(function(){
+        		plus.gatewayCmd.getDeviceInfo(null, function(data){
+        			if(data.mode == 2){
+        				$(".mask_layer").show();
+				}else{
+					$(".mask_layer").hide();
+					reFreshHtmlWithData(data)
+				}
+				var name = data.name.indexOf("#$default$#") != -1 ? lang_name_A5+data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+				dId = data.devID;
+				getMoreConfig(dId);
+				contorl(data.gwID,data.devID,data.endpoints[0].endpointNumber)
+        		})
+        		plus.gatewayCmdRush.newDataRefresh(function(data){
+        			if(data.cmd == "500" && dId == data.devID){
+					if(data.mode == 2){
+						$(".mask_layer").show();
+					}else{
+						$(".mask_layer").hide();
+						reFreshHtmlWithData(data)
+					}
+                    var name = data.name.indexOf("#$default$#") != -1 ? lang_name_A5+data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+				}else if(data.cmd == "502" && dId == data.devID){
+					if((data.name != undefined || data.name != '') && data.name.indexOf("#$default$#") == -1){
+						$(".deviceName").html(data.name)
+					}else{
+                        var name = data.name.indexOf("#$default$#") != -1 ? lang_name_A5+data.name.split("#")[2]:data.name
+                        $(".deviceName").html(name)
+					}
+					if(data.endpointStatus == 0){
+						//撤防状态
+						state = 0;
+						//修改控制按钮样式
+						$(".btn").addClass("btn_1")
+	                    $(".btn").html(lang_fortify)
+	                    //修改门铃状态样式
+	                    $(".status_img").css("background","url(img/icon_removal.png) no-repeat")
+	                    $(".status_img").css("background-size","2.3rem");
+	                    //修改门铃大图样式
+	                    $(".img_state").css("background","url(img/sensor_doorbell_offline.png) no-repeat center center")
+	                    $(".img_state").css("background-size","20.8rem auto")
+						//国际化
+						$("#fortifying").html(lang_disarmed)
+						$("#disarming").html("")
+						//清除动画
+						clearInterval(timer)
+						$(".loading i").hide()
+						$(".loading").hide()
+					}else if(data.endpointStatus == 1){
+						//设防状态
+						state = 1;
+						//修改控制按钮样式
+						$(".btn").removeClass("btn_1")
+	                    $(".btn").html(lang_disarming)
+	                    //修改门铃状态样式
+	                    $(".status_img").css("background","url(img/icon_protection.png) no-repeat")
+	                    $(".status_img").css("background-size","2.3rem");
+	                    //修改门铃大图样式
+	                    $(".img_state").css("background","url(img/sensor_doorbell_normal.png) no-repeat center center")
+	                    $(".img_state").css("background-size","20.8rem auto")
+						//国际化
+						$("#fortifying").html(lang_fortifying)
+						$("#disarming").html(lang_normal)
+						//清除动画
+						clearInterval(timer)
+						$(".loading i").hide()
+						$(".loading").hide()
+					}
+				}
+				
+        		})
+        		 //返回到设备详情页
+			$(".back").on("click",function(){
+				plus.tools.back(function() {})
+			})
+			//跳转到更多页面
+			$(".more").on("click",function(){
+				plus.tools.more(moreConfig, function() {})
+			})
+			//设备设防撤防控制502
+			function deviceContorl(gwID,devID,endpointNumber,state){
+				var data = {
+				"cmd":"502",
+				"gwID":gwID,
+				"mode":0,
+				"devID":devID,
+				"endpointNumber":endpointNumber,
+				"endpointStatus":state
+				}
+				return data;
+			}
+			function contorl(gwID,devID,endpointNumber){
+				$("#contrlbtn").on("click",function(){
+					if(state == 0){
+						var deviceInfo = deviceContorl(gwID,devID,endpointNumber,'1');
+						plus.gatewayCmd.controlDevice(deviceInfo,function(){})
+					}else{
+						var deviceInfo = deviceContorl(gwID,devID,endpointNumber,'0');
+						plus.gatewayCmd.controlDevice(deviceInfo,function(){})
+					}
+				})
+			}
+			function reFreshHtmlWithData(data){
+				if(data.endpoints[0].endpointStatus == 0){
+					//撤防状态
+					state = 0;
+					//清除动画
+					num = 2;
+					clearInterval(timer)
+					$(".loading i").hide()
+					$(".loading").hide()
+					//修改控制按钮样式
+					$(".btn").addClass("btn_1")
+	                $(".btn").html(lang_fortify)
+					//修改门铃状态样式
+	                $(".status_img").css("background","url(img/icon_removal.png) no-repeat")
+	                $(".status_img").css("background-size","2.3rem");
+	                //修改门铃大图样式
+	                $(".img_state").css("background","url(img/sensor_doorbell_offline.png) no-repeat center center")
+	                $(".img_state").css("background-size","20.8rem auto")
+					//国际化
+	                $("#fortifying").html(lang_disarmed)
+	                $("#disarming").html("")
+				}else if(data.endpoints[0].endpointStatus == 1){
+					//设防状态
+					state = 1;
+					//修改控制按钮样式
+					$(".btn").removeClass("btn_1")
+	                $(".btn").html(lang_disarming)
+	                //修改门铃状态样式
+	                $(".status_img").css("background","url(img/icon_protection.png) no-repeat")
+	                $(".status_img").css("background-size","2.3rem");
+	                //修改门铃大图样式
+	                	$(".img_state").css("background","url(img/sensor_doorbell_normal.png) no-repeat center center")
+	                	$(".img_state").css("background-size","20.8rem auto")
+					$("#fortifying").html(lang_fortifying)
+					var attribute = data.endpoints[0].clusters[0].attributes[0]
+					//设防状态下，报警编辑
+					if(attribute.attributeValue == 1){
+						//报警
+						$("#disarming").html(lang_ring)
+						$(".loading").show()
+						clearInterval(timer)
+						timer = setInterval(beginCircle, 300);
+					}else if(attribute.attributeValue == 0){
+						//消警
+						$("#disarming").html(lang_normal)
+						clearInterval(timer)
+						$(".loading i").hide()
+						$(".loading").hide()
+					}
+				}
+			}
+        })
+        /*
+		 * 报警动画
+		 */
+		function beginCircle() {
+			if(num >= 0) {
+				$(".loading i").eq(num).css("display","block")
+			}
+			num = num - 1;
+			if(num == -2) {
+				num = 2;
+				$(".loading i").css("display","none")
+			}
+		}
+	</script>
+</html>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/newBackground"
+    tools:context="cc.wulian.smarthomev6.main.message.setts.MessageSettingsActivity">
+
+    <TextView
+        android:id="@+id/alarm_text_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/message_center_detail_no_result_MarginTop"
+        android:text="@string/Device_None"
+        android:textColor="@color/message_center_no_result_text_color"/>
+
+<!--    <View
+        android:id="@+id/view_back_push"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_ripper_effect"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/message_settings_text_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="@dimen/message_center_item_text_Padding"
+        android:text="@string/Setting_Vibration_Alarm"
+        android:textColor="@color/black"
+        android:textSize="@dimen/message_center_item_text_size"
+        app:layout_constraintLeft_toLeftOf="@+id/view_back_push"
+        app:layout_constraintTop_toTopOf="@+id/view_back_push"
+        app:layout_constraintBottom_toBottomOf="@+id/view_back_push"/>
+
+    <ToggleButton
+        android:id="@+id/message_settings_toggle"
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="@dimen/message_center_item_image_Padding"
+        android:background="@android:color/transparent"
+        android:button="@drawable/button_toggle_switch"
+        android:checked="true"
+        android:text=""
+        android:textOff=""
+        android:textOn=""
+        app:layout_constraintRight_toRightOf="@+id/view_back_push"
+        app:layout_constraintBottom_toBottomOf="@+id/view_back_push"
+        app:layout_constraintTop_toTopOf="@+id/view_back_push"/>-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/message_settings_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</FrameLayout>

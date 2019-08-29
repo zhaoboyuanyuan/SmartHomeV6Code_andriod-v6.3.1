@@ -1,0 +1,29 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_A1_name = "四路输入型翻译器";
+$lang.device_A1_way = "路";
+$lang.device_A1_Rename_hint = "注：长按可进行重命名";
+$lang.device_A1_Alarm = "报警消息";
+$lang.device_A1_more = "更多";
+$lang.device_A1_out_of_time = "连接超时";
+$lang.device_A1_know = "我知道了";
+$lang.device_A1_Rename = "重命名";
+$lang.device_A1_cancel = "取消";
+$lang.device_A1_ok = "确定";
+$lang.device_A1_fortify = "设防";
+$lang.device_A1_disarming = "撤防";
+$lang.device_A1_fortifying = "设防中";
+$lang.device_A1_disarmed = "已撤防";
+$lang.device_A1_normal = "正常";
+$lang.device_A1_abnormal = "有报警";
+$lang.device_A1_Offline = "设备已离线";
+$lang.device_A1_set = "设置";
+$lang.device_A1_action_close = "闭合";
+$lang.device_A1_action_open = "断开";
+$lang.device_A1_normal_set = "正常状态设置";
+$lang.device_A1_normal_set_hint = "注：此状态下不会报警";
+$lang.Device_A1_Details_Loading2 = "正在加载…";
+$lang.device_A1_noData = "暂无数据";

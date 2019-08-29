@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			  content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+		<meta name="format-detection" content="telephone=no">
+		<title>添加设备</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/setState.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<link rel="stylesheet" type="text/css" href="../../source/mui/css/mui.min.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<style type="text/css">
+		body {
+			width: 100%;
+			height: 100%;
+			background-color: #f1f4f8;
+		}
+		.secTitle {
+			padding: 0.8rem;
+		}
+		.title {
+			height: 2.4rem;
+			line-height: 2.4rem;
+			font-size: 1.4rem;
+		}
+		.checkBox {
+			display: inline-block;
+			float: right;
+			width: 4rem;
+			height: 2.4rem;
+			font-size: 0rem;
+			background: url(../../skinSource/img/checkbox_2.png) no-repeat;
+			background-size: 2rem auto;
+		}
+		.checkBox[m-checked = true] {
+			background: url(../../skinSource/img/checkbox_1.png) no-repeat;
+			background-size: 2rem auto;
+		}
+		#refreshContainer {
+			position: fixed;
+			top: 13rem;
+			bottom: 10rem;
+		}
+		.deviceList {
+			display: block;
+			width: 100%;
+            overflow: auto;
+		}
+		.deviceList li {
+			display: block;
+			width: 100%;
+			padding: 0.8rem 0.8rem;
+			height: 8rem;
+			background: white;
+			overflow: hidden;
+			border-bottom: 1px solid #f1f4f8;
+			box-sizing: border-box;
+		}
+		.deviceList .container {
+			display: inline-block;
+			float: left;
+		}
+		.deviceList .container span {
+			height: 1.6rem;
+			font-size: 1.5rem;
+			line-height: 1.6rem;
+		}
+		.deviceList .selector {
+			position: relative;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+		.deviceList .added {
+			display: inline-block;
+			float: right;
+			width: 4rem;
+			height: 2.4rem;
+			color: #f00;
+			font-size: 1.2rem;
+		}
+
+		.secNoData {
+			display: none;
+			width: 100%;
+			height: auto;
+			top: 6.4rem;
+		}
+		.secNoData .emptyTitle {
+			width: 100%;
+			height: 3rem;
+			margin-top: 12rem;
+			line-height: 3rem;
+			text-align: center;
+			font-size: 2.4rem;
+		 }
+		.secNoData .emptyDesc {
+			width: 100%;
+			height: 3rem;
+			line-height: 3rem;
+			text-align: center;
+			font-size: 1.4rem;
+		}
+	</style>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:history.back(-1)"></a>
+				<a href="javascript:;" class="autoSwitchLanguager" key="addDevice_DD_title" >添加全宅背景音乐</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+
+		<section class="secTitle">
+			<div class="title">
+				<i class="autoSwitchLanguager"  key="addDevice_DD_step_2">请选择要添加的设备</i>
+				<span id="selectAll" class="checkBox" m-checked="false"></span>
+			</div>
+		</section>
+		<section>
+			<!--下拉刷新容器-->
+			<div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<!--数据列表-->
+					<ul class="mui-table-view mui-table-view-chevron deviceList">
+						<!--<li><div class="container"><div><span class="autoSwitchLanguager" key="addDevice_DD_mode">型号：</span><span class="m-type"></span></div><div><span class="autoSwitchLanguager" key="addDevice_DD_room">房间名：</span><span class="m-roomName"></span></div><div><span class="autoSwitchLanguager" key="addDevice_DD_room_id">房间号：</span><span class="m-roomNum"></span></div></div><span class="selector checkBox" m-devID="666">已添加</span></li>-->
+						<!--<li><div class="container"><div><span class="autoSwitchLanguager" key="addDevice_DD_mode">型号：</span><span class="m-type"></span></div><div><span class="autoSwitchLanguager" key="addDevice_DD_room">房间名：</span><span class="m-roomName"></span></div><div><span class="autoSwitchLanguager" key="addDevice_DD_room_id">房间号：</span><span class="m-roomNum"></span></div></div><span class="selector added" m-devID="666">已添加</span></li>-->
+					</ul>
+
+					<div class="secNoData">
+						<div class="emptyTitle autoSwitchLanguager" key="addDevice_DD_no_device">
+							未找到设备
+						</div>
+						<div class="emptyDesc autoSwitchLanguager" key="addDevice_DD_Refresh">
+							下拉刷新
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="addSensorBtn">
+			<a href="javascript:;" class="autoSwitchLanguager disableBtn" id="nextStep">下一步</a>
+		</section>
+
+		<section id="succeed" class="toast" style="display:block; padding-bottom: 1rem; z-index: 99999">
+			<i class="rotate">&nbsp;</i>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/commonModel.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan();
+		var info = window.sysfun;
+        info.init("V6addDevice");
+		var timer;
+		var gwID;
+		var selectArr = [];
+		var deviceDict = {};
+
+		plus.plusReady(function() {
+            // timer = setTimeout(function () {
+				//
+            // }, 60000);
+            //下拉刷新
+            mui.init({
+                pullRefresh: {
+                    container: '#refreshContainer',
+                    down: {
+                        contentrefresh: languageUtil.getResource("addDevice_DD_Refreshing"),
+                        callback: retry
+                    }
+                }
+            });
+
+            info.setItem('name', languageUtil.getResource("device_DD_name"));
+			plus.gatewayCmd.getGatewayID(function (data) {
+				gwID = data;
+            });
+			plus.gatewayCmd.newDataRefresh(function(data) {
+				if(data.cmd == "517") {
+				    // clearTimeout(timer);
+				    $('#succeed').hide();
+				    if (data.page != undefined) {
+				        return;
+					}
+                    setTimeout(function () {
+                        mui('#refreshContainer').pullRefresh().endPulldownToRefresh(); //refresh completed
+                    }, 100);
+				    if (data.data == null || data.data == [] || data.data == undefined || data.data == '') {
+                        if (Object.keys(deviceDict).length == 0) {
+                            $('.secNoData').show();
+                        }
+                        // $('.secNoData').show();
+					} else {
+                        $('.secNoData').hide();
+                        data.data.forEach(function (item) {
+                            if (item.status == undefined || item.status == null) {
+                                item.status = '0'
+							}
+                            deviceDict[item.devID] = item;
+                        });
+                        $('.deviceList').empty();
+                        for (var id in deviceDict) {
+                            $('.deviceList').append(createItem(deviceDict[id]))
+						}
+                        // data.data.forEach(function (item) {
+                        //     console.log('item: ' + item);
+                        //     $('.deviceList').append(createItem(item))
+                        // });
+                    }
+
+                    $('.checkBox').on('tap', function () {
+                        if ($(this).attr('id') == 'selectAll') {
+                            if ($(this).attr('m-checked') == 'true') {
+                                $('.checkBox').attr('m-checked', 'false');
+                            } else {
+                                $('.checkBox').attr('m-checked', 'true');
+                                $('.addSensorBtn a').css('background-image', 'url(../../skinSource/img/bigBtnEnable.png)');
+                            }
+                        } else {
+                            if ($(this).attr('m-checked') == 'true') {
+                                $(this).attr('m-checked', 'false');
+                                $('#selectAll').attr('m-checked', 'false');
+                            } else {
+                                $(this).attr('m-checked', 'true');
+                                $('.addSensorBtn a').css('background-image', 'url(../../skinSource/img/bigBtnEnable.png)');
+                            }
+                        }
+
+                        selectArr = [];
+                        $('.checkBox').each(function () {
+                            if ($(this).attr('m-checked') == 'true') {
+                                var devID = $(this).attr('m-devID');
+                                if (devID != '' && devID != null && devID != undefined) {
+                                    selectArr.push(devID);
+                                }
+                            }
+                        });
+                        if (selectArr.length == 0) {
+                            $('.addSensorBtn a').css('background-image', 'url(../../skinSource/img/bigBtnDisable.png)');
+                        }
+                    });
+                    // $('.checkBox').click(function () {
+                    //     if ($(this).attr('id') == 'selectAll') {
+                    //         if ($(this).attr('m-checked') == 'true') {
+                    //             $('.checkBox').attr('m-checked', 'false');
+                    //         } else {
+                    //             $('.checkBox').attr('m-checked', 'true');
+                    //             $('.addSensorBtn a').css('background-image', 'url(../../skinSource/img/bigBtnEnable.png)');
+                    //         }
+                    //     } else {
+                    //         if ($(this).attr('m-checked') == 'true') {
+                    //             $(this).attr('m-checked', 'false');
+                    //             $('#selectAll').attr('m-checked', 'false');
+                    //         } else {
+                    //             $(this).attr('m-checked', 'true');
+                    //             $('.addSensorBtn a').css('background-image', 'url(../../skinSource/img/bigBtnEnable.png)');
+                    //         }
+                    //     }
+                    //
+                    //     selectArr = [];
+                    //     $('.checkBox').each(function () {
+						// 	if ($(this).attr('m-checked') == 'true') {
+						// 	    var devID = $(this).attr('m-devID');
+						// 	    if (devID != '' && devID != null && devID != undefined) {
+                    //                 selectArr.push(devID);
+                    //             }
+						// 	}
+                    //     });
+						// if (selectArr.length == 0) {
+                    //         $('.addSensorBtn a').css('background-image', 'url(../../skinSource/img/bigBtnDisable.png)');
+						// }
+                    // });
+				}
+
+				if (data.cmd == "500") {
+				    if (data.type == "DD" && data.mode == 4) {
+                        info.setItem("decInfo",JSON.stringify(data));
+                        clearTimeout(timer);
+                        window.location = "addDevice_succ.html?name="+languageUtil.getResource("device_DD_name");
+					}
+				}
+			});
+		});
+
+		$('.addSensorBtn').click(function () {
+			if (selectArr.length > 0) {
+			    addDevice(selectArr.concat())
+			}
+        });
+
+		function addDevice(arr) {
+            sendCmd(arr[0]);
+            arr.splice(0, 1);
+		    if (arr.length > 0) {
+                setTimeout(function () {
+                    addDevice(arr);
+                }, 100);
+			} else {
+                $('#succeed').show();
+                timer = setTimeout(function () {
+                    window.location = "addDevice_fail.html?name="+languageUtil.getResource("device_DD_name");
+                }, 60000);
+			}
+        }
+
+        function retry() {
+		    $('.secNoData').hide();
+            // $('#succeed').show();
+            plus.gatewayCmd.gatewayAddDeviceByType("DD", function() {
+            });
+        }
+
+        function sendCmd(devID){
+            var jsonData = {};
+            jsonData.cmd = "517";
+            jsonData.gwID = gwID;
+            jsonData.devID = devID;
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+        }
+
+		function createItem(item) {
+		    var hasCheckBox = item.status == '1' ? 'added' : 'checkBox';
+			var li = '<li>' +
+                '<div class="container">' +
+					'<div>' +
+						'<span >'+ languageUtil.getResource("addDevice_DD_mode") +'</span>' +
+						'<span class="m-type">'+ item.type + '</span>' +
+					'</div>' +
+					'<div>' +
+						'<span >'+ languageUtil.getResource("addDevice_DD_room") +'</span>' +
+						'<span class="m-roomName">'+ item.roomName + '</span>' +
+					'</div>' +
+					'<div>' +
+						'<span >'+ languageUtil.getResource("addDevice_DD_room_id") +'</span>' +
+						'<span class="m-roomNum">'+ item.roomNum + '</span>' +
+					'</div>' +
+                '</div>' +
+                '' +
+                '<span class="selector '+ hasCheckBox +'" m-devID="'+ item.devID + '">'+languageUtil.getResource("addDevice_DD_Added")+'</span>' +
+                '</li>';
+			return li;
+        }
+
+	</script>
+
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>RoadTranslator_A2</title>
+	<link rel="stylesheet" type="text/css" href="css/base.css" />
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+	<link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+	
+	<style>
+		.content {
+			width: 100%;
+			background: #f1f4f8;
+		}
+
+		.form-group {
+			margin-top: 2rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.form-group .title {
+			font-size: 1.5rem;
+			color: #666;
+			padding: 1rem 1.5rem;
+		}
+
+		.form-group .form-item {
+			background-color: #fff;
+			/*height: 4.5rem;*/ 
+			line-height: 4.5rem;
+			border-bottom: 1px solid #e3e3e3;
+			padding: 0 1.5rem;
+		}
+
+		.form-group .form-item:first-child {
+			border-top: 1px solid #e3e3e3;
+		}
+
+		.form-group .label {
+			font-size: 1.7rem;
+			color: #444;
+			line-height: inherit;
+			height: inherit;
+			margin: 0;
+			padding: 0;
+			border: hidden;
+		}
+
+
+		.form-group .form-item .label {
+			float: left;
+		}
+		
+		.right-opre {
+			float: right;
+		}
+		
+		.value {
+			vertical-align: middle;
+			font-size: 1.5rem;
+			color: #8DD652;
+			margin-right: 0.8rem;
+			float: right;
+		}
+		
+		.switch{
+	  		position:relative;
+			float:right;
+			width:4rem;
+			height:2rem;
+			padding:0.5rem;
+			margin-top: 1.4rem;
+			margin: 1.25rem 0 0.75rem 0;
+			background:#aaa;
+			border-radius:1.5rem;
+		}
+		.switch i{
+			position:absolute;
+			left:10%;
+			top:13%;
+			display:block;
+			width:1.5rem;
+			height:1.5rem;
+			background:#fff;
+			border-radius:50%;
+		}
+		.on{
+			background:#8dd652;
+		}
+		.switch i.open{
+			left: 50%;
+		}
+	</style>
+
+</head>
+
+<body>
+	<header class="header">
+		<div class="header_top">
+			<a class="back" href="javascript:;"></a>
+			<a href="javascript:;" class="autoSwitchLanguager deviceName" id="device_A2_set">设置</a>
+		</div>
+	</header>
+	<div class="content">
+		<div class="form-group">
+			<div class='form-item numItem_one clearfix'>
+				<span class="label">一路</span>
+				<div class="right-opre switch switch_one">
+					<i data-state="off" id="on"></i>
+				</div>
+				<span class="autoSwitchLanguager value" id="device_A2_action_open"></span>
+			</div>
+			
+			<div class='form-item numItem_two clearfix'>
+				<span class="label">二路</span>
+				<div class="right-opre switch switch_two">
+					<i data-state="off" id="on"></i>
+				</div>
+				<span class="autoSwitchLanguager value" id="device_A2_action_open"></span>
+			</div>
+		</div>
+	</div>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/mui/js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		
+		var gwID;
+		var dId;
+		initlan()
+		plus.plusReady(function () {
+			
+			$(".numItem_one .label").html(1 + lang_A2_way);
+			$(".numItem_two .label").html(2 + lang_A2_way);
+			
+			plus.gatewayCmd.getDeviceInfo(function (data) {
+				dId = data.devID;
+				gwID = data.gwID;
+				//查询默认初始动作
+				sendControlOrder(1, 0x0102, null);
+			})
+
+			plus.gatewayCmd.newDataRefresh(function (data) {
+				if (data.cmd == "500" && dId == data.devID) {
+					if (data.mode == 2) {
+					} else {
+						refreshHtml(data);
+					}
+				}
+			})
+		})
+		
+		function refreshHtml(data) {
+			//更新开关图片
+			$.each(data.endpoints, function(i, endpoints) {
+				var attributes = endpoints.clusters[0].attributes;
+		 		for (var j = 0; j < attributes.length; j++) {
+		 			var status = attributes[j].attributeValue;
+					var attributeId = attributes[j].attributeId;
+					if(attributeId == 0x8101) {
+					
+						if(endpoints.endpointNumber == 1) {
+							if(status == "0") {
+								$(".switch_one").find("i").attr("data-state", "off");
+								$(".switch_one").removeClass("on");
+								$(".switch_one").find("i").removeClass("open");
+								$(".numItem_one .value").html(lang_A2_action_open)
+							} else if(status == "1") {
+								$(".switch_one").find("i").attr("data-state", "on");
+								$(".switch_one").addClass("on");
+								$(".switch_one").find("i").addClass("open");
+								$(".numItem_one .value").html(lang_A2_action_close)
+							}
+						} else if(endpoints.endpointNumber == 2){
+							if(status == "0") {
+								$(".switch_two").find("i").attr("data-state", "off");
+								$(".switch_two").removeClass("on");
+								$(".switch_two").find("i").removeClass("open");
+								$(".numItem_two .value").html(lang_A2_action_open)
+							} else if(status == "1") {
+								$(".switch_two").find("i").attr("data-state", "on");
+								$(".switch_two").addClass("on");
+								$(".switch_two").find("i").addClass("open");
+								$(".numItem_two .value").html(lang_A2_action_close)
+							}
+						}
+					}
+				}
+			})
+		}
+		
+		window.onload = new function() {
+			
+		}
+		
+		$(".back").on("click", function () {
+			plus.tools.back(function () { })
+		})
+		
+		$(".switch_one").find("i").on("click", function() {
+			var self = $(this)
+			if($(this).attr("data-state") == "on") {
+				$(".switch_one").removeClass("on");
+				self.attr("data-state", "off");
+				self.removeClass("open");
+				sendControlOrder(1, 0x0101, ["0"]);
+			} else {
+				$(".switch_one").addClass("on");
+				self.addClass("open");
+				self.attr("data-state", "on");
+				sendControlOrder(1, 0x0101, ["1"]);
+			}
+		})
+		$(".switch_two").find("i").on("click", function() {
+			var self = $(this)
+			if($(this).attr("data-state") == "on") {
+				$(".switch_two").removeClass("on");
+				self.attr("data-state", "off");
+				self.removeClass("open");
+				sendControlOrder(2, 0x0101, ["0"]);
+			} else {
+				$(".switch_two").addClass("on");
+				self.addClass("open");
+				self.attr("data-state", "on");
+				sendControlOrder(2, 0x0101, ["1"]);
+			}
+		})
+		
+		function sendControlOrder(endpointNum, commandId, parameter) {
+			
+			var jsonData = {}
+            jsonData.cmd = "501";
+            jsonData.gwID = gwID;
+            jsonData.devID = dId;
+            jsonData.endpointNumber = endpointNum;
+            jsonData.clusterId = 0x0201;
+            jsonData.commandType = 1;
+            jsonData.commandId = commandId;
+            if(parameter != undefined) {
+            		jsonData.parameter = parameter;
+            }
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+		}
+		
+		
+	</script>
+
+</body>
+
+</html>

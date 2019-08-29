@@ -1,0 +1,50 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Host = "Anfitrión";
+$lang.Slave = "Esclavo";
+$lang.Temp = "Temperatura ambiente";
+$lang.Type = "Modo";
+$lang.Type2 = "Refrigeración";
+$lang.Type3 = "Calefacción";
+$lang.Type1 = "Suministro de aire";
+$lang.Type5 = "Deshumidifiación";
+$lang.Speed = "Velocidad del viento";
+$lang.Speed1 = "Alto";
+$lang.Speed2 = "Medio";
+$lang.Speed3 = "Bajo";
+$lang.offLine                 = "Dispositivo offline";
+$lang.Timing = "Sincronización";
+$lang.Timing_close = "Apagar después de%@hora%@minuto";
+$lang.Off = "Apagar";
+$lang.On = "Encender";
+$lang.Timing_open = "Endender después de%@hora%@minuto";
+$lang.Set_device_status = "Establecer el estado del dispositivo";
+$lang.Switch = "Cambiar";
+$lang.Temperature = "Temperatura";
+$lang.Save = "Guardar";
+$lang.Confirm = "OK";
+$lang.Cancel = "Cancelar";
+$lang.CD = "Refrescar";
+$lang.CloseAll = "Todo cerrado";
+$lang.OpenAll = "Todo abierto";
+$lang.Loading1 = "Equipo en preparación， por favor más tarde ...";
+$lang.Loading2 = "Cargando…";
+$lang.Name1 = "Nombre";
+$lang.Name2 = "Ingrese el nombre";
+$lang.Closed = "Cerrado";
+$lang.moreSettingLog          = "Historial";
+$lang.moreSettingAlarm        = "Mensaje de alarma";
+$lang.Device_OZ_Details_CloseAlltips = "¿Estás seguro de que todo se cerró?";
+$lang.Device_OZ_Details_OpenAlltips = "¿Estás seguro de que todo está abierto?";
+$lang.device_a0_name = "Aire acondicionado central (placa P )";
+$lang.Type4 = "Auto";
+$lang.Speed4 = "Ultra Bajo";
+$lang.Speed5 = "Ultra Alto";
+$lang.Time_close = "Temporizar Cierre";
+$lang.Time_open = "Temporizar Apertura";
+$lang.Device_a0_aircondition = "Aire acondicionado";
+$lang.Device_a0_countdown = "¿seguro que quieres cancelar la cuenta atrás?";
+$lang.Cooling_and_heating = "Los modos de refrigeración y calefacción solo permiten la regulación del huésped.";

@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>切换模式界面</title>
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/base_ao.css" />
+		<link rel="stylesheet" type="text/css" href="css/device.css" />
+		<script src="js/mui.min.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/constant.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="js/devbase.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/control.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	</head>
+	<style type="text/css">
+		.divMode {
+			background-color: #FFFFFF;
+			width: 100%;
+			height: 50px;
+		}
+		
+		.divMode img {
+			width: 20px;
+			margin-top: 14px;
+			margin-left: 5%;
+			float: left;
+		}
+		
+		.divMode .img_choose {
+			float: right;
+			margin-left: 0px;
+			margin-right: 5%;
+			margin-top: 17px;
+			display: none;
+		}
+		
+		.divMode .p1 {
+			margin-left: 10px;
+			float: left;
+			font-size: 14px;
+			margin-top: 14px;
+			color: #000000;
+		}
+		
+		.divMode .p2 {
+			margin-left: 10px;
+			float: right;
+			font-size: 14px;
+			margin-top: 14px;
+			margin-right: 5%;
+			color: #000000;
+		}
+		
+		.p_msg {
+			color: #3D3D3D;
+			margin: 10px 5%;
+			line-height: 16px;
+			word-wrap: break-word;
+			font-size: 14px;
+		}
+		
+		.splitLine {
+			height: 1px;
+			width: 100%;
+			background-color: #E2E2E2;
+		}
+	</style>
+
+	<body style="background-color: #F1F4F8">
+		<header class="header">
+			<div class="header_top_switch">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" key="switch_An_ChangeMode01" href="javascript:;">切换模式</a>
+				<a id="submit" class="autoSwitchLanguager" key="sure" href="javascript:;" onclick="submit_complete();" style="display: none;margin-right: 10px">确定</a>
+			</div>
+		</header>
+		<div style="margin-top: 20px;"></div>
+		<div class="splitLine"></div>
+		<div id="divCurMode" class="divMode">
+			<img id="divCurMode_img" src="fonts/icon_modebinding.png" />
+			<p id="divCurMode_p1" class="p1 autoSwitchLanguager" key="modeBind">绑定模式</p>
+			<p id="divCurMode_p2" class="p2 autoSwitchLanguager" key="switch_An_ChangeMode04">当前</p>
+		</div>
+		<div class="splitLine"></div>
+		<p id="p_msg" class="p_msg"></p>
+		<div class="splitLine"></div>
+		<div id="divMode_Switch" class="divMode">
+			<img src="fonts/icon_modeswitch.png" />
+			<p class="p1 autoSwitchLanguager" key="modeSwitch">开关模式</p>
+			<img id="divMode_Switch_check" class="img_choose" src="fonts/choose.png" />
+		</div>
+		<div id="line1" class="splitLine"></div>
+		<div id="divMode_binding" class="divMode">
+			<img src="fonts/icon_modebinding.png" />
+			<p class="p1 autoSwitchLanguager" key="modeBind">绑定模式</p>
+			<img id="divMode_binding_check" class="img_choose" src="fonts/choose.png" />
+		</div>
+		<div id="line2" class="splitLine"></div>
+		<div id="divMode_secne" class="divMode">
+			<img src="fonts/icon_modescene.png" />
+			<p class="p1 autoSwitchLanguager" key="modeScene">场景模式</p>
+			<img id="divMode_scene_check" class="img_choose" src="fonts/choose.png" />
+		</div>
+		<div id="line3" class="splitLine"></div>
+		<section id="fail" class="toast" style="display:none;">
+			<p class="autoSwitchLanguager" id="toastText"></p>
+		</section>
+	</body>
+
+	<script src="js/changemode.js" type="text/javascript" charset="UTF-8"></script>
+	<script>
+		var epNum, epMode, devID, gwID;
+		var isBinding = false;
+		initlan();
+		plus.plusReady(function() {
+			var iphoneX = { sysFunc: "getItem:", room: "iphoneX", id: "iphoneX", data: "" };
+			var iStr = '';
+			if(!window.v6sysfunc) {
+				iStr = prompt(JSON.stringify(iphoneX))
+			}
+			if(iStr == "iphoneX") {
+				var body = document.getElementsByClassName("header")[0];
+				body.style.paddingTop = "1.4rem"
+			}
+			initUIDev();
+			initUiByMode();
+			plus.gatewayCmd.getDeviceInfo(function(result) {
+				devID = result.devID;
+				gwID = result.gwID;
+			});
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				var isright = result != null &&
+					result != undefined &&
+					result.cmd == "500" &&
+					result.devID == devID;
+				if(isright && isBinding) {
+					isBinding = false;
+					closeToast();
+					setTimeout(function() {
+						$(".comToast").hide();
+						$("#fail").show();
+						$("#toastText").html(languageUtil.getResource("saveSuccessful"));
+						setTimeout(function() {
+							$("#fail").hide();
+							window.location = "switch_Am.html"
+						}, 600)
+					}, 500)
+				}
+			})
+		});
+
+		function initUiByMode() {
+			epNum = decodeURI(getUrlParam("epNum"));
+			epMode = decodeURI(getUrlParam("epMode"));
+			if(isNull(epMode)) {
+				epMode = con_mode_switch; //默认是开关模式
+			}
+			initModeList(epMode);
+			if(epMode == con_mode_switch) {
+				document.getElementById("p_msg").innerHTML = " ";
+			} else if(epMode == con_mode_bind) {
+				document.getElementById("p_msg").innerHTML = languageUtil.getResource("switch_An_ChangeMode02");
+			} else if(epMode == con_mode_scene) {
+				document.getElementById("p_msg").innerHTML = languageUtil.getResource("switch_An_ChangeMode03");
+			}
+		}
+
+		document.getElementById("back").addEventListener("click", function() {
+			javascript: history.go(-1);
+		});
+
+		function rush_500() {
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				var isright = result != null &&
+					result != undefined &&
+					result.cmd == "500" &&
+					result.devID == devID;
+				if(isright && isBinding) {
+					isBinding = false;
+					closeToast();
+					showSucToast(languageUtil.getResource("saveSuccessful"), function() {
+						javascript: history.go(-1);
+					});
+				}
+			});
+		}
+
+		/***********************************访问接口*******************************/
+
+		/*
+		 * 设备控制
+		 */
+		function sendCmd(jsonData) {
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result " + result);
+			})
+		}
+		/*向三键金属开关发送命令
+		 * endpointNumber：0表示对所有按键都有作用
+		 * commandId：表示执行不同的操作
+		 * param:参数,注意，这个是数组
+		 * */
+		function sendCmdForAo(endpointNumber, commandId, param) {
+			var jsonData;
+			if(param != null) {
+				jsonData = {
+					"cmd": "501",
+					"gwID": gwID,
+					"devID": devID,
+					"endpointNumber": endpointNumber,
+					"commandType": 1,
+					"commandId": commandId,
+					"parameter": param
+				};
+			} else {
+				jsonData = {
+					"cmd": "501",
+					"gwID": gwID,
+					"devID": devID,
+					"endpointNumber": endpointNumber,
+					"commandType": 1,
+					"commandId": commandId
+				};
+			}
+			sendCmd(jsonData);
+		}
+		/*改变绑定模式：改变为开关模式*/
+		function changeModeToSwitch(endpointNumber) {
+			checkUnBinding(endpointNumber);
+			setTimeout(function() {
+				sendCmdForAo(endpointNumber, 0x8010, ["1"]);
+			}, 500);
+		}
+		/*改变绑定模式：改变为绑定模式*/
+		function changeModeToBind(endpointNumber) {
+			checkUnBinding(endpointNumber);
+			setTimeout(function() {
+				sendCmdForAo(endpointNumber, 0x8010, ["2"]);
+			}, 500);
+		}
+		/*改变绑定模式：改变为场景模式*/
+		function changeModeToScene(endpointNumber) {
+			checkUnBinding(endpointNumber);
+			setTimeout(function() {
+				sendCmdForAo(endpointNumber, 0x8010, ["3"]);
+			}, 500);
+		}
+
+		function checkUnBinding(endpointNumber) {
+			if(epMode == con_mode_scene) {
+				unBindScene(endpointNumber);
+			} else if(epMode == con_mode_bind) {
+				UnBindingDev(endpointNumber)
+			}
+
+			setTimeout(function() {
+				isBinding = false;
+				$(".comToast").hide();
+				$("#fail").show();
+				$("#toastText").html(languageUtil.getResource("saveFailed"));
+				// 可以提交
+				couldSubmit = true;
+				setTimeout(function() {
+					$("#fail").hide();
+				}, 1000)
+			}, 10000)
+		}
+	</script>
+
+</html>

@@ -1,0 +1,50 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Host = "Host";
+$lang.Slave = "Slave";
+$lang.Temp = "Indoor temperature";
+$lang.Type = "Type";
+$lang.Type2 = "Refrigeration";
+$lang.Type3 = "Heat";
+$lang.Type1 = "Air suppply";
+$lang.Type5 = "Dehumidify";
+$lang.Speed = "Windspeed";
+$lang.Speed1 = "High";
+$lang.Speed2 = "Middle";
+$lang.Speed3 = "Low";
+$lang.offLine                 = "Device Offline";
+$lang.Timing = "Timing";
+$lang.Timing_close = "Turn off after %@hour %@minute ";
+$lang.Off = "Turn off  ";
+$lang.On = "Turn on";
+$lang.Timing_open = "Turn on after %@hour %@minute ";
+$lang.Set_device_status = "Set device status";
+$lang.Switch = "Switch";
+$lang.Temperature = "Temperature";
+$lang.Save = "Save";
+$lang.Confirm = "Confirm";
+$lang.Cancel = "Cancel";
+$lang.CD = "Refresh";
+$lang.CloseAll = "All closed";
+$lang.OpenAll = "All open";
+$lang.Loading1 = "Equipment in preparation， please later…";
+$lang.Loading2 = "Loading…";
+$lang.Name1 = "Name";
+$lang.Name2 = "Enter the name";
+$lang.Closed = "Closed";
+$lang.moreSettingLog          = "Log";
+$lang.moreSettingAlarm        = "Alarm Message";
+$lang.Device_OZ_Details_CloseAlltips = "Are you sure all closed down";
+$lang.Device_OZ_Details_OpenAlltips = "Are you sure all open";
+$lang.device_a0_name = "Central air conditioning (P board )";
+$lang.Type4 = "Auto";
+$lang.Speed4 = "Ultra low";
+$lang.Speed5 = "Ultra high";
+$lang.Time_close = "Timing off";
+$lang.Time_open = "Timing on";
+$lang.Device_a0_aircondition = "A/C ";
+$lang.Device_a0_countdown = "Are you sure you want to cancel the countdown?";
+$lang.Cooling_and_heating = "Cooling and heating modes only allow host regulation";

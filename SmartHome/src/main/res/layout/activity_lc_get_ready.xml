@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/icon_cg24_bg" />
+
+    <TextView
+        android:id="@+id/tv_config_tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_icon"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:gravity="center_horizontal"
+        android:text="@string/add_deviceLC_green_light"
+        android:textColor="@color/device_config_wifi_tips_color"
+        android:textSize="16sp" />
+
+    <TextView
+
+        android:id="@+id/tv_no_voice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_next_step"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="@dimen/default_padding_normal"
+        android:gravity="center_horizontal"
+        android:onClick="onClick"
+        android:text="@string/add_deviceLC_green_light_no"
+        android:textColor="#454749"
+        android:textSize="@dimen/default_text_size" />
+
+    <Button
+        android:id="@+id/btn_next_step"
+        style="@style/config_next_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClick"
+        android:text="@string/Config_Next_Step" />
+
+</RelativeLayout>

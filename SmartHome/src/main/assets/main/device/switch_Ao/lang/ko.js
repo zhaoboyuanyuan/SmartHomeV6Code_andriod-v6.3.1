@@ -1,0 +1,55 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.switch_Ao_01 = "스위치";
+$lang.switch_Ao_02 = "장비의 연결을 해제 하시겠습니까?";
+$lang.switch_Ao_03 = "연결된 장비는 커튼 컨트롤러입니다. 버튼 중 하나를 해제하면 세 개의 버튼이 모두 해제되고 모든 연결이 확인됩니다.";
+$lang.switch_Ao_04 = "커튼 컨트롤러를 연결한 후， 1 버튼이 켜져 있고， 2 버튼이 일시 중지되어 있고， 3 버튼이 꺼져 있고， 현재 버튼 수가 충분하지 않습니다. 3 개의 버튼을 모두 연결 모드로 전환 한 다음 다시 시도해보십시오.";
+$lang.switch_Ao_05 = "장면을 삭제 하시겠습니까?";
+$lang.switch_Ao_06 = "장비 연결 안됨";
+$lang.switch_Ao_07 = "장면 연결 안됨";
+$lang.switch_Ao_08 = "스위치 이름 수정";
+$lang.swtich_Ao_09 = "편집";
+$lang.swtich_Ao_10 = "장면 삭제";
+$lang.switch_Ao_11 = "다시 연결";
+$lang.switch_Ao_12 = "연결 해제";
+$lang.switch_Ao_13 = "취소";
+$lang.switch_Ao_14 = "확인";
+$lang.switch_Ao_15 = "이름을 바꾸십시오";
+$lang.switch_Ao_On = "켜짐";
+$lang.switch_Ao_Off = "꺼짐";
+$lang.switch_Ao_Stop = "멈춤 ";
+$lang.switch_Ao_Binding = "연결 중";
+$lang.switch_Ao_BindingSuc = "연결완료";
+$lang.switch_Ao_BindingFail = "연결 실패";
+$lang.switch_Ao_NoSwitchMode = "스위치 모드 없음";
+$lang.switch_Ao_ChangeMode01 = "모드 바꾸기";
+$lang.switch_Ao_ChangeMode02 = "연결 장비는 변경 모드 후에 연결해제 됩니다.";
+$lang.switch_Ao_ChangeMode03 = "연결 장면은 변경 모드 후에 연결해제 됩니다.";
+$lang.switch_Ao_ChangeMode04 = "현재";
+$lang.switch_mode_01 = "스위치 모드";
+$lang.switch_mode_02 = "연결 모드";
+$lang.switch_mode_03 = "장면 모드";
+$lang.un_room = "분류되지 않음";
+$lang.offLine = "오프라인";
+$lang.onLine = "오프라인";
+$lang.switch_Ao_timeout = "요청시간 초과!";
+$lang.switch_Ao_saveSuc = "완료 저장";
+$lang.switch_Ao_ChooseScene = "장면 선택";
+$lang.swtich_Ao_Complete = "완료";
+$lang.BindDeviceTitle = "장비연결";
+$lang.switch_Ao_ChooseBtn = "선택 버튼";
+$lang.switch_Ao_Saving = "저장";
+$lang.switch_Ao_UpdateSuc = "수정 완료";
+$lang.swich_Ao_UnbindSuc = "연결 완료 해제";
+$lang.Log = "로그";
+$lang.Alarm = "알람 메세지";
+$lang.device_Am_name = "1구 메탈 스위치";
+$lang.device_An_name = "2구 메탈 스위치";
+$lang.device_Ao_name = "3구 메탈 스위치";
+$lang.device_Ar_Name = "메탈 커튼 스위치";
+$lang.swich_Ao_Unbundling = "연결 해제중…";
+$lang.device_Ao_NoScene = "장면 없음 <br /> 홈페이지로 이동 - 모든 장면 추가";
+$lang.Share_No_Permission = "공유한 장비는 설정 권한이 없습니다";

@@ -1,0 +1,196 @@
+@charset "utf-8";
+body, button, select, textarea, input, label, option, fieldset, legend{font-family: "微软雅黑",Tahoma,Verdana;}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, legend, input, textarea, button, p, blockquote, th, td{margin: 0;padding: 0;}
+textarea{resize: none}
+textarea, input{outline: none;}
+.clear{height:1px;overflow:hidden;clear:both;}
+a,img,div{border:0;}
+a{color: #666;text-decoration: none;-webkit-tap-highlight-color:transparent}
+li{list-style-type:none;}
+i,em{font-style: normal;}
+.fl{float:left;}
+.fr{float:right;}
+.ds{display:block;}
+.hid{overflow:hidden;}
+h1,h2,h3,h4,h5,h6{
+	font-weight: normal;
+}
+.clearfix{*zoom:1}
+.clearfix:after{display:block;visibility:hidden;clear:both;height:0;content:'.';font-size:0}
+button{outline: none;}
+html{background:#f1f4f8;font-size:1.2rem;}
+/*@media (max-width: 1650px) {
+	html,body {
+		background:pink;
+		max-width:1650px;
+		font-size:0.6rem;	
+	}
+}*/
+
+/*公用头部*/
+header{
+	width:100%;
+	background:#8dd652;
+	overflow: hidden;
+}
+
+.shadow{
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	z-index: 999;
+	background-color: rgba(0,0,0,0.3);
+	top:6.4rem
+}
+
+.header_top{
+	padding-top:2rem;
+	width:100%;
+	height:4.4rem;
+}
+.header_top a{
+	display: block;
+	float:left;
+	width:13.7%;
+	height:4.4rem;
+}
+.header_top a:nth-child(2){
+	width:72.6%;
+	text-align:center;
+	line-height:4.4rem;
+	font-size:1.6rem;
+	color:white;
+	-webkit-tap-highlight-color:rgba(255,0,0,0);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.header_top a:first-child{
+	background:url(../fonts/icon_back_1.png) no-repeat center center;
+	background-size:2.3rem auto;
+}
+.header_top a:nth-child(3){
+	text-align:center;
+	line-height:4.4rem;
+	font-size:1.4rem;
+	color:#fff;
+}
+.header_top a.more{
+	background:url(../fonts/icon_more.png) no-repeat center center;
+	background-size:1.6rem auto;
+}
+.header_top .complete{
+	font-size:1.4rem;
+	background:none;
+}
+
+
+
+/*遮罩层*/
+.mask_layer{
+	display:none;
+	position:fixed;
+	z-index:3000;
+	left:0;
+	top:6.4rem;
+	width:100%;
+	height:calc(100% - 6.4rem);
+	text-align:center;
+	background:rgba(0,0,0,0.7)
+}
+.mask_layer i{
+	display:inline-block;
+	width:8rem;
+	height:8rem;
+	margin-top:15rem;
+	background:url(../fonts/icon_new.png) no-repeat center center;
+	background-size:8rem auto;
+}
+.mask_layer span{
+	display:block;
+	width:100%;
+	height:5rem;
+	line-height:5rem;
+	text-align:center;
+	font-size:1.6rem;
+	color:#fff;
+}
+.toast {
+	display: block;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 60%;
+	/*height:3.5rem;*/
+	overflow: hidden;
+	text-align: center;
+	padding-top: 1rem;
+	padding-bottom:1rem;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+}
+/*正在保存toast*/
+.comToast{
+	display: block;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 60%;
+	text-align:center;
+	overflow: hidden;
+	padding-top: 1rem;
+	padding-bottom:1rem;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+	border-radius: 5px;
+}
+.comToast i{
+	display:inline-block;
+	height:2rem;
+	line-height:2rem;
+	font-size:1.4rem;
+	color:#fff;
+}
+@-webkit-keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+@keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+.comToast i em{
+	display:block;
+	float:left;
+	width:2rem;
+	height:2rem;
+	margin-right:1rem;
+	background-size: 2rem auto;
+}
+.comToast i em.rotate{
+	-webkit-animation: rotate 0.7s linear infinite;
+	animation: rotate 0.7s linear infinite;
+}
+

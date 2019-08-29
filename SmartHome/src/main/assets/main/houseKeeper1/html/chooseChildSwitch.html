@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设置设备状态</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/editok.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.grayEnable {
+				color: rgb(204, 204, 204)!important;
+			}
+			
+			.grayEnable i {
+				color: rgb(204, 204, 204);
+				float: right;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="header">
+			<a href="javascript:window.history.back(-1);"></a>
+			<a key="device_choose_switch" id="device_choose_switch" class="autoSwitchLanguager" href="javascript:;">选择开关</a>
+			<a style="background: none;" href="javascript:;"></a>
+		</header>
+		<section style="margin-top: 6.4rem;width: 100%;">
+			<ul class="set_list">
+			</ul>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Housekeeper");
+		initlan();
+		var deviceID = decodeURI(getUrlParam("devID"));
+		var viewType = decodeURI(getUrlParam("viewType"));
+		var devType;
+		plus.plusReady(function() {
+            plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+            });
+			plus.gatewayCmd.getDeviceInfo(deviceID, function(result) {
+				devType = result.devType;
+				for(var i = 0; i < result.endpoints.length; i++) {
+					var htmlStr;
+					var endpointName = (result.endpoints[i].endpointName == undefined) ? "" : result.endpoints[i].endpointName;
+					endpointName = (endpointName.length == 0 || devType == "Aw" || devType == "Ax") ? (device_switch + (i+1)) : endpointName;
+					if(result.endpoints[i].endpointType == 2) {
+						htmlStr = '<li>' + endpointName + '<i></i></li>'
+					} else {
+						htmlStr = '<li class="grayEnable">' + endpointName + '<i>' + switch_Aohk_03 + '</i></li>'
+					}
+					$(".set_list").append(htmlStr);
+				}
+
+				$(".set_list li").on("click", function() {
+					if($(this).find("i").html() == "") {
+						$(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+						info.setItem("switchName", $(this).text())
+						info.setItem("num", $(this).index() + 1)
+						if(viewType == "scene") {
+							window.location = "setDeviceState.html"
+						} else {
+							window.location = "setDoorState.html"
+						}
+					}
+				})
+			})
+
+		})
+	</script>
+
+</html>

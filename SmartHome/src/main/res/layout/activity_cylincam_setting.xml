@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_camera_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Camera_Name" />
+
+        <TextView
+            android:id="@+id/tv_device_name"
+            style="@style/device_setting_text"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/default_padding_normal"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:layout_toLeftOf="@+id/iv_arrows"
+            android:ellipsize="end"
+            android:gravity="center_vertical|right"
+            android:maxLines="1"
+            android:paddingLeft="@dimen/default_padding_normal" />
+
+        <ImageView
+            android:id="@+id/iv_arrows"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/system_intent_right" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_marginTop="1dp"
+        android:id="@+id/rl_camera_information"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Camera_Info" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/system_intent_right" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:id="@+id/rl_camera_broadcast"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Camera_Voice" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/system_intent_right" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_environment"
+        android:layout_marginTop="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Environmental_Data" />
+
+        <ToggleButton
+            android:id="@+id/tb_environment"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/default_padding_small"
+            android:layout_marginTop="@dimen/default_padding_small"
+            android:layout_marginBottom="@dimen/default_padding_small"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/selector_togglebutton"
+            android:paddingRight="@dimen/default_padding_small"
+            android:textOff=""
+            android:textOn="" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_camera_storage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Device_VideoStorage" />
+
+        <TextView
+            android:id="@+id/tv_device_storage"
+            style="@style/device_setting_text"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/default_padding_normal"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:layout_toLeftOf="@+id/iv_arrows_storage"
+            android:ellipsize="end"
+            android:gravity="center_vertical|right"
+            android:maxLines="1"
+            android:paddingLeft="@dimen/default_padding_normal" />
+
+        <ImageView
+            android:id="@+id/iv_arrows_storage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/system_intent_right" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="1dp"
+        android:id="@+id/ll_bind_lock"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Bind_Lock" />
+
+        <ImageView
+            android:id="@+id/iv_arrows_bind_lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/system_intent_right" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="1dp"
+        android:id="@+id/rl_wifi_config"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/WIFI_Config" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/system_intent_right" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="1dp"
+        android:id="@+id/rl_camera_protect"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Safety_Protection" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/system_intent_right" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/btn_delete_camera"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/config_device_btn_height"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/default_padding_normal"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="@string/Delete_Camera"
+            android:textColor="@color/red"
+            android:outlineProvider="none"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+</LinearLayout>

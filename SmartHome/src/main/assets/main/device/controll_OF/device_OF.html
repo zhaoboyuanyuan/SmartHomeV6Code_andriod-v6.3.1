@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport"
+              content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+        <meta charset="UTF-8">
+        <title>智能晾衣机</title>
+        <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+        <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+        <link rel="stylesheet" href="css/base.css">
+        <link rel="stylesheet" href="css/device.css">
+        <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    </head>
+    <body>
+        <header class="header" style="position:fixed;left:0;top:0;">
+            <div class="header_top">
+                <a id="back" href="javascript:;"></a>
+                <a class="deviceName autoSwitchLanguager" key="device_OF_name" href="javascript:;">智能晾衣机</a>
+                <a class="more" href="javascript:;"></a>
+            </div>
+        </header>
+        <section class="content">
+            <div class="imgState"></div>
+            <div class="controlBtn">
+                <dl id="ctrlUp">
+                    <dt>
+                        <img class="ctrlBtn ctrlUp"
+                             src="fonts/falling.png"
+                             m-normal="fonts/falling.png"
+                             m-tap="fonts/falling_pre.png"
+                             alt="">
+                    </dt>
+                    <dd class="autoSwitchLanguager" key="clothes_hanger_up">上升</dd>
+                </dl>
+                <dl id="ctrlPause">
+                    <dt>
+                        <img class="ctrlBtn ctrlPause"
+                             src="fonts/suspended.png"
+                             m-normal="fonts/suspended.png"
+                             m-tap="fonts/suspended_pre.png"
+                             alt="">
+                    </dt>
+                    <dd class="autoSwitchLanguager" key="clothes_hanger_time_out">暂停</dd>
+                </dl>
+                <dl id="ctrlDown">
+                    <dt>
+                        <img class="ctrlBtn ctrlDown"
+                             src="fonts/rising.png"
+                             m-normal="fonts/rising.png"
+                             m-tap="fonts/rising_pre.png"
+                             alt="">
+                    </dt>
+                    <dd class="autoSwitchLanguager" key="clothes_hanger_decline">下降</dd>
+                </dl>
+            </div>
+            <ul class="other_control">
+                <li id="light" class="switch">
+                    <em class="autoSwitchLanguager" key="clothes_hanger_light">照明</em>
+                    <div switch="off"><span></span></div>
+                </li>
+                <li id="wind" class="switch play divider" play="yes">
+                    <em class="autoSwitchLanguager" key="clothes_hanger_Air_dry">风干</em>
+                    <div switch="off"><span></span></div>
+                </li>
+                <li id="drying" class="switch play" play="yes">
+                    <em class="autoSwitchLanguager" key="clothes_hanger_drying">烘干</em>
+                    <div switch="off"><span></span></div>
+                </li>
+                <li id="pickDateBtn1" class="time play" play="yes">
+                    <em class="autoSwitchLanguager" key="clothes_hanger_set_time">时间设置</em>
+                    <i></i>
+                </li>
+                <li id="disinfect" class="switch divider">
+                    <em class="autoSwitchLanguager" key="clothes_hanger_Disinfection">杀菌消毒</em>
+                    <div switch="off"><span></span></div>
+                </li>
+                <li id="pickDateBtn" class="time" play="yes">
+                    <em class="autoSwitchLanguager" key="clothes_hanger_set_time">时间设置</em>
+                    <i></i>
+                </li>
+            </ul>
+        </section>
+        <section class="alert" style="display:none;">
+            <div class="nameToast">
+                <!--<span class="tip autoSwitchLanguager" key="Device_Bm_Details_Prompt">提示</span>-->
+                <div class="msg autoSwitchLanguager" key="clothes_hanger_cancel_Air_dry">确定取消“风干”？</div>
+                <div class="choose_1">
+                    <a class="autoSwitchLanguager cancel_click" key="clothes_hanger_cancel" href="javascript:;" >取消</a>
+                    <a class="autoSwitchLanguager sure_click" key="clothes_hanger_ok" href="javascript:;" >确定</a>
+                </div>
+            </div>
+        </section>
+        <section class="mask_layer" style="display:none;"><i></i><span id="offLine" class="autoSwitchLanguager" key="device_OF_Offline"></span></section>
+    </body>
+    <script type="text/javascript" src="../../source/js/rem.js"></script>
+    <script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="../../source/mui/js/mui.min.js"></script>
+    <script type="text/javascript" src="../../source/mui/js/mui.picker.min.js"></script>
+    <script type="text/javascript" src="js/plus.js"></script>
+    <script type="text/javascript" src="js/tools.js"></script>
+    <script type="text/javascript" src="js/gatewayCmd.js"></script>
+    <script type="text/javascript" src="lang/lang.js"></script>
+    <script type="text/javascript" src="js/more.js"></script>
+    <script type="text/javascript">
+        /**********************************************************************
+         *                              变量区域
+         **********************************************************************/
+        /**
+         * 弹框类型
+         * 0 风干
+         * 1 烘干
+         * 2 杀菌
+         * 3 不能杀菌
+         */
+        var mAlertType = 0;
+        /**
+         * 电机控制：1开、2关、0停
+         * @type {number}
+         * 1 开
+         * 2 关
+         * 0 停
+         */
+        var mCtrlState = 0;
+        /**
+         * 照明
+         * @type {number}
+         * 0 关闭
+         * 1 开启
+         */
+        var mLightState = 0;
+        /**
+         * 风干状态
+         * @type {number}
+         * 0 关闭
+         * 1 开启
+         */
+        var mWindState = 0;
+        var mWindTime = 30;//风干剩余时间：0-180（单位分钟）
+        /**
+         * 烘干状态
+         * @type {number}
+         * 0 关闭
+         * 1 开启
+         */
+        var mDryingState = 0;//烘干按钮：0关闭 1开启
+        var mDryingTime = 30;//烘干剩余时间：0-180（单位分钟）
+        /**
+         * 烘干风干都为关闭时的  时间
+         */
+        var mNextWindTime = 30;
+        /**
+         * 消毒按钮
+         * @type {number}
+         * 0 关闭
+         * 1 开启
+         */
+        var mDisinfectState = 0;
+        var mDisinfectTime = 30;// 消毒剩余时间：0-30（单位分钟）
+        var mNextDisinfectTime = 30;// 下次 消毒剩余时间：0-30（单位分钟）
+        /**
+         * 衣杆位置
+         * @type {number}
+         * 1 上限
+         * 2 下限
+         * 0 其他
+         */
+        var mStickPosition = 0;
+        //初始化PopPicker组件
+        var picker;
+        //     = new mui.PopPicker({
+        //     layer: 2
+        // }); //杀菌消毒时间设置控件
+        //初始化PopPicker组件
+        var picker1;// = new mui.PopPicker({}); //风干或烘干时间设置控件
+        var deviceID = "";//设备id
+        var gwID = "";//网关ID
+
+        /**********************************************************************
+         *                              初始化
+         **********************************************************************/
+        initlan();
+        mui.init();
+
+        plus.plusReady(function () {
+            plus.gatewayCmd.getDeviceInfo(function (result) {
+                deviceID = result.devID;
+                gwID = result.gwID;
+                getMoreConfig(deviceID);
+                modeState(result);
+                // 查询设备所有状态
+                sendCmd(0x8000, "");
+            });
+            rush_500();
+        });
+
+        function rush_500() {
+            plus.gatewayCmd.newDataRefresh(function (data) {
+                if (data.cmd == "500" && data.devID == deviceID) {
+                    var name = data.name.indexOf("#$default$#") != -1 ? device_OF_name + data.name.split("#")[2] : data.name;
+                    $(".deviceName").html(name);
+                    modeState(data);
+                } else if (data.cmd == "502" && data.devID == deviceID) {
+                    if (data.name != undefined || data.name != '') {
+                        $(".deviceName").html(data.name)
+                    }
+                }
+            });
+        }
+
+        function modeState(result) {
+            if (result.mode === 2) {
+                $(".mask_layer").show()
+            } else if (result.mode === 3) {
+                //原生做的操作
+            } else {
+                $(".mask_layer").hide();
+                handleEp(result.endpoints);
+            }
+        }
+
+        // 处理 endpoints
+        // 遍历解析
+        function handleEp(endpoints) {
+            endpoints.forEach(function (endpoint) {
+                var clusters = endpoint.clusters;
+                clusters.forEach(function (cluster) {
+                    var attributes = cluster.attributes;
+                    attributes.forEach(function (attribute) {
+                        var attributeId = attribute.attributeId;
+                        var attributeValue = attribute.attributeValue;
+                        reloadUI(attributeId, attributeValue);
+                    })
+                })
+            });
+        }
+
+        function reloadUI(id, value) {
+            console.log("Id: " + id.toString(16) + "\t\tValue: " + value);
+            switch (id) {
+                case 0x8001:
+                    // 电机控制：1开、2关、0停；
+                    // 控制动画或按钮现在处于什么状态
+                    mCtrlState = parseInt(value);
+                    updateCtrlBtn();
+                    break;
+                case 0x8002:
+                    break;
+                case 0x8003:
+                    break;
+                case 0x8004:
+                    // 照明控制：1开、0关；
+                    mLightState = parseInt(value);
+                    updateLight();
+                    break;
+                case 0x8005:
+                    // 衣杆位置
+                    mStickPosition = parseInt(value);
+                    break;
+                case 0x8006:
+                    // 风干：1开、0关；
+                    mWindState = parseInt(value);
+                    updateWindAndDry();
+                    break;
+                case 0x8007:
+                    // 风干剩余时间：0-180（单位分钟）
+                    mWindTime = parseInt(value);
+                    updateWindTime();
+                    break;
+                case 0x8008:
+                    // 风干：1开、0关；
+                    mDryingState = parseInt(value);
+                    updateWindAndDry();
+                    break;
+                case 0x8009:
+                    // 烘干剩余时间：0-180（单位分钟）
+                    mDryingTime = parseInt(value);
+                    updateWindTime();
+                    break;
+                case 0x800A:
+                    // 杀菌消毒状态
+                    mDisinfectState = parseInt(value);
+                    updateDisinfect();
+                    break;
+                case 0x800B:
+                    // 杀菌消毒时间
+                    mDisinfectTime = parseInt(value);
+                    updateDisinfectTime();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        function getArr(start, end) {
+            var arr = [];
+            for (var i = start; i <= end; i++) {
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                arr.push(i)
+            }
+            return arr;
+        }
+
+        function timeNum(num) {
+            if ((num + '').length <= 1) {
+                num = "0" + num;
+            }
+            return num;
+        }
+
+        /**********************************************************************
+         *                              更新状态
+         **********************************************************************/
+        // 更新控制按钮
+        function updateCtrlBtn() {
+            console.log('6666 ' + mCtrlState);
+            $('.ctrlUp').attr('src', $('.ctrlUp').attr('m-normal'));
+            $('.ctrlPause').attr('src', $('.ctrlPause').attr('m-normal'));
+            $('.ctrlDown').attr('src', $('.ctrlDown').attr('m-normal'));
+            if (mCtrlState == 0) {
+                $('.ctrlPause').attr('src', $('.ctrlPause').attr('m-tap'));
+            } else if (mCtrlState == 2) {
+                $('.ctrlDown').attr('src', $('.ctrlDown').attr('m-tap'));
+            } else {
+                $('.ctrlUp').attr('src', $('.ctrlUp').attr('m-tap'));
+            }
+        }
+
+        // 更新照明状态
+        function updateLight() {
+            $('#light div').attr('switch', mLightState == 0 ? 'off' : 'on')
+        }
+
+        // 更新 烘干风干 状态
+        function updateWindAndDry() {
+            $('.play').attr('play', 'no');
+            $('.play div').attr('switch', 'off');
+            if (mDryingState == 1) {
+                $('#drying').attr('play', 'yes');
+                $('#drying div').attr('switch', 'on');
+            } else if (mWindState == 1) {
+                $('#wind').attr('play', 'yes');
+                $('#wind div').attr('switch', 'on');
+            }  else {
+                $('.play').attr('play', 'yes');
+            }
+        }
+
+        // 更新 烘干风干 时间
+        function updateWindTime() {
+            var time = 30;
+            if (mDryingState == 1) {
+                time = mDryingTime;
+            } else if (mWindState == 1) {
+                time = mWindTime;
+            } else {
+                time = mNextWindTime;
+            }
+
+            if (time == -1) {
+                $("#pickDateBtn1 i").html("");
+            } else if (time <= 1 && (mWindState == 1 || mDryingState == 1)) {
+                $("#pickDateBtn1 i").html(languageUtil.getResource("clothes_hanger_Coming_to_end"));
+            } else {
+                $("#pickDateBtn1 i").html(time + languageUtil.getResource("clothes_hanger_mine"));
+            }
+        }
+        // 更新杀菌消毒
+        function updateDisinfect() {
+            if (mDisinfectState == 1) {
+                $('#disinfect div').attr('switch', 'on');
+                $('#pickDateBtn').attr('play', 'no');
+            } else {
+                $('#disinfect div').attr('switch', 'off');
+                $('#pickDateBtn').attr('play', 'yes');
+            }
+        }
+
+        // 更新 杀菌消毒 时间
+        function updateDisinfectTime() {
+            var time = mDisinfectTime;
+            if (mDisinfectState == 0) {
+                time = mNextDisinfectTime;
+            }
+            if (time == -1) {
+                $("#pickDateBtn i").html("");
+            } else if (time <= 1 && mDisinfectState == 1) {
+                $("#pickDateBtn i").html(languageUtil.getResource("clothes_hanger_Coming_to_end"));
+            } else {
+                $("#pickDateBtn i").html(time + languageUtil.getResource("clothes_hanger_mine"));
+            }
+        }
+
+        // 更新衣杆位置
+        function updateStick() {
+
+        }
+
+        /**********************************************************************
+         *                              事件绑定
+         **********************************************************************/
+        $('#back').on('click', function () {
+            plus.tools.back();
+        });
+        $('.more').on('click', function () {
+            plus.tools.more(moreConfig, function () {})
+        });
+        // 上升按钮
+        $('.ctrlUp').on('click', function () {
+            console.log('点击 上升按钮');
+            sendCmd(0x8010, ['1'])
+        });
+
+        // 暂停按钮
+        $('.ctrlPause').on('click', function () {
+            console.log('点击 暂停按钮');
+            sendCmd(0x8010, ['0'])
+        });
+
+        // 下降按钮
+        $('.ctrlDown').on('click', function () {
+            console.log('点击 下降按钮');
+            sendCmd(0x8010, ['2'])
+        });
+
+        $('.ctrlBtn').on('touchstart', function () {
+            $(this).attr('src', $(this).attr('m-tap'))
+        });
+        $('.ctrlBtn').on('touchend', function () {
+            $(this).attr('src', $(this).attr('m-normal'))
+        });
+
+        // 风干
+        $('#wind').on('click', function () {
+            if ($(this).attr('play') == 'yes') {
+                if ($(this).find('div').attr('switch') == 'on') {
+                    showAlertWind();
+                } else {
+                    var timeText = mNextWindTime;
+                    if (timeText < 10) {
+                        timeText = '00' + timeText;
+                    } else if (mWindTime < 100) {
+                        timeText = '0' + timeText;
+                    }
+                    sendCmd(0x8014, ['1' + timeText]);
+                    // 演示代码
+                    // mWindTime = mNextWindTime;
+                    // mWindState = 1;
+                    // updateWindAndDry();
+                    // updateWindTime();
+                }
+
+            }
+        });
+
+        // 烘干
+        $('#drying').on('click', function () {
+            if ($(this).attr('play') == 'yes') {
+                if ($(this).find('div').attr('switch') == 'on') {
+                    showAlertDrying()
+                } else {
+
+                    var timeText = mNextWindTime;
+                    if (timeText < 10) {
+                        timeText = '00' + timeText;
+                    } else if (mWindTime < 100) {
+                        timeText = '0' + timeText;
+                    }
+                    sendCmd(0x8015, ['1' + timeText]);
+                    // 演示代码
+                    // mDryingState = 1;
+                    // mDryingTime = mNextWindTime;
+                    // updateWindAndDry();
+                    // updateWindTime();
+                }
+            }
+        });
+
+        // 照明
+        $('#light').on('click', function () {
+            if ($(this).find('div').attr('switch') == 'on') {
+                sendCmd(0x8013, ['0'])
+            } else {
+                sendCmd(0x8013, ['1'])
+            }
+        });
+
+        // 杀菌消毒
+        $('#disinfect').on('click', function () {
+            if ($(this).find('div').attr('switch') == 'on') {
+                showAlertDisinfect()
+            } else {
+                showAlertCanNotDisinfect();
+            }
+        });
+
+        // 风干烘干  时间选择
+        $('#pickDateBtn1').on("click", function () {
+            if ($(this).attr('play') != 'yes') {
+                return;
+            }
+            if (!picker) {
+                picker = new mui.PopPicker({
+                    layer: 2
+                });
+                picker.body.setAttribute('id', 'picker');
+
+                picker.setData([{
+                    value: "00",
+                    text: "00",
+                    children: getArr(1, 59)
+                }, {
+                    value: "01",
+                    text: "01",
+                    children: getArr(0, 59)
+                }, {
+                    value: "02",
+                    text: "02",
+                    children: getArr(0, 59)
+                }]);
+            }
+            $(".mui-backdrop").css("opacity", "0");
+            $(".mui-poppicker-btn-cancel").html(languageUtil.getResource("clothes_hanger_cancel"));//device_cancel
+            $(".mui-poppicker-btn-ok").html(languageUtil.getResource("clothes_hanger_ok"));//device_sure
+            var left = $("#picker .mui-picker").eq(0).find(".mui-pciker-rule-ft");
+            var right = $("#picker .mui-picker").eq(1).find(".mui-pciker-rule-ft");
+            $(left).html(languageUtil.getResource("clothes_hanger_hour"));
+            $(right).html(languageUtil.getResource("clothes_hanger_mine"));
+            var width = $("#picker .mui-pciker-rule-ft").width();
+            $(left).css({
+                "text-indent": width / 2 + 20 + "px"
+            });
+            $(right).css({
+                "text-indent": width / 2 + 20 + "px"
+            });
+            picker.show(function (item) {
+                //风干或烘干
+                var hour = parseInt(item[0].value);
+                var min = parseInt(item[1]);
+                var allMin = hour * 60 + min;
+                var timeText = '' + allMin;
+                if (allMin < 10) {
+                    timeText = '00' + allMin
+                } else if (allMin < 100) {
+                    timeText = '0' + allMin
+                }
+                if (mDryingState === 1) {
+                    sendCmd(0x8015, ['1' + timeText]);
+                    // 演示代码
+                    // mWindTime = allMin;
+                } else if (mWindTime === 1) {
+                    sendCmd(0x8014, ['1' + timeText]);
+                    // 演示代码
+                    // mDryingTime = allMin;
+                } else {
+                    mNextWindTime = allMin;
+                    // 暂定这个时间  不设置
+                    updateWindTime();
+                }
+
+                // updateWindTime();
+            })
+        });
+
+        // 杀菌消毒 时间选择
+        $('#pickDateBtn').on("click", function () {
+            if ($(this).attr('play') != 'yes') {
+                return;
+            }
+
+            if (!picker1) {
+                picker1 = new mui.PopPicker({});
+                picker1.body.setAttribute('id', 'picker1');
+            }
+            //初始化PopPicker组件
+            picker1.setData(getArr(1, 30));
+            $(".mui-backdrop").css("opacity", "0");
+            $(".mui-poppicker-btn-cancel").html(languageUtil.getResource("clothes_hanger_cancel"));//device_cancel
+            $(".mui-poppicker-btn-ok").html(languageUtil.getResource("clothes_hanger_ok"));//device_sure
+            $("#picker1 .mui-pciker-rule-ft").html(languageUtil.getResource("clothes_hanger_mine"));
+            var width = $(document).width();
+            $(".mui-pciker-rule-ft").css({
+                "text-indent": width / 2 + 20 + "px"
+            });
+            picker1.show(function (item) {
+                var min = parseInt(item[0]);
+                var timeText = min;
+                if (min < 10) {
+                    timeText = '0' + min;
+                }
+                if (mDisinfectState === 1) {
+                    mDisinfectTime = min;
+                    sendCmd(0x8016, ["1" + timeText]);
+                } else {
+                    mNextDisinfectTime = min;
+                    updateDisinfectTime();
+                }
+
+                // 演示代码
+                // updateDisinfectTime();
+            })
+        });
+
+        // 弹框取消
+        $('.cancel_click').on('click', function () {
+            hideAlert();
+        });
+
+        // 弹框确定
+        $('.sure_click').on('click', function () {
+            alertSure();
+        });
+        /**********************************************************************
+         *                              公共方法
+         **********************************************************************/
+        // 弹框确定
+        function alertSure() {
+            if (mAlertType == 0) {
+                // 这里应该只发送命令
+                sendCmd(0x8014, ['0030']);
+                // 演示代码
+                // mWindState = 0;
+                // mWindTime = 30;
+                mNextWindTime = 30;
+                // updateWindAndDry();
+                // updateWindTime();
+            } else if (mAlertType == 1) {
+                sendCmd(0x8015, ['0030']);
+                // 演示代码
+                // mDryingState = 0;
+                // mDryingTime = 30;
+                mNextWindTime = 30;
+                // updateWindAndDry();
+                // updateWindTime();
+            } else if (mAlertType == 2) {
+                sendCmd(0x8016, ['000']);
+                // 演示代码
+                // mDisinfectState = 0;
+                // mDisinfectTime = 30;
+                // mNextDisinfectTime = 30;
+                // updateDisinfect();
+                // updateDisinfectTime();
+            } else if (mAlertType == 3) {
+                // sendCmd(0x8015, ['100']);
+                // 演示代码
+                // mDisinfectState = 1;
+                // updateDisinfect();
+            }
+
+            hideAlert();
+        }
+
+        // 隐藏弹框
+        function hideAlert() {
+            $('.alert').hide();
+        }
+
+        // 弹框 关闭风干
+        function showAlertWind() {
+            $('.msg').html(languageUtil.getResource("clothes_hanger_cancel_Air_dry"));
+            $('.cancel_click').html(languageUtil.getResource("clothes_hanger_cancel"));
+            $('.nameToast .choose_1 a').css('width', '50%');
+            $('.sure_click').show();
+            mAlertType = 0;
+            $('.alert').show();
+        }
+
+        // 弹框 关闭烘干
+        function showAlertDrying() {
+            $('.msg').html(languageUtil.getResource("clothes_hanger_cancel_drying"));
+            $('.cancel_click').html(languageUtil.getResource("clothes_hanger_cancel"));
+            $('.nameToast .choose_1 a').css('width', '50%');
+            $('.sure_click').show();
+            mAlertType = 1;
+            $('.alert').show();
+        }
+
+        // 弹框 关闭杀菌
+        function showAlertDisinfect() {
+            $('.msg').html(languageUtil.getResource("clothes_hanger_cancel_Disinfection"));
+            $('.cancel_click').html(languageUtil.getResource("clothes_hanger_cancel"));
+            $('.nameToast .choose_1 a').css('width', '50%');
+            $('.sure_click').show();
+            mAlertType = 2;
+            $('.alert').show();
+        }
+
+        // 弹框  不能杀菌
+        function showAlertCanNotDisinfect() {
+            if (mStickPosition != 1) {
+                $('.msg').html(languageUtil.getResource("clothes_hanger_Disinfection_prompt"));
+                $('.cancel_click').html(languageUtil.getResource("clothes_hanger_i_konw"));
+                $('.nameToast .choose_1 a').css('width', '100%');
+                $('.sure_click').hide();
+                mAlertType = 3;
+                $('.alert').show();
+            } else {
+                var timeText = ''  + mNextDisinfectTime;
+                if (mNextDisinfectTime < 10) {
+                    timeText = '0' + mNextDisinfectTime;
+                }
+                sendCmd(0x8016, ["1" + timeText]);
+                // 演示代码
+                // mDisinfectState = 1;
+                // updateDisinfect();
+            }
+        }
+
+        // 发送命令
+        function sendCmd(commandId,parameter){
+            console.log('sendCmd: ' + commandId.toString(16) + ', ' + parameter);
+            var jsonData = {};
+            jsonData.cmd = "501";
+            jsonData.gwID = gwID;
+            jsonData.devID = deviceID;
+            jsonData.endpointNumber = 1;
+            jsonData.commandType = 1;
+            jsonData.clusterId = 0x0102;
+            jsonData.commandId = commandId;
+            if(parameter){
+                jsonData.parameter = parameter;
+            }
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+        }
+    </script>
+</html>

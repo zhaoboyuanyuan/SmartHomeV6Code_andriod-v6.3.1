@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title></title>
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+    <link href="css/translator.css" rel="stylesheet">
+    <style>
+        body,html{
+            height: 100%;
+            width: 100%;
+            background-color: #f1f4f8;
+        }
+    </style>
+    <style type="text/css">
+        .ui-switch {
+            position: absolute;
+            font-size: .16rem;
+            right: 1.4rem;
+            top: 50%;
+            transform: translate(0,-50%);
+            /*margin-top: -0.16rem;*/
+            width: 3.3rem !important;
+            height: 1.8rem;
+            line-height: .3rem;
+        }
+
+        .ui-switch input {
+            width: 3.3rem !important;
+            height: 1.8rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            border: 0;
+            background: 0 0;
+            -webkit-appearance: none;
+            outline: 0;
+        }
+
+        .ui-switch input:before {
+            content: '';
+            width: 3.3rem !important;
+            height: 1.7rem;
+            border: 1px solid #dfdfdf;
+            background-color: #fdfdfd;
+            border-radius: 1rem;
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            vertical-align: middle;
+            -webkit-box-sizing: content-box;
+            box-sizing: content-box;
+            border-color: #dfdfdf;
+            -webkit-box-shadow: #dfdfdf 0 0 0 0 inset;
+            box-shadow: #dfdfdf 0 0 0 0 inset;
+            -webkit-transition: border .4s, -webkit-box-shadow .4s;
+            transition: border .4s, box-shadow .4s;
+            -webkit-background-clip: content-box;
+            background-clip: content-box;
+        }
+
+        .ui-switch input:checked:before {
+            border-color: #64bd63;
+            -webkit-box-shadow: #64bd63 0 0 0 0.16rem inset;
+            box-shadow: #64bd63 0 0 0 0.16rem inset;
+            background-color: #64bd63;
+            transition: border .4s, box-shadow .4s, background-color 1.2s;
+            -webkit-transition: border .4s, -webkit-box-shadow .4s, background-color 1.2s;
+            background-color: #64bd63
+        }
+
+        .ui-switch input:checked:after {
+            left: 1.62rem
+        }
+
+        .ui-switch input:after {
+            content: '';
+            width: 1.7rem;
+            height: 1.7rem;
+            position: absolute;
+            top: 56%;
+            left: 0px;
+            -webkit-transform: translateY(-50%);
+            border-radius: 100%;
+            background-color: #fff;
+            -webkit-box-shadow: 0 0.01rem 0.03rem rgba(0, 0, 0, .4);
+            box-shadow: 0 0.01rem 0.03rem rgba(0, 0, 0, .4);
+            -webkit-transition: left .2s;
+            transition: left .2s;
+        }
+
+        .mui-pciker-rule-ft {
+            z-index: 2;
+            border-top: solid 1px rgba(0,0,0,.1);
+            border-bottom: solid 1px rgba(0,0,0,.1);
+            text-align: right;
+            padding-right: 40%;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header_top" style="height: 6.4rem">
+        <a id="back" href="javascript:window.history.back(-1);"></a>
+        <a href="javascript:;" key="device_B9_button_name_status" class="deviceName autoSwitchLanguager remove">按键名称与状态</a>
+        <a href="javascript:;" class="remove autoSwitchLanguager" id="keep" key="device_B9_save">保存</a>
+    </div>
+</header>
+    <!--<button onclick="show_list()">点击我</button>
+    <ul class="pop_list">
+        <li>删除</li>
+        <li>取消</li>
+        <li>确定</li>
+    </ul>-->
+<div class="add_button_name">
+    <p key="device_B9_name_1" class="autoSwitchLanguager">名称</p>
+    <input type="text" value="" key="device_B9_enter_name" class="autoSwitchLanguager" placeholder="请输入名称" id="button_name" onkeyup="value=value.replace(/[^\a-zA-Z\u4E00-\u9FA5]/g,'')" >
+</div>
+<div class="add_button_status">
+    <p key="device_B9_status" class="autoSwitchLanguager">状态</p>
+    <ul>
+        <li>
+            <span key="device_B9_1_way" class="autoSwitchLanguager">一路</span>
+            <label class="ui-switch">
+            <input type="checkbox" id="fuxuan">
+            </label>
+        </li>
+        <li id="line_action">
+            <span key="device_B9_action" class="autoSwitchLanguager">动作</span>
+            <!--<select id="action">
+                <option value="1" selected="selected" key="device_B9_action_close" class="autoSwitchLanguager">闭合</option>
+                <option value="0" key="device_B9_action_open" class="autoSwitchLanguager">断开</option>
+                <option value="3" key="device_B9_action_close_open" class="autoSwitchLanguager">先闭合后断开</option>
+                <option value="4" key="device_B9_action_open_close" class="autoSwitchLanguager">先断开后闭合</option>
+            </select>-->
+            <span id="action" key="device_B9_action_close" class="autoSwitchLanguager">闭合</span>
+            <img src="fonts/more.png">
+        </li>
+        <li id="closeTime">
+            <span key="device_B9_close_time" class="autoSwitchLanguager" id="qhTime"></span>
+            <span id="time">10s</span>
+            <img src="fonts/more.png">
+        </li>
+    </ul>
+</div>
+<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/mui/js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/add-button.js"></script>
+</body>
+</html>

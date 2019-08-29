@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:id="@+id/ll_device_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="@dimen/default_padding_normal"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Device_Name" />
+
+            <TextView
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:gravity="center_vertical|right"
+                android:layout_marginRight="@dimen/default_padding_small"
+                android:id="@+id/tv_device_name"
+                style="@style/device_setting_text"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/iv_arrows" />
+
+            <ImageView
+                android:id="@+id/iv_arrows"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ll_device_information"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="1dp"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Device_Info" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ll_bind_lock"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="20dp"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Bind_Lock" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ll_device_detection"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="1dp"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/CateEye_Move_Setting" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/ll_device_wifi_config"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:visibility="visible"
+            android:layout_marginTop="1dp"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/WIFI_Config" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_zone"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/config_device_btn_height"
+            android:layout_marginTop="1dp"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Time_Zone" />
+
+            <TextView
+                android:id="@+id/tv_zone_name"
+                style="@style/device_setting_text_left"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/default_padding_small"
+                android:layout_toLeftOf="@+id/iv"
+                android:gravity="center_vertical|right" />
+
+            <ImageView
+                android:id="@+id/iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+
+        </RelativeLayout>
+
+
+        <Button
+            android:id="@+id/btn_device_unbind"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="30dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:outlineProvider="none"
+            android:text="@string/Unbind_Cateye"
+            android:textColor="@color/red"
+            android:textSize="@dimen/default_text_size" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/base.css?v=1.1"/>
+    <link rel="stylesheet" type="text/css" href="../css/scene.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+        .mainview {
+            position:relative;
+            width:100%;
+            min-height: calc(100% - 6.4rem);
+            margin-top:6.4rem;
+            overflow:hidden;
+            background:#fff;
+        }
+        .select_box{
+            width: 100%;
+            height: 8rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .select_box a:nth-child(2){
+            /*margin-left: 2.8rem;*/
+            /*margin-right: 2.8rem;*/
+        }
+        .select_box b {
+            display: inline-block;
+            width: 8rem;
+            height: 3rem;
+            margin: 1.5rem;
+        }
+        .select_btn {
+            display: block;
+            width: 8rem;
+            height: 3rem;
+            color: #333;
+            border: 0.1rem solid #333;
+            border-radius: 0.3rem;
+            line-height: 3.05rem;
+            font-size: 1.4rem;
+            text-align: center;
+            margin: 0.4rem 1.5rem 0 1.5rem;
+        }
+        .btn_choosed {
+            background-color: #8cd451;
+            color: white;
+            border-color: #8cd451;
+        }
+    </style>
+    <style type="text/css">
+        /*************************************************************************
+        *                          内部传感器异常弹框                           *
+        *************************************************************************/
+        .alert{
+            display:block;
+            position:absolute;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.4)
+        }
+        .nameToast{
+            position:absolute;
+            left:12%;
+            top:50%;
+            width:76%;
+            /*height:14rem;*/
+            -webkit-transform:translateY(-50%);
+            -ms-transform:translateY(-50%);
+            -moz-transform:translateY(-50%);
+            transform:translateY(-50%);
+            background:#fff;
+            border-radius:8px;
+            overflow:hidden;
+        }
+        .nameToast span{
+            display:block;
+            width:100%;
+            height:5.3rem;
+            line-height:5.3rem;
+            text-align:center;
+            font-size:1.7rem;
+            color:#555;
+        }
+        .nameToast .name{
+            margin:0 5%;
+            width:90%;
+            background:#f2f2f2;
+            border-radius:5px;
+            overflow:hidden;
+        }
+        .msg{
+            display:block;
+            float:left;
+            padding-left:5%;
+            width:85%;
+            /*height:16rem;*/
+            line-height:2rem;
+            border:0;
+            font-size:1.4rem;
+            text-align: center;
+            overflow:auto
+        }
+        .nameToast .choose_1{
+            margin-top: 5rem;
+            border-top: 1px solid #d9d9d9;
+        }
+        .nameToast .choose_1 a{
+            display:block;
+            box-sizing: border-box;
+            float:left;
+            width:100%;
+            height:4.5rem;
+            line-height:4.5rem;
+            text-align:center;
+            border-right:1px solid #d9d9d9;
+            font-size:1.5rem;
+            color:#555;
+        }
+        .nameToast .choose_1 em:last-child{
+            border-right:0;
+        }
+
+    </style>
+</head>
+<body style="padding-top: 0.01rem;">
+<header class="header" style="position:fixed;left:0;top:0;width: 100%;z-index: 1000;">
+    <div class="header_top">
+        <a href="javascript:;" class="back"></a>
+        <a href="javascript:;" key="setDeviceStatus" class="autoSwitchLanguager">批量添加设备</a>
+        <a id="finishScene"  key="complete" class="autoSwitchLanguager" href="javascript:;">完成</a>
+    </div>
+</header>
+
+<section class="mainview"></section>
+
+<section class="alert" style="display:none;">
+    <div class="nameToast">
+        <span class="tip autoSwitchLanguager" key=""></span>
+        <div class="msg"></div>
+        <div class="choose_1">
+            <a class="autoSwitchLanguager sure_click" key="Add_batches_i_know" href="javascript:;" onclick="sure()" >确定..</a>
+        </div>
+    </div>
+</section>
+
+</body>
+
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="application/javascript" >
+    var info = window.sysfun;
+    info.init("V6Scene");
+    var reFlag; //防plusReady多次触发的标志
+    initlan();
+
+    var slDevList = JSON.parse(info.getItem("batchAdd_slDevList"))  // 已选择的设备
+    var hasOnoff = false  // 是否有开关
+    var hasCurtain = false  // 是否有窗帘
+    var hasSocket = false  // 是否有插座
+
+    //和原生通信已准备完成
+    plus.plusReady(function () {
+        if(reFlag)return;
+        reFlag = true;
+
+        checkDeviceCategory()
+
+        // 安卓返回
+        plus.gatewayCmd.androidBack(function () {
+            goBack();
+        });
+
+
+    })
+
+    // 检查设备有哪些类别
+    function checkDeviceCategory() {
+        slDevList.forEach(function (model) {
+            if (model.category == "3") {
+                hasOnoff = true
+            }
+            if (model.category == "7") {
+                hasCurtain = true
+            }
+            if (model.category == "4") {
+                hasSocket = true
+            }
+        })
+
+        drawView()
+    }
+
+    // 绘制页面
+    function drawView() {
+        if (hasOnoff) {
+            var str = '<div>' +
+                    '<p style="width: 100%;height: 4rem;font-size: 1.5rem;padding-left: 1.5rem;line-height: 4rem;color: #666;">' + Add_batches_switch + '</p>' +
+                    '<p class="select_box">' +
+                        '<a class="select_btn" data-status="onoff_open">' + lang_openSingle + '</a>' +
+                        '<a class="select_btn" data-status="onoff_close">' + lang_closeSingle + '</a>' +
+                        '<a class="select_btn" data-status="onoff_change">' + lang_switch_cut + '</a>' +
+                    '</p>' +
+                    '</div>'
+
+            $(".mainview").append(str)
+        }
+
+        if (hasCurtain) {
+            var str = '<div>' +
+                '<p style="width: 100%;height: 4rem;font-size: 1.5rem;padding-left: 1.5rem;line-height: 4rem;color: #666;">' + Add_batches_curtain + '</p>' +
+                '<p class="select_box">' +
+                '<a class="select_btn" data-status="curtain_open">' + lang_openSingle + '</a>' +
+                '<a class="select_btn" data-status="curtain_close">' + lang_closeSingle + '</a>' +
+                '<a class="select_btn" data-status="curtain_stop">' + lang_stopSingle + '</a>' +
+                '</p>' +
+                '</div>'
+
+            $(".mainview").append(str)
+        }
+
+        if (hasSocket) {
+            var str = '<div>' +
+                '<p style="width: 100%;height: 4rem;font-size: 1.5rem;padding-left: 1.5rem;line-height: 4rem;color: #666;">' + Add_batches_socket + '</p>' +
+                '<p class="select_box">' +
+                '<a class="select_btn" data-status="socket_open">' + lang_openSingle + '</a>' +
+                '<a class="select_btn" data-status="socket_close">' + lang_closeSingle + '</a>' +
+                '<b></b>' +
+                '</p>' +
+                '</div>'
+
+            $(".mainview").append(str)
+        }
+        
+        $(".select_btn").on("click", function () {
+            $(this).parent().find("a").removeClass("btn_choosed")
+            $(this).addClass("btn_choosed")
+        })
+    }
+
+    // 返回方法
+    $(".back").on("click", function () {
+        goBack();
+    })
+    function goBack() {
+        info.setItem("flag", "0")
+
+        window.history.back(-1)
+        // window.location = "editScene.html"
+    }
+
+    //完成
+    $("#finishScene").on("click", function () {
+
+        // 检查选择的状态
+        var selectedStatus = []
+        $(".btn_choosed").each(function () {
+            var status = $(this).data("status")
+            selectedStatus.push(status)
+        })
+        console.log(selectedStatus)
+
+        var need = $(".mainview div").length
+
+        if (need === selectedStatus.length) {
+            info.setItem("batchAdd_slStatus", JSON.stringify(selectedStatus) )
+            window.location = "batchAdd_addDelay.html"
+        } else {
+            // 弹框提示
+            showAlert(Add_batches_save)
+        }
+    })
+
+    /**********************************************************************
+     *                              显示弹框
+     **********************************************************************/
+    function showAlert(msg) {
+        $('.msg').html(msg);
+        $('.alert').show()
+    }
+    /**********************************************************************
+     *                              弹框确认按钮                          *
+     **********************************************************************/
+    function sure() {
+        $('.alert').hide()
+    }
+    
+</script>
+</html>

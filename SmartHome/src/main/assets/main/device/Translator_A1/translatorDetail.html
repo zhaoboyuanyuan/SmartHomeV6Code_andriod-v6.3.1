@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>翻译器</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body data-status="fortify">
+<header class="header">
+    <a class="back" href="javascript:window.history.back(-1);"></a>
+    <a class="deviceName autoSwitchLanguager" id="" href="javascript:;"></a>
+</header>
+<section class="state_show">
+    <div class="status autoSwitchLanguager" data-text="no" key="device_A1_fortifying">设防中</div>
+    <div class="img_state" data-state="close" style="position: relative;">
+        <div class="loading">
+            <i></i>
+            <i></i>
+            <i></i>
+        </div>
+        <span class="deviceState autoSwitchLanguager" key="device_A1_normal">正常</span>
+    </div>
+</section>
+<section class="img_bottom">
+    <div class="bottom_btn">
+        <a class="btn autoSwitchLanguager" data-btn="true" key="lang_device_disarming" href="javascript:;">撤防</a>
+    </div>
+</section>
+<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" id="device_A1_Offline">设备已离线</span></section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var info = window.sysfun;
+    info.init("device_A1");
+    var endpointNumber = parseInt(getUrlParam("endpointNumber"));
+    var name = info.getItem("name");
+    $(".deviceName").html(name);
+    var gwID,devID,appID;
+    var num = 2; //动画数组长度
+    var timer;
+    plus.plusReady(function(){
+        plus.gatewayCmd.getCurrentAppID(function(result){
+            appID = result;
+        });
+        plus.gatewayCmd.getDeviceInfo(null,function(data){
+            if(data.mode == 2){
+                $(".mask_loading").hide();
+                $(".mask_layer").show();
+            }else{
+                $(".mask_layer").hide();
+            }
+            console.log(data);
+            devID = data.devID;
+            gwID = data.gwID;
+            sendCmd_501(gwID,devID,appID,0,0x0102,"");
+            modeAnalysis500(data);
+        });
+        plus.gatewayCmd.newDataRefresh(function(data){
+            if(data.cmd == "500" && data.devID == devID){
+                modeAnalysis500(data);
+            }else if(data.cmd == "502" && data.devID == devID){
+                modeAnalysis502(data)
+            }
+        });
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header")[0].style.paddingTop = "4rem";
+        }
+    });
+    $(".btn").on("click",function(){
+        if($(this).attr("data-btn") === "true"){
+            sendCmd_502(gwID,devID,0,endpointNumber,"0")
+        }else if($(this).attr("data-btn") === "false"){
+            sendCmd_502(gwID,devID,0,endpointNumber,"1")
+        }
+    });
+    function modeAnalysis500(data){
+        switch(data.mode){
+            case 2:
+                $(".mask_layer").show();
+                break;
+            case 0:
+            case 1:
+            case 4:
+                reloadUI(data);
+                break;
+        }
+    }
+    function reloadUI(data){
+        if(data){
+            if(data.endpoints){
+                var endpoints = data.endpoints;
+                for(var j in endpoints){
+                    if(endpoints[j].endpointNumber === endpointNumber){
+                        var status = endpoints[j].endpointStatus;
+                        if(status == "0"){
+                            $(".status").attr("data-state","no");
+                            $(".status").html(lang_device_disarmed);
+                            $(".btn").html(lang_device_fortify);
+                            $("body").attr("data-status","disarmed");
+                            $(".btn").attr("data-btn","false");
+                            $(".loading i").hide();
+                            $(".loading").hide();
+                            var attributes = endpoints[j].clusters[0].attributes;
+                            drawUi(attributes,status);
+                        }else{
+                            $(".status").attr("data-state","yes");
+                            $(".status").html(lang_device_fortifying);
+                            $(".btn").html(lang_device_disarming);
+                            $("body").attr("data-status","fortify");
+                            $(".btn").attr("data-btn","true");
+                            var attributes = endpoints[j].clusters[0].attributes;
+                            drawUi(attributes,status);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    function drawUi(attributes,status){
+        if(attributes){
+            var state = "";
+            for(var i in attributes){
+                var id = attributes[i].attributeId;
+                var value = attributes[i].attributeValue;
+                switch(id){
+                    case 0x8101:
+                        state = value == "0" ? "close" : "open";
+                        $(".img_state").attr("data-state",state);
+                        break;
+                    case 0x8102:
+                        if(value == "0"){
+                            if(status == 1){
+                                $(".deviceState").html(lang_device_normal);
+                            }else{
+                                $(".deviceState").html("");
+                            }
+                            clearInterval(timer);
+                            $(".loading i").hide()
+                            $(".loading").hide()
+                        }else if(value == "1"){
+                            if(status == 1){
+                                if(state == "open"){
+                                    $(".img_state").attr("data-state","close");
+                                }else if(state == "close"){
+                                    $(".img_state").attr("data-state","open");
+                                }
+                                $("body").attr("data-status","alarm");
+                                $(".deviceState").html(lang_device_abnormal);
+                                clearInterval(timer);
+                                timer = setInterval(beginCircle, 300);
+                            }
+                            $(".loading").show()
+                        }
+                        break;
+                }
+            }
+        }
+    }
+    function modeAnalysis502(data){
+        var id = data.endpointNumber;
+        if(id == endpointNumber){
+            $(".loading i").hide()
+            $(".loading").hide()
+            switch(data.mode){
+                case 0:
+                    var status = data.endpointStatus;
+                    if(status == 0) {
+                        $(".status").attr("data-state", "no");
+                        $(".status").html(lang_device_disarmed);
+                        $("body").attr("data-status", "disarmed");
+                        $(".btn").attr("data-btn", "false");
+                        $(".btn").html(lang_device_fortify);
+                        $(".deviceState").html("");
+                    }else if(status == 1){
+                        $(".status").attr("data-state","yes");
+                        $(".status").html(lang_device_fortifying);
+                        $("body").attr("data-status","fortify");
+                        $(".btn").attr("data-btn","true");
+                        $(".btn").html(lang_device_disarming);
+                        $(".deviceState").html(lang_device_normal);
+                    }
+                    break;
+                case 2:
+                    $(".deviceName").html(data.endpointName);
+                    break;
+            }
+        }
+    }
+    function sendCmd_501(gwID,devID,appID,endpointNumber,commandId,parameter){
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        jsonData.endpointNumber = endpointNumber;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+    //设备设防撤防控制502
+    function sendCmd_502(gwID,devID,mode,endpointNumber,state){
+        var dataJson = {
+            "cmd":"502",
+            "gwID":gwID,
+            "mode":mode,
+            "devID":devID,
+            "endpointNumber":endpointNumber
+        };
+        if(mode == 0){
+            dataJson.endpointStatus = state;
+        }else if(mode == 2){
+            dataJson.endpointName = state;
+        }
+        plus.gatewayCmd.controlDevice(dataJson,function(){})
+    }
+    /*
+     * 报警动画
+     */
+    function beginCircle() {
+        if(num >= 0) {
+            $(".loading i").eq(num).css("display","block")
+        }
+        num = num - 1;
+        if(num == -2) {
+            num = 2;
+            $(".loading i").css("display","none")
+        }
+    }
+</script>
+</html>

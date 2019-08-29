@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/device_Ap.css" />
+    <script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/mui/js/mui.picker.all.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+
+<body>
+    <header class="header" style="box-sizing: content-box;-webkit-box-sizing: content-box;z-index: 105; height: auto;">
+        <a href="javascript:window.history.back(-1);"></a>
+        <a class="deviceName autoSwitchLanguager" key="setDeviceState_tittle" href="javascript:;">设置设备状态</a>
+        <a key="customScene_sure" class="complete autoSwitchLanguager" onclick="save()" href="javascript:;">确定</a>
+    </header>
+    <section class="onoffSection">
+        <div class="mainTop">
+            <span class="autoSwitchLanguager" key="device_switch">开关</span>
+            <div class="switch" id="open"><i data-state="off" class="on"></i></div>
+        </div>
+    </section>
+    <section>
+        <div class="mainBottom" onclick="showPop()">
+            <span class="autoSwitchLanguager" key="houseKeeper2_Ap_Temperature">温度</span>
+            <span class="currentTemp">26℃</span>
+            <i class="iconRight"></i>
+        </div>
+    </section>
+</body>
+<script>
+    initlan();
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+
+    var deviceID = info.getItem('deviceID');
+    var taskType = info.getItem("taskType");
+
+    turnOffSwitch();
+    var tempScale = 0;
+    var state = 0; // 开关状态
+    var temp = 26; // 温度
+
+    // 摄氏度数组    10 - 32    Bx 步进 0.5  Cj 步进 1 默认 26℃
+    var mainTempArrC = [];
+    if(info.getItem("type") === "Bx"){
+        for (var i = 0; i <= 44; i++) {
+            var t = 10 + i / 2;
+            mainTempArrC.push(t + '℃')
+        }
+    }else if(info.getItem("type") === "Cj"){
+        for (var i = 0; i <= 22; i++) {
+            var t = 10 + i;
+            mainTempArrC.push(t + '℃')
+        }
+    }
+
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        info.setItem("epData", "0100");
+        info.setItem("switchName", languageUtil.getResource('device_status_close'));
+        info.setItem("deviceState", ' ');
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header")[0].style.paddingTop = "4.8rem";
+        }
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header")[0].style.paddingTop = "4.8rem";
+            $(".header")[0].style.height = "auto";
+            $(".onoffSection")[0].style.paddingTop = "2.4rem";
+        }
+    });
+
+    function save() {
+        // alert(info.getItem("switchName") + info.getItem("deviceState"));
+        if (taskType == 'timeTask') {
+            window.location = "setDelay_timeTask.html";
+        } else {
+            window.location = "setDelay_sceneTask.html";
+        }
+    }
+
+    function setState(s) {
+        state = s;
+        if (state == 0) {
+            info.setItem('epData', '0100');
+            info.setItem("switchName", languageUtil.getResource('device_status_close'));
+            info.setItem("deviceState", ' ');
+        } else {
+            if(info.getItem("type") === "Bx"){
+                ss = parseInt(temp * 10).toString(16);
+                if (ss.length == 2) {
+                    ss = '0' + ss;
+                }
+                info.setItem('epData', ('0101,040' + ss));
+            }else if(info.getItem("type") === "Cj"){
+                ss = parseInt(temp).toString(16);
+                info.setItem('epData', ('0101,04' + ss));
+            }
+            info.setItem("switchName", languageUtil.getResource('device_status_open'));
+            info.setItem("deviceState", temp + "℃");
+        }
+    }
+
+    function setTemp(t) {
+        temp = t;
+
+        if (state == 0) {
+            info.setItem('epData', '0100');
+            info.setItem("switchName", languageUtil.getResource('device_status_close'));
+            info.setItem("deviceState", ' ');
+        } else {
+            if(info.getItem("type") === "Bx"){
+                ss = parseInt(temp * 10).toString(16);
+                if (ss.length == 2) {
+                    ss = '0' + ss;
+                }
+                info.setItem('epData', ('0101,040' + ss));
+            }else if(info.getItem("type") === "Cj"){
+                ss = parseInt(temp).toString(16);
+                info.setItem('epData', ('0101,04' + ss));
+            }
+            info.setItem("switchName", languageUtil.getResource('device_status_open'));
+            info.setItem("deviceState", temp + "℃");
+        }
+
+        $('.currentTemp').html(temp + "℃")
+    }
+
+    $("#open").on("click", toggleSwitch);
+
+    /**
+     * 切换开关
+     */
+    function toggleSwitch() {
+        var state = $("#open .on").attr("data-state");
+        if (state == "off") {
+            setState(1);
+            turnOnSwitch()
+        } else {
+            setState(0);
+            turnOffSwitch()
+        }
+    }
+
+    function turnOnSwitch() {
+        state = 1;
+        $("#open .on").attr("data-state", "on");
+        $("#open").css("background", "#8dd652");
+        $("#open i").animate({
+            left: '60%'
+        }, 200)
+
+        $('.mainBottom').show();
+    }
+
+    function turnOffSwitch() {
+        state = 0;
+        $("#open .on").attr("data-state", "off");
+        $("#open").css("background", "#aaa");
+        $("#open i").animate({
+            left: '10%'
+        }, 200)
+
+        $('.mainBottom').hide();
+    }
+
+    function showPop() {
+        //初始化PopPicker组件
+        var picker = new mui.PopPicker({});
+
+        picker.setData(mainTempArrC);
+
+        $(".mui-backdrop").css("opacity", "0");
+        $(".mui-poppicker-btn-cancel").html(languageUtil.getResource('houseKeeper4_Ap_Cancel')); //"取消"
+        $(".mui-poppicker-btn-ok").html(languageUtil.getResource('houseKeeper3_Ap_Confirm')); //"确定"
+        picker.show(function (item) {
+            var st = item.toString();
+            setTemp(st.substring(0, st.length - 1))
+        });
+    }
+</script>
+
+</html>

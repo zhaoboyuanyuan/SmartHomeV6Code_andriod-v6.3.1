@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1.0" >
+
+        <RelativeLayout
+            android:id="@+id/rl_query_device"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" >
+
+            <Button
+                android:id="@+id/btn_retry_invailable_query_device"
+                style="@style/config_next_button"
+                android:layout_alignParentBottom="true"
+                android:visibility="invisible"
+                android:text="@string/Common_Retry" />
+
+            <TextView
+                style="@style/config_wifi_text"
+                android:id="@+id/tv_query_device"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/btn_retry_invailable_query_device"
+                android:layout_marginBottom="@dimen/default_padding_normal"
+                android:gravity="center_horizontal"
+                android:text="@string/Config_Query_Device_Now" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/tv_query_device"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/default_padding_normal"
+                android:layout_marginTop="@dimen/default_margin_normal"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_query_device_fail" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_query_device_fail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" >
+
+            <Button
+                android:id="@+id/btn_retry_query_device"
+                style="@style/config_next_button"
+                android:layout_alignParentBottom="true"
+                android:text="@string/Common_Retry" />
+
+            <TextView
+                style="@style/config_wifi_text"
+                android:id="@+id/tv_query_device_fail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/btn_retry_query_device"
+                android:layout_marginBottom="@dimen/default_padding_normal"
+                android:gravity="center_horizontal"
+                android:text="@string/Config_Query_Device_Fail" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/tv_query_device_fail"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/default_padding_large"
+                android:layout_marginTop="@dimen/default_margin_normal"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_query_device_fail" />
+        </RelativeLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1.0" >
+    </LinearLayout>
+
+</LinearLayout>

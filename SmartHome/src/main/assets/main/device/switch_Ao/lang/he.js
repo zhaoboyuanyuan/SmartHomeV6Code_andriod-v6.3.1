@@ -1,0 +1,55 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.switch_Ao_01 = "בקר מפסק";
+$lang.switch_Ao_02 = "אתה בטוח שציוד זה מקושר?";
+$lang.switch_Ao_03 = "קישוריות לבקר תריס תוספת 3 לחצנים， בטוח לבטל קישוריות?";
+$lang.switch_Ao_04 = "בקר תריס דורש 3 לחצנים， 1 פתח， 2 עצור， 3 סגורץ אין מספר לחצנים מתאים בטוח לקשר?";
+$lang.switch_Ao_05 = "בטוח שברצונך למחוק את התרחיש?";
+$lang.switch_Ao_06 = "בטל קישוריות לבקר";
+$lang.switch_Ao_07 = "בטל קישוריות לתרחיש";
+$lang.switch_Ao_08 = "שינוי שם תרחיש";
+$lang.swtich_Ao_09 = "עריכה";
+$lang.swtich_Ao_10 = "מחק תרחיש";
+$lang.switch_Ao_11 = "חיבור מחדש";
+$lang.switch_Ao_12 = "ניתוק";
+$lang.switch_Ao_13 = "בטל";
+$lang.switch_Ao_14 = "אשר";
+$lang.switch_Ao_15 = "אנא שנה שם";
+$lang.switch_Ao_On = "פתח";
+$lang.switch_Ao_Off = "סגור";
+$lang.switch_Ao_Stop = "עצור";
+$lang.switch_Ao_Binding = "קישוריות";
+$lang.switch_Ao_BindingSuc = "קישוריות הצליחה";
+$lang.switch_Ao_BindingFail = "קישוריות נכשלה";
+$lang.switch_Ao_NoSwitchMode = "לא במצב מפסק";
+$lang.switch_Ao_ChangeMode01 = "שינוי מצבים";
+$lang.switch_Ao_ChangeMode02 = "בקרי קישוריות ינותקו לאחר שינוי מצב";
+$lang.switch_Ao_ChangeMode03 = "בקרי קישוריות ינותקו לאחר שינוי מצב";
+$lang.switch_Ao_ChangeMode04 = "נוכחי";
+$lang.switch_mode_01 = "מצב מפסק";
+$lang.switch_mode_02 = "מצב קישוריות";
+$lang.switch_mode_03 = "מצב תרחיש";
+$lang.un_room = "אזור לא מוגדר";
+$lang.offLine = "מנותק";
+$lang.onLine = "מנותק";
+$lang.switch_Ao_timeout = "בקשה נכשלה， תזמון!";
+$lang.switch_Ao_saveSuc = "שמירה הצליחה";
+$lang.switch_Ao_ChooseScene = "בחר תרחיש";
+$lang.swtich_Ao_Complete = "סיום";
+$lang.BindDeviceTitle = "קישור בקר";
+$lang.switch_Ao_ChooseBtn = "בחר לחצן";
+$lang.switch_Ao_Saving = "שומר";
+$lang.switch_Ao_UpdateSuc = "שינוי הצליח";
+$lang.swich_Ao_UnbindSuc = "ביטול קישור הצליח";
+$lang.Log = "היסטוריה";
+$lang.Alarm = "הודעת אתראה";
+$lang.device_Am_name = "בקר 1";
+$lang.device_An_name = "בקר 2 ";
+$lang.device_Ao_name = "בקר 3 ";
+$lang.device_Ar_Name = "בקר תריס/וילון חשמלי";
+$lang.swich_Ao_Unbundling = "ניתוק קישוריות";
+$lang.device_Ao_NoScene = "אין תרחיש כרגע<br />לך למסך הבית כל התרחישים הוספו";
+$lang.Share_No_Permission = "שיתוף נתב， אין אישור לתפעול";

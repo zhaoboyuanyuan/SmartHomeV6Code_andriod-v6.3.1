@@ -1,0 +1,50 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Host = "מצב שרת";
+$lang.Slave = "מצב נשלט";
+$lang.Temp = "טמפרטורת חדר";
+$lang.Type = "סוג";
+$lang.Type2 = "קירור";
+$lang.Type3 = "חימום";
+$lang.Type1 = "אוורור";
+$lang.Type5 = "הפחתת לחות";
+$lang.Speed = "מהירות מאוורר";
+$lang.Speed1 = "גבוהה";
+$lang.Speed2 = "אמצע";
+$lang.Speed3 = "נמוכה";
+$lang.offLine                 = "בקר מנותק";
+$lang.Timing = "תזמון";
+$lang.Timing_close = "כבר לאחר %@שעות %@דקות";
+$lang.Off = "כיבוי";
+$lang.On = "הפעלה";
+$lang.Timing_open = "הפעל בעוד %@שעות %@דקות ";
+$lang.Set_device_status = "קבע מצב התקן";
+$lang.Switch = "החלף";
+$lang.Temperature = "טמפרטורה";
+$lang.Save = "שמור";
+$lang.Confirm = "אשר";
+$lang.Cancel = "ביטול";
+$lang.CD = "מרענן";
+$lang.CloseAll = "הכול סגור";
+$lang.OpenAll = "הכול פתוח";
+$lang.Loading1 = "ציוד בהכנה， אנא יותר מאוחר ...";
+$lang.Loading2 = "בטעינה ...";
+$lang.Name1 = "שם";
+$lang.Name2 = "הכנס שם";
+$lang.Closed = "סגור";
+$lang.moreSettingLog          = "היסטוריה";
+$lang.moreSettingAlarm        = "הודעת התראה";
+$lang.Device_OZ_Details_CloseAlltips = "האם אתה בטוח שהכול סגור למטה?";
+$lang.Device_OZ_Details_OpenAlltips = "האם אתה בטוח שהכול פתוח?";
+$lang.device_a0_name = "מיזוג מרכזי (פנסיון + מתרגם)";
+$lang.Type4 = "אוטומטי";
+$lang.Speed4 = "נמוך במיוחד";
+$lang.Speed5 = "סופר גבוה";
+$lang.Time_close = "כיבוי מתוזמן";
+$lang.Time_open = "אתחול מתוזמן";
+$lang.Device_a0_aircondition = "מיזוג אוויר";
+$lang.Device_a0_countdown = "ברצונך לבטל את הספירה לאחור?";
+$lang.Cooling_and_heating = "קירור וחימום מצבים רק לאפשר ויסות המארח";

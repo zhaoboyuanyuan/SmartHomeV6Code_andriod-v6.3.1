@@ -1,0 +1,659 @@
+{
+  "zone": [
+    {
+      "timeZone": "430",
+      "cn": "喀布尔",
+      "en": "Afghanistan Standard Time"
+    },
+    {
+      "timeZone": "-900",
+      "cn": "阿拉斯加",
+      "en": "Alaskan Standard Time"
+    },
+    {
+      "timeZone": "-1000",
+      "cn": "阿留申群岛",
+      "en": "Aleutian Standard Time"
+    },
+    {
+      "timeZone": "700",
+      "cn": "巴尔瑙尔，戈尔诺-阿尔泰斯克",
+      "en": "Altai Standard Time"
+    },
+    {
+      "timeZone": "300",
+      "cn": "科威特，利雅得",
+      "en": "Arab Standard Time"
+    },
+    {
+      "timeZone": "400",
+      "cn": "阿布扎比，马斯喀特",
+      "en": "Arabian Standard Time"
+    },
+    {
+      "timeZone": "300",
+      "cn": "巴格达",
+      "en": "Arabic Standard Time"
+    },
+    {
+      "timeZone": "-300",
+      "cn": "布宜诺斯艾利斯",
+      "en": "Argentina Standard Time"
+    },
+    {
+      "timeZone": "400",
+      "cn": "阿斯特拉罕，乌里扬诺夫斯克",
+      "en": "Astrakhan Standard Time"
+    },
+    {
+      "timeZone": "-400",
+      "cn": "大西洋时间(加拿大)",
+      "en": "Atlantic Standard Time"
+    },
+    {
+      "timeZone": "930",
+      "cn": "达尔文",
+      "en": "AUS Central Standard Time"
+    },
+    {
+      "timeZone": "845",
+      "cn": "尤克拉",
+      "en": "Aus Central W. Standard Time"
+    },
+    {
+      "timeZone": "1000",
+      "cn": "堪培拉，墨尔本，悉尼",
+      "en": "AUS Eastern Standard Time"
+    },
+    {
+      "timeZone": "400",
+      "cn": "巴库",
+      "en": "Azerbaijan Standard Time"
+    },
+    {
+      "timeZone": "-100",
+      "cn": "亚速尔群岛",
+      "en": "Azores Standard Time"
+    },
+    {
+      "timeZone": "-300",
+      "cn": "萨尔瓦多",
+      "en": "Bahia Standard Time"
+    },
+    {
+      "timeZone": "600",
+      "cn": "达卡",
+      "en": "Bangladesh Standard Time"
+    },
+    {
+      "timeZone": "300",
+      "cn": "明斯克",
+      "en": "Belarus Standard Time"
+    },
+    {
+      "timeZone": "1100",
+      "cn": "布干维尔岛",
+      "en": "Bougainville Standard Time"
+    },
+    {
+      "timeZone": "-600",
+      "cn": "萨斯喀彻温",
+      "en": "Canada Central Standard Time"
+    },
+    {
+      "timeZone": "-100",
+      "cn": "佛得角群岛",
+      "en": "Cape Verde Standard Time"
+    },
+    {
+      "timeZone": "400",
+      "cn": "埃里温",
+      "en": "Caucasus Standard Time"
+    },
+    {
+      "timeZone": "930",
+      "cn": "阿德莱德",
+      "en": "Cen. Australia Standard Time"
+    },
+    {
+      "timeZone": "-600",
+      "cn": "中美洲",
+      "en": "Central America Standard Time"
+    },
+    {
+      "timeZone": "600",
+      "cn": "阿斯塔纳",
+      "en": "Central Asia Standard Time"
+    },
+    {
+      "timeZone": "-400",
+      "cn": "库亚巴",
+      "en": "Central Brazilian Standard Time"
+    },
+    {
+      "timeZone": "100",
+      "cn": "贝尔格莱德，布拉迪斯拉发，布达佩斯，卢布尔雅那，布拉格",
+      "en": "Central Europe Standard Time"
+    },
+    {
+      "timeZone": "100",
+      "cn": "萨拉热窝，斯科普里，华沙，萨格勒布",
+      "en": "Central European Standard Time"
+    },
+    {
+      "timeZone": "1100",
+      "cn": "所罗门群岛，新喀里多尼亚",
+      "en": "Central Pacific Standard Time"
+    },
+    {
+      "timeZone": "-600",
+      "cn": "中部时间(美国和加拿大)",
+      "en": "Central Standard Time"
+    },
+    {
+      "timeZone": "-600",
+      "cn": "瓜达拉哈拉，墨西哥城，蒙特雷",
+      "en": "Central Standard Time (Mexico)"
+    },
+    {
+      "timeZone": "1245",
+      "cn": "查塔姆群岛",
+      "en": "Chatham Islands Standard Time"
+    },
+    {
+      "timeZone": "800",
+      "cn": "北京，重庆，香港特别行政区，乌鲁木齐",
+      "en": "China Standard Time"
+    },
+    {
+      "timeZone": "-500",
+      "cn": "哈瓦那",
+      "en": "Cuba Standard Time"
+    },
+    {
+      "timeZone": "-1200",
+      "cn": "国际日期变更线西",
+      "en": "Dateline Standard Time"
+    },
+    {
+      "timeZone": "300",
+      "cn": "内罗毕",
+      "en": "E. Africa Standard Time"
+    },
+    {
+      "timeZone": "1000",
+      "cn": "布里斯班",
+      "en": "E. Australia Standard Time"
+    },
+    {
+      "timeZone": "200",
+      "cn": "基希讷乌",
+      "en": "E. Europe Standard Time"
+    },
+    {
+      "timeZone": "-300",
+      "cn": "巴西利亚",
+      "en": "E. South America Standard Time"
+    },
+    {
+      "timeZone": "-600",
+      "cn": "复活节岛",
+      "en": "Easter Island Standard Time"
+    },
+    {
+      "timeZone": "-500",
+      "cn": "东部时间(美国和加拿大)",
+      "en": "Eastern Standard Time"
+    },
+    {
+      "timeZone": "-500",
+      "cn": "切图马尔",
+      "en": "Eastern Standard Time (Mexico)"
+    },
+    {
+      "timeZone": "200",
+      "cn": "开罗",
+      "en": "Egypt Standard Time"
+    },
+    {
+      "timeZone": "500",
+      "cn": "叶卡捷琳堡",
+      "en": "Ekaterinburg Standard Time"
+    },
+    {
+      "timeZone": "1200",
+      "cn": "斐济",
+      "en": "Fiji Standard Time"
+    },
+    {
+      "timeZone": "200",
+      "cn": "赫尔辛基，基辅，里加，索非亚，塔林，维尔纽斯",
+      "en": "FLE Standard Time"
+    },
+    {
+      "timeZone": "400",
+      "cn": "第比利斯",
+      "en": "Georgian Standard Time"
+    },
+    {
+      "timeZone": "0",
+      "cn": "都柏林，爱丁堡，里斯本，伦敦",
+      "en": "GMT Standard Time"
+    },
+    {
+      "timeZone": "-300",
+      "cn": "格陵兰",
+      "en": "Greenland Standard Time"
+    },
+    {
+      "timeZone": "0",
+      "cn": "蒙罗维亚，雷克雅未克",
+      "en": "Greenwich Standard Time"
+    },
+    {
+      "timeZone": "200",
+      "cn": "雅典，布加勒斯特",
+      "en": "GTB Standard Time"
+    },
+    {
+      "timeZone": "-500",
+      "cn": "海地",
+      "en": "Haiti Standard Time"
+    },
+    {
+      "timeZone": "-1000",
+      "cn": "夏威夷",
+      "en": "Hawaiian Standard Time"
+    },
+    {
+      "timeZone": "530",
+      "cn": "钦奈，加尔各答，孟买，新德里",
+      "en": "India Standard Time"
+    },
+    {
+      "timeZone": "330",
+      "cn": "德黑兰",
+      "en": "Iran Standard Time"
+    },
+    {
+      "timeZone": "200",
+      "cn": "耶路撒冷",
+      "en": "Israel Standard Time"
+    },
+    {
+      "timeZone": "200",
+      "cn": "安曼",
+      "en": "Jordan Standard Time"
+    },
+    {
+      "timeZone": "200",
+      "cn": "加里宁格勒",
+      "en": "Kaliningrad Standard Time"
+    },
+    {
+      "timeZone": "1200",
+      "cn": "彼得罗巴甫洛夫斯克-堪察加",
+      "en": "Kamchatka Standard Time"
+    },
+    {
+      "timeZone": "900",
+      "cn": "首尔",
+      "en": "Korea Standard Time"
+    },
+    {
+      "timeZone": "200",
+      "cn": "的黎波里",
+      "en": "Libya Standard Time"
+    },
+    {
+      "timeZone": "1400",
+      "cn": "圣诞岛",
+      "en": "Line Islands Standard Time"
+    },
+    {
+      "timeZone": "1030",
+      "cn": "豪勋爵岛",
+      "en": "Lord Howe Standard Time"
+    },
+    {
+      "timeZone": "1100",
+      "cn": "马加丹",
+      "en": "Magadan Standard Time"
+    },
+    {
+      "timeZone": "-930",
+      "cn": "马克萨斯群岛",
+      "en": "Marquesas Standard Time"
+    },
+    {
+      "timeZone": "400",
+      "cn": "路易港",
+      "en": "Mauritius Standard Time"
+    },
+    {
+      "timeZone": "-200",
+      "cn": "中大西洋",
+      "en": "Mid-Atlantic Standard Time"
+    },
+    {
+      "timeZone": "200",
+      "cn": "贝鲁特",
+      "en": "Middle East Standard Time"
+    },
+    {
+      "timeZone": "-300",
+      "cn": "蒙得维的亚",
+      "en": "Montevideo Standard Time"
+    },
+    {
+      "timeZone": "0",
+      "cn": "卡萨布兰卡",
+      "en": "Morocco Standard Time"
+    },
+    {
+      "timeZone": "-700",
+      "cn": "山地时间(美国和加拿大)",
+      "en": "Mountain Standard Time"
+    },
+    {
+      "timeZone": "-700",
+      "cn": "奇瓦瓦，拉巴斯，马萨特兰",
+      "en": "Mountain Standard Time (Mexico)"
+    },
+    {
+      "timeZone": "630",
+      "cn": "仰光",
+      "en": "Myanmar Standard Time"
+    },
+    {
+      "timeZone": "700",
+      "cn": "新西伯利亚",
+      "en": "N. Central Asia Standard Time"
+    },
+    {
+      "timeZone": "100",
+      "cn": "温得和克",
+      "en": "Namibia Standard Time"
+    },
+    {
+      "timeZone": "545",
+      "cn": "加德满都",
+      "en": "Nepal Standard Time"
+    },
+    {
+      "timeZone": "1200",
+      "cn": "奥克兰，惠灵顿",
+      "en": "New Zealand Standard Time"
+    },
+    {
+      "timeZone": "-330",
+      "cn": "纽芬兰",
+      "en": "Newfoundland Standard Time"
+    },
+    {
+      "timeZone": "1100",
+      "cn": "诺福克岛",
+      "en": "Norfolk Standard Time"
+    },
+    {
+      "timeZone": "800",
+      "cn": "伊尔库茨克",
+      "en": "North Asia East Standard Time"
+    },
+    {
+      "timeZone": "700",
+      "cn": "克拉斯诺亚尔斯克",
+      "en": "North Asia Standard Time"
+    },
+    {
+      "timeZone": "830",
+      "cn": "平壤",
+      "en": "North Korea Standard Time"
+    },
+    {
+      "timeZone": "600",
+      "cn": "鄂木斯克",
+      "en": "Omsk Standard Time"
+    },
+    {
+      "timeZone": "-400",
+      "cn": "圣地亚哥",
+      "en": "Pacific SA Standard Time"
+    },
+    {
+      "timeZone": "-800",
+      "cn": "太平洋时间(美国和加拿大)",
+      "en": "Pacific Standard Time"
+    },
+    {
+      "timeZone": "-800",
+      "cn": "下加利福尼亚州",
+      "en": "Pacific Standard Time (Mexico)"
+    },
+    {
+      "timeZone": "500",
+      "cn": "伊斯兰堡，卡拉奇",
+      "en": "Pakistan Standard Time"
+    },
+    {
+      "timeZone": "-400",
+      "cn": "亚松森",
+      "en": "Paraguay Standard Time"
+    },
+    {
+      "timeZone": "100",
+      "cn": "布鲁塞尔，哥本哈根，马德里，巴黎",
+      "en": "Romance Standard Time"
+    },
+    {
+      "timeZone": "1100",
+      "cn": "乔库尔达赫",
+      "en": "Russia Time Zone 10"
+    },
+    {
+      "timeZone": "1200",
+      "cn": "阿纳德尔，堪察加彼得罗巴甫洛夫斯克",
+      "en": "Russia Time Zone 11"
+    },
+    {
+      "timeZone": "400",
+      "cn": "伊热夫斯克，萨马拉",
+      "en": "Russia Time Zone 3"
+    },
+    {
+      "timeZone": "300",
+      "cn": "莫斯科，圣彼得堡，伏尔加格勒",
+      "en": "Russian Standard Time"
+    },
+    {
+      "timeZone": "-300",
+      "cn": "卡宴，福塔雷萨",
+      "en": "SA Eastern Standard Time"
+    },
+    {
+      "timeZone": "-500",
+      "cn": "波哥大，利马，基多，里奥布朗库",
+      "en": "SA Pacific Standard Time"
+    },
+    {
+      "timeZone": "-400",
+      "cn": "乔治敦，拉巴斯，马瑙斯，圣胡安",
+      "en": "SA Western Standard Time"
+    },
+    {
+      "timeZone": "-300",
+      "cn": "圣皮埃尔和密克隆群岛",
+      "en": "Saint Pierre Standard Time"
+    },
+    {
+      "timeZone": "1100",
+      "cn": "萨哈林",
+      "en": "Sakhalin Standard Time"
+    },
+    {
+      "timeZone": "1300",
+      "cn": "萨摩亚群岛",
+      "en": "Samoa Standard Time"
+    },
+    {
+      "timeZone": "700",
+      "cn": "曼谷，河内，雅加达",
+      "en": "SE Asia Standard Time"
+    },
+    {
+      "timeZone": "800",
+      "cn": "吉隆坡，新加坡",
+      "en": "Singapore Standard Time"
+    },
+    {
+      "timeZone": "200",
+      "cn": "哈拉雷，比勒陀利亚",
+      "en": "South Africa Standard Time"
+    },
+    {
+      "timeZone": "530",
+      "cn": "斯里加亚渥登普拉",
+      "en": "Sri Lanka Standard Time"
+    },
+    {
+      "timeZone": "200",
+      "cn": "大马士革",
+      "en": "Syria Standard Time"
+    },
+    {
+      "timeZone": "800",
+      "cn": "台北",
+      "en": "Taipei Standard Time"
+    },
+    {
+      "timeZone": "1000",
+      "cn": "霍巴特",
+      "en": "Tasmania Standard Time"
+    },
+    {
+      "timeZone": "-300",
+      "cn": "阿拉瓜伊纳",
+      "en": "Tocantins Standard Time"
+    },
+    {
+      "timeZone": "900",
+      "cn": "大阪，札幌，东京",
+      "en": "Tokyo Standard Time"
+    },
+    {
+      "timeZone": "700",
+      "cn": "托木斯克",
+      "en": "Tomsk Standard Time"
+    },
+    {
+      "timeZone": "1300",
+      "cn": "努库阿洛法",
+      "en": "Tonga Standard Time"
+    },
+    {
+      "timeZone": "900",
+      "cn": "赤塔市",
+      "en": "Transbaikal Standard Time"
+    },
+    {
+      "timeZone": "300",
+      "cn": "伊斯坦布尔",
+      "en": "Turkey Standard Time"
+    },
+    {
+      "timeZone": "-400",
+      "cn": "特克斯和凯科斯群岛",
+      "en": "Turks And Caicos Standard Time"
+    },
+    {
+      "timeZone": "800",
+      "cn": "乌兰巴托",
+      "en": "Ulaanbaatar Standard Time"
+    },
+    {
+      "timeZone": "-500",
+      "cn": "印地安那州(东部)",
+      "en": "US Eastern Standard Time"
+    },
+    {
+      "timeZone": "-700",
+      "cn": "亚利桑那",
+      "en": "US Mountain Standard Time"
+    },
+    {
+      "timeZone": "1200",
+      "cn": "协调世界时+12",
+      "en": "UTC+12"
+    },
+    {
+      "timeZone": "-200",
+      "cn": "协调世界时-02",
+      "en": "UTC-02"
+    },
+    {
+      "timeZone": "-800",
+      "cn": "协调世界时-08",
+      "en": "UTC-08"
+    },
+    {
+      "timeZone": "-900",
+      "cn": "协调世界时-09",
+      "en": "UTC-09"
+    },
+    {
+      "timeZone": "-1100",
+      "cn": "协调世界时-11",
+      "en": "UTC-11"
+    },
+    {
+      "timeZone": "-400",
+      "cn": "加拉加斯",
+      "en": "Venezuela Standard Time"
+    },
+    {
+      "timeZone": "1000",
+      "cn": "符拉迪沃斯托克",
+      "en": "Vladivostok Standard Time"
+    },
+    {
+      "timeZone": "800",
+      "cn": "珀斯",
+      "en": "W. Australia Standard Time"
+    },
+    {
+      "timeZone": "100",
+      "cn": "中非西部",
+      "en": "W. Central Africa Standard Time"
+    },
+    {
+      "timeZone": "100",
+      "cn": "阿姆斯特丹，柏林，伯尔尼，罗马，斯德哥尔摩，维也纳",
+      "en": "W. Europe Standard Time"
+    },
+    {
+      "timeZone": "700",
+      "cn": "科布多",
+      "en": "W. Mongolia Standard Time"
+    },
+    {
+      "timeZone": "500",
+      "cn": "阿什哈巴德，塔什干",
+      "en": "West Asia Standard Time"
+    },
+    {
+      "timeZone": "200",
+      "cn": "加沙，希伯伦",
+      "en": "West Bank Standard Time"
+    },
+    {
+      "timeZone": "1000",
+      "cn": "关岛，莫尔兹比港",
+      "en": "West Pacific Standard Time"
+    },
+    {
+      "timeZone": "900",
+      "cn": "雅库茨克",
+      "en": "Yakutsk Standard Time"
+    }
+  ]
+}

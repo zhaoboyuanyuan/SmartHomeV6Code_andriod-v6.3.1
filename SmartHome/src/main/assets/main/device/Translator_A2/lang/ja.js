@@ -1,0 +1,31 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_A2_name = "2回路出力変換器";
+$lang.device_A2_add_button = "コントロールボタンを追加";
+$lang.device_A2_button_name_status = "ボタン名と状態";
+$lang.device_A2_name_1 = "名称";
+$lang.device_A2_enter_name = "名前を入力";
+$lang.device_A2_status = "状態";
+$lang.device_A2_way = "回路";
+$lang.device_A2_action = "操作";
+$lang.device_A2_action_close = "クローズ";
+$lang.device_A2_action_open = "オープン";
+$lang.device_A2_action_close_open = "クローズ後オープン";
+$lang.device_A2_action_open_close = "オープン後クローズ";
+$lang.device_A2_cancel = "取消";
+$lang.device_A2_ok = "確認";
+$lang.device_A2_close_time = "クローズ時間";
+$lang.device_A2_open_time = "オープン時間";
+$lang.device_A2_s = "s";
+$lang.device_A2_save = "保存";
+$lang.device_A2_re_edit = "再編集";
+$lang.device_A2_delete = "削除";
+$lang.device_A2_delete_sure = "削除してもいいですか？";
+$lang.device_A2_sent = "コマンド送信";
+$lang.device_A2_Offline = "デバイスがオフラインです";
+$lang.device_A2_set = "設定";
+$lang.device_A2_initial_action = "初期設定";
+$lang.device_A2_initial_action_hint = "注：設定されたボタンの動作が実際の装置の応答と反対の場合、初期設定を調整することで一貫性を保つことができます。";

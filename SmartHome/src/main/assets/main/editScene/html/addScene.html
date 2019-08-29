@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<title>自定义场景1</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/scene.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			#header_addScene{
+				position:fixed;
+				left:0;
+				top:0;
+				width:100%;
+				background: url(../../skinSource/img/headerBackground.png) no-repeat center center;
+				background-size: 100% 100%;
+				z-index:999;
+			}
+		</style>
+	</head>
+	<body>
+	<header id="header_addScene" style="">
+		<div class="header_top">
+			<a id="scene_back" href="javascript:;"></a>
+			<a class="navTab autoSwitchLanguager" href="javascript:;" key="">
+				<span class="tab autoSwitchLanguager" key="editScene_add">新增</span>
+				<span class="autoSwitchLanguager" key="editScene_recommend">推荐</span>
+			</a>
+			<a href="javascript:;" id="finishDelay" key="complete" class="autoSwitchLanguager" style="display:inline-block;height: auto;line-height: 2rem;margin-top: 1.2rem;text-align:center;">完成</a>
+		</div>
+	</header>
+	<section class="addSceneMain sceneMain" style="margin-top:6.4rem;">
+		<section class="search" style="background-color: white;text-align: left;">
+			<span id="customScene_name" key="sceneName" class="autoSwitchLanguager" style="color: #454749;">场景名称</span>
+			<input id="customScene_input_name" key="inputName" class="autoSwitchLanguager scene_name" type="text" maxlength="20" placeholder="请输入场景名称" style="outline:none;" />
+			<i id="i_del" style="display:none;"></i>
+		</section>
+		<div id="customScene_icon" key="sceneIcon" class="autoSwitchLanguager scene_icon" style="color: #454749;background-color: white;text-align: left;">场景图标</div>
+		<section class="main_list pt_0" style="">
+			<a data-id="01" data-name="" key="Scene_icon_01" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="02" data-name="" key="Scene_icon_02" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="03" data-name="" key="Scene_icon_03" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="04" data-name="" key="Scene_icon_04" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="05" data-name="" key="Scene_icon_05" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="06" data-name="" key="Scene_icon_07" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="07" data-name="" key="Scene_icon_08" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="08" data-name="" key="Scene_icon_09" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="09" data-name="" key="Scene_icon_06" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="10" data-name="" key="Scene_icon_10" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="11" data-name="" key="Scene_icon_11" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="12" data-name="" key="Scene_icon_12" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="13" data-name="" key="Scene_icon_13" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="14" data-name="" key="Scene_icon_14" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="15" data-name="" key="Scene_icon_15" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="16" data-name="" key="Scene_icon_16" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="17" data-name="" key="Scene_icon_17" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="18" data-name="" key="Scene_icon_18" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="19" data-name="" key="Scene_icon_19" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="20" data-name="" key="Scene_icon_20" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="21" data-name="" key="Scene_icon_21" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="22" data-name="" key="Scene_icon_22" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="23" data-name="" key="Scene_icon_23" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="24" data-name="" key="Scene_icon_24" class="autoSwitchLanguager"><i></i></a>
+			<!--<a data-id="25" href="javascript:;"><i></i></a>-->
+			<!--<a data-id="26" href="javascript:;"><i></i></a>-->
+			<!--<a data-id="27" href="javascript:;"><i></i></a>-->
+			<!--<a data-id="28" href="javascript:;"><i></i></a>-->
+			<!--<a data-id="29" href="javascript:;"><i></i></a>-->
+			<!--<a data-id="30" href="javascript:;"><i></i></a>-->
+		</section>
+	</section>
+	<section class="recommendSceneMain sceneMain" style="margin-top:6.4rem;">
+		<ul>
+			<li id="02" style="background:url(../../source/sceneImg/sceneImg_02.png) no-repeat center center;background-size:100% 100%;">
+				<span class="autoSwitchLanguager" key="Scene_icon_02">回家</span>
+				<em class="autoSwitchLanguager" key="recommendScene_02">“打开所有灯、插座，关闭摄像机安全防护，关闭安防”</em>
+			</li>
+			<li id="01" style="background:url(../../source/sceneImg/sceneImg_01.png) no-repeat center center;background-size:100% 100%;">
+				<span class="autoSwitchLanguager" key="Scene_icon_01">离家</span>
+				<em class="autoSwitchLanguager" key="recommendScene_01">“关闭所有灯、插座，打开摄像机安全防护，打开安防”</em>
+			</li>
+			<li id="10" style="background:url(../../source/sceneImg/sceneImg_10.png) no-repeat center center;background-size:100% 100%;">
+				<span class="autoSwitchLanguager" key="Scene_icon_10">全开</span>
+				<em class="autoSwitchLanguager" key="recommendScene_10">“打开所有灯”</em>
+			</li>
+			<li id="11" style="background:url(../../source/sceneImg/sceneImg_11.png) no-repeat center center;background-size:100% 100%;">
+				<span class="autoSwitchLanguager" key="Scene_icon_11">全关</span>
+				<em class="autoSwitchLanguager" key="recommendScene_11">“关闭所有灯”</em>
+			</li>
+			<li id="14" style="background:url(../../source/sceneImg/sceneImg_14.png) no-repeat center center;background-size:100% 100%;">
+				<span class="autoSwitchLanguager" key="Scene_icon_14">设防</span>
+				<em class="autoSwitchLanguager" key="recommendScene_14">“所有安防设备设防”</em>
+			</li>
+			<li id="15" style="background:url(../../source/sceneImg/sceneImg_15.png) no-repeat center center;background-size:100% 100%;">
+				<span class="autoSwitchLanguager" key="Scene_icon_15">撤防</span>
+				<em class="autoSwitchLanguager" key="recommendScene_15">“所有安防设备撤防”</em>
+			</li>
+			<li id="04" style="background:url(../../source/sceneImg/sceneImg_04.png) no-repeat center center;background-size:100% 100%;">
+				<span class="autoSwitchLanguager" key="Scene_icon_04">起床</span>
+				<em class="autoSwitchLanguager" key="recommendScene_04">“调低调光开关亮度”</em>
+			</li>
+			<li id="05" style="background:url(../../source/sceneImg/sceneImg_05.png) no-repeat center center;background-size:100% 100%;">
+				<span class="autoSwitchLanguager" key="Scene_icon_05">睡觉</span>
+				<em class="autoSwitchLanguager" key="recommendScene_05">“打开窗帘、背景音乐，关闭摄像机安全防护、安防”</em>
+			</li>
+			<li id="03" style="background:url(../../source/sceneImg/sceneImg_03.png) no-repeat center center;background-size:100% 100%;">
+				<span class="autoSwitchLanguager" key="Scene_icon_03">起夜</span>
+				<em class="autoSwitchLanguager" key="recommendScene_03">“关闭所有灯、窗帘，打开摄像机安全防护、安防”</em>
+			</li>
+		</ul>
+	</section>
+	<section id="noviceGuide" style="display:none;">
+		<img src="../../source/commonImg/icon_guide_zh-cn.png" alt="">
+	</section>
+		<!--<section id="customScene_null_name" key="existed_02" class="toast autoSwitchLanguager" style="position:fixed;">-->
+			<!--该场景名称已存在，请换一个-->
+		<!--</section>-->
+	</body>
+	<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../model/scene.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Scene");
+		initlan();
+		var nameValue='';
+		var ifFaultName;
+		$(".navTab span").on("click",function(){
+			var index = $(this).index();
+			$(this).addClass("tab").siblings().removeClass("tab");
+            $(".sceneMain").hide();
+			$(".sceneMain").eq(index).show();
+			$("body,html").scrollTop(0);
+			if(index === 0){
+			    $("#finishDelay").show();
+			}else{
+                $("#finishDelay").hide();
+			}
+		});
+		$(".recommendSceneMain ul li").on("click",function(e){
+            info.clear();
+		    e.stopPropagation();
+		    info.setItem("sceneName",$(this).find("span").eq(0).html());
+		    info.setItem("sceneIcon",$(this).attr("id"));
+		    window.location = "recommendScene.html?edit=true";
+		});
+		plus.plusReady(function() {
+		    //新手引导页显示隐藏
+			plus.gatewayCmd.isShowGuidePage("recommend",function(data){
+			    if(data === "YES"){
+					$("#noviceGuide").show();
+				}else if(data === "NO"){
+                    $("#noviceGuide").hide();
+				}
+			});
+            $("#noviceGuide").unbind("click").bind("click",function(){
+                $(this).hide();
+			});
+            var nameArr = [
+                Scene_icon_01, Scene_icon_02,
+				Scene_icon_03, Scene_icon_04,
+				Scene_icon_05, Scene_icon_06,
+				Scene_icon_07, Scene_icon_08,
+				Scene_icon_09, Scene_icon_10,
+				Scene_icon_11, Scene_icon_12,
+				Scene_icon_13, Scene_icon_14,
+				Scene_icon_15, Scene_icon_16,
+				Scene_icon_17, Scene_icon_18,
+				Scene_icon_19, Scene_icon_20,
+				Scene_icon_21, Scene_icon_22,
+				Scene_icon_23, Scene_icon_24];
+            //点击显示图标高亮
+            $(".main_list a").on("click", function() {
+                $(this).addClass("on").siblings().removeClass("on");
+                nameValue = $(this).data("name");
+                var id = $(this).data("id");
+                if(nameValue == ""){
+                    nameValue = nameArr[id];
+                }
+                setSureIsEnable(nameValue);
+            });
+
+            // 如果是新建, 就清除垃圾数据
+            if(decodeURI(getUrlParam("addScene")) == "true") {
+                info.clear();
+                setSureIsEnable("");
+                info.setItem("flag", "0");
+                $(".scene_name").attr("placeholder", lang_inputName)
+            }
+            plus.gatewayCmd.androidBack(function () {
+                goBack();
+            });
+			$("#customScene_input_name").on("input propertychange", function() {
+				$(".search").find("i").fadeIn();
+				setSureIsEnable("");
+			});
+			$(".search i").on("click", function() {
+				$(".scene_name").val('');
+				$(this).hide();
+				setSureIsEnable("");
+			});
+			//点击确认
+			$("#finishDelay").on("click", function() {
+				var value = {};
+				value.name = $(".scene_name").val();
+				//获取场景id
+				if(info.getItem("sceneID")) {
+					value.sceneID = info.getItem("sceneID");
+				}
+				if(verInputValue(value.name)) {
+					var src = $(".on").attr("data-id");
+					//判断场景名称是否重复
+					plus.tools.isSceneExist(value, function(data) {
+						if(data == "YES" && src != undefined) {
+							if(info.getItem("flag") == "0") {
+								//发送新建场景命令
+								addScene(value, src)
+							}
+						} else {
+							//场景名称重复
+							window.showDialog.show(languageUtil.getResource("existed_02"),3000);
+						}
+					})
+				}
+
+			});
+			//返回上一页或返回原生
+			$("#scene_back").on("click", function() {
+				goBack();
+			});
+            function setSureIsEnable(name) {
+                var scene_name = $(".scene_name").val();
+                if(name == ""){
+                    $("#i_del").hide();
+                }else{
+                    if(!scene_name){
+                        $("#i_del").show();
+                        $(".scene_name").val(name);
+                        scene_name = name;
+                    }else{
+                        if($.inArray(scene_name,nameArr) != -1) {
+                            $("#i_del").show();
+                            $(".scene_name").val(name);
+                            scene_name = name;
+                        }
+                    }
+                }
+                if(verInputValue(scene_name)) {
+                    document.getElementById("finishDelay").disable = true;
+                    document.getElementById("finishDelay").style.color = "#FFFFFF";
+                } else {
+                    document.getElementById("finishDelay").disable = false;
+                    document.getElementById("finishDelay").style.color = "#E2E2E2";
+                }
+            }
+		});
+		function goBack() {
+            plus.tools.back(function() {})
+        }
+
+		function verInputValue(sceneName) {
+			var src = $(".on").attr("data-id");
+			var verWrong = sceneName == null || sceneName == undefined || sceneName == "" ||
+				src == null || src == undefined || src == "";
+			return(verWrong == false);
+		}
+
+		function addScene(name, icon) {
+			var param = sceneModel.send_add_503;
+			param.name = name.name;
+			param.icon = icon;
+			plus.gatewayCmd.getCurrentGatewayID(function(result) {
+				param.gwID = result;
+				plus.gatewayCmd.scene_503(param, function(data) {
+					info.setItem("sceneID", data.sceneID)
+					info.setItem("sceneName", $(".scene_name").val())
+					info.setItem("imgSrc", $(".on").attr("data-id"))
+					window.location = "editScene.html";
+				})
+			})
+
+		}
+		$("#customScene_input_name").on("blur",function(){
+		    var value = $(this).val();
+            var valueFace = noFace(value);
+            console.log(valueFace);
+            $(this).val(valueFace);
+		});
+
+		function noFace(param){
+            var regRule = /\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g;
+            param = param.replace(/(^\s*)|(\s*$)/g, "");
+            if(param.match(regRule)) {
+                param = param.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, "");
+                return param;
+            }else{
+                return param;
+			}
+        }
+	</script>
+
+</html>

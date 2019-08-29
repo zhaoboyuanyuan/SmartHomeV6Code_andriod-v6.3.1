@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_ripper_effect"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/splitLineTop"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/v6_line" />
+
+    <LinearLayout
+        android:id="@+id/layoutContent"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/splitLineTop"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/left_rename"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/Device_Vidicon_UserAdministrate"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/right_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="@dimen/setting_right_margin"
+            android:src="@drawable/system_intent_right" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/viewline"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_below="@+id/layoutContent"
+        android:background="@color/v6_line" />
+</RelativeLayout>

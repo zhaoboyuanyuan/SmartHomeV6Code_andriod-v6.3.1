@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title>金属三路开关</title>
+    <link rel="stylesheet" href="css/mui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+    <script src="js/mui.min.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="data/moreSetting.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/en.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="lang/zh-cn.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="js/devbase.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="js/constant.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="js/AoData.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="js/devAoCmdControl.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="js/switchControl.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="js/base64.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+</head>
+<style type="text/css">
+
+</style>
+
+<body>
+<header id="header" class="header" style="">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName" href="javascript:;"></a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+
+<!--主体部分-->
+<div class="lockbackimageview" style="">
+    <div style="height: 5%;width: 100%;"></div>
+    <div style="height: 30%;">
+        <div class="btn_outer">
+            <div id="btn01_img" class="btn_img"
+                 style="background-image: url(fonts/icon_btnclose.png);border-color:#E2E2E2;">
+            </div>
+            <div style="float: left;margin-top: 30px;">
+                <p id="btn01_name" style="color:#8DD652;">关</p>
+                <div id="btn01_mode" class="btnMode" style="background-image:url(fonts/icon_switchmode.png)">开关模式</div>
+
+            </div>
+        </div>
+    </div>
+    <div style="height: 30%;width: 100%;" style="text-align: center;">
+        <div class="btn_outer">
+            <div id="btn02_img" class="btn_img"
+                 style="background-image: url(fonts/icon_add.png);border-color:#E2E2E2;"></div>
+            <div style="float: left;margin-top: 30px;">
+                <p id="btn02_name" style="color:#8DD652;">未绑定设备</p>
+                <div id="btn02_mode" class="btnMode" style="background-image:url(fonts/icon_switchmode.png)">绑定模式</div>
+            </div>
+        </div>
+    </div>
+    <div style="height: 30%;width: 100%;" style="text-align: center;">
+        <div class="btn_outer">
+            <div id="btn03_img" class="btn_img"
+                 style="background-image: url(fonts/scene_01.png);border-color:#8DD652;"></div>
+            <div style="float: left;margin-top: 30px;">
+                <p id="btn03_name" style="color:#8DD652;">外出</p>
+                <div id="btn03_mode" class="btnMode" style="background-image:url(fonts/icon_switchmode.png)">场景模式</div>
+            </div>
+        </div>
+    </div>
+    <div style="height: 5%;width: 100%;">
+
+    </div>
+</div>
+<!--遮罩层部分-->
+<div id="body_layer" class="mask_layer" style="display: none;top: 6.4rem;">
+    <!--开关模式的操作-->
+    <div id="switch_updatename" key="switch_Ao_08" class="autoSwitchLanguager bottom4" style="display: none;">
+        修改开关名称
+    </div>
+    <!--场景模式的操作-->
+    <div id="scene_edit" class="autoSwitchLanguager bottom1" key="swtich_Ao_09" style="display: none;">
+        编辑
+    </div>
+    <div id="scene_delete" class="autoSwitchLanguager bottom2" key="swtich_Ao_10" style="display: none;">
+        删除场景
+    </div>
+    <!--绑定模式的操作-->
+    <div id="binding_again" class="autoSwitchLanguager bottom1" key="switch_Ao_11" style="display: none;">
+        重新绑定
+    </div>
+    <div id="binding_undo" class="autoSwitchLanguager bottom2" key="switch_Ao_12" style="display: none;">
+        解除绑定
+    </div>
+    <!--取消-->
+    <div id="layer_cancel" class="autoSwitchLanguager bottom3" key="switch_Ao_13">
+        取消
+    </div>
+</div>
+<!--Toast_修改开关名称-->
+<section class="changeName" style="display:none;" id="rename">
+    <div class="nameToast ">
+        <span class="autoSwitchLanguager" key="switch_Ao_08">修改开关名称</span>
+        <div class="inputname">
+            <input id="renameInput" class="autoSwitchLanguager" maxlength="20"
+                   style="background-color:#f2f2f2;float: left;" maxlength="15" type="text" key="switch_Ao_15"
+                   placeholder="请重新命名"/>
+            <i id="delrename" onclick="toast_delrename();"></i>
+        </div>
+
+        <div class="choose_1">
+            <a class="autoSwitchLanguager" id="searchScene_cancal" key="switch_Ao_13" href="javascript:;"
+               onclick="toast_cancel()">取消</a>
+            <a id="addDevice_sure" href="javascript:;" onclick="toast_surename()" class="sure_click autoSwitchLanguager"
+               key="switch_Ao_14">确定</a>
+        </div>
+    </div>
+</section>
+<!--Toast_询问弹窗-->
+<section class="changeName" style="display:none;" id="toast_forask">
+    <div class="nameToast ">
+        <div class="inputname">
+            <p id="askContent"></p>
+        </div>
+
+        <div class="choose_1">
+            <a class="autoSwitchLanguager" id="searchScene_cancal" href="javascript:;" key="switch_Ao_13"
+               onclick="toast_cancel()">取消</a>
+            <a id="addDevice_sure" href="javascript:;" onclick="toast_sureask()" class="sure_click autoSwitchLanguager"
+               key="switch_Ao_14">确定</a>
+        </div>
+    </div>
+</section>
+
+<section id="layer_offline" class="mask_layer" style="display:none;top: 6.4rem;">
+    <i></i>
+    <span id="OffLine" class="autoSwitchLanguager" key="OffLine"></span>
+</section>
+<section id="fail" class="toast" style="display:none;">
+    <p class="autoSwitchLanguager" id="toastText"></p>
+</section>
+
+</body>
+
+<script type="text/javascript">
+    muieventConfig();
+    var info = window.sysfun;
+    info.init("deviceAn");
+    var deviceName = document.getElementsByClassName("deviceName")[0];
+    var G_deviceIsShare;//设备是否为被分享的设备
+    initBtn();
+    registerBtnEvent();
+    if (AoEndPointInfo == null) {
+        AoEndPointInfo = initAllEndPoint("Ao");
+    }
+
+    //		Test_ForData();
+    initlan(function () {
+        deviceName.textContent = switch_detail_title;
+        document.getElementById("OffLine").innerHTML = lang_offLine;
+        updateUIByEndPointInfo();
+        setbtn_outerCenter();
+    });
+
+    //		testResult();
+    //		window.onload=function(){
+    ////			document.getElementById("layer_offline").style.marginTop=document.getElementById("header").style.height;
+    //		}
+    plus.plusReady(function () {
+        plus.gatewayCmd.getCurrentAppID(function (result) {
+            appID = result;
+        })
+        plus.gatewayCmd.getDeviceInfo(function (result) {
+            devID = result.devID;
+            gwID = result.gwID;
+            setDevAoDevID(devID);
+            getMoreConfig(gwID, devID);
+            rush_500();
+            if (result.mode == 2) {
+                document.getElementById("layer_offline").style.display = "block";
+            } else {
+                document.getElementById("layer_offline").style.display = "none";
+            }
+            if(result.isShared == true){
+                G_deviceIsShare = true;
+            }else{
+                G_deviceIsShare = false;
+            }
+            refreshData(result);
+            searchAoStatus();
+            //				searchConfigInfo();
+            var name = switch_detail_title;
+            if (!isNull(result.name)) {
+                name = result.name.indexOf("#$default$#") != -1 ? switch_detail_title + result.name.split("#")[2] : result.name;
+            }
+            deviceName.textContent = name;
+        });
+    });
+    document.getElementById("back").addEventListener("click", function () {
+        plus.tools.back(function () {
+        });
+    });
+    document.getElementsByClassName("more")[0].addEventListener("click", function () {
+        plus.tools.more(moreSettingData, function () {
+        });
+    });
+
+    function muieventConfig() {
+        mui.init({
+            gestureConfig: {
+                longtap: true,
+                /*长按*/
+                hold: true,
+                /*按住*/
+                release: true,
+                /*离开*/
+            },
+        });
+    }
+
+    function rush_500() {
+        plus.gatewayCmd.newDataRefresh(function (result) {
+            var isright = result != null &&
+                result != undefined &&
+                result.devID == devID;
+            if (isright) {
+                if (result.cmd == "500") {
+                    if (isRunUnBinding == true) {
+                        isRunUnBinding = false;
+                        //							closeToast();
+                        //解绑成功
+                        showSucToastLong(swich_Ao_UnbindSuc, function () {
+                            closeToast();
+                            console.log("解绑成功后重新查询...");
+                            searchAoStatus();
+                            //								searchConfigInfo();
+                        });
+                    } else {
+                        refreshData(result);
+                    }
+                } else if (result.cmd == "513") {
+                    if (result.mode == 3) {
+                        //解绑成功
+                        showSucToast(swich_Ao_UnbindSuc, function () {
+                            //								searchConfigInfo();
+                            searchAoStatus();
+                        });
+                    }
+                } else if (result.cmd == "502") {
+                    if (result.endpointNumber == 0) {
+                        var name = switch_detail_title;
+                        if (!isNull(result.name)) {
+                            name = result.name.indexOf("#$default$#") != -1 ? switch_detail_title + result.name.split("#")[2] : result.name;
+                        }
+                        document.getElementById("deviceName").textContent = name;
+                    } else {
+                        //修改成功
+                        showSucToast(switch_Ao_UpdateSuc, function () {
+                            searchAoStatus();
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    function test() {
+        changeModeToScene(3);
+    }
+
+    function test_unbindingDev() {
+        BindingDev(0);
+    }
+
+    function test_bindingDev() {
+        //			BindingDev(2,"A952CB0A004B1200",2);
+        showSucToast(switch_Ao_BindingSuc, function () {
+            //				console.log("haha");
+        });
+    }
+
+    function test_base64() {
+        var strBase64 = "WwogICB7CiAgICAgICJiaW5kRGV2RVAiIDogIiIsCiAgICAgICJiaW5kRGV2SUQiIDogIiIsCiAgICAgICJiaW5kRGV2dHlwZSIgOiAiIiwKICAgICAgImVuZHBvaW50TnVtYmVyIiA6ICIyIiwKICAgICAgImVwTmFtZSIgOiAiIiwKICAgICAgIm1vZGUiIDogIjMiLAogICAgICAibmFtZSIgOiAiIiwKICAgICAgInNjZW5lSUQiIDogIjEiLAogICAgICAic2NlbmVJY29uIiA6ICIwOCIsCiAgICAgICJzY2VuZU5hbWUiIDogIuaYryIKICAgfSwKICAgewogICAgICAiYmluZERldkVQIiA6ICIiLAogICAgICAiYmluZERldklEIiA6ICIiLAogICAgICAiYmluZERldnR5cGUiIDogIiIsCiAgICAgICJlbmRwb2ludE51bWJlciIgOiAiMyIsCiAgICAgICJlcE5hbWUiIDogIiIsCiAgICAgICJtb2RlIiA6ICIxIiwKICAgICAgIm5hbWUiIDogIiIsCiAgICAgICJzY2VuZUlEIiA6ICIiLAogICAgICAic2NlbmVJY29uIiA6ICIwOCIsCiAgICAgICJzY2VuZU5hbWUiIDogIuaYryIKICAgfSwKICAgewogICAgICAiYmluZERldkVQIiA6ICIiLAogICAgICAiYmluZERldklEIiA6ICIiLAogICAgICAiYmluZERldnR5cGUiIDogIiIsCiAgICAgICJlbmRwb2ludE51bWJlciIgOiAiMSIsCiAgICAgICJlcE5hbWUiIDogIiIsCiAgICAgICJtb2RlIiA6ICIyIiwKICAgICAgIm5hbWUiIDogIiIsCiAgICAgICJzY2VuZUlEIiA6ICIiLAogICAgICAic2NlbmVJY29uIiA6ICIwOCIsCiAgICAgICJzY2VuZU5hbWUiIDogIuaYryIKICAgfQpdCg";
+        //			var strJson=base64decode(strBase64);
+        //			var objJson= JSON.parse(strJson);
+        var base = new Base64();
+        var strJson = base.decode(strBase64);
+        console.log(strJson);
+        //			console.log(objJson.endpointNumber+" "+objJson.mode);
+        //			var test="Metallic switch(1 gang)switch1";
+        //			var displayname=getDisplayName(test);
+        //			console.log(displayname);
+    }
+
+    function allToBindMode() {
+        changeModeToBind(0);
+        //			changeModeToBind(2);
+        //			changeModeToBind(3);
+    }
+
+    function setbtn_outerCenter() {
+        var btn_outerList = document.getElementsByClassName("btn_outer");
+        console.log("btn_outerList.length：" + btn_outerList.length);
+        var mixWidth = window.innerWidth;
+        for (var i = 0; i < btn_outerList.length; i++) {
+            var curWidth = btn_outerList[i].offsetWidth;
+
+            if (curWidth < mixWidth) {
+                mixWidth = curWidth;
+            }
+        }
+        console.log("" + window.innerWidth);
+        var marginLeft = (window.innerWidth - mixWidth) / 2;
+        for (var i = 0; i < btn_outerList.length; i++) {
+            btn_outerList[i].style.marginLeft = marginLeft + "px";
+        }
+
+    }
+</script>
+
+</html>

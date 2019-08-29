@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/tv_remote_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:ellipsize="end"
+        android:inputType="text"
+        android:gravity="center_vertical"
+        android:hint="@string/Infraredrelay_Custom_Entername"
+        android:lines="1"
+        android:maxLength="20"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp" />
+
+
+    <Button
+        android:id="@+id/btn_next_step"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:layout_marginTop="40dp"
+        android:background="@color/white"
+        style="?android:attr/borderlessButtonStyle"
+        android:gravity="center"
+        android:text="@string/Config_Next_Step"
+        android:textColor="@color/v6_green"
+        android:textSize="@dimen/default_text_size" />
+
+</LinearLayout>

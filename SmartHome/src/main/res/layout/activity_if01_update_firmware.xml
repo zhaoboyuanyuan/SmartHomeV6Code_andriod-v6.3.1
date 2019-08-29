@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg">
+
+
+
+    <ImageView
+        android:id="@+id/iv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/icon_update_loading"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_update_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_result"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
+        android:text="@string/IF_006"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_update_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_update_result"
+        android:layout_marginTop="5dp"
+        android:gravity="center_horizontal"
+        android:text="@string/IF_007"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/btn_result"
+        style="@style/config_next_button"
+        android:layout_alignParentBottom="true"
+        android:text="@string/Common_Retry" />
+
+</RelativeLayout>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>绑定场景</title>
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="css/device.css"/>
+		<link rel="stylesheet" type="text/css" href="css/sceneRelate.css"/>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header" style="position:fixed;left:0;top:0;">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a href="javascript:;" class="autoSwitchLanguager" key = 'Device_32_details_name'></a>
+				<a id="complete" href="javascript:;" class="autoSwitchLanguager" key = 'Device_32_Details_Confirm'></a>
+			</div>
+		</header>
+		<section class="binding" style="padding-top:6.4rem;">
+			<article binded = 'off' id = "unbinding" class="autoSwitchLanguager" key = 'Device_32_Details_Notbound'>未绑定
+			</article>
+			<nav id="nav">
+			</nav>
+		</section>
+		<section class="emptyView" style="padding-top:6.4rem;">
+			<div style="height: 100%; width:100%;">
+				<img src="fonts/icon_empty.png">
+			</div>
+			<span id="container" class="autoSwitchLanguager" key='device_32_NoScene'></span>
+		</section>
+		<section class="mask_layer " style="display:none; ">
+			<i></i>
+			<span id="offline " class="autoSwitchLanguager" key = 'offLine'></span>
+		</section>
+	</body>
+	<script>
+		var GWID;
+		var DEVID;
+		var DEVICEINFO;
+		var APPID;
+		var MVC = {};
+		var sceneList = [];
+		var endPointNum;
+		var bindSceneID;
+		var nav = document.getElementById("nav");
+		var article =  document.getElementById("unbinding");
+		
+		/*
+		 * 页面启动完成入口
+		 */
+		plus.plusReady(function() {
+			initlan();
+			MVC.C.initInfo();
+		});
+
+        function hasScene(isHas) {
+            if(isHas){
+                document.getElementsByClassName("binding")[0].style.display='block';
+                document.getElementById("complete").style.display='block';
+                document.getElementsByClassName("emptyView")[0].style.display='none';
+            }else{
+                document.getElementsByClassName("binding")[0].style.display='none';
+                document.getElementById("complete").style.display='none';
+                document.getElementsByClassName("emptyView")[0].style.display='block';
+            }
+        }
+
+		/*
+		 * 添加元素
+		 */
+		function addLi(sceneID,sceneName,sceneIcon)
+		{
+			var sceneName = sceneName;
+			var sceneIcon = sceneIcon;
+			var li = document.createElement("li");
+			var em = document.createElement('em');	
+			em.style.background = sceneIcon + ' no-repeat left center';
+			em.style.backgroundSize = '2.6rem auto';
+			var i = document.createElement('i');
+			if (sceneID == bindSceneID) {
+				li.setAttribute('binded', "on");
+			} else {
+				li.setAttribute('binded', "off");
+			}
+			li.innerText = sceneName;
+			nav.appendChild(li);
+			li.appendChild(em);
+			li.appendChild(i);
+			
+			//添加事件
+			li.addEventListener('click',function(){
+				bindSceneID = sceneID;
+				clearSelect();
+				li.setAttribute('binded', "on");
+			});
+		}
+		
+		//清空选中
+		function clearSelect()
+		{
+			article.setAttribute('binded', "off");
+			var arr = document.getElementsByTagName('li');
+			for (var i = 0; i < arr.length; i++){
+				var object = arr[i];
+				object.setAttribute('binded', "off");
+			}
+		}
+
+		//view    页面渲染
+		MVC.V = {
+			bindClick: function() {
+				document.getElementById("back").addEventListener("click", function() {
+					window.location = 'switch_32.html';
+				});
+				article.addEventListener("click", function() {
+					bindSceneID = '-1';
+					clearSelect();
+					article.setAttribute('binded', "on");
+				});
+				document.getElementById("complete").addEventListener("click", function() {
+					
+					if(bindSceneID == '-1') {
+						//解绑
+						var data = [];
+						var bindInfo = {"endpointNumber": endPointNum};
+						data.push(bindInfo);
+						MVC.M.unBind(data);
+					} else {
+						var data = [];
+						var bindInfo = {"endpointNumber": endPointNum ,"sceneID": bindSceneID};
+						data.push(bindInfo);
+						MVC.M.setBind(data);
+					}
+					window.location = 'switch_32.html';
+				});
+			},
+		};
+		
+	</script>
+		<script src="js/index.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/bindModel.js" type="text/javascript" charset="utf-8"></script>
+</html>

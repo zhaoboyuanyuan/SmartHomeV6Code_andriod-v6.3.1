@@ -1,0 +1,310 @@
+@charset "utf-8";
+body,html{
+    width:100%;
+    height:100%;
+    background:#f1f4f8;
+}
+.content{
+    padding-top:6.4rem;
+    width:100%;
+    height:calc(100% - 6.4rem);
+    overflow:hidden;
+}
+.content .comment{
+    margin-top:1rem;
+    padding:0 4%;
+    width:92%;
+    background:#fff;
+}
+.openState{
+    display:block;
+    width:100%;
+    height:100%;
+}
+.closeState{
+    display:none;
+    width:100%;
+    height:100%;
+}
+/*************************************************************************
+ *                             室内外温湿度                              *
+ *************************************************************************/
+.indoorCon{
+    position: relative;
+    height:17%;
+}
+.indoorCon2 {
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.indoorCon dl{
+    width:100%;
+    overflow:hidden;
+}
+.indoorCon dl:nth-child(1){
+    /*padding-top:1.2rem;*/
+}
+.indoorCon dl dt,.indoorCon dl dd{
+    float:left;
+    height:3rem;
+    line-height:3rem;
+}
+.indoorCon dl dt{
+    width:20%;
+    font-size:1.5rem;
+}
+.indoorCon dl dd{
+    width:80%;
+}
+/*************************************************************************
+ *                                风量                                  *
+ *************************************************************************/
+.blastCapacity{
+    height:17%;
+}
+.blastCapacity h4{
+    width:100%;
+    height:2rem;
+    padding-top:1rem;
+    line-height:2rem;
+    font-size:1.5rem;
+}
+.blastCapacity ul.line{
+    width:84%;
+    /*width:77%;*/
+    margin-left:8%;
+    /*margin-left:12.5%;*/
+    margin-top:1.2rem;
+}
+.blastCapacity ul.line li{
+    position:relative;
+    float:left;
+    /*width:33.33333333333333%;*/
+    width:50%;
+    height:0.6rem;
+}
+.blastCapacity ul.line li i{
+    position:absolute;
+    left:-1.25rem;
+    top:-1rem;
+    width:2.5rem;
+    height:2.5rem;
+    background:url(../fonts/icon_off.png) no-repeat center center;
+    background-size:1.6rem auto;
+}
+.blastCapacity ul.line li:last-child i:nth-child(2){
+    position:absolute;
+    left:calc(100% - 1.25rem);
+    top:-1rem;
+}
+.blastCapacity ul.line li hr{
+    display:block;
+    border:0;
+    margin:0;
+    padding:0;
+    width:100%;
+    height:0.6rem;
+    background:#f3f3f3;
+}
+.blastCapacity ul.line li hr[line-mode="pass"]{
+    background:#8dd652;
+}
+.blastCapacity ul.line li hr[line-mode="no"]{
+    background:#f3f3f3;
+}
+.blastCapacity ul.line li i[child-mode="off"]{
+    background:url(../fonts/icon_off.png) no-repeat center center;
+    background-size:1.4rem auto;
+}
+.blastCapacity ul.line li i[child-mode="on"]{
+    background:url(../fonts/icon_on.png) no-repeat center center;
+    background-size:1.7rem auto;
+}
+.blastCapacity ul.line li i[child-mode="pass"]{
+    background:url(../fonts/icon_pass.png) no-repeat center center;
+    background-size:1.4rem auto;
+}
+
+.blastCapacity ul.text{
+    margin-left:-6%;
+    width:112%;
+    /*margin-left:8%;*/
+    overflow:hidden;
+}
+.blastCapacity ul.text li{
+    float:left;
+    /*width:25%;*/
+    width:33.33%;
+    height:3.4rem;
+    text-align:center;
+}
+/*.blastCapacity ul.text li:first-child{*/
+    /*text-align:left;*/
+/*}*/
+/*.blastCapacity ul.text li:last-child{*/
+    /*text-align:right;*/
+/*}*/
+.blastCapacity ul.text li span{
+    display:block;
+    width:100%;
+    height:3.4rem;
+    line-height:3.4rem;
+}
+/*************************************************************************
+ *                                模式                                  *
+ *************************************************************************/
+.mode{
+    height:40%;
+    text-align:center;
+}
+.mode h4{
+    width:100%;
+    height:2rem;
+    line-height:2rem;
+    text-align:left;
+    padding-top:1rem;
+    font-size:1.5rem;
+}
+.mode ul{
+    display:inline-block;
+    width:95%;
+    overflow:hidden;
+}
+.mode ul li{
+    float:left;
+    width:33.333333333333%;
+    text-align:center;
+    overflow:hidden;
+    margin-top:0.8rem;
+}
+.mode ul li i{
+    display:inline-block;
+    width:4.8rem;
+    height:4.8rem;
+    /*background:pink;*/
+}
+.mode ul li:nth-child(1) i{
+    background:url(../fonts/icon_mode_huanqi.png) no-repeat center center;
+    background-size: 4.4rem auto;
+}
+.mode ul li:nth-child(2) i{
+    background:url(../fonts/icon_mode_paifeng.png) no-repeat center center;
+    background-size: 4.4rem auto;
+}
+.mode ul li:nth-child(3) i{
+    background:url(../fonts/icon_mode_zhineng.png) no-repeat center center;
+    background-size: 4.4rem auto;
+}
+.mode ul li:nth-child(4) i{
+    background:url(../fonts/icon_mode_qiangjing.png) no-repeat center center;
+    background-size: 4.4rem auto;
+}
+.mode ul li:nth-child(5) i{
+    background:url(../fonts/icon_mode_shengdian.png) no-repeat center center;
+    background-size: 4.4rem auto;
+}
+.mode ul li:nth-child(1) i[mode-state = 'on']{
+    background:url(../fonts/icon_mode_huanqi_1.png) no-repeat center center;
+    background-size: 4.4rem auto;
+}
+.mode ul li:nth-child(2) i[mode-state = 'on']{
+    background:url(../fonts/icon_mode_paifeng_1.png) no-repeat center center;
+    background-size: 4.4rem auto;
+}
+.mode ul li:nth-child(3) i[mode-state = 'on']{
+    background:url(../fonts/icon_mode_zhineng_1.png) no-repeat center center;
+    background-size: 4.4rem auto;
+}
+.mode ul li:nth-child(4) i[mode-state = 'on']{
+    background:url(../fonts/icon_mode_qiangjing_1.png) no-repeat center center;
+    background-size: 4.4rem auto;
+}
+.mode ul li:nth-child(5) i[mode-state = 'on']{
+    background:url(../fonts/icon_mode_shengdian_1.png) no-repeat center center;
+    background-size: 4.4rem auto;
+}
+.mode ul li span{
+    display:block;
+    width:100%;
+    height:2.2rem;
+    line-height:2.2rem;
+}
+.mode ul li[is-not="no"]{
+    display:none;
+}
+/*************************************************************************
+ *                             开关按钮                                  *
+ *************************************************************************/
+.controlBtn{
+    padding:0 4%;
+    width:92%;
+    overflow:hidden;
+}
+.controlBtn button{
+    display:block;
+    width:100%;
+    height:3.8rem;
+    line-height:3.8rem;
+    border-radius:5px;
+    background:#ff8212 url(../fonts/icon_power.png) no-repeat center center;
+    background-size:2rem auto;
+    border:0;
+    margin-top:3.4rem;
+}
+.controlBtn span{
+    display:block;
+    width:100%;
+    height:2.2rem;
+    line-height:2.2rem;
+    text-align:center;
+    font-size:1.2rem;
+    color:#666666;
+}
+.closeControlBtn{
+    position:absolute;
+    left:0;
+    top:50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+}
+.closeControlBtn button{
+    margin-top:0;
+    background:#8dd652 url(../fonts/icon_on.png) no-repeat center center;
+    background-size:2rem auto;
+}
+/*************************************************************************
+ *                             设备离线遮罩层                            *
+ *************************************************************************/
+.mask_layer {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 6.4rem;
+    width: 100%;
+    height: 94%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7)
+}
+
+.mask_layer i {
+    display: inline-block;
+    width: 8rem;
+    height: 8rem;
+    margin-top: 15rem;
+    background: url(../fonts/icon_new.png) no-repeat center center;
+    background-size: 8rem auto;
+}
+
+.mask_layer span {
+    display: block;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #fff;
+}

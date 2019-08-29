@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <a class="back" href="javascript:window.history.back(-1);"></a>
+    <a id="setDeviceState_tittle" class="autoSwitchLanguager" href="javascript:;">设置设备状态</a>
+    <a class="complete" id="finishState" href="javascript:;"></a>
+</header>
+<section style="margin-top:6.4rem;">
+    <ul class="set_list">
+        <li><b id="lang_camera_safety_open" class="autoSwitchLanguager">开启安全防护</b><i></i></li>
+        <li><b id="lang_camera_safety_close" class="autoSwitchLanguager">关闭安全防护</b><i></i></li>
+    </ul>
+</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    initlan()
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        // 获取设备ID
+        var deviceID = info.getItem("deviceID")
+
+        $(".set_list li").on("click", function () {
+            var elid = $(this).find("b").attr("id")
+            var enable = false
+            var action = 'stopSafety'
+            if (elid == 'lang_camera_safety_open') {
+                enable = true
+                action = 'startSafety'
+            } else if (elid == 'lang_camera_safety_close') {
+                enable = false
+                action = 'stopSafety'
+            }
+
+            var data = {
+                "deviceId": deviceID,
+                "action": action,
+                "data": {
+                    "linkageGuardDic": {
+                        "day": [
+                            "Sun",
+                            "Mon",
+                            "Tues",
+                            "Wed",
+                            "Thurs",
+                            "Fri",
+                            "Sat"
+                        ],
+                        "enable": enable,
+                        "time": [
+                            {
+                                "end": "23:59",
+                                "start": "00:00"
+                            }
+                        ]
+                    },
+                    "motionDetectionDic": {
+                        "enable": enable,
+                        "sensitivity": 80,
+                        "areaArray": [
+                            0,
+                            0,
+                            320,
+                            240
+                        ]
+                    }
+                }
+            }
+
+            var dataJson = JSON.stringify(data)
+
+            info.setItem("actionType", "1")
+            info.setItem("deviceState", $(this).find('b').text())
+            var taskType = info.getItem('taskType')
+            if (taskType === 'sceneTask') {
+                info.setItem("epData", dataJson)
+                window.location = "setDelay_sceneTask.html"
+            } else {
+                info.setItem("epData", dataJson)
+                window.location = "setDelay_timeTask.html"
+            }
+        })
+
+    })
+</script>
+</html>

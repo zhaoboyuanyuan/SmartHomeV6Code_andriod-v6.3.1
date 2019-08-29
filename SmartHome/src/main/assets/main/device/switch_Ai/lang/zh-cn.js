@@ -1,0 +1,36 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_Ai_name = "一位DIN开关计量版";
+$lang.device_Delay_off = "延时关闭";
+$lang.device_Datastatistics = "数据统计";
+$lang.device_Delay_open = "延时打开";
+$lang.device_Realtime_power = "实时功率";
+$lang.device_Accumulated_electricity = "累计电量";
+$lang.Delay_off_notstarted = "未启动延时关闭功能";
+$lang.Delay_open_notstarted = "未启动延时打开功能";
+$lang.Not_started = "不开启";
+$lang.Minutes_30 = "30分钟";
+$lang.Minutes_60 = "60分钟";
+$lang.Minutes_120 = "120分钟";
+$lang.Minutes_Custom = "自定义";
+$lang.Time_close = "关闭时间";
+$lang.Time_open = "打开时间";
+$lang.Selection_time_confirm = "确定";
+$lang.Selection_time_cancel = "取消";
+$lang.Power_data_statistics = "用电数据统计";
+$lang.Power_data_hour = "时";
+$lang.Power_data_day = "天";
+$lang.Power_data_week = "周";
+$lang.Power_data_month = "月";
+$lang.Power_data_Consumption = "用电量";
+$lang.Log = "日志";
+$lang.Alarm = "报警消息";
+$lang.offLine = "设备已离线";
+$lang.Settings_Overload_protection = "过载保护值设置";
+$lang.Settings_Overload_Popup = "检测到用电器功率超出额定范围，已为您自动断电";
+$lang.Settings_Totalpower_cleared = "累计电量清零";
+$lang.device_Ai_unit = "单位：";
+$lang.device_Ai_Electric = "电量";

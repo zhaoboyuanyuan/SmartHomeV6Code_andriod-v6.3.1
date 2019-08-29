@@ -1,0 +1,213 @@
+@charset "utf-8";
+body, button, select, textarea, input, label, option, fieldset, legend{font-family: "微软雅黑",Tahoma,Verdana;}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, legend, input, textarea, button, p, blockquote, th, td{margin: 0;padding: 0;}
+textarea{resize: none}
+textarea, input{outline: none;}
+.clear{height:1px;overflow:hidden;clear:both;}
+a,img{border:0;}
+a{color: #666;text-decoration: none;}
+li{list-style-type:none;}
+i,em{font-style: normal;}
+.fl{float:left;}
+.fr{float:right;}
+.ds{display:block;}
+.hid{overflow:hidden;}
+.clearfix{*zoom:1}
+.clearfix:after{display:block;visibility:hidden;clear:both;height:0;content:'.';font-size:0}
+html,body{width:100%;height:100%;background:url(../fonts/bg_1.png) repeat-x left top;background-size:100% 100% !important;}
+/*html,body{width:100%;height:100%;background:url(../fonts/bg_2.png) repeat-x left top;}*/
+/*html,body{width:100%;height:100%;background:url(../fonts/bg_3.png) repeat-x left top;}*/
+
+/*header*/
+header{
+	width:100%;
+	height:4.4rem;
+	padding-top:2rem;
+}
+header a{
+	float:left;
+	display:block;
+	width:73.2%;
+	height:4.4rem;
+	text-align:center;
+	line-height:4.4rem;
+	font-size:1.7rem;
+	color:#fff;
+}
+header a:nth-child(1),header a:nth-child(3){
+	width:13.4%;
+}
+header a:nth-child(1){
+	background:url(../fonts/icon_back_1.png) no-repeat center center;
+	background-size:2.2rem auto;
+}
+header a:nth-child(3){
+	background:url(../fonts/icon_more.png) no-repeat center center;
+	background-size:2rem auto;
+}
+header a:nth-child(2){
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-webkit-tap-highlight-color:rgba(255,0,0,0);
+}
+
+/*中间部分状态图*/
+.state_show{
+	position:relative;
+	width:100%;
+	margin-top:0.5rem;
+	text-align:center;
+}
+.state_show .status{
+	position:absolute;
+	right:4%;
+	top:0;
+	padding-left:3rem;
+	height:2.8rem;
+	line-height:2.7rem;
+	font-size:1.6rem;
+	color:#fff;
+	background:url(../fonts/icon_yes.png) no-repeat left center;
+	background-size:2.3rem auto;
+}
+.state_show .status_no{
+	background:url(../fonts/icon_no.png) no-repeat left center;
+	background-size:2.3rem auto;
+}
+.state_show .img_state{
+	position:relative;
+	display:inline-block;
+	margin-top:7.5rem;
+	width:21.3rem;
+	height:21.3rem;
+	text-align:center;
+	background:url(../fonts/bg_state.png) no-repeat center center;
+	background-size:20.8rem auto;
+}
+.state_show .img_state img{
+	display:inline-block;
+	width:5.5rem;
+	height:auto;
+	margin-top:6.5rem;
+}
+.state_show .img_state span{
+	display:block;
+	width:100%;
+	height:4.5rem;
+	text-align:center;
+	line-height:4.5rem;
+	font-size:1.6rem;
+	color:#fff;
+}
+.img_state .loading{
+	display:block;
+	position:absolute;
+	left:-5.5rem;
+	top:-5.5rem;
+	width:32.3rem;
+	height:32.3rem;
+}
+.img_state .loading i{
+	display:none;
+	position:absolute;
+	opacity: 1;
+}
+.img_state .loading i:nth-child(3){
+	left:4rem;
+	top:4rem;
+	width:24.3rem;
+	height:24.3rem;
+	border:1px solid rgba(255,255,255,0.6);
+	border-radius:50%;
+}
+.img_state .loading i:nth-child(2){
+	left:2rem;
+	top:2rem;
+	width:28.3rem;
+	height:28.3rem;
+	border:1px solid rgba(255,255,255,0.4);
+	border-radius:50%;
+}
+.img_state .loading i:nth-child(1){
+	left:0rem;
+	top:0rem;
+	width:32.3rem;
+	height:32.3rem;
+	border:1px solid rgba(255,255,255,0.2);
+	border-radius:50%;
+}
+
+/*底部水纹背景图*/
+.img_bottom{
+	position:fixed;
+	left:0;
+	bottom:0;
+	z-index:300;
+	width:100%;
+	height:23.5rem;
+	background:url(../fonts/bg_bottom.png) no-repeat left top;
+	background-size:100% auto;
+}
+/*.img_bottom img{
+	display:block;
+	width:100%;
+	height:12rem;
+}*/
+.img_bottom .bottom_btn{
+	width:100%;
+	height:11.5rem;
+	margin-top:12rem;
+}
+.img_bottom .bottom_btn .btn{
+	display:block;
+	box-sizing: border-box;
+	width:92%;
+	height:5rem;
+	margin:0 4%;
+	text-align:center;
+	line-height:5rem;
+	border:1px solid #8DD652;
+	border-radius:5px;
+	font-size:1.7rem;
+	color:#8DD652;
+}
+.img_bottom .bottom_btn .btn_1{
+	border:0;
+	border-radius:5px;
+	font-size:1.7rem;
+	color:#fff;
+	background:#8DD652;
+}
+
+/*遮罩层*/
+.mask_layer{
+	display:none;
+	position:absolute;
+	z-index:3000;
+	left:0;
+	top:6.4rem;
+	width:100%;
+	height:calc(100% - 6.4rem);
+	text-align:center;
+	background:rgba(0,0,0,0.7)
+}
+.mask_layer i{
+	display:inline-block;
+	width:8rem;
+	height:8rem;
+	margin-top:15rem;
+	background:url(../fonts/icon_new.png) no-repeat center center;
+	background-size:8rem auto;
+}
+.mask_layer span{
+	display:block;
+	width:100%;
+	height:5rem;
+	line-height:5rem;
+	text-align:center;
+	font-size:1.6rem;
+	color:#fff;
+}
+
+

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_ripper_effect">
+    <View android:id="@+id/splitLineTop"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/v6_line" />
+    <LinearLayout android:id="@+id/layoutContent"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_item_height"
+        android:orientation="horizontal"
+        android:layout_below="@+id/splitLineTop">
+
+        <TextView
+            android:id="@+id/left_rename"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/Device_More_Powerclear"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+        <ImageView
+            android:id="@+id/right_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/system_intent_right" />
+
+    </LinearLayout>
+    <View android:id="@+id/viewline"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/v6_line"
+        android:layout_below="@+id/layoutContent"/>
+</RelativeLayout>

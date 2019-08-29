@@ -1,0 +1,37 @@
+@charset "utf-8";
+
+.main{
+    width:100%;
+    overflow:hidden;
+}
+.main ul{
+    width:100%;
+    overflow:hidden;
+    padding-top:4rem;
+}
+.main ul li{
+    float:left;
+    width:33.333333333333333%;
+    height:4rem;
+    text-align:center;
+
+}
+.main ul li span{
+    display:inline-block;
+    width:60%;
+    height:3rem;
+    line-height:3rem;
+    border:1px solid #333;
+    border-radius:5px;
+    background:#fff;
+}
+.main ul li.on span{
+    background:#8dd652;
+}
+.main p{
+    padding:4rem 5% 0;
+    width:90%;
+    line-height:3rem;
+    font-size:1.5rem;
+    color:#333;
+}

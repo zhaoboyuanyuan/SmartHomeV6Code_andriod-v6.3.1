@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+
+    <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/thermostat.css"/>
+
+    <script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/mui/js/mui.picker.all.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <a href="javascript:window.history.back(-1);"></a>
+    <a id="setDeviceStatus" class="autoSwitchLanguager" href="javascript:;">设置设备状态</a>
+    <a key="confirm" class="complete autoSwitchLanguager" onclick="save()" href="javascript:;">确定</a>
+</header>
+<section class="mainListView">
+    <ul>
+        <li><a  class="autoSwitchLanguager" key="device_switch">开关</a><dd><i><em></em></i></dd></li>
+        <li style="display: none"><a  class="autoSwitchLanguager" key="houseKeeper1_OZ_Type">模式</a><a></a><i></i></li>
+        <li style="display: none"><a id="change_temperature">温度</a><a></a><i></i></li>
+    </ul>
+</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var status = "0";
+    var mode = "FF";//模式
+    var temperature = "FF";//温度
+</script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var taskType = info.getItem("taskType");
+    initlan();
+    var deviceSuooortedModes = ['1','2','3','4'];
+    var deviceHeatMinTemperature = 5;
+    var deviceHeatMaxTemperature = 35;
+    var deviceCoolMaxTemperature = 30;
+    var deviceCoolMinTemperature = 5;
+    var deviceLandMinTemperature = 20;
+    var deviceLandMaxTemperature = 45;
+    //
+    var showSupportModes = [];
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        showSupportModes = [Device_Bs_01,Device_Bs_02,Device_Bs_03,Device_Bs_04];
+
+        $(".mainListView").find("ul").find("li").find("i").off("click");
+        $(".mainListView").find("ul").find("li").find("i").on("click", function(){
+            var self = $(this)
+            if($(this).attr("class") == "on") {
+                status = "0"
+            } else {
+                status = "1"
+                //默认值
+                mode = "2";
+                temperature = 18;
+                //模式
+                $(".mainListView ul:first-child li:nth-child(2) a:nth-child(2)").html(Device_Bs_02);
+                //温度
+                $(".mainListView ul:first-child li:nth-child(3) a:nth-child(2)").html("18");
+                $("#change_temperature").html(Device_Bs_05);
+            }
+            updateStatus();
+        });
+        function updateStatus() {
+            if(status == "0") {
+                $(".mainListView").find("ul").find("li").find("i").removeClass("on")
+                $(".mainListView ul:first li").hide();
+                $(".mainListView ul:first li:first").show();
+            } else {
+                $(".mainListView").find("ul").find("li").find("i").addClass("on")
+                $(".mainListView ul:first li").show();
+            }
+        }
+        $(".mainListView").find("ul").find("li").off("click");
+        $(".mainListView").find("ul").find("li").on("click",function () {
+            var liIndexNum = $(this).index();
+            var picker = new mui.PopPicker({});
+            $(".mui-poppicker-btn-cancel").html(LEDlight_90_Cancel);
+            $(".mui-poppicker-btn-ok").html(LEDlight_90_ok);
+            switch (liIndexNum){
+                case 1:{
+                    picker.setData(showSupportModes);
+                    picker.show(function(item) {
+                        var modeShowStr = item.toString();
+                        var modeShowStrIndex = $.inArray(modeShowStr, showSupportModes);
+
+                        if (modeShowStrIndex == 0 || modeShowStrIndex == 1 || modeShowStrIndex == 2) {
+                            temperature = 18;
+                            //温度
+                            $(".mainListView ul:first-child li:nth-child(3) a:nth-child(2)").html("18");
+                            $(".mainListView ul:first-child li:nth-child(3)").css("display","block");
+                            $("#change_temperature").html(Device_Bs_05);
+                        } else if (modeShowStrIndex == 3) { //地面模式
+                            temperature = "30";
+                            $(".mainListView ul:first-child li:nth-child(3) a:nth-child(2)").html("30");
+                            $(".mainListView ul:first-child li:nth-child(3)").css("display","block");
+                            $("#change_temperature").html(Device_Bs_06);
+                        }
+                        if(modeShowStrIndex >= 0){
+                            mode = deviceSuooortedModes[modeShowStrIndex];
+                            $(".mainListView ul:first-child li:nth-child(2) a:nth-child(2)").html(modeShowStr);
+                        }
+                    });
+                }
+                    break;
+                case 2:{
+                    var tempArry = [];
+                    if(mode == "1"){
+                        if(deviceCoolMaxTemperature && deviceCoolMinTemperature){
+                            var deviceCoolMaxTemperatureNum = parseInt(deviceCoolMaxTemperature);
+                            var deviceCoolMinTemperatureNum = parseInt(deviceCoolMinTemperature);
+                            for (var i = deviceCoolMinTemperatureNum;i <= deviceCoolMaxTemperatureNum;i+=0.5){
+                                tempArry.push(i.toString());
+                            }
+                        }
+                    }else if(mode == "2" || mode == "3"){
+                        if(deviceHeatMaxTemperature && deviceHeatMinTemperature){
+                            var deviceHeatMaxTemperatureNum = parseInt(deviceHeatMaxTemperature);
+                            var deviceHeatMinTemperatureNum = parseInt(deviceHeatMinTemperature);
+                            for (var i = deviceHeatMinTemperatureNum;i <= deviceHeatMaxTemperatureNum;i+=0.5){
+                                tempArry.push(i.toString());
+                            }
+                        }
+                    }else if(mode == "4"){
+                        if(deviceLandMaxTemperature && deviceLandMinTemperature){
+                            var deviceLandMaxTemperatureNum = parseInt(deviceLandMaxTemperature);
+                            var deviceLandMinTemperatureNum = parseInt(deviceLandMinTemperature);
+                            for (var i = deviceLandMinTemperatureNum;i <= deviceLandMaxTemperatureNum;i+=0.5){
+                                tempArry.push(i.toString());
+                            }
+                        }
+                    }
+                    picker.setData(tempArry);
+                    picker.show(function(item) {
+                        temperature = item.toString();
+                        var temperatureStrIndex = $.inArray(temperature, tempArry);
+                        if(temperatureStrIndex >= 0) {
+                            $(".mainListView ul:first-child li:nth-child(3) a:nth-child(2)").html(temperature);
+                        }
+                    });
+                }
+                    break;
+            }
+        })
+
+    })
+
+    function save() {
+        var epdataStr = "";
+        var deviceStateShow = "";
+        if(status == "0"){
+            //off
+            status = "2"+status;
+            epdataStr = epdataStr + status;
+            deviceStateShow = languageUtil.getResource("closeSingle");
+
+            info.setItem("deviceState", deviceStateShow);
+        }else if(status == "1"){
+            status = "2"+status;
+            mode = "3"+mode;
+            epdataStr = epdataStr + status + ',' + mode;
+
+            var modeShowStr = mode.substr(1,1).toString();
+            var modeShowStrIndex = $.inArray(modeShowStr, deviceSuooortedModes);
+
+            deviceStateShow = deviceStateShow +  languageUtil.getResource("openSingle") + " " + showSupportModes[modeShowStrIndex];
+
+            var sendTemperatureStr =  temperature.toString();
+            if (sendTemperatureStr != 'FF'){
+                //拼接
+                if ((temperature*10).toString().length==3){
+                    sendTemperatureStr ="4" + "0" + (temperature*10);
+                }else if((temperature*10).toString().length==2){
+                    sendTemperatureStr ="4" + "00" + (temperature*10);
+                }
+                epdataStr = epdataStr + ',' + sendTemperatureStr;
+                deviceStateShow = deviceStateShow + " " + temperature;
+            } else {
+                //不拼接
+                epdataStr = epdataStr + ',';
+            }
+            info.setItem("deviceState", deviceStateShow);
+        }
+        info.setItem("epData", epdataStr);
+        if (taskType == 'timeTask') {
+            window.location = "setDelay_timeTask.html";
+        } else {
+            window.location = "setDelay_sceneTask.html";
+        }
+    }
+</script>
+</html>

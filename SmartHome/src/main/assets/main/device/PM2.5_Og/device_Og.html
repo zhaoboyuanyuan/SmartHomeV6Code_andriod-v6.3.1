@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="../../source/js/rem.js"></script>
+    <script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+</head>
+<body style="width:100%;height:100%;">
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="device_Og_name" href="javascript:;"></a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<section class="main_con">
+    <span class="temperature"></span>
+    <span class="humidity"></span>
+    <i id="statistics_btn" style="background:url(fonts/icon_statistics.png) no-repeat center center;background-size:2.5rem"></i>
+    <div class="middle middle_suitable">
+        <span class="state state_suitable autoSwitchLanguager" key="excellent"></span>
+    </div>
+    <span class="state_tip autoSwitchLanguager" key="AirQuality"></span>
+    <div class="bottom bottom_suitable">
+    </div>
+    <div class="current_value_div">
+        <span id="current_value">0</span>
+        <span id="unit">μg/m3</span>
+    </div>
+    <span id="describe" class="autoSwitchLanguager" key="PM25_number"></span>
+    <span id="electricity"></span>
+</section>
+<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="OffLine">设备已离线</span></section>
+<section class="gw_toast autoSwitchLanguager" id="device_toast">通过账号登录后才可查看</section>
+</body>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="js/more.js"></script>
+<script type="text/javascript">
+    var gwID,dID;
+    initlan()
+    plus.plusReady(function(){
+        $("#back").click(function(){
+            plus.tools.back(function(){})
+        })
+        plus.gatewayCmd.getDeviceInfo(function(data){
+            gwID = data.gwID;
+            dID = data.devID;
+            var name = data.name.indexOf("#$default$#") != -1 ? device_Og_name + data.name.split("#")[2]:data.name
+            $(".deviceName").html(name)
+            if(data.mode === 2){
+                $(".mask_layer").show()
+            }else if(data.mode === 3){
+                //原生做的操作
+            }else{
+                $(".mask_layer").hide()
+            }
+            modeState(data)
+            initBtn()
+        })
+
+        plus.gatewayCmd.newDataRefresh(function(data){
+            if(data.cmd == "500" && data.devID == dID){
+                var name = data.name.indexOf("#$default$#") != -1 ? device_Og_name + data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+                modeState(data)
+            }else if(data.cmd == "502" && data.devID == dID){
+                if(data.name != undefined || data.name != ''){
+                    $(".deviceName").html(data.name)
+                }
+            }
+            gwID = data.gwID;
+            dID = data.devID;
+        })
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header")[0].style.paddingTop = "2.4rem";
+        }
+    })
+
+    function initBtn(gwID,dID){
+        $("#statistics_btn").on("click",function(){
+            plus.tools.getLoginType(function(data) {
+                if(data == "100") {
+                    window.location.href = "history.html";
+                } else {
+                    $(".gw_toast").show()
+                    setTimeout(function() {
+                        $(".gw_toast").hide()
+                    }, 3000)
+                }
+            })
+        })
+        $(".more").on("click",function(){
+            var moreData = getMoreConfig(dID,gwID)
+            plus.tools.more(moreData,function(){})
+        })
+    }
+
+    //        function sendCmd(gwID,dID,endpointNumber,clusterId,commandId){
+    //            var jsonData = {}
+    //            jsonData.cmd = "501";
+    //            jsonData.gwID = gwID;
+    //            jsonData.devID = dID;
+    //            jsonData.endpointNumber = endpointNumber;
+    //            jsonData.clusterId = clusterId;
+    //            jsonData.commandType = 1;
+    //            jsonData.commandId = commandId;
+    //            plus.gatewayCmd.controlDevice(jsonData,function(){})
+    //        }
+
+    function modeState(result){
+        if(result.mode === 2){
+            $(".mask_layer").show()
+        }else if(result.mode === 3){
+            //原生做的操作
+        }else{
+            $(".mask_layer").hide()
+            var pm25Value
+            var temperatureValue
+            var humidityValue
+            var electricityValue
+            for(var i = 0;i<result.endpoints.length;i++){
+                if(result.endpoints[i].clusters[0].clusterId == 2049 && result.endpoints[i].clusters[0].attributes[0].attributeId == 0){
+                    pm25Value = result.endpoints[i].clusters[0].attributes[0].attributeValue;
+                }else if(result.endpoints[i].clusters[0].clusterId == 1026 && result.endpoints[i].clusters[0].attributes[0].attributeId == 0){
+                    temperatureValue = result.endpoints[i].clusters[0].attributes[0].attributeValue;
+                }else if(result.endpoints[i].clusters[0].clusterId == 1029 && result.endpoints[i].clusters[0].attributes[0].attributeId == 0){
+                    humidityValue = result.endpoints[i].clusters[0].attributes[0].attributeValue;
+                }else if(result.endpoints[i].clusters[0].clusterId == 2051){
+                    for(var j = 0;j<result.endpoints[i].clusters[0].attributes.length; j++){
+                        if(result.endpoints[i].clusters[0].attributes[j].attributeId == 3){
+                            electricityValue = result.endpoints[i].clusters[0].attributes[j].attributeValue;
+                            break;
+                        }
+                    }
+                }
+//                  reloadUI(attributeId,attributeValue,result.extData[0])
+            }
+            reloadUI(pm25Value,temperatureValue,humidityValue,electricityValue);
+        }
+    }
+    //        window.onload = function(){
+    //            setTimeout(function(){
+    //                reloadUI(0,1)
+    //            },5000)
+    //        };
+    function reloadUI(pm25Value,temperatureValue,humidityValue,electricityValue){
+        if(pm25Value > 75){
+            $(".middle").addClass("middle_strong");
+            $(".middle").removeClass("middle_suitable");
+            $(".middle").removeClass("middle_weak");
+            $(".state").addClass("state_strong");
+            $(".state").removeClass("state_weak");
+            $(".state").removeClass("state_suitable");
+            $(".bottom").addClass("bottom_strong");
+            $(".bottom").removeClass("bottom_weak");
+            $(".bottom").removeClass("bottom_suitable");
+            $(".state").html(bad);
+        }else if(pm25Value <= 35){
+            $(".middle").addClass("middle_suitable");
+            $(".middle").removeClass("middle_strong");
+            $(".middle").removeClass("middle_weak");
+            $(".state").addClass("state_suitable");
+            $(".state").removeClass("state_weak");
+            $(".state").removeClass("state_strong");
+            $(".bottom").addClass("bottom_suitable");
+            $(".bottom").removeClass("bottom_weak");
+            $(".bottom").removeClass("bottom_strong");
+            $(".state").html(excellent);
+        }else if(pm25Value > 35 && pm25Value <= 75){
+            $(".middle").addClass("middle_weak");
+            $(".middle").removeClass("middle_strong");
+            $(".middle").removeClass("middle_suitable");
+            $(".state").addClass("state_weak");
+            $(".state").removeClass("state_strong");
+            $(".state").removeClass("state_suitable");
+            $(".bottom").addClass("bottom_weak");
+            $(".bottom").removeClass("bottom_strong");
+            $(".bottom").removeClass("bottom_suitable");
+            $(".state").html(fine);
+        }
+        $(".state_tip").html(AirQuality);
+        $("#describe").html(PM25_number);
+        $(".temperature").html(temperature + ":" + temperatureValue + "℃");
+        $(".humidity").html(humidity + ":" + humidityValue + "%");
+        $("#current_value").html(pm25Value)
+        if(electricityValue != null && electricityValue != undefined){
+            $("#electricity").html(device_energy + ":" + electricityValue + "%");
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/widget_padding_horizontal"
+    android:paddingRight="10dp"
+    android:paddingTop="@dimen/widget_padding_vertical"
+    android:paddingBottom="@dimen/widget_padding_vertical">
+
+    <include layout="@layout/view_widget_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/widget_padding_vertical"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/switch_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/home_widget_circle_gray"
+                android:padding="18dp"
+                android:src="@drawable/switch_off" />
+
+            <cc.wulian.smarthomev6.support.customview.ProgressRing
+                android:id="@+id/one_switch_progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:ringStartColor="#F7FAF5"
+                app:ringEndColor="@color/colorPrimary"
+                app:ringWidth="1.5dp"
+                android:visibility="invisible"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/refrigeration_heat_mode_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/Device_Widget_Oi_Type"
+                    android:textColor="@color/newPrimaryText"
+                    android:textSize="@dimen/widget_secondary_text_size" />
+                <TextView
+                    android:id="@+id/tv_refrigeration_heat_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="19dp"
+                    android:layout_marginTop="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="---"
+                    android:textColor="@color/v6_text_dark"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/Device_Widget_Oi_Speed"
+                    android:textColor="@color/newPrimaryText"
+                    android:textSize="@dimen/widget_secondary_text_size" />
+
+                <TextView
+                    android:id="@+id/tv_refrigeration_heat_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="19dp"
+                    android:layout_marginTop="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="---"
+                    android:textColor="@color/v6_text_dark"
+                    android:textSize="16dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/Device_Widget_Oi_Set"
+                    android:textColor="@color/newPrimaryText"
+                    android:textSize="@dimen/widget_secondary_text_size" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="31dp">
+                    <ImageView
+                        android:id="@+id/refrigeration_heat_temperature_sub_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="2dp"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/home_weight_temperature_sub"
+                        android:scaleType="centerInside"
+                        android:adjustViewBounds="true"/>
+
+                    <ImageView
+                        android:id="@+id/refrigeration_heat_temperature_add_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="2dp"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/home_weight_temperature_add"
+                        android:scaleType="centerInside"
+                        android:adjustViewBounds="true"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:layout_centerHorizontal="true"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_refrigeration_heat_temperature"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="0"
+                            android:textColor="@color/v6_text_dark"
+                            android:textSize="19dp" />
+
+                        <TextView
+                            android:id="@+id/tv_refrigeration_heat_temperature_format"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="℃"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/v6_text_dark"
+                            android:textSize="14dp" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/auto_mode_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.4"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/Device_Widget_Oi_Type"
+                    android:textColor="@color/newPrimaryText"
+                    android:textSize="@dimen/widget_secondary_text_size" />
+
+                <TextView
+                    android:id="@+id/tv_auto_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="19dp"
+                    android:layout_marginTop="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="---"
+                    android:textColor="@color/v6_text_dark"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.4"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/Device_Widget_Oi_Speed"
+                    android:textColor="@color/newPrimaryText"
+                    android:textSize="@dimen/widget_secondary_text_size" />
+
+                <TextView
+                    android:id="@+id/tv_auto_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="19dp"
+                    android:layout_marginTop="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="---"
+                    android:textColor="@color/v6_text_dark"
+                    android:textSize="16dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/Device_Widget_82_Set_Min"
+                    android:textColor="@color/newPrimaryText"
+                    android:textSize="@dimen/widget_secondary_text_size" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="31dp">
+                    <ImageView
+                        android:id="@+id/auto_min_temperature_sub_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="2dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/home_weight_temperature_sub"
+                        android:scaleType="centerInside"
+                        android:adjustViewBounds="true"/>
+
+                    <ImageView
+                        android:id="@+id/auto_min_temperature_add_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="2dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/home_weight_temperature_add"
+                        android:scaleType="centerInside"
+                        android:adjustViewBounds="true"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:layout_centerHorizontal="true"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_auto_min_temperature"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="0"
+                            android:textColor="@color/v6_text_dark"
+                            android:textSize="19dp" />
+
+                        <TextView
+                            android:id="@+id/tv_auto_min_temperature_format"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="℃"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/v6_text_dark"
+                            android:textSize="14dp" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/Device_Widget_83_Set_Max"
+                    android:textColor="@color/newPrimaryText"
+                    android:textSize="@dimen/widget_secondary_text_size" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="31dp">
+                    <ImageView
+                        android:id="@+id/auto_max_temperature_sub_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="2dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/home_weight_temperature_sub"
+                        android:scaleType="centerInside"
+                        android:adjustViewBounds="true"/>
+
+                    <ImageView
+                        android:id="@+id/auto_max_temperature_add_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="2dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/home_weight_temperature_add"
+                        android:scaleType="centerInside"
+                        android:adjustViewBounds="true"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:layout_centerHorizontal="true"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_auto_max_temperature"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="0"
+                            android:textColor="@color/v6_text_dark"
+                            android:textSize="19dp" />
+
+                        <TextView
+                            android:id="@+id/tv_auto_max_temperature_format"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="℃"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/v6_text_dark"
+                            android:textSize="14dp" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

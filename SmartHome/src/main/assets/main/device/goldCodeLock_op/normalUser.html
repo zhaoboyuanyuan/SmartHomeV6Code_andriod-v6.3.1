@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建普通用户</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/set.css"/>
+    <link rel="stylesheet" type="text/css" href="css/scene.css"/>
+     <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:window.location='accountManage.html';"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_op_detail_01" href="javascript:;">普通用户详情</a>
+            <a class="edit autoSwitchLanguager" key="device_op_txt_22" href="javascript:;">编辑</a>
+        </div>
+    </header>
+    <section class="content">
+        <div class="createInput">
+            <span class="autoSwitchLanguager" key="device_op_normal_03">用户名</span>
+            <input id="userName" class="autoSwitchLanguager" key="device_op_normal_05" type="text" maxlength="20" disabled="disabled" placeholder="请输入用户名" value="">
+        </div>
+        <div class="createInput">
+            <span class="autoSwitchLanguager" key="device_op_normal_04">密码</span>
+            <input id="pwd" type="password" disabled="disabled" value=""><i class="look"></i>
+        </div>
+        <dl scene-id="" class="bindScene" onclick="bindingScene(this)">
+            <dt class="autoSwitchLanguager" id="lock_Scenes_bind">场景绑定</dt>
+            <dd class="sceneName"></dd>
+        </dl>
+    </section>
+    <!--<section id="fail" class="toast" style="display:none;">-->
+        <!--<p class="autoSwitchLanguager" id="toastText" style="color:#fff;"></p>-->
+    <!--</section>-->
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/completeToast.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/onceUser.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan()
+    $("#pwd").on("input propertychange",function(){
+        if($(this).val().length >= 6){
+            $(this).val($(this).val().substr(0,6));
+        }
+    });
+    $("#userName").on("blur",function(){
+        var value = $(this).val();
+        var valueFace = noFace(value);
+        console.log(valueFace);
+        $(this).val(valueFace);
+    });
+    var NAME,PWD, DEVICEID, GWID, APPID, UID, token, sceneId;
+    var info = window.sysfun;
+    info.init("Token_OP")
+    token = info.getItem("Token_OP");
+    var liData = JSON.parse(info.getItem("liData"));
+    PWD = liData.pwd;
+    NAME = liData.name;
+    UID = liData.uid;
+    sceneId = liData.sceneId ? liData.sceneId:"";
+    plus.plusReady(function() {
+        //点击编辑,用户名和密码都可编辑
+        $(".edit").on("click",function(){
+            if($(this).html() == account_txt_22){
+                $(this).html(normal_txt_05)
+                $("#userName").attr("placeholder","")
+                $("#userName").removeAttr("disabled");
+                $("#pwd").removeAttr("disabled");
+            }else{
+                if($("#userName").val() == '' && $("#pwd").val() == ''){
+                    window.showDialog.show(normal_txt_01,2000);
+                }else if($("#userName").val() == ''){
+                    window.showDialog.show(normal_txt_02,2000);
+                }else if($("#pwd").val() == ''){
+                    window.showDialog.show(normal_txt_03,2000);
+                }else{
+                    var reg = new RegExp("^[0-9]*$");
+                    if($("#pwd").val().length <6 || !reg.test($("#pwd").val())){
+                        window.showDialog.show(normal_txt_03,2000);
+                    }else{
+                        createToast()
+                        send520Cmd()
+                        setTimeout(function() {
+                            $(".comToast").hide();
+                            window.showDialog.show(normal_txt_04,2000);
+                        }, 60000)
+                    }
+                }
+            }
+        });
+        plus.gatewayCmd.getCurrentAppID(function(result) {
+            APPID = result;
+            plus.gatewayCmd.getDeviceInfo(function(result) {
+                DEVICEID = result.devID;
+                GWID = result.gwID;
+                rush_cmd(4,DEVICEID,APPID);
+            })
+        });
+        plus.gatewayCmd.getSceneList(function(result){
+            if(result){
+                for(var i=0;i<result.length;i++){
+                    if(sceneId != ""){
+                        if(result[i].sceneID == sceneId){
+                            $(".sceneName").html(result[i].sceneName);
+                            $(".bindScene").attr("scene-id",sceneId);
+                        }
+                    }else{
+                        $(".sceneName").html(lock_Scenes_bind_no_bind);//lock_Scenes_bind_no_bind "未绑定"
+                        $(".bindScene").attr("scene-id","");
+                    }
+                }
+            }
+        });
+        PWD = info.getItem("pwd");
+        NAME = info.getItem("name");
+        UID = info.getItem("uid");
+        $("#pwd").val(PWD)
+        $("#userName").val(NAME)
+    });
+    function send520Cmd() {
+        var jsonData = {};
+        jsonData.cmd = "520";
+        jsonData.gwID = GWID;
+        jsonData.devID = DEVICEID;
+        jsonData.operType = 4;
+        jsonData.appID = APPID;
+        PWD = $("#pwd").val()
+        NAME = $("#userName").val();
+        var data = {
+            "tk": token,
+            "uid": UID,
+            "ut": "1",
+            "pwd": PWD,
+            "name": NAME,
+            "sceneId":sceneId
+        }
+        jsonData.data = data;
+        plus.gatewayCmd.controlDevice(jsonData, function(result) {
+
+        })
+    }
+    /*
+     *	绑定场景
+     *"tk":"tk","uid":"uid","ut":"ut","pwd":"pwd","st":"st","et":"et",
+     "name":"name","sceneId":"sceneId"
+     */
+
+    function bindingScene(self){
+        var sceneID = $(self).attr("scene-id");
+        window.location = "sceneList.html?sceneID="+sceneID+"&tk="+token+"&pwd="+PWD+"&name="+NAME+"&ut=1&uid="+UID;
+    }
+</script>
+</html>

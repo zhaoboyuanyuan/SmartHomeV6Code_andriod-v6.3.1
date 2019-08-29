@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <cc.wulian.smarthomev6.support.customview.SwipeRefreshLayout
+            android:id="@+id/area_swipe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/v6_bg"
+            android:visibility="visible">
+
+            <ListView
+                android:id="@+id/area_listView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="@color/v6_bg"
+                android:divider="@color/v6_line"
+                android:dividerHeight="0.1dp"
+                android:scrollbars="none" />
+        </cc.wulian.smarthomev6.support.customview.SwipeRefreshLayout>
+
+        <TextView
+            android:id="@+id/tv_no_area_tip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/Device_Area_blank"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:id="@+id/sort_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:text="@string/up_down_Sort"
+                android:textColor="@color/v6_text_gray" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/area_sort_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:scrollbars="none"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>

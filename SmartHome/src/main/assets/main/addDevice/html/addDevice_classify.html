@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!--<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />-->
+    <title>添加设备</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/addDevice_list.css" />
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+
+<body>
+    <header class="header" style="position: fixed;">
+        <div class="header_top">
+            <a class="" href="addDeviceNew.html"></a>
+            <a href="javascript:;" class="categoryName autoSwitchLanguager" id=""></a>
+            <a href="javascript:;"></a>
+        </div>
+    </header>
+    <section id="space_line" style="padding-top:6.4rem;overflow:hidden;width:100%;height:1rem;"></section>
+    <section class="device_list device_list5">
+        <!--<a onclick="jump('addDevice_Common_01.html','Ar')"><i></i><span class="autoSwitchLanguager" id="addDevice_Ar_name">金属窗帘控制器</span></a>-->
+        <!--<a onclick="jump('addDevice_Common_01.html','80')"><i></i><span class="autoSwitchLanguager" id="device_80_name">窗帘电机</span></a>-->
+        <!--<a onclick="jump('addDevice_Common_01.html','65')"><i></i><span class="autoSwitchLanguager" id="addDevice_65_name">窗帘控制器02型</span></a>-->
+        <!--<a onclick="jump('addDevice_Common_01.html','81')"><i></i><span class="autoSwitchLanguager" id="addDevice_81_name">双轨双驱自动窗帘</span></a>-->
+        <!--<a onclick="jump('addDevice_Common_01.html','Bh')"><i></i><span class="autoSwitchLanguager" id="addDevice_Bh_name">双轨双驱自动窗帘</span></a>-->
+    </section>
+    <!--<section class="gw_toast autoSwitchLanguager" id="addScene_scene_toast">网关登录情况下不能进行添加网关操作</section>-->
+</body>
+<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../build/navigator.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<!--<script src="../deviceModel/addDeviceModel.js" type="text/javascript" charset="utf-8"></script>-->
+<script type="text/javascript">
+    initlan();
+    var info = window.sysfun;
+    info.init("V6addDevice");
+    var categoryType = decodeURI(getUrlParam("type"));
+    var project = decodeURI(getUrlParam("project"));
+    var loginType = '';
+    var gatewayIsShared;
+    var gwType = "";
+    var addDeviceWhiteList = ["GW01", "GW06", "GW08", "GW09", "GW10", "GW11", "GW12","GW15","GW14", "CMICA1", "CMICA2",
+        "CMICA3", "CMICA4", "CMICA5", "CMICY1", "IF02", "XW01", "Ok", "smart01", "smart02", "smart03", "smart04",
+        "smart05", "smart06"
+    ];
+    var device_list_height = $(window).height() - $("#space_line").outerHeight(true);
+    $(".device_list").height(device_list_height + "px");
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    if (project == "smartRoom_app" || project == "ASH_app" || project == "Kamande_app" ||
+        project == "IOTX_app" || project == "B_Gaon_app" || project == "LAVO_app" || project == "SmartCom_app" || project == "fjh_app") {
+        script.src = "../deviceModel/addDeviceModel.js";
+    } else if (project == "Legrand_app") {
+        script.src = "../deviceModel/Legrand_addDeviceModel.js";
+    } else if (project == "zmartplus_app") {
+        script.src = "../deviceModel/zmartplus_addDeviceModel.js";
+    } else if (project == "hubb_app") {
+        script.src = "../deviceModel/hubb_addDeviceModel.js";
+    } else if (project == "wulian_app") {
+        script.src = "../deviceModel/addDeviceModel.js";
+    }
+    document.getElementsByTagName('head')[0].appendChild(script);
+    plus.plusReady(function () {
+        getDeviceList(project, categoryType, ".device_list", ".categoryName");
+        plus.tools.getLoginType(function (data) {
+            loginType = data;
+        });
+        plus.tools.getGatewayIsShared(function (data) {
+            gatewayIsShared = data;
+        });
+    });
+
+    function contains(type) {
+        for (var i = 0; i < addDeviceWhiteList.length; i++) {
+            if (addDeviceWhiteList[i] == type) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function jump(url, type) {
+        if ("YES" == gatewayIsShared) {
+            if (!contains(type)) {
+                window.showDialog.show(addDevice_toast_03,3000);
+                return;
+            }
+        }
+        //100为账号登录 101为网关登录
+        if (categoryType == "gateway") {
+            if (loginType == "100") {
+                if (type == "GW01") {
+                    //竖型网关
+                    window.location = "addGateway01.html"
+                } else if (type == "GW06") {
+                    //02型增强网关
+                    window.location = "addDevice_gateway_02_01.html"
+                } else if (type == "GW12") {
+                    //网关02型(局域网)
+                    window.location = "addDevice_gateway_12_01.html"
+                } else if (type == "GW08") {
+                    //墙面网关跳转
+                    plus.tools.qrScan(function () {})
+                    //梦想之花跳转
+                } else if (type == "GW09" || type == "GW10") {
+                    window.location = "addDevice_gateway_09_01.html"
+                } else if (type == "GW11") {
+                    window.location = "addDevice_gateway_11_01.html"
+                }else if (type == "GW15") {
+                    window.location = "addDevice_gateway_15_01.html"
+                }else if(type == "GW14"){
+                    plus.tools.startLiteGW(type,function(){});
+                }else if(type == "GWv5"){
+                    window.location = "gw_v5ToV6_01.html"
+                }
+            } else {
+                window.showDialog.show(addScene_scene_toast,3000);
+            }
+        } else if (categoryType == "camera") {
+            if (loginType == "100") {
+                plus.tools.startCamera(type, function () {})
+            } else {
+                window.showDialog.show(addScene_txt_01,3000);
+            }
+        } else if (categoryType == "safeDog") {
+            if (loginType == "100") {
+                plus.tools.startSafeDog(type, function () {})
+            } else {
+                window.showDialog.show(addScene_txt_01,3000);
+            }
+        } else if (type == "XW01") {
+            if (loginType == "100") {
+                plus.tools.startWishBgm(type, function () {})
+            } else {
+                window.showDialog.show(addScene_txt_01,3000);
+            }
+
+        } else if (type == "HS05") {
+            if (loginType == "100") {
+                plus.tools.startHisense(type, function () {})
+            } else {
+                window.showDialog.show(addScene_txt_01,3000);
+            }
+        } else if (type == "IF02") {
+            if (loginType == "100") {
+                plus.tools.startWifiIR(type, function () {})
+            } else {
+                window.showDialog.show(addScene_txt_01,3000);
+            }
+        }
+        else {
+            if (loginType == "100") {
+                plus.gatewayCmd.getGatewayID(function (result) {
+                    if (result == "" || result == null || result == undefined) {
+                        window.showDialog.show(addDevice_noGw,3000);
+                    } else {
+                        plus.gatewayCmd.getCurrentGWInfo(function(data){
+                            gwType = JSON.parse(data).gwType;
+                            if(gwType === "GW14"){
+                                var param = {
+                                    "gatewayType":"GW14",
+                                    "deviceType":type
+                                };
+                                plus.gatewayCmd.checkGatewaySupportDevice(param,function(data){
+                                    if(data){
+                                        info.setItem("deviceType", type);
+                                        window.location = url;
+                                    }else{
+                                        window.showDialog.show(languageUtil.getResource("addDevice_Toast_GW14"),3000);
+                                    }
+                                });
+                            }else {
+                                info.setItem("deviceType", type);
+                                window.location = url;
+                            }
+                        });
+                    }
+                });
+            } else {
+                info.setItem("deviceType", type);
+                window.location = url;
+            }
+        }
+    }
+</script>
+
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>批量添加设备</title>
+    <script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/deviceList.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/base.css?v=1.1"/>
+    <link rel="stylesheet" type="text/css" href="../css/batchAdd_devList.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header" style="position:fixed;left:0;top:0;width: 100%;z-index: 1000;padding-bottom:3.4rem;">
+    <div class="header">
+        <a href="javascript:;" class="back"></a>
+        <a href="javascript:;" key="Add_in_batches" class="autoSwitchLanguager">批量添加设备</a>
+        <a id="finishScene"  key="finishDelay" class="autoSwitchLanguager" href="javascript:;">完成</a>
+    </div>
+</header>
+<section class="get_list" style="padding-top:6.4rem;">
+    <div class="zone">
+        <div class="zoneMain">
+            <div class="room"><i class="zoneIcon autoSwitchLanguager" id="device_list_allAreas">全部分区</i></div>
+            <div class="className"><i class="zoneIcon autoSwitchLanguager" id="device_list_Categories">全部类别</i></div>
+        </div>
+        <div class="zoneList">
+            <nav class="zoneHide zoneOne">
+                <!--<li>全部</li>-->
+                <!--<li>测试区域2</li>-->
+                <!--<li>ces</li>-->
+                <!--<li>办公区</li>-->
+                <!--<li>测试123</li>-->
+                <!--<li>会议室1</li>-->
+                <!--<li>大礼堂</li>-->
+                <!--<li>大展架</li>-->
+            </nav>
+            <nav class="zoneHide zoneTwo">
+                <!--<li data-id="0">全部类别</li>-->
+                <!--<li data-id="1">智能门锁</li>-->
+                <!--<li data-id="2">摄像机</li>-->
+                <!--<li data-id="3">开关照明</li>-->
+                <!--<li data-id="4">插座</li>-->
+                <!--<li data-id="5">安防设备</li>-->
+                <!--<li data-id="6">环境监测</li>-->
+                <!--<li data-id="7">窗帘</li>-->
+                <!--<li data-id="8">智能遥控</li>-->
+                <!--<li data-id="9">中继器</li>-->
+                <!--<li data-id="10">控制器</li>-->
+                <!--<li data-id="11">背景音乐</li>-->
+                <!--<li data-id="12">健康管理</li>-->
+                <!--<li data-id="13">家用电器</li>-->
+            </nav>
+        </div>
+    </div>
+    <div class="select_all">
+        <div class="select_all_text">
+            <p class="autoSwitchLanguager" key="Add_batches_device">暂时只支持开关类、插座类、窗帘类</p>
+        </div>
+        <p id="selectedAllBtn">全选</p>
+    </div>
+    <ul class="devicelist" style="">
+        <!--<li data-num="1" data-category="3" data-id="41D1680F004B1200" data-type="At"-->
+        <!--data-src="../../source/deviceIcon/device_icon_At.png"><a href="setSwitch.html"><i class="left"-->
+        <!--style="background:url(../../source/deviceIcon/device_icon_At.png) no-repeat center center;background-size:4.75rem auto;padding-left: 4%"></i>-->
+        <!--<div class="right"><p>内嵌式二路开关</p>    <br> <em>在线</em> <span class="roomName">[测试区域2]</span></div>-->
+        <!--</a></li>-->
+        <!--<li data-num="1" data-category="3" data-id="840B1A05004B1200" data-type="90"-->
+        <!--data-src="../../source/deviceIcon/device_icon_90.png"><a href="setColorfulLight_90.html"><i class="left"-->
+        <!--style="background:url(../../source/deviceIcon/device_icon_90.png) no-repeat center center;background-size:4.75rem auto;padding-left: 4%"></i>-->
+        <!--<div class="right"><p>彩灯</p>    <br> <em>在线</em> <span class="roomName">[未分区]</span></div>-->
+        <!--</a></li>-->
+    </ul>
+    <div class="no_list autoSwitchLanguager" key="noDevice" id="not_device">没有可选择的设备</div>
+</section>
+</body>
+<script src="../../source/js/getCategoryList.js" type="text/javascript" charset="utf-8"></script>
+<script type="application/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var reFlag; //防plusReady多次触发的标志
+    initlan();
+
+    // 界面数据
+    var devList = {}  // 设备列表数据
+    var currentCategory = "0"  // 选中的类别
+    var currentGroup = "all"  // 选中的分区
+    var isSelectedAll = false  // 当前是否全选标识
+    var isSelectedOne = false  // 当前是否选择了标识
+
+    //和原生通信已准备完成
+    plus.plusReady(function () {
+        if(reFlag)return;
+        reFlag = true;
+
+        //获取分类
+        window.categoryList = getCategoryList();
+        for(var j in categoryList){
+            var categoryStr = '<li data-id="'+categoryList[j].type+'">'+categoryList[j].name+'</li>';
+            $(".zoneTwo").append(categoryStr);
+        }
+        // 选择类别
+        $(".zoneTwo li").on("click", function () {
+            var category = $(this).data("id")
+            $(".className").find("i").text($(this).text());
+            filterDevice(currentGroup, category)
+        })
+        // 安卓返回
+        plus.gatewayCmd.androidBack(function () {
+            goBack();
+        });
+        // 获取分区列表
+        plus.gatewayCmd.getGroupList(function (result) {
+            console.log(result);
+            // 生成分区列表
+            $(".zoneOne").html("<li id='all'>"+lang_allAreas+"</li>");
+            $(".zoneOne").append("<li id='-1'>"+lang_group+"</li>");
+            for(var i in result){
+                var str = '<li id="'+result[i].roomID+'">'+result[i].name+'</li>';
+                $(".zoneOne").append(str);
+            }
+            // 选择分区
+            $(".zoneOne li").on("click", function () {
+                var group = $(this).attr("id")
+                $(".room").find("i").text($(this).text());
+                filterDevice(group, currentCategory)
+            })
+
+            // 点击事件
+            $(".zoneMain div").on("click", function (e) {
+                e.stopPropagation();
+                var index = $(this).index();
+                if ($(".zoneList nav").eq(index).css("display") == "block") {
+                    $(".zoneList").hide();
+                    $(".zoneList nav").eq(index).hide();
+                    $(this).find(".zoneIcon").css({
+                        "background": "url(../fonts/icon_down.png) no-repeat right center",
+                        "background-size": "1.4rem auto"
+                    })
+                } else {
+                    $(".zoneList").show();
+                    $(".zoneList nav").eq(index).show().siblings().hide();
+                    $(this).find(".zoneIcon").css({
+                        "background": "url(../fonts/icon_up.png) no-repeat right center",
+                        "background-size": "1.4rem auto"
+                    }).parent().siblings().find(".zoneIcon").css({
+                        "background": "url(../fonts/icon_down.png) no-repeat right center",
+                        "background-size": "1.4rem auto"
+                    })
+                }
+            });
+        });
+
+        // 获取设备列表
+        plus.gatewayCmd.getDeviceList(function (data) {
+            if (data.length > 0) {
+                $(".get_list ul").html('')
+
+                console.log(data);
+                for (var i = 0; i < data.length; i++) {
+                    // 过滤可批量添加的设备
+                    if (data[i].type == "61" ||
+                        data[i].type == "62" ||
+                        data[i].type == "63" ||
+                        data[i].type == "Am" ||
+                        data[i].type == "An" ||
+                        data[i].type == "Ao" ||
+                        data[i].type == "Aj" ||
+                        data[i].type == "At" ||
+                        data[i].type == "Ai" ||
+                        data[i].type == "50" ||
+                        data[i].type == "16" ||
+                        data[i].type == "77" ||
+                        data[i].type == "65" ||
+                        data[i].type == "Ar" ||
+                        data[i].type == "80" ||
+                        data[i].type == "81" ||
+                        data[i].type == "Bt" ||
+                        data[i].type == "Bu" ||
+                        data[i].type == "Bv" ||
+                        data[i].type == "Bw" ||
+                        data[i].type == "Ca" ||
+                        data[i].type == "Cb" ||
+                        data[i].type == "Cl" ||
+                        data[i].type == "Cm" ||
+                        data[i].type == "Cn" ||
+                        data[i].type == "Au" ||
+                        data[i].type == "Ca" ||
+                        data[i].type == "Cb" ||
+                        data[i].type == "Bh" ||
+                        data[i].type == "Co") {
+
+                        handleDeviceData(data[i])
+
+                    }
+                }
+            }
+
+            checkCurrentIsSelectAll()
+
+            // 没有设备提示
+            if (Object.keys(devList).length == 0) {
+                $(".no_list").show()
+            }
+
+        })
+
+    })
+
+    // 返回方法
+    $(".back").on("click", function () {
+        goBack();
+    })
+    function goBack() {
+        info.setItem("flag", "0")
+
+        window.history.back(-1)
+        // window.location = "editScene.html"
+    }
+
+    // 处理单个设备的数据
+    function handleDeviceData(device) {
+        console.log(device)
+        // 被分享的不处理
+        if (device.relationFlag == '2' || device.relationFlag == '3' || device.isShared == true) {
+            return
+        }
+        // 处理数据
+        var name = device.name.indexOf("#$default$#") != -1 ? window.deviceList[device.type].name + device.name.split("#")[2] : device.name;
+        var icon = window.deviceList[device.type].icon;
+        var isOnline = device.isOnline
+        if (isOnline == undefined) {
+            if (device.mode == "2") {
+                isOnline = false;
+            } else {
+                isOnline = true;
+            }
+        }
+
+        var roomID = device.roomID
+        if (roomID == undefined) {
+            roomID = '-1'
+        }
+        var deviceModel = {
+            devID: device.devID,
+            isOnline: isOnline,
+            name: name,
+            roomID: roomID,
+            roomName: device.roomName,
+            category: device.cat,
+            type: device.type,
+            icon: icon,
+            isSelected: false
+        }
+
+        devList[device.devID] = deviceModel
+
+        // 绘制页面
+        drawDeviceCell(deviceModel)
+
+    }
+
+    // 绘制单个设备
+    function drawDeviceCell(deviceModel) {
+
+        var str = '<li data-id="' + deviceModel.devID+ '" data-type="' + deviceModel.type + '" data-category="' + deviceModel.category + '">' +
+            '<a style="width: 88%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' +
+            '<i class="left" style="background:url(' + deviceModel.icon + ') no-repeat center center;background-size:4.75rem auto;padding-left: 4%"></i>' +
+            '<div class="right">' +
+            '	<p>' + deviceModel.name + '</p>' +
+            '	<br />' +
+            '	<em>' + (deviceModel.isOnline ? lang_onLine : lang_offLine)  + '</em>' +
+            '	<span class="roomName" data-room="'+deviceModel.roomID+'"> [' + deviceModel.roomName + ']</span>' +
+            '</div>' +
+            '</a>' +
+            '<div class="'+ (deviceModel.isSelected ? 'is_sel' : 'un_sel') +'" style="float: right; width: 2.5rem;height: 2.5rem;margin-right: 1rem;margin-top: 1.75rem;">' +
+            '</li>'
+
+        $(".devicelist").append(str)
+
+        // 点击选中，处理数据
+        $(".devicelist li").unbind("click").on("click", function () {
+            console.log($(this).data("id"))
+            var model = devList[$(this).data("id")]
+            model.isSelected = !model.isSelected
+            $(this).children("div").removeClass((model.isSelected ? 'un_sel' : 'is_sel'))
+            $(this).children("div").addClass((model.isSelected ? 'is_sel' : 'un_sel'))
+
+            checkCurrentIsSelectAll()
+
+        })
+    }
+
+    // 全选按钮
+    $("#selectedAllBtn").on("click", function () {
+        $(".devicelist li").each(function () {
+            var model = devList[$(this).data("id")]
+            model.isSelected = !isSelectedAll
+            $(this).children("div").removeClass((model.isSelected ? 'un_sel' : 'is_sel'))
+            $(this).children("div").addClass((model.isSelected ? 'is_sel' : 'un_sel'))
+        })
+
+        checkCurrentIsSelectAll()
+
+    })
+
+    // 统计是否全选了,是否已选择了一项
+    function checkCurrentIsSelectAll() {
+        var result = true
+        var chooseOne = false
+        jQuery.each(devList, function(key, val) {
+            if (val.isSelected === true) {
+                chooseOne = true
+            }
+            if ( (val.roomID == currentGroup || currentGroup === "all") && (val.category == currentCategory || currentCategory == "0") ) {
+                if (val.isSelected === false) {
+                    result = false
+                }
+            }
+        });
+        isSelectedAll = result
+        isSelectedOne = chooseOne
+
+        if (isSelectedAll) {
+            $("#selectedAllBtn").html(unselect_all)
+        } else {
+            $("#selectedAllBtn").html(lang_OZ_TIPS2)
+        }
+
+        if (chooseOne) {
+            $("#finishScene").css('color','white');
+        } else {
+            $("#finishScene").css('color','#b4b4b4');
+        }
+    }
+
+    // 点击空白处取消
+    $(".zoneList").on("click", function () {
+        $(".zoneList").hide();
+        $(".zoneList nav").hide();
+        $(".zoneMain div").find("i").css({
+            "background": "url(../fonts/icon_down.png) no-repeat right center",
+            "background-size": "1.4rem auto"
+        })
+        return false
+    });
+
+    // 选择类别和分区
+    function filterDevice(group, category) {
+        currentGroup = group
+        currentCategory = category
+        $(".devicelist").html("")
+
+        var nodevice = true
+        jQuery.each(devList, function(key, val) {
+            if ( (val.roomID == currentGroup || currentGroup === "all") && (val.category == currentCategory || currentCategory == "0") ) {
+                drawDeviceCell(val)
+                nodevice = false
+            }
+        });
+
+        if (nodevice) {
+            $(".no_list").show()
+        } else {
+            $(".no_list").hide()
+        }
+
+        $(".devicelist").scrollTop(0)
+
+        checkCurrentIsSelectAll()
+
+
+    }
+
+    //完成
+    $("#finishScene").on("click", function () {
+        if (!isSelectedOne) return;
+
+        var selectedDevList = []  // 选中的设备
+        jQuery.each(devList, function(key, val) {
+            if ( val.isSelected == true ) {
+                selectedDevList.push(val)
+            }
+        });
+
+        info.setItem("batchAdd_slDevList", JSON.stringify(selectedDevList) )
+
+        window.location = "batchAdd_setStatus.html"
+    })
+
+</script>
+</html>

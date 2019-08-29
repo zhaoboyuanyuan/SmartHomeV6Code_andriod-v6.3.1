@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/widget_padding_vertical"
+    android:paddingLeft="@dimen/widget_padding_horizontal"
+    android:paddingRight="@dimen/widget_padding_horizontal"
+    android:paddingTop="@dimen/widget_padding_vertical">
+
+    <include layout="@layout/view_widget_title" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="@dimen/default_padding_normal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/default_padding_small"
+                    android:gravity="center_vertical"
+                    android:text="@string/Device_Ck_temperature"
+                    android:textColor="#666"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_tmp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/default_padding_normal"
+                    android:layout_toEndOf="@+id/tv_left"
+                    android:gravity="center"
+                    android:textColor="#000"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    tools:text="18" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toEndOf="@+id/tv_tmp"
+                    android:gravity="bottom"
+                    android:paddingBottom="4dp"
+                    android:text=" ℃"
+                    android:textColor="#000"
+                    android:textSize="17sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_left2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/default_padding_small"
+                    android:gravity="center_vertical"
+                    android:text="@string/Device_Widget_Oi_Speed"
+                    android:textColor="#666"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/default_padding_normal"
+                    android:layout_toEndOf="@+id/tv_left2"
+                    android:gravity="center"
+                    android:textColor="#000"
+                    android:textSize="17sp"
+                    tools:text="高" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="@dimen/default_padding_normal"
+            android:layout_marginStart="@dimen/default_padding_normal">
+
+            <ImageView
+                android:id="@+id/iv_switch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:src="@drawable/icon_switch_mode_off" />
+
+            <cc.wulian.smarthomev6.support.customview.ProgressRing
+                android:id="@+id/switch_progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                app:ringEndColor="@color/colorPrimary"
+                app:ringStartColor="#F7FAF5"
+                app:ringWidth="1.5dp" />
+        </FrameLayout>
+
+
+    </FrameLayout>
+</LinearLayout>

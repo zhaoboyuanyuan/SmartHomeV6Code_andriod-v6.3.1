@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="@dimen/widget_padding_vertical"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_widget_title" />
+
+    <FrameLayout
+        android:layout_marginTop="@dimen/default_padding_small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/widget_uei_linear_first"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/widget_uei_image_first"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center"
+                    android:padding="8dp"
+                    android:src="@drawable/icon_uei_widget_air" />
+
+                <TextView
+                    android:id="@+id/widget_uei_text_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:text="@string/Infraredtransponder_Airconditioner_Remotecontrol"
+                    android:textColor="@color/newSecondaryText"
+                    android:textSize="@dimen/widget_secondary_text_size"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/widget_uei_linear_second"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/widget_uei_image_second"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center"
+                    android:padding="8dp"
+                    android:src="@drawable/icon_uei_widget_air" />
+
+                <TextView
+                    android:id="@+id/widget_uei_text_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:text="@string/Infraredtransponder_Airconditioner_Remotecontrol"
+                    android:textColor="@color/newSecondaryText"
+                    android:textSize="@dimen/widget_secondary_text_size"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/widget_uei_linear_third"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/widget_uei_image_third"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center"
+                    android:padding="8dp"
+                    android:src="@drawable/icon_uei_widget_air" />
+
+                <TextView
+                    android:id="@+id/widget_uei_text_third"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:text="@string/Infraredtransponder_Airconditioner_Remotecontrol"
+                    android:textColor="@color/newSecondaryText"
+                    android:textSize="@dimen/widget_secondary_text_size"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/widget_uei_linear_more"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_area_more"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:layout_marginTop="@dimen/widget_margin_component"
+                    android:text="@string/Home_Edit_More"
+                    android:textColor="@color/newSecondaryText"
+                    android:textSize="@dimen/widget_secondary_text_size"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/widget_uei_root_add"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/default_padding_small"
+            android:background="@color/white">
+            <View
+                android:id="@+id/widget_uei_view_add"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:background="@drawable/selector_widget_23_add"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"/>
+            <TextView
+                android:id="@+id/widget_uei_text_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="@+id/widget_uei_view_add"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="@+id/widget_uei_view_add"
+                app:layout_constraintBottom_toBottomOf="@+id/widget_uei_view_add"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:drawableStart="@drawable/icon_ao_add"
+                android:drawablePadding="8dp"
+                android:textColor="@color/newSecondaryText"
+                android:text="@string/Home_Widget_Addremote"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toTopOf="@+id/widget_uei_view_add"
+                android:layout_marginTop="8dp"/>
+        </android.support.constraint.ConstraintLayout>
+    </FrameLayout>
+</LinearLayout>

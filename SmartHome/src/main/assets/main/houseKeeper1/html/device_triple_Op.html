@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <a class="back" href="javascript:window.history.back(-1);"></a>
+    <a id="setDeviceState_tittle" class="autoSwitchLanguager" href="javascript:;">设置设备状态</a>
+    <a class="complete" id="finishState" href="javascript:;"></a>
+</header>
+<section style="margin-top:6.4rem;">
+    <ul class="set_list">
+        <li><i></i></li>
+        <li><i></i></li>
+    </ul>
+    <div class="no_list">没有可选择的设备</div>
+</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var arr = [];
+    initlan();
+    plus.plusReady(function(){
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        plus.gatewayCmd.getDeviceInfo(info.getItem("deviceID"), function(result) {
+            devID = result.devID;
+            gwID = result.gwID;
+            devType = result.type;
+            devName = result.name;
+
+            getCategory(result);
+
+        });
+
+        function getCategory(data) {
+
+            var errorStr = "";
+            var attributes = data.endpoints[0].clusters[0].attributes;
+            for (var i = 0; i < attributes.length; i++) {
+                var attribute = attributes[i];
+                if(attribute.attributeId == 0x000B) {
+                    errorStr = attribute.attributeValue;
+                }
+            }
+            if(errorStr != "1") {
+                var endpointsAir = new Array();
+                var endpointsFreshAir = new Array();
+                var endpointsFloorHeat = new Array();
+                var categoryList = new Array();
+                var htmlStr = "";
+                for(var i = 0;i < data.endpoints.length;i++) {
+                    var endpoint = data.endpoints[i];
+                    if(endpoint.endpointNumber > 0 && endpoint.endpointNumber <= 320) {
+                        endpointsAir.push(endpoint);
+                    } else if(endpoint.endpointNumber > 320 && endpoint.endpointNumber <= 384) {
+                        endpointsFreshAir.push(endpoint);
+                    } else if(endpoint.endpointNumber > 384 && endpoint.endpointNumber <= 448) {
+                        endpointsFloorHeat.push(endpoint);
+                    }
+                }
+                if(endpointsAir.length > 0) {
+                    var categoryData = {};
+                    categoryData.type = "0";
+                    categoryList.push(categoryData);
+                }
+                if(endpointsFreshAir.length > 0) {
+                    var categoryData = {};
+                    categoryData.type = "1";
+                    categoryList.push(categoryData);
+                }
+                if(endpointsFloorHeat.length > 0) {
+                    var categoryData = {};
+                    categoryData.type = "2";
+                    categoryList.push(categoryData);
+                }
+                if(categoryList.length > 0) {
+                    $(".no_list").hide();
+                    $(".set_list").html("");
+                    for(var i = 0; i < categoryList.length; i++) {
+                        var type = categoryList[i].type;
+                        var categoryName = "空调";
+                        if(type == "1") {
+                            categoryName = "新风";
+                        } else if(type == "2") {
+                            categoryName = "地暖";
+                        }
+                        htmlStr = htmlStr + '<li id="' + type +'">' + categoryName + '<i style="color: #E2E2E2;"></i></li>';
+                    }
+                    $(".set_list").append(htmlStr);
+                    $(".set_list li").on("click", function() {
+                        var type = $(this).attr("id");
+                        window.location = "device_triple_choose.html?type=" + type;
+                    })
+
+                } else {
+                    $(".no_list").show();
+                    $(".no_list").innerHTML("未检测到有空调室内机、新风或地暖设备接入，如已接入，请检查设备线路连接是否异常");
+                }
+            } else {
+                $(".no_list").show();
+                $(".no_list").innerHTML("该设备未经过出厂注册");
+            }
+        }
+    })
+</script>
+</html>

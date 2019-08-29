@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加设备_Bo_02</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/setState.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a class="back_addScene" href="javascript:history.back(-1)"></a>
+				<a href="javascript:;" class="addDoorC autoSwitchLanguager" id="addDevice_Bo_title">添加二路输出型翻译器02型</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section style="width: 100%;">
+			<section style="width: 100%;text-align: center;">
+				<img style="width: 19.4rem;margin-top: 4rem;" src="../fonts/add_Bo_02.png" />
+			</section>
+			<div class="add_06_step" style="width: 100%;height: 15rem;text-align:center;margin-top: 3.7rem;">
+				<span class="autoSwitchLanguager" id="addDevice_Bo_01">快击SET键4次，指示灯开始闪烁。添加成功后，指示灯长亮2秒后熄灭。</span>
+			</div>
+		</section>
+		<section class="iphoneX9_4" style="position: absolute; top: 7rem;right: 10px">
+			<canvas id="canvas" style="width:8rem;height:8rem;right: 0px;">
+		    </canvas>
+		</section>
+		<section class="addSensorBtn">
+			<a class="autoSwitchLanguager" id="searchScene_cancal" href="javascript:;" >取消</a>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/timer_canvas.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+        initlan()
+		var info = window.sysfun;
+		info.init("V6addDevice");
+		info.clear();
+        info.setItem("type", "Bo");
+//		var lang_name_43 = "烟雾探测器"
+		var time_canvas = 60;
+		picture(60);
+		var timer = setInterval(function() {
+			if(time_canvas <= 0) {
+				window.clearInterval(timer);
+				window.location = "addDevice_fail.html?name="+languageUtil.getResource("device_Bo_name");
+			}
+			picture(60);
+			time_canvas = time_canvas - 1;
+		}, 1000);
+		plus.plusReady(function() {
+            info.setItem("name", languageUtil.getResource("device_Bo_name"));
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				if(result.cmd == "500") {
+					if(result.mode == 4 && result.type == "Bo" && result.endpoints[0].clusters[0].clusterId == 1280) {
+						info.setItem("decInfo",JSON.stringify(result));
+				        window.location = "addDevice_succ.html?name="+languageUtil.getResource("device_Bo_name");
+					}
+				}
+			});
+			$(".addSensorBtn").unbind("click").on("click", function() {
+				window.location = "addDeviceNew.html";
+			})
+		})
+	</script>
+</html>

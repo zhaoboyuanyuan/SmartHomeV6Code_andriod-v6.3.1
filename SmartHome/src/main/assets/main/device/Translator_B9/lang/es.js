@@ -1,0 +1,49 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_B9_name = "Traductor bidireccional (entrada y salida)";
+$lang.device_B9_way_in = "Vía (entrada)";
+$lang.device_B9_way_out = "Vía (salida)";
+$lang.device_B9_Rename_hint = "Nota: mantenga presionado para cambiar el nombre";
+$lang.device_B9_Alarm = "Mensaje de alarma";
+$lang.device_B9_more = "Más";
+$lang.device_B9_out_of_time = "Conexión fuera de tiempo";
+$lang.device_B9_know = "Obtener";
+$lang.device_B9_Rename = "Renombrar";
+$lang.device_B9_cancel = "Cancelar";
+$lang.device_B9_ok = "Confirmar";
+$lang.device_B9_fortify = "Asegurar";
+$lang.device_B9_disarming = "Desasegurar";
+$lang.device_B9_fortifying = "Armado ";
+$lang.device_B9_disarmed = "Desasegurado";
+$lang.device_B9_normal = "Normal";
+$lang.device_B9_abnormal = "Alarma";
+$lang.device_B9_add_button = "Agregar botón de control";
+$lang.device_B9_button_name_status = "Nombre y estado del botón";
+$lang.device_B9_name_1 = "Nombre";
+$lang.device_B9_enter_name = "Ingrese nombre";
+$lang.device_B9_status = "Estado";
+$lang.device_B9_action = "Acción";
+$lang.device_B9_action_close = "Cerrar";
+$lang.device_B9_action_open = "Abrir ";
+$lang.device_B9_action_close_open = "Cierra y luego interrumpir";
+$lang.device_B9_action_open_close = "interrumpir y luego cierra";
+$lang.device_B9_close_time = "Hora de cierre";
+$lang.device_B9_open_time = "Hora de interrumpir";
+$lang.device_B9_s = "Segundo";
+$lang.device_B9_save = "Guardar";
+$lang.device_B9_re_edit = "Reeditar";
+$lang.device_B9_delete = "Borrar";
+$lang.device_B9_delete_sure = "¿Confirma eliminar?";
+$lang.device_B9_sent = "Comando enviado";
+$lang.device_B9_Offline = "Dispositivo offline";
+$lang.device_B9_set = "Configuración";
+$lang.device_B9_normal_set_hint = "Nota: no hay alarma bajo este estado";
+$lang.Device_B9_Details_Loading2 = "Cargando…";
+$lang.device_B9_normal_set = "Configuración normal de entrada";
+$lang.device_B9_initial_action = "Configuración de la acción inicial de salida";
+$lang.device_B9_initial_action_hint = "Nota: cuando la acción configurada para el botón contradice la acción de respuesta del dispositivo， el usuario puede ajustar la acción inicial para mantenerla constante.";
+$lang.device_B9_noData = "Sin datos";
+$lang.device_B9_1_way = "Una pandilla";

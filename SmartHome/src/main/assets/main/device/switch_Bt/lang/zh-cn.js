@@ -1,0 +1,30 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_Bt_name = "智敬联排智能插座";
+$lang.device_Bw_on = "已开启";
+$lang.device_Bw_off = "已关闭";
+$lang.device_Bw_find = "设备指示灯将慢闪3次，请查找...";
+$lang.device_Bw_control = "多联多控";
+$lang.device_Bw_control_help = "通过设置多联多控，可实现两个智能开关对一个用电设备的控制，广泛用于楼梯、走廊、客厅、卧室等照明方案中。由于采用无线连接，安装方便，操作简单，免去凿墙布线的烦恼。";
+$lang.device_Bw_choose_modus = "选择控制形式";
+$lang.device_Bw_subordinate = "被其他设备控制";
+$lang.device_Bw_Binding = "正在绑定，请稍后…";
+$lang.device_Bw_Binding_0 = "请于20S内操作其他开关";
+$lang.device_Bw_Binding_1 = "1.按住SET键不动";
+$lang.device_Bw_Binding_2 = "2.快击1次需要控制的按键";
+$lang.device_Bw_Binding_3 = "3.松开SET键";
+$lang.device_Bw_Binding_4 = "4.联排开关请进入设备更多页，设置多联多控";
+$lang.device_Bw_Binding_5 = "注：绑定成功，指示灯闪烁3次，绑定失败，指示灯闪烁6次";
+$lang.device_Bw_Binding_success = "绑定成功";
+$lang.device_Bw_Binding_failure = "绑定失败，请重试";
+$lang.device_Bw_time_out = "连接超时";
+$lang.offLine = "设备已离线";
+$lang.offLine_1 = "离线";
+$lang.onLine = "在线";
+$lang.group_text = "未分区";
+$lang.device_switch = "开关";
+$lang.Add_batches_i_know = "我知道了";
+$lang.Log = "日志";

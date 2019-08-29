@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/newBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/device_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_device_icon" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/item_device_info_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+        <View
+            android:id="@+id/bottom_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line"
+            android:visibility="invisible" />
+
+        <View
+            android:id="@+id/lineChannel_top"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/v6_line"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:id="@+id/layout_signal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0.1dp"
+            android:background="@drawable/bg_ripper_effect"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/item_signal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="7dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/Mine_Signal_strength"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <TextView
+                android:id="@+id/tv_signal_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="7dp"
+                android:gravity="end"
+                android:textColor="@color/newSecondaryText"
+                android:textSize="@dimen/mine_text_size"
+                tools:text="-45dB" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutChannel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/bg_ripper_effect"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/item_channel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="7dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/Channel_Title_01"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/image_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/system_intent_right" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/lineChannel_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/layoutDebug"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_ripper_effect"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="7dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="启动网关调试"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mine_text_size" />
+
+            <ImageView
+                android:id="@+id/imageDebug"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/icon_off" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/lineDebug"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/item_update_gateway"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_ripper_effect"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:text="@string/Cateyemini_Setup_Upgrade"
+            android:textColor="@color/v6_green"
+            android:textSize="@dimen/mine_text_size"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

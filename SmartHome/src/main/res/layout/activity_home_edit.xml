@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dslv="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:text="@string/Home_Edit_Detail"
+        android:textColor="@color/v6_text_gray"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!--<cc.wulian.smarthomev6.support.customview.DragSortListView.DragSortListView
+                android:id="@+id/list_drag_the_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dividerHeight="1px"
+                dslv:click_remove_id="@+id/click_remove"
+                dslv:collapsed_height="1px"
+                dslv:drag_enabled="true"
+                dslv:drag_handle_id="@+id/drag_handle"
+                dslv:drag_scroll_start="0.33"
+                dslv:drag_start_mode="onDown"
+                dslv:float_alpha="0.6"
+                dslv:remove_enabled="true"
+                dslv:remove_mode="clickRemove"
+                dslv:slide_shuffle_speed="0.3" />-->
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/home_edit_recycler_sort"
+                android:layout_width="match_parent"
+                android:scrollbars="none"
+                android:background="@color/white"
+                android:layout_height="wrap_content"
+                app:layoutManager="LinearLayoutManager"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:gravity="center_vertical"
+                android:text="@string/Home_Edit_More"
+                android:paddingLeft="15dp"
+                android:textColor="@color/v6_text_gray"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/home_edit_add_recyclerview"
+                android:layout_width="match_parent"
+                android:scrollbars="none"
+                android:background="@color/white"
+                android:layout_height="wrap_content"
+                app:layoutManager="LinearLayoutManager"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

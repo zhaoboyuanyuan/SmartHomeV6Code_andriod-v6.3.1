@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/tv_tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_padding_large"
+            android:layout_marginLeft="@dimen/default_padding_small"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:layout_marginTop="@dimen/config_wifi_margin_top"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_prompt"
+                style="@style/config_wifi_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/add_deviceLC_connection_wifi"
+                android:textColor="@color/device_config_wifi_tips_color" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_config_wifi_img"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_tips"
+            android:layout_margin="@dimen/default_margin_normal">
+
+            <ImageView
+                android:id="@+id/iv_oval_left_device"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_wifi_config_left" />
+
+            <ImageView
+                android:id="@+id/iv_oval_rigth_device"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_wifi" />
+
+            <ImageView
+                android:id="@+id/iv_config_wifi_step_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/wifi_config_anim" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_password_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/default_padding_large"
+            android:gravity="center"
+            android:text="@string/add_deviceLC_wrong_password"
+            android:textColor="@color/v6_green"
+            android:textSize="@dimen/default_text_size" />
+
+    </RelativeLayout>
+
+</LinearLayout>

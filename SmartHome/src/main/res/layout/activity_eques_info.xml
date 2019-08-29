@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/rl_setting_model"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/white">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Cateyemini_Setup_Equipmenttype" />
+
+        <TextView
+            android:id="@+id/tv_setting_model"
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:gravity="center_vertical"
+            android:text="@string/Cateyemini_Adddevice_Cateyemini"
+            android:textColor="@color/v6_text_gray" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_setting_number"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_setting_number_hint"
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Device_Number" />
+
+        <TextView
+            android:id="@+id/tv_setting_number"
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:layout_toRightOf="@id/tv_setting_number_hint"
+            android:ellipsize="middle"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:textColor="@color/v6_text_gray" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_setting_version"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Cateyemini_Setup_FirmwareVersion" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_setting_version"
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/default_padding_small"
+                android:gravity="center_vertical"
+                android:textColor="@color/v6_text_gray" />
+
+            <Button
+                android:id="@+id/btn_setting_version"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginRight="@dimen/default_padding_small"
+                android:background="@drawable/shape_btn_active_bg"
+                android:text="@string/Cateyemini_Setup_Upgrade"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_setting_wifi"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/WIFI_Connected" />
+
+        <TextView
+            android:id="@+id/tv_setting_wifi"
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:gravity="center_vertical"
+            android:textColor="@color/v6_text_gray" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_setting_wifi_level"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/WIFI_Strength" />
+
+        <TextView
+            android:id="@+id/tv_setting_wifi_level"
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:gravity="center_vertical"
+            android:textColor="@color/v6_text_gray" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_setting_wifi_mac"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/MAC_Location" />
+
+        <TextView
+            android:id="@+id/tv_setting_wifi_mac"
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="@dimen/default_padding_small"
+            android:gravity="center_vertical"
+            android:textColor="@color/v6_text_gray" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+    </RelativeLayout>
+</LinearLayout>

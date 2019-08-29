@@ -1,0 +1,32 @@
+cancel: 取消
+confirm: 确定
+maintitle: 短信通知
+maincelltitle1: 防胁迫开锁通知
+maincelltitle2: 系统锁定通知
+maincelltitle3: 自检通知
+maincelltitle4: 门铃通知
+sysSmsDesc: 当有人在门锁前连续输入密码或指纹、NFC验证错误，导致门锁锁定时，系统会发送信息通知关联人员及时处理
+ringSmsDesc: 当有客人来访，触发门铃告警时，系统会发送信息通知关联人员及时处理
+userCountDesc: 发给以下用户   （{userCount}/3）
+delDesc: 确定要删除吗？
+phoneErr: 格式错误
+helpSmsDesc: 当遇到危险如有人劫持、跟踪等紧急情况时，您可使用防胁迫方式开锁，系统会向关联人员发送求救信息，协助脱身。请牢记防胁迫密码，同时为避免引起不必要麻烦，请只在最需要时刻使用
+setHelpUser: 设置防胁迫用户
+helpSmsTip: 注：您可在锁体新增一个管理员密码专用于防胁迫方式开锁
+phoneAlertPlacehold: 输入手机号码
+phoneAlertTitle: 添加用户
+selfTestDesc: 系统会在您设置的时间自动检查门锁状态，若发现未上保险或未反锁，则发送信息通知关联人员及时处理
+repeat: 重复
+checkTime: 检测时间
+adminPassword: 管理员密码
+inputPassword: 请输入密码
+passErr: 密码错误请重试
+admin: 管理员
+
+
+
+
+
+
+
+

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>翻译器</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+    <link rel="stylesheet" type="text/css" href="../../source/mui/css/mui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header" style="position:fixed;left:0;top:0;z-index:10000;">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="device_A1_name" href="javascript:;">四路输入型翻译器</a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<section class="deviceMain">
+    <ul class="childDeviceList">
+        <!--<li id="1">-->
+        <!--<span>一路</span>-->
+        <!--<span data-status="fortify">-->
+        <!--<i class="disarmedBtn"></i>-->
+        <!--<i class="fortifyBtn"></i>-->
+        <!--</span>-->
+        <!--</li>-->
+        <!--<li id="2">-->
+        <!--<span>二路</span>-->
+        <!--<span data-status="disarmed">-->
+        <!--<i class="disarmedBtn"></i>-->
+        <!--<i class="fortifyBtn"></i>-->
+        <!--</span>-->
+        <!--</li>-->
+        <!--<li id="3">-->
+        <!--<span>紧急按钮</span>-->
+        <!--<span data-status="fortify">-->
+        <!--<i class="disarmedBtn"></i>-->
+        <!--<i class="fortifyBtn"></i>-->
+        <!--</span>-->
+        <!--</li>-->
+        <!--<li id="4">-->
+        <!--<span>厨房烟感</span>-->
+        <!--<span data-status="disarmed">-->
+        <!--<i class="disarmedBtn"></i>-->
+        <!--<i class="fortifyBtn"></i>-->
+        <!--</span>-->
+        <!--</li>-->
+    </ul>
+    <div class="devicePs autoSwitchLanguager" key="device_A1_Rename_hint">注：长按可进行重命名</div>
+</section>
+<section class="alarmMessage">
+    <div class="alarmTitle">
+        <strong class="autoSwitchLanguager" key="device_A1_Alarm">报警消息</strong>
+        <span id="goToAlarm" class="autoSwitchLanguager" key="device_A1_more">更多</span>
+    </div>
+    <ul class="alarmList">
+        <!--<li>-->
+            <!--<span>紧急按钮有报警</span>-->
+            <!--<span>2018.04.20 10:00</span>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<span>超超超超超超超超长名字的紧急按钮有报警</span>-->
+            <!--<span>2018.04.20 10:00</span>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<span>紧急按钮有报警</span>-->
+            <!--<span>2018.04.20 10:00</span>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<span>紧急按钮有报警</span>-->
+            <!--<span>2018.04.20 10:00</span>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<span>紧急按钮有报警</span>-->
+            <!--<span>2018.04.20 10:00</span>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<span>紧急按钮有报警</span>-->
+            <!--<span>2018.04.20 10:00</span>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<span>紧急按钮有报警</span>-->
+            <!--<span>2018.04.20 10:00</span>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<span>紧急按钮有报警</span>-->
+            <!--<span>2018.04.20 10:00</span>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<span>紧急按钮有报警</span>-->
+            <!--<span>2018.04.20 10:00</span>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<span>紧急按钮有报警</span>-->
+            <!--<span>2018.04.20 10:00</span>-->
+        <!--</li>-->
+        <!--<li class="notAlarm">暂无告警消息</li>-->
+    </ul>
+</section>
+<section class="mask_name">
+    <div class="device_rename" id="rename">
+        <h5 key="device_A1_Rename" class="autoSwitchLanguager name">重命名</h5>
+        <input id="input_rename" type="text" maxlength="20" key="device_A1_Rename" class="autoSwitchLanguager" placeholder="重命名">
+        <div class="device_btn">
+            <span id="rename_cancel" key="device_A1_cancel" class="autoSwitchLanguager">取消</span>
+            <span id="rename_ok" key="device_A1_ok" class="autoSwitchLanguager">确认</span>
+        </div>
+    </div>
+</section>
+<section class="saveToast" style="display:none;">
+    <div>
+        <i><em class="rotate"></em></i>
+        <p key="Device_A1_Details_Loading2" class="autoSwitchLanguager">正在加载...</p>
+    </div>
+</section>
+<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" id="device_A1_Offline">设备已离线</span></section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var devID,gwID,appID;
+    var info = window.sysfun;
+    info.init("device_A1");
+    mui.init({
+        gestureConfig:{
+            longtap:true,
+            hold:true,
+            release:true
+        }
+    });
+    //返回到设备详情页
+    $("#back").on("click",function(){
+        plus.tools.back(function() {})
+    });
+    //跳转到更多页面
+    $(".more").on("click",function(){
+        plus.tools.more(moreConfig, function() {})
+    });
+    $("#goToAlarm").on("click",function(){
+        plus.tools.goAlarm(function(){});
+    });
+    $(".saveToast").show();
+    plus.plusReady(function(){
+        plus.gatewayCmd.getCurrentAppID(function(result){
+            appID = result;
+        });
+        plus.gatewayCmd.getDeviceInfo(null,function(data){
+            if(data.mode == 2){
+                $(".saveToast").hide();
+                $(".mask_layer").show();
+            }else{
+                $(".mask_layer").hide();
+            }
+            var name = data.name.indexOf("#$default$#") != -1 ? lang_name_A1 + data.name.split("#")[2]:data.name;
+            $(".deviceName").html(name);
+            console.log(JSON.stringify(data));
+            devID = data.devID;
+            gwID = data.gwID;
+            modeAnalysis500(data);
+            sendCmd_501(gwID,devID,appID,0,0x0102,"");
+            getMoreConfig(devID);
+        });
+        plus.gatewayCmd.newDataRefresh(function(data){
+            if(data.cmd == "500" && data.devID == devID){
+                var name = data.name.indexOf("#$default$#") != -1 ? lang_name_A1 + data.name.split("#")[2]:data.name;
+                $(".deviceName").html(name);
+                modeAnalysis500(data);
+            }else if(data.cmd == "502" && data.devID == devID){
+                modeAnalysis502(data)
+            }
+        });
+        plus.tools.getLoginType(function(result){
+            if(result == "101"){
+                //网关登录
+                $(".alarmMessage").hide();
+            }else if(result == "100"){
+                //账号登录
+                $(".alarmMessage").show();
+                $(".alarmList").html("");
+                //接下来执行 报警消息请求
+                var endTime = new Date().getTime();
+                var startTime = endTime - 7*24*60*60*1000;
+                var param = {
+                    "deviceId":devID,
+                    "deviceType":"A1",
+                    "messageCode":"0102101",
+                    "dataType":"1",
+                    "startTime":startTime+"",
+                    "endTime":endTime+""
+                };
+                plus.gatewayCmd.getAlarmList(param, function(data){
+                    if(!data || data == ''){
+                        $(".alarmList").append('<li class="notAlarm">'+lang_device_noData+'</li>');
+                        return;
+                    }
+                    var len = data.length >= 8 ? 8 : data.length;
+                    for(var i=0;i<len;i++){
+                        var time = new Date(parseInt(data[i].time)).Format("yyyy.MM.dd hh:mm");
+                        var str = '<li>' +
+                                '<span>'+data[i].message+'</span>' +
+                                '<span>'+time+'</span>' +
+                            '</li>';
+                        $(".alarmList").append(str)
+                    }
+//                    alert(JSON.stringify(data));
+                })
+            }
+        });
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header_top")[0].style.paddingTop = "4rem";
+        }
+    });
+    function modeAnalysis500(data){
+        $(".saveToast").hide();
+        switch(data.mode){
+            case 2:
+                $(".mask_layer").show();
+                break;
+            case 0:
+            case 1:
+            case 4:
+                childDeviceList(data);
+                break;
+        }
+    }
+    function childDeviceList(data){
+        if(data){
+            if(data.endpoints){
+                if(data.endpoints.length === 1){
+                    if($(".childDeviceList").find("li").length === 0){
+                        drawLi(data.endpoints);
+                    }else{
+                        var endpointStatus = data.endpoints[0].endpointStatus == "0" ? "disarmed" : "fortify";
+                        $("#"+data.endpoints[0].endpointNumber).find("span").eq(1).attr("data-status",endpointStatus);
+                    }
+                }else{
+                    var endpoints = data.endpoints;
+                    $(".childDeviceList").html(" ");
+                    drawLi(endpoints);
+                }
+                //单击li进入详情页
+                mui(".childDeviceList").on("click", 'li', function(e){
+                    event.stopPropagation();
+                    var endpointNumber = parseInt($(this).attr("id"));
+                    var target = e.target;
+                    var _thisClass = target.getAttribute("class");
+                    var _thisParentStatus = target.parentNode.getAttribute("data-status");
+                    if(_thisClass.indexOf("clickBtn") != -1){
+                        if(_thisClass.indexOf("disarmedBtn") != -1 && _thisParentStatus != "disarmed"){
+//                          console.log("切换撤防");
+                            //发送502撤防命令
+                            $(".saveToast").show();
+                            sendCmd_502(gwID,devID,0,endpointNumber,"0")
+                        }else if(_thisClass.indexOf("fortifyBtn") != -1 && _thisParentStatus != "fortify"){
+//                          console.log("切换设防");
+                            //发送502设防命令
+                            $(".saveToast").show();
+                            sendCmd_502(gwID,devID,0,endpointNumber,"1")
+                        }else{
+//                          console.log("不可切换状态");
+                        }
+                    }else{
+                        var name = $(this).find("span:first-child").html();
+                        info.setItem("name",name);
+                        window.location = "translatorDetail.html?endpointNumber=" + endpointNumber
+                    }
+                });
+                //长按li进行重命名
+                mui(".childDeviceList").on("longtap", 'li', function(event){
+                    event.stopPropagation();
+                    var endpointNumber = $(this).attr("id");
+                    var name = $(this).find("span:first-child").html();
+                    deviceRename(endpointNumber,name)
+                });
+            }
+        }
+    }
+    function drawLi(endpoints){
+        for(var i in endpoints){
+            var endpointStatus = endpoints[i].endpointStatus == "0" ? "disarmed" : "fortify";
+            var endpointName = endpoints[i].endpointName ? endpoints[i].endpointName : endpoints[i].endpointNumber+lang_device_way;
+            var str = '<li class="listLi" id="'+endpoints[i].endpointNumber+'">'
+                +  '<span class="listSpan">'+endpointName+'</span>'
+                +  '<span class="listSpan" data-status="'+endpointStatus+'">'
+                +  '<i class="disarmedBtn clickBtn"></i>'
+                +  '<i class="fortifyBtn clickBtn"></i>'
+                +  '</span>'
+                +  '</li>';
+            $(".childDeviceList").append(str);
+        }
+    }
+    function modeAnalysis502(data){
+        $(".saveToast").hide();
+        var id = data.endpointNumber;
+        switch(data.mode){
+            case 0:
+                var status = data.endpointStatus == "0" ? "disarmed" : "fortify";
+                $("#"+id).find("span:last-child").attr("data-status",status);
+                break;
+            case 2:
+                $("#"+id).find("span:first-child").html(data.endpointName);
+                break;
+        }
+    }
+    //弹出重命名输入框
+    function deviceRename(num,name){
+        $(".mask_name").show();
+        $(".mask_name").attr("data-id",num);
+        $("#input_rename").val(name);
+    };
+    //input聚焦时清空input框
+    $("#input_rename").on("focus",function(){
+        $("#input_rename").val("");
+    });
+    //重命名确认及取消click事件
+    mui(".device_btn").on("tap", "#rename_cancel",function(e){
+        e.stopPropagation();
+        $(".mask_name").hide();
+        $(".mask_name").attr("data-id","");
+        $("#input_rename").val("");
+        $("#input_rename").blur();
+    });
+    //重命名确认click 进行验证及发送修改昵称命令
+    mui(".device_btn").on("tap", "#rename_ok",function(e){
+        e.stopPropagation();
+        var endpointNumber = parseInt($(".mask_name").attr("data-id"));
+        if($("#input_rename").val().trim() !== ''){
+            var value = $("#input_rename").val().replace(/(^\s*)|(\s*$)/g,'');
+            sendCmd_502(gwID,devID,2,endpointNumber,value);
+            $(".saveToast").show();
+            $("#input_rename").val("");
+            $(".mask_name").hide();
+            $(".mask_name").attr("data-id","");
+            $("#input_rename").blur();
+        }
+    });
+    function sendCmd_501(gwID,devID,appID,endpointNumber,commandId,parameter){
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        jsonData.endpointNumber = endpointNumber;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+    //设备设防撤防控制502
+    function sendCmd_502(gwID,devID,mode,endpointNumber,state){
+        var dataJson = {
+            "cmd":"502",
+            "gwID":gwID,
+            "mode":mode,
+            "devID":devID,
+            "endpointNumber":endpointNumber
+        };
+        if(mode == 0){
+            dataJson.endpointStatus = state;
+        }else if(mode == 2){
+            dataJson.endpointName = state;
+        }
+        plus.gatewayCmd.controlDevice(dataJson,function(){})
+    }
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+</script>
+</html>

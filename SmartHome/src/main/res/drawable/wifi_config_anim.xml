@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false" >
+
+    <item
+        android:drawable="@drawable/xiaodian2_2x"
+        android:duration="1000"/>
+    <item
+        android:drawable="@drawable/xiaodian3_2x"
+        android:duration="1000"/>
+  <item
+        android:drawable="@drawable/xiaodian4_2x"
+        android:duration="1000"/>
+    <item
+        android:drawable="@drawable/xiaodian5_2x"
+        android:duration="1000"/>
+
+</animation-list>

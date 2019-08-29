@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/v5ToV6.css" />
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body style="background:#fff;">
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="autoSwitchLanguager" key="Device_upgrade_ing" href="javascript:;" >v5网关升级</a>
+        <a href="javascript:;"></a>
+    </div>
+</header>
+<section class="gwMain">
+    <div style="position: absolute; top: 12rem;left:50%;transform: translateX(-50%);-webkit-transform: translateX(-50%)">
+        <canvas id="canvas" style="width:15rem;height:15rem;right: 0px;">
+        </canvas>
+    </div>
+    <p class="otherTips autoSwitchLanguager" key="Device_upgrade_1_2" style="text-align:center;padding-top:20rem;font-size:1.5rem;">升级过程大约1-2分钟，请勿断电断网</p>
+</section>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/timer_canvas.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var deviceId = getUrlParam("deviceId");
+    var model = getUrlParam("model");
+    var time_canvas = 180;
+    picture(180);
+    plus.plusReady(function(){
+        var timer = setInterval(function () {
+            if (time_canvas <= 0) {
+                window.clearInterval(timer);
+                if(model === "v5"){
+                    window.location = "gw_v5ToV6_02.html?deviceId="+deviceId;
+                }else if(model === "v6"){
+                    window.location = "gw_v5ToV6_fail.html?deviceId="+deviceId;
+                }
+            }
+            picture(180);
+            time_canvas = time_canvas - 1;
+        }, 1000);
+        $("#back").unbind("click").bind("click",function(){
+            window.location = "gw_v5ToV6_02.html?deviceId="+deviceId
+        });
+        plus.gatewayCmd.newDataRefresh(function(data){
+            // alert(data);
+            if(data.cmd === "01" && deviceId === data.gwID){
+                window.clearInterval(timer);
+                if(model === "v5"){
+                    window.location = "gw_v5ToV6_02.html?deviceId="+deviceId
+                }else if(model === "v6"){
+                    plus.tools.goToBindGateway(deviceId,function(){});
+                }
+            }
+        })
+    });
+</script>
+</body>
+</html>

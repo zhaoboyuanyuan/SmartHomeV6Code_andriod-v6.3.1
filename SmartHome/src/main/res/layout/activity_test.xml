@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/newBackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:text="Build Type"
+                android:textColor="@color/newPrimaryText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/test_text_build_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end|center_vertical"
+                tools:text="开发" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/test_linear_domain_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:text="Domain"
+                    android:textColor="@color/newPrimaryText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/test_text_domain"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
+                    tools:text="开发" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/test_linear_domain_ctrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/newBackground"
+                android:orientation="horizontal"
+                android:paddingTop="1dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/button_change_2_dev"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:onClick="onClick"
+                    android:padding="8dp"
+                    android:text="开发" />
+
+                <TextView
+                    android:id="@+id/button_change_2_test"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:onClick="onClick"
+                    android:padding="8dp"
+                    android:text="测试" />
+
+                <TextView
+                    android:id="@+id/button_change_2_release"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:onClick="onClick"
+                    android:padding="8dp"
+                    android:text="正式" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/test_linear_remote_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:text="远程页面调试"
+                    android:textColor="@color/newPrimaryText"
+                    android:textSize="16sp" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/test_switch_remote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/test_edit_remote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="不使用远程页面调试"
+                android:imeOptions="actionDone"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:singleLine="true"
+                android:text="http://172.19.5.208:8080"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:text="Project"
+                    android:textColor="@color/newPrimaryText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/test_text_project"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
+                    tools:text="wulian" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="仅限本次修改, 重启后恢复"
+                android:textSize="12sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/test_recycler_project"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:text="设备列表"
+                android:textColor="@color/newPrimaryText"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/test_recycler_devices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="GridLayoutManager"
+                app:spanCount="5" />
+
+            <TextView
+                android:id="@+id/test_text_device_report"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="start|center_vertical"
+                tools:text="开发" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_tv_controller"
+            style="@style/TestButton"
+            android:text="电视遥控器" />
+
+        <Button
+            android:id="@+id/button_bgm"
+            style="@style/TestButton"
+            android:text="冰箱" />
+
+        <Button
+            android:id="@+id/button_tv_box"
+            style="@style/TestButton"
+            android:text="机顶盒遥控器" />
+
+        <Button
+            android:id="@+id/button_safedog"
+            style="@style/TestButton"
+            android:text="安全狗" />
+
+        <Button
+            android:id="@+id/button_print_devices"
+            style="@style/TestButton"
+            android:text="打印 设备信息" />
+
+        <Button
+            android:id="@+id/button_assets"
+            style="@style/TestButton"
+            android:text="复制assets到external" />
+
+        <cc.wulian.smarthomev6.support.customview.InformationChannelView
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

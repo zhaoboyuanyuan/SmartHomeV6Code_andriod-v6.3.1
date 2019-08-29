@@ -1,0 +1,37 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_D9_name = "梦想之花电台";
+$lang.Radio_Shuffle_Playback = "随机播放";
+$lang.Radio_songs = "首";
+$lang.Radio_volume = "音量调节";
+$lang.Radio_Countdown = "倒计时";
+$lang.Radio_Countdown_close = "未启动倒计时";
+$lang.Radio_Countdown_no = "不开启";
+$lang.Radio_30_min = "30分钟";
+$lang.Radio_60_min = "60分钟";
+$lang.Radio_120_min = "120分钟";
+$lang.Radio_customize = "自定义";
+$lang.Radio_open_later = "分钟后开始播放";
+$lang.Radio_close_later = "分钟后停止播放";
+$lang.Radio_customize_time = "自定义时间";
+$lang.Radio_min = "分钟";
+$lang.Radio_ok = "确定";
+$lang.Radio_customize_time_out = "自定义时间超出上限，最大为120分钟";
+$lang.Radio_play_Start = "开始播放";
+$lang.Radio_play_stop = "停止播放";
+$lang.Radio_no_content_yet = "暂无内容，请点击右上角“+”添加";
+$lang.Radio_is_not_supported = "梦想之花内部设备，不支持此操作";
+$lang.Radio_delete = "删除";
+$lang.Radio_Added_successfully = "加入播放列表成功";
+$lang.Radio_Added_failed = "加入播放列表失败";
+$lang.Radio_Search = "搜索";
+$lang.Radio_Search_search_results = "个搜索结果";
+$lang.Radio_Add_to_play_queue = "加入播放队列";
+$lang.Radio_Classification = "分类";
+$lang.Radio_Other_categories = "其他分类";
+$lang.Radio_set_all = "全选";
+$lang.offLine = "设备已离线";
+$lang.Radio_name_title = "电台";

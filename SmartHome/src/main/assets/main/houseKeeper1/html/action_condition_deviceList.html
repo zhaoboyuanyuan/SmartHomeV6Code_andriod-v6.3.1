@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设备列表</title>
+		<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/scene.css" />
+		<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<a href="javascript:window.history.back(-1);"></a>
+			<a href="javascript:;" id="sceneList_select_device" class="autoSwitchLanguager">选择设备</a>
+		</header>
+		<section class="get_list iphoneXList" style="padding-top:6.4rem;">
+			<ul style="margin-top:0;">
+			</ul>
+			<div class="no_list autoSwitchLanguager" id="not_device">没有可选择的设备</div>
+		</section>
+	</body>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Housekeeper");
+		initlan();
+		plus.plusReady(function() {
+            plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+            });
+			plus.gatewayCmd.getDeviceList(function(data) {
+                if(data.length>0){
+                    $(".get_list ul").html('');
+                    for(var i = 0; i < data.length; i++) {
+                        var name = "";
+                        if(data[i].type == "03") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_03 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_03.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setSceneState.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if(data[i].type == "06") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_06 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_06.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setSecurityDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if(data[i].type == "04") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_04 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_04.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setSecurityDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if(data[i].type == "02") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_02 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_02.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setSecurityDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if(data[i].type == "09") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_09 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_09.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setSecurityDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if(data[i].type == "43") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_43 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_43.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setSecurityDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if(data[i].type == "17") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_17 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_17.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setHumitureDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if(data[i].type == "A5") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_A5 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_A5.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setSecurityDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if(data[i].type == "42") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_42 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_42.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setcarbonDioxideDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        }else if(data[i].type == "A0") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_A0 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_A0.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setcarbonDioxideDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        }else if(data[i].type == "D4") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_D4 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_D4.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setcarbonDioxideDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        }else if(data[i].type == "D5") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_D5 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_D5.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setcarbonDioxideDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        }else if(data[i].type == "44") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_44 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_44.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setcarbonDioxideDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        }else if(data[i].type == "D6") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_D6 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_D6.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setcarbonDioxideDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if(data[i].type == "19"){
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_19 + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_19.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setLightIntensity.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if(data[i].type == "Og"){
+                            name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_Og + data[i].name.split("#")[2] : data[i].name
+                            icon = '../../source/deviceIcon/device_icon_Og.png';
+                            info.setItem("taskType","conditionTask");
+                            stateUrl = "setcarbonDioxideDevice.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if(data[i].type == "Ad"){
+                           name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_Ad + data[i].name.split("#")[2] : data[i].name
+                           icon = '../../source/deviceIcon/device_icon_Ad.png';
+                           stateUrl = "setMultifunctional.html"
+                           info.setItem('taskType', 'conditionTask');
+                           modeTest(i,data,name,icon,stateUrl,true)
+                       } else if(data[i].type == "C0"){
+                           name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_C0 + data[i].name.split("#")[2] : data[i].name
+                           icon = '../../source/deviceIcon/device_icon_C0.png';
+                           stateUrl = "setMultifunctional.html"
+                           info.setItem('taskType', 'conditionTask');
+                           modeTest(i,data,name,icon,stateUrl,true)
+                       }
+                    }
+				}else{
+                    $(".no_list").show()
+				}
+				$(".get_list ul li").on("click", function() {
+				    var deviceId = $(this).attr("data-id");
+                    var _this = $(this);
+                    plus.gatewayCmd.isDeviceDisalbe(deviceId,function(data){
+                        if(data === "YES"){
+                            alert(languageUtil.getResource("device_device_Disable"));//"您的设备已被禁止使用，请与售卖经销商联系"
+                        }else{
+                            var value = $(_this).find("p").html();
+                            var bgSrc = $(_this).find("i").css("background-image");
+                            info.setItem("deviceName", value);
+                            info.setItem("deviceID", deviceId);
+                            info.setItem("num", $(_this).attr("data-num"));
+                            info.setItem("type", $(_this).attr("data-type"));
+                            info.setItem("deviceIcon",bgSrc);
+                            info.setItem("editUrl",$(_this).attr("data-src"));
+                            info.setItem("roomName", $(_this).find("span").html().split("[")[1].split("]")[0])
+
+                            var type = $(_this).attr("data-type");
+                            if(type == "22" || type == "23" || type == "24") {
+                                var param = {
+
+                                    "deviceId" : info.getItem("deviceID"),
+                                    "deviceName" : info.getItem("deviceName"),
+                                    "deviceIcon" : info.getItem("deviceIcon"),
+                                    "num" : info.getItem("num"),
+                                    "type" : info.getItem("type"),
+                                    "roomName" : info.getItem("roomName")
+                                };
+                                plus.tools.infraredSceneOrHouseKepper(param, function(data){
+
+                                });
+                            }else{
+                                var aSrc = $(_this).attr("data-src");
+                                window.location = aSrc;
+							}
+                        }
+                    });
+                })
+			})
+		});
+		function modeTest(i,data,name,icon,stateUrl,WifiDevice){
+			var modeState = ''
+			if(data[i].mode == "3"){
+				modeState = ""
+			}else{
+				if(data[i].mode == "2"){
+					modeState = lang_offLine
+				}else if(data[i].mode == "1" || data[i].mode == "4" || data[i].mode == "0"){
+					modeState = lang_onLine
+				}
+				var roomName1 = ((data[i].roomName == undefined)||(data[i].roomName == '')||(data[i].roomName == null)) ? lang_group : data[i].roomName
+				if(WifiDevice){
+					createList(name, icon, modeState, roomName1, stateUrl, 1, data[i].devID, data[i].type)
+				}else{
+					createList(name, icon, modeState, roomName1, stateUrl, data[i].endpoints[0].endpointNumber, data[i].devID, data[i].type)
+				}
+			}
+		}
+		function createList(name, src, mode, area, aSrc, endpNum, devID,type) {
+			var str = '<li data-num="' + endpNum + '" data-id="' + devID + '" data-type="' + type + '" data-src="' + aSrc + '">' +
+				'<a href="javascript:;">' +
+				'<i class="left" style="background:url(' + src + ') no-repeat center center;background-size:4.75rem auto;"></i>' +
+				'<p>' + name + '</p>' +
+				'<span>[' + area + ']</span>' +
+				'<br /><em>' + mode + '</em>' +
+				'</a>' +
+				'</li>'
+			$(".get_list ul").append(str)
+		}
+		
+		plus.gatewayCmdRush.infraredCallBack(function(data){
+            	var deviceState = data.deviceState;
+            	var deviceEpData = data.deviceEpData;
+          	info.setItem("deviceState", deviceState);
+        		info.setItem("epData", deviceEpData);
+  			window.location = "setDelay_sceneTask.html";
+		})
+		//setSceneState.html03/setSecurityDevice.html06 02 09 43/setHumitureDevice.html17
+	</script>
+
+</html>

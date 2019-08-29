@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6">
+
+        <LinearLayout
+            android:id="@+id/layout_main_view"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/default_padding_small"
+                    android:layout_marginRight="@dimen/default_padding_normal"
+                    android:layout_weight="1"
+                    android:gravity="end|bottom"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/iv_fan_power"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginBottom="@dimen/default_padding_small"
+                        android:background="@drawable/selector_fan_power"
+                        android:tag="power" />
+
+                    <TextView
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/Home_Widget_Switch" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/default_padding_small"
+                    android:layout_marginLeft="@dimen/default_padding_normal"
+                    android:layout_weight="1"
+                    android:gravity="start|bottom"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/iv_fan_oscillation"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginBottom="@dimen/default_padding_small"
+                        android:background="@drawable/selector_fan_oscillation"
+                        android:tag="oscillation" />
+
+                    <TextView
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/IF_050" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/default_padding_normal"
+                    android:layout_marginTop="@dimen/default_padding_small"
+                    android:layout_weight="1"
+                    android:gravity="end|top"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/iv_fan_mode"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginBottom="@dimen/default_padding_small"
+                        android:background="@drawable/selector_fan_mode"
+                        android:tag="mode" />
+
+                    <TextView
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/IF_051" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/default_padding_normal"
+                    android:layout_marginTop="@dimen/default_padding_small"
+                    android:layout_weight="1"
+                    android:gravity="start|top"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/iv_fan_speed"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginBottom="@dimen/default_padding_small"
+                        android:background="@drawable/selector_fan_fanspeed"
+                        android:tag="fanspeed" />
+
+                    <TextView
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/Infraredtransponder_Airconditioner_Speed" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_custom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/custom_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+
+        <CheckBox
+            android:id="@+id/btn_customboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/default_padding_normal"
+            android:background="@drawable/infrared_fan_more"
+            android:text="@string/IF_052"
+            android:button="@null"
+            android:checked="false"
+            android:gravity="center"
+            android:textSize="16sp" />
+    </FrameLayout>
+
+
+</LinearLayout>

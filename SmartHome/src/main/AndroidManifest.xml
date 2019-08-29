@@ -1,0 +1,1266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="cc.wulian.smarthomev6">
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.android.permission.WRITE_APN_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!--<uses-permission android:name="android.permission.WRITE_SETTINGS" />-->
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- 扫码所需 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
+
+    <!--<instrumentation android:name="android.test.InstrumentationTestRunner"-->
+                     <!--android:targetPackage="cc.wulian.smarthomev6"/>-->
+
+    <instrumentation android:name="com.wtt.runner.android.InstTestRunner"
+                     android:targetPackage="cc.wulian.smarthomev6"/>
+
+
+    <application
+        android:name=".main.application.MainApplication"
+        android:allowBackup="true"
+        android:hardwareAccelerated="false"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:persistent="true"
+        android:screenOrientation="portrait"
+        android:supportsRtl="false"
+        android:theme="@style/AppTheme"
+        tools:replace="android:supportsRtl">
+
+        <!-- 适配屏幕长宽比最大18.5:9 -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="${UMENG_APPKEY}" />
+        <!-- 测试：58e6ea382ae85b457600030d -->
+        <!-- 正式：58eb30b882b6350474001312 -->
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${CHANNEL_NAME}" />
+
+        <!-- talkingdata SDK集成 -->
+        <!-- 测试：5E44778BC5BC4B41BD121E97091BE449 -->
+        <!-- 正式：ACE6CAFE0B734897912ECBFF151C1F49 -->
+        <meta-data
+            android:name="TD_APP_ID"
+            android:value="${TD_APP_ID}" />
+        <meta-data
+            android:name="TD_CHANNEL_ID"
+            android:value="${CHANNEL_NAME}" />
+
+        <service
+            android:name="com.talkingdata.sdk.TDAntiCheatingService"
+            android:process="com.talkingdata.sdk.TDAntiCheatingService"> <!-- 用户质量评估Service可以配置在主进程或者单独进程 -->
+            <intent-filter>
+                <action android:name="com.talkingdata.sdk.TDAntiCheatingService" />
+            </intent-filter>
+        </service>
+        <service android:name=".support.service.MainService" />
+        <service android:name="com.cloudrtc.service.PjSipService" />
+
+        <activity
+            android:name=".main.home.HomeActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatMainTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+        <activity
+            android:name=".main.welcome.SplashActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatNoActionBarFullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".main.welcome.AdvActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatNoActionBarFullScreen" />
+        <activity
+            android:name=".main.home.voicecontrol.VoiceControlActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppCompatMainTheme" />
+        <activity
+            android:name=".main.login.SigninActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/LoginAppTheme" />
+        <activity
+            android:name=".main.home.HomeEditActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.AddDeviceActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".main.device.AreaActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.setting.SettingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.setting.SkinActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.GatewayCenterActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.UserMassageActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.GatewayListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.login.GatewayLoginActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.GatewayLocationActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.dreamFlower.setting.GatewayProvinceActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.dreamFlower.setting.GatewayCityActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.login.RegisterActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.login.DisclaimerActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+        <activity
+            android:name=".main.ztest.TestActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.sharedevice.ShareDeviceMainActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.sharedevice.ShareDeviceAccountListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.sharedevice.ShareDeviceChildListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.sharedevice.ShareDeviceSearchAccountActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.platform.ControlPlatformActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".main.mine.platform.whiterobot.WhiteRobotAuthActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.platform.whiterobot.WhiteRobotUnauthActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.platform.whiterobot.WhiteRobotWifiActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.platform.whiterobot.WhiteRobotQRCodeActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.AuthAccountActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.RightsManageActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.GatewaySettingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.GatewayZoneActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.CylincamGatewayZoneActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.ChangePasswordActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.RemindSetActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.GatewayBackRecoveryActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.AboutActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.AboutUsActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.IntroductionActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.setting.AlarmVoiceActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.setting.AccountSecurityActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.alarm.EquesAlarmActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.alarm.EquesHistoryAlarmActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.setting.ChangePhoneNumberActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.setting.BindMailBoxActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.setting.ConfirmMailBoxActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.GatewayBindActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.login.ForgotPassWordActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.home.scene.AllSceneActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.home.scene.EditRecSceneActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.home.scene.SceneSortActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.home.scene.EditSceneActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.home.scene.EditNewSceneActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.DeviceDetailActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_bc.DeviceDetailForBcActivity"
+            android:launchMode="singleTop" />
+        <!-- 猫眼activity -->
+        <activity
+            android:name=".main.device.cateye.CateyeDetailActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppCompatMainTheme" />
+        <activity
+            android:name=".main.device.cateye.CateyeRingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatNoActionBarFullScreenTranslucent" />
+        <activity android:name=".main.device.cateye.setting.CateyeDetectionActivity" />
+        <activity android:name=".main.device.cateye.setting.CateyeRecordTypeActivity" />
+        <activity android:name=".main.device.cateye.setting.CateyeRecordTimeActivity" />
+        <activity android:name=".main.device.cateye.setting.CateyeSensitivityActivity" />
+        <activity android:name=".main.device.cateye.setting.CateyeInformationActivity" />
+        <activity android:name=".main.device.cateye.setting.CateyeSettingActivity" />
+
+        <!-- 随便看activity -->
+        <activity
+            android:name=".main.device.lookever.LookeverDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatMainTheme" />
+        <activity
+            android:name=".main.device.lookever.LookeverReplayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.lookever.LookeverReplayHardActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.UnlockDialogActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatNoActionBarFullScreenTranslucent" />
+        <activity
+            android:name=".main.device.UnlockAutoDialogActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatNoActionBarFullScreenTranslucent" />
+        <activity android:name=".main.device.lookever.setting.LookEverSettingActivity" />
+        <activity android:name=".main.device.lookever.setting.LookEverInformationActivity" />
+        <activity android:name=".main.device.lookever.setting.LookEverRecordStorageActivity" />
+        <activity android:name=".main.device.lookever.setting.LookEverSafeProtectActivity" />
+        <!-- <activity -->
+        <!-- android:name=".main.device.lookever.LookEverBroadcastActivity" /> -->
+        <activity android:name=".main.device.lookever.setting.LookEverProtectSettingActivity" />
+        <activity android:name=".main.device.lookever.setting.LookEverProtectTimeActivity" />
+        <activity android:name=".main.device.lookever.setting.LookEverBroadcastActivity" />
+        <activity android:name=".main.device.lookever.setting.CameraBindDoorLockActivity" />
+        <activity
+            android:name=".main.device.lookever.setting.LookEverProtectAreaActivity"
+            android:launchMode="standard"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
+
+        <!-- 企鹅机activity -->
+        <activity
+            android:name=".main.device.penguin.PenguinDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatMainTheme" />
+        <activity android:name=".main.device.penguin.setting.PenguinSettingActivity" />
+        <activity android:name=".main.device.penguin.setting.PenguinInformationActivity" />
+        <activity android:name=".main.device.penguin.setting.PenguinRecordStorageActivity" />
+        <activity android:name=".main.device.penguin.setting.PenguinSafeProtectActivity" />
+        <activity android:name=".main.device.penguin.setting.PenguinProtectSettingActivity" />
+        <activity android:name=".main.device.penguin.setting.PenguinProtectTimeActivity" />
+        <activity android:name=".main.device.penguin.setting.PenguinBroadcastActivity" />
+        <activity
+            android:name=".main.device.penguin.setting.PenguinProtectAreaActivity"
+            android:launchMode="standard"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
+
+        <!-- 户外机activity -->
+        <activity
+            android:name=".main.device.outdoor.OutdoorDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatMainTheme" />
+        <activity android:name=".main.device.outdoor.setting.OutdoorSettingActivity" />
+        <activity android:name=".main.device.outdoor.setting.OutdoorInformationActivity" />
+        <activity android:name=".main.device.outdoor.setting.OutdoorRecordStorageActivity" />
+        <activity android:name=".main.device.outdoor.setting.OutdoorSafeProtectActivity" />
+        <activity android:name=".main.device.outdoor.setting.OutdoorProtectSettingActivity" />
+        <activity android:name=".main.device.outdoor.setting.OutdoorProtectTimeActivity" />
+        <activity android:name=".main.device.outdoor.setting.OutdoorBroadcastActivity" />
+        <activity
+            android:name=".main.device.outdoor.setting.OutdoorProtectAreaActivity"
+            android:launchMode="standard"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
+
+        <!-- 可视门锁 -->
+        <activity
+            android:name=".main.device.device_bc.DeviceBcCameraActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppCompatMainTheme" />
+
+        <!-- 摄像机类型设备配网activity -->
+        <activity android:name=".main.device.config.AddDeviceGuideActivity" />
+        <activity android:name=".main.device.config.AddDeviceByUidActivity" />
+        <activity android:name=".main.device.config.DeviceStartConfigActivity" />
+        <activity android:name=".main.device.config.DeviceConfigSuccessActivity" />
+        <activity android:name=".main.device.config.DeviceConfigFailActivity" />
+
+        <!-- ZXing 拍照activity -->
+        <activity
+            android:name=".support.tools.zxing.activity.CaptureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/QRTheme" />
+        <activity
+            android:name=".support.tools.zxing.activity.QRCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/QRTheme" />
+        <activity
+            android:name=".support.tools.zxing.activity.HisQRCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/QRTheme" />
+        <activity
+            android:name=".main.explore.ExploreQRCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/QRTheme" />
+        <activity android:name=".main.home.scene.AddSceneActivity" />
+        <activity
+            android:name=".main.home.scene.SceneListDialogActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatNoActionBarFullScreenTranslucent" />
+        <activity
+            android:name=".main.login.MailRegisterActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.PushTimeActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".main.device.AreaDetailActivity" />
+        <activity
+            android:name=".main.device.DeviceDetailMoreActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.DeviceDetailMoreAreaActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.explore.WulianStoreActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".main.explore.WulianSmartLifeActivity" />
+        <activity
+            android:name=".main.h5.CommonH5Activity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.home.scene.HouseKeeperActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.welcome.GuideActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppCompatNoActionBarFullScreen" />
+        <activity android:name=".main.device.cateye.album.AlbumActivity" />
+        <activity android:name=".main.device.cateye.album.AlbumGridActivity" />
+        <activity android:name=".main.device.cateye.album.AlbumPicActivity" />
+        <activity android:name=".main.device.cateye.CateyeVisitorActivity" />
+        <activity android:name=".main.device.cateye.CateyeVisitorNewActivity" />
+        <activity
+            android:name=".main.device.device_Bg.BgDoorNotDisturbTimeActivity"
+            android:launchMode="singleTop" />
+        <!-- 新浪 -->
+        <activity
+            android:name=".WBShareActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- 微信 -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- QQ -->
+        <activity
+            android:name="com.umeng.qq.tencent.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent100424468" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.umeng.qq.tencent.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".main.device.cateye.CateyePlayVideoActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.cateye.BcPlayVideoActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.home.LockDialogActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LockDialog" />
+        <activity
+            android:name=".main.device.device_bc.settingmore.LeaveHomeActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".main.device.LockMessageSettingActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".main.device.lock_op.LockOpActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.h5.H5BridgeCommonActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_ow.LockOwActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_70.Lock70Activity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_bc.config.DevBcWifiConfigActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".main.device.device_bc.settingmore.DevBc_deviceInfoActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".main.device.device_bc.settingmore.DevBc_userManagerActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".main.device.DeviceMoreActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.DeviceInfoActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesAddGuideActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".main.device.eques.EquesAddWiFiActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesAddQRActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesAddBindActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesPlayActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesSettingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesInfosActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesPirSettingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_bc.DevBcCallToAnswerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatNoActionBarFullScreenTranslucent" />
+        <activity
+            android:name=".main.device.eques.EquesPirTimeActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesPirSensibilityActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesPirTypeActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesPirRingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.cateye.CateyePicActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesPicActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesVideoActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesPicsActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesVisitorActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesVisitorPicActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.eques.EquesRingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_bc.DeviceMoreActivityForBc"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_bc.settingmore.DevBc_AlarmSettingActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".main.login.BindPhoneActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".main.login.ThirdLoginSetPwdActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".main.device.device_Ao.DevAoForChooseBindActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="cc.wulian.smarthomev6.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name=".main.message.MessageCenterNewActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.alarm.MessageAlarmListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.alarm.MessageAlarmActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.alarm.BcAlarmActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.log.MessageLogListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.log.SceneLogActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.log.HouseKeeperLogActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.setts.MessageSettingsActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.setting.ConfirmPhoneNumberActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.setting.ConfirmOldMailActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.setting.ChangeMailActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.log.MessageLogActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.setts.MessageSettingsDetailActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.alarm.ICamAlarmActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.alarm.ICamHistoryAlarmActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.more.AtBindModeSwitchActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.FeedbackActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".main.mine.CustomerServiceActivity" />
+        <activity android:name=".main.mine.OnlineServiceActivity" />
+        <activity android:name=".main.mine.MemberCenterActivity" />
+        <activity android:name=".main.login.ConfirmPasswordActivity" />
+        <activity android:name=".main.mine.gatewaycenter.ConfirmGatewayPasswordActivity" />
+
+        <!-- mini 网关 -->
+        <activity android:name=".main.device.gateway_mini.config.MiniGatewayActivity" />
+        <activity
+            android:name=".main.device.gateway_mini.device_d8.DeviceD8Activity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.gateway_mini.device_d8.DeviceD8AlarmTimeActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.gateway_mini.device_d8.DeviceD8AlarmVoiceActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".main.device.gateway_mini.device_d8.DeviceD8MoreActivity" />
+        <activity android:name=".main.device.gateway_mini.device_d8.DeviceD8WifiConfigActivity" />
+        <activity
+            android:name=".main.mine.setting.PushTimeActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.account.RegisterVerificationActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name=".main.account.RegisterSetPasswordActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name=".main.account.RegisterPhoneActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name=".main.account.RegisterMailActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name=".main.account.ForgotAccountActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name=".main.account.ForgotVerificationActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name=".main.account.ForgotSetPasswordActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name=".main.account.ThirdBindPhoneActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name=".main.account.ThirdVerificationActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name=".main.account.ThirdSetPasswordActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LoginAppTheme"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name=".main.device.device_23.InfraredTransponderActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_23.AirConditioning.AirConditioningMainActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_23.Device23Activity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".main.device.device_23.ControllerMoreActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.CustomerServiceTitleActivity"
+            android:launchMode="singleTop" />
+
+        <!-- 小物摄像机 -->
+        <activity
+            android:name=".main.device.cylincam.setting.CylincamSettingActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.cylincam.setting.CylincamBroadcastActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.cylincam.setting.CylincamInformationActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.cylincam.setting.CylincamRecordStorageActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.cylincam.setting.CylincamSafeProtectActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.cylincam.setting.CylincamProtectSettingActivity"
+            android:launchMode="singleTop" />
+        <!--
+             <activity
+             android:name=".main.device.cylincam.setting.CylincamProtectAreaActivity"
+             android:launchMode="standard"
+             android:screenOrientation="landscape"
+             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+             android:windowSoftInputMode="stateHidden|stateUnchanged"/>
+        -->
+        <activity
+            android:name=".main.device.cylincam.setting.CylincamProtectAreaActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
+        <activity
+            android:name=".main.device.cylincam.CylincamReplayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:theme="@style/AppThemeForAirConditioning"/>
+        <!--<activity android:name=".main.device.device_23.Device23Activity">-->
+        <!--</activity>-->
+        <!--<activity android:name=".main.device.device_23.ControllerMoreActivity">-->
+        <!--</activity>-->
+        <!--<activity android:name=".main.mine.CustomerServiceTitleActivity">-->
+        <!--</activity>-->
+            android:screenOrientation="portrait" />
+
+        <service android:name=".main.device.wristband.BluetoothLeService" />
+
+        <activity android:name=".main.device.wristband.AddWristbandActivity" />
+        <activity android:name=".main.device.wristband.WristbandDetailActivity" />
+        <activity android:name=".main.device.wristband.WristbandMoreActivity" />
+        <activity
+            android:name=".main.device.device_23.AirConditioning.AirConditioningBrandActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_23.Device23CategoryListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.message.alarm.CylincamAlarmActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.h5.WebActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.cylincam.CylincamPlayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatMainTheme" />
+
+        <receiver
+            android:name=".main.appwidget.AppWidgetProvider_Scene"
+            android:exported="false"
+            android:label="智能家居场景">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_scene" />
+        </receiver>
+
+        <activity
+            android:name=".main.device.device_12.RegulateSwitchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.more.AiSetOverloadProtectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.AddGateway06Activity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.AddGateway11Activity"
+            android:launchMode="singleTop" />
+
+        <!-- uei 电视遥控器 -->
+        <activity
+            android:name=".main.device.device_23.tv.RemoteControlBrandActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_23.tv.RemoteControlModelActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".main.device.device_23.tv.MatchingModelActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_23.tv.DownLoadCodeLibraryActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_23.tv.TvRemoteMainActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".main.device.device_23.custom.CustomActivity" />
+        <!-- <activity -->
+        <!-- android:name=".main.device.device_23.tv_remote.TvRemoteMainActivity" -->
+        <!-- android:launchMode="singleTop" /> -->
+        <activity android:name=".main.mine.setting.ChangePasswordConfirmActivity" />
+        <activity android:name=".main.mine.setting.ChangePasswordSetPwdActivity" />
+        <activity android:name=".main.device.gateway_wall.config.WallGatewayActivity" />
+        <activity android:name=".main.device.lookever.setting.CameraZoneSettingActivity" />
+        <activity
+            android:name=".main.login.SigninSmsActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".main.device.device_Av.RegulateSwitchAvActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_Av.RegulateSwitchAvMoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.nfc.NFCWriteActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.nfc.NFCHandleActivity"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="ext"
+                    android:pathPrefix="/wulian:scene"
+                    android:scheme="vnd.android.nfc" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".main.device.device_82.Controller82MoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_82.DeviceSetActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_22.Device22Activity"
+            android:launchMode="singleTop" />
+        <activity android:name=".main.device.device_22.Device22AddActivity" />
+        <activity
+            android:name=".main.device.dreamFlower.radioStation.RadioStationSettingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.dreamFlower.radioStation.BroadcastTimeActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".main.device.device_22.CustomRemoteActivity" />
+        <activity android:name=".main.device.device_22.Device22RemoteMoreActivity" />
+        <activity android:name=".main.device.device_22.TVRemoteActivity" />
+        <activity android:name=".main.device.DeviceActivationActivity" />
+        <activity android:name=".main.mine.gatewaycenter.FogGatewayActivity" />
+        <activity
+            android:name=".main.device.hisense.config.AddHisenseDeviceActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.hisense.config.HisDevStartConfigActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.hisense.config.AddHisDevByUidActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.safeDog.SafeDogMainActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.safeDog.SafeDogDevicesActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.safeDog.config.SDConfigActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.safeDog.SafeDogSettingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.safeDog.SafeDogSecurityActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.safeDog.SafeDogAttackSourceRecord"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.lookever.CameraLiveStreamActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatMainTheme" />
+        <activity
+            android:name=".main.device.device_Be.RegulateSwitchBeActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_Be.RegulateSwitchBeMoreActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_Be.BindSceneActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.more.BaSetOverloadProtectionActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.more.OkSetSleepModeActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.more.AwSetModeActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".main.device.device_23.custom.CustomAddActivity" />
+        <activity android:name=".main.device.cateye.setting.CateyeZoneSettingActivity" />
+        <activity android:name=".main.device.more.Dev69ChangePwdActivity" />
+
+        <!-- 向往背景音乐配网 -->
+        <activity
+            android:name=".main.device.device_xw01.config.WishBgmAddGuideActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_xw01.config.WishBgmActivateActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_xw01.config.WishQRCodeActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_xw01.config.WishBgmAlreadyBindActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_xw01.config.WishBgmAddResultActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.hisense.setting.HisenseDeviceSettingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_xw01.setting.WishBmgSettingActivity"
+            android:launchMode="singleTop" />
+
+        <!-- wifi红外转发器 -->
+        <activity
+            android:name=".main.device.device_if02.config.AddIF02DeviceActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.config.IF02DevStartConfigActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.WifiIRActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".main.device.device_if02.WifiIRCategoryListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.setting.WifiIRInformationActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.setting.WifiIRSettingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.setting.WifiIRUpdateFirmwareActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.match.WifiIRBrandActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.match.WifiIRModelActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.match.MatchNextKeyActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".main.device.device_if02.tv.TvRemoteMainActivity" />
+        <activity
+            android:name=".main.device.device_if02.match.DownLoadCodeActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.ControllerMoreActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.airconditioner.AirConditionerMainActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.airconditioner.MatchResultActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".main.device.device_23.tv.ProjectorRemoteMainActivity" />
+        <activity android:name=".main.device.device_23.tv.AudioRemoteMainActivity" />
+        <activity
+            android:name=".main.device.device_Bn.setting.DeviceBnDeviceInfoActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name=".main.device.device_Bq.BqDoorNotDisturbTimeActivity"></activity>
+        <activity
+            android:name=".main.mine.gatewaycenter.GatewayChannelActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.gatewaycenter.DeviceSignalActivity"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".main.device.device_Bn.DeviceBnCameraActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppCompatMainTheme" />
+        <activity
+            android:name=".main.device.device_Bn.config.DevBnWifiConfigActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".main.device.device_Bn.DevBnCallToAnswerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatNoActionBarFullScreenTranslucent" />
+        <activity
+            android:name=".main.device.device_Bn.DeviceMoreActivityForBn"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".main.device.device_if02.airconditioner.AirOneByOneMatchActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.tv.TvOneByOneMatchActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.stb.StbOneByOneMatchActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.match.MatchModelActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.fan.FanOneByOneMatchActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".main.device.device_if02.fan.FanMainActivity" />
+        <activity android:name=".main.device.device_if02.stb.StbRemoteMainActivity" />
+        <activity
+            android:name=".main.device.device_if02.projector.ProjectorOneByOneMatchActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_if02.it_box.ITBoxOneByOneMatchActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".main.device.device_if02.it_box.ITBoxMainActivity" />
+        <activity android:name=".main.device.device_if02.projector.ProjectorMainActivity" />
+        <activity
+            android:name=".main.device.device_if02.custom.AddCustomActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".main.device.device_if02.custom.CustomMainActivity" />
+        <activity
+            android:name=".main.device.device_91.Device91Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.SpecificationActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.mine.setting.SceneSettingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".main.device.device_Cc.RegulateSwitchCcActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_Cc.RegulateSwitchCcMoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_Cc.ModeSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_Cc.LightSourceSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_Cc.RangeSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.smart.SceneManageGroupActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_13.RegulateSwitch13Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.camera_lc.LcOutdoorCameraActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".main.device.camera_lc.LcPTZCameraActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".main.device.camera_lc.PlayCameraBackActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".main.device.camera_lc.setting.LcCameraSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.camera_lc.setting.LcSafeProtectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.camera_lc.setting.LcProtectTimeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.camera_lc.setting.LcCustomProtectTimeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.camera_lc.config.LcStartConfigActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.camera_lc.config.AddLcCameraGuideActivity"
+            android:launchMode="standard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.camera_lc.setting.LcInformationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.message.alarm.LcCameraAlarmActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.camera_lc.LcAlarmPicActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.mine.gatewaycenter.GatewayWanPortSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.camera_lc.NVRDeviceListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.camera_lc.NVRDeviceDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".main.device.camera_lc.LcHistoryRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.camera_lc.setting.NVRDetailSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.camera_lc.setting.NVRListSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_CG27.config.AddCG27GuideActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_CG27.config.AddCG27DetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_CG27.config.AddCG27SuccessActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_CG27.config.DeviceAlreadyBindActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_CG27.config.AddCG27FailActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".main.device.device_CG27.setting.CG27SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_CG27.CG27QRCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_CG27.setting.CG27InformationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.device.device_CG27.VideoScreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatMainTheme" />
+        <activity
+            android:name=".main.device.device_CG27.CG27WaitingAnswerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppCompatMainTheme" />
+
+        <!--测试-->
+        <uses-library android:name="android.test.runner"/>
+
+    </application>
+
+</manifest>

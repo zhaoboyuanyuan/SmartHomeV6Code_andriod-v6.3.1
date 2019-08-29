@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <EditText
+        style="@style/config_wifi_text"
+        android:id="@+id/et_input_uid"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_btn_height"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/white"
+        android:lines="1"
+        android:inputType="text"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/default_editText_size"
+        android:hint="@string/Scan_Qr_Code_Manual"
+        android:paddingLeft="@dimen/default_padding_small"/>
+
+    <Button
+        android:id="@+id/btn_next_step"
+        style="@style/config_next_button"
+        android:layout_alignParentBottom="true"
+        android:text="@string/Sure" />
+
+
+</RelativeLayout>

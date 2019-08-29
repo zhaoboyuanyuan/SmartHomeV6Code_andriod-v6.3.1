@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/default_padding_normal"
+    android:layout_marginLeft="@dimen/default_padding_normal"
+    android:layout_marginRight="@dimen/default_padding_normal"
+    android:layout_marginStart="@dimen/default_padding_normal"
+    android:background="@drawable/shape_default_dialog_bg"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:id="@+id/iv_normal_set_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon_barcode_camera_1" />
+
+    <TextView
+        android:layout_marginTop="@dimen/default_padding_normal"
+        style="@style/config_wifi_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/Config_Barcode_Scan" />
+    <ImageView
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/v6_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <TextView
+        android:gravity="center"
+        android:textSize="16sp"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/v6_green"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/config_device_btn_height"
+        android:id="@+id/tv_dialog_close"
+        android:text="@string/Tip_I_Known" />
+
+</LinearLayout>

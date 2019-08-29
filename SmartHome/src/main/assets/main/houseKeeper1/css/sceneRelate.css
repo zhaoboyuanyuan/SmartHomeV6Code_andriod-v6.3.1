@@ -1,0 +1,69 @@
+@charset "utf-8";
+b,strong{font-weight:500;}
+/*绑定场景*/
+.binding{
+	width:100%;
+	overflow:hidden;
+}
+.binding article,.binding nav li{
+	box-sizing: border-box;
+	padding:0 4%;
+	font-size:1.6rem;
+	color:#000000;
+}
+.binding article i{
+	display:block;
+	float:right;
+	width:2.2rem;
+	height:4.4rem;
+	background:url(../fonts/icon_5.png) no-repeat right center;
+	background-size: 2.2rem auto;
+}
+.binding nav li i{
+	display:block;
+	float:right;
+	width:2.2rem;
+	height:4.4rem;
+}
+.binding nav li i.on{
+	background:url(../fonts/icon_5.png) no-repeat right center;
+	background-size: 2.2rem auto;
+}
+.binding article{
+	width:100%;
+	height:4.4rem;
+	line-height:4.4rem;
+	border-bottom:1px solid #d9d9d9;
+	background:#fff;
+}
+.binding nav{
+	margin-top:1.5rem;
+	overflow:hidden;
+	border-top:1px solid #d9d9d9;
+	background:#fff;
+}
+.binding nav li{
+	width:100%;
+	height:4.4rem;
+	line-height:4.4rem;
+	border-bottom:1px solid #d9d9d9;
+}
+.binding nav li em{
+	display:block;
+	float:left;
+	width:3.6rem;
+	height:4.4rem;
+	background:url(../fonts/scene_normal_01.png) no-repeat left center;
+	background-size:2.6rem auto;
+}
+.binding nav li i{
+	/*display:none;*/
+}
+.no_list{
+	display:none;
+	width:100%;
+	padding-top:60%;
+	text-align:center;
+	font-size:1.6rem;
+	color:#929292;
+}

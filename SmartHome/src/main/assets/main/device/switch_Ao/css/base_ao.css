@@ -1,0 +1,417 @@
+@charset "utf-8";
+body, button, select, textarea, input, label, option, fieldset, legend{font-family: "微软雅黑",Tahoma,Verdana;}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, legend, input, textarea, button, p, blockquote, th, td{margin: 0;padding: 0;}
+textarea{resize: none}
+textarea, input{outline: none;}
+.clear{height:1px;overflow:hidden;clear:both;}
+a,img{border:0;}
+a{color: #666;text-decoration: none;}
+li{list-style-type:none;}
+i,em{font-style: normal;}
+.fl{float:left;}
+.fr{float:right;}
+.ds{display:block;}
+.hid{overflow:hidden;}
+.clearfix{*zoom:1}
+.clearfix:after{display:block;visibility:hidden;clear:both;height:0;content:'.';font-size:0}
+html,body{width:100%;height:100%;background:white repeat-x left top;background-size:100% 100% !important;-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Chrome/Safari/Opera */}
+/*html,body{width:100%;height:100%;background:url(../fonts/bg_2.png) repeat-x left top;}*/
+/*html,body{width:100%;height:100%;background:url(../fonts/bg_3.png) repeat-x left top;}*/
+
+/*header*/
+header{
+	width:100%;
+	height:4.4rem;
+	padding-top:2rem;
+	background-color: #8dd652;
+}
+header a{
+	float:left;
+	display:block;
+	width:73.2%;
+	height:4.4rem;
+	text-align:center;
+	line-height:4.4rem;
+	font-size:1.7rem;
+	color:#fff;
+}
+header a:nth-child(1),header a:nth-child(3){
+	width:13.4%;
+}
+header a:nth-child(1){
+	background:url(../fonts/icon_back_1.png) no-repeat center center;
+	background-size:2.2rem auto;
+}
+header a:nth-child(3){
+	background:url(../fonts/icon_more.png) no-repeat center center;
+	background-size:2rem auto;
+}
+header a:nth-child(2){
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/*第一个开关*/
+.switchTop{
+	position:relative;
+	display: inline-block;
+	width:100%;
+	text-align:center;
+	margin-top:5rem;
+}
+.divTop {
+	text-align:center;
+}
+.switchBottom{
+	position:relative;
+	display: inline-block;
+	width:100%;
+	text-align:center;
+	margin-top: 3rem;
+}
+.divBottom {
+
+}
+
+.imageTop{
+	position:relative;
+	float:left;
+	display:inline-block;
+	width:50%;
+	height:15rem;
+}
+.imageContainer{
+	position: relative;
+	top:50%;
+	transform:translateY(-50%);
+}
+
+.switchImage {
+	margin-left: 2rem;
+	width: 12.5rem;
+	height: 12.5rem;
+	border: 2px solid;
+	border-radius: 50%;
+	text-align: center;
+}
+.switchClose {
+	color: #c9cfdb;
+	background: url("../fonts/switch_close.png") no-repeat center #fff;
+	background-size: 4.5rem auto;
+}
+.switchPressed {
+	color: #8dd652;
+	background: url("../fonts/switch_open.png") no-repeat center #f2faed;
+	background-size: 4.5rem auto;
+}
+.switchOpen {
+	color: #8dd652;
+	background: url("../fonts/switch_open.png") no-repeat center #fff;
+	background-size: 4.5rem auto;
+}
+
+.bindNone {
+	color: #c9cfdb;
+	background: url("../fonts/add.png") no-repeat center #fff;
+	background-size: 4.5rem auto;
+}
+.bindOneWay {
+	color: #8dd652;
+	background: url("../fonts/switch_01.png") no-repeat center #fff;
+	background-size: 4.5rem auto;
+}
+.bindDeviceAm {
+	color: #8dd652;
+	background: url("../fonts/icon_am.png") no-repeat center #fff;
+	background-size: 4.5rem auto;
+}
+.bindDeviceAn {
+	color: #8dd652;
+	background: url("../fonts/icon_an.png") no-repeat center #fff;
+	background-size: 4.5rem auto;
+}
+.bindDeviceAo {
+	color: #8dd652;
+	background: url("../fonts/icon_ao.png") no-repeat center #fff;
+	background-size: 4.5rem auto;
+}
+.bindTwoWays {
+	color: #8dd652;
+	background: url("../fonts/switch_02.png") no-repeat center #fff;
+	background-size: 4.5rem auto;
+}
+.bindThreeWays {
+	color: #8dd652;
+	background: url("../fonts/switch_03.png") no-repeat center #fff;
+	background-size: 4.5rem auto;
+}
+
+.funTop{
+	position:relative;
+	float: right;
+	display:inline-block;
+	text-align: left;
+	width:50%;
+	height:15rem;
+	background: #ffffff no-repeat center center;
+}
+
+.mTop {
+	position: relative;
+	top:50%;
+	transform:translateY(-50%);
+	left: 1rem;
+}
+
+.funTop span {
+	display: block;
+}
+
+.nameTop {
+	color: #535353;
+	font-size: 1.6rem;
+}
+.modeTop {
+	margin-top: 2rem;
+}
+
+.modeLayoutTop {
+	color: #fff;
+	border-style: solid;
+	border-radius: 8px;
+	font-size: 1.6rem;
+	padding: 0.8rem;
+	background: #8dd652;
+}
+.modeTextTop {
+	padding-right: 1.9rem;
+	background: url("../fonts/toggle.png") no-repeat right center;
+	background-size:1.4rem auto;
+}
+
+.pupWindow {
+	display:none;
+	position:fixed;
+	z-index:999;
+	left:0;
+	top:6.4rem;
+	width:100%;
+	height:94%;
+	text-align:center;
+	background:rgba(0,0,0,0.5)
+}
+.pupContainer {
+	position: fixed;
+	width: 100%;
+	bottom:0;
+}
+.pupItem {
+	margin: 1rem;
+	padding: 1rem 0;
+	border: 2px solid #fff;
+	border-radius: 4px;
+	background-color: #fff;
+	font-size: 1.7rem;
+	color: #535353;
+}
+.pupSwitch {
+	display: none;
+}
+.pupScene {
+	display: block;
+}
+.pupBind {
+	display: none;
+}
+.pupCancel {
+	 margin: 1rem;
+	 padding: 1rem 0;
+	 border: 2px solid #fff;
+	 border-radius: 4px;
+	 background-color: #fff;
+	 font-size: 1.7rem;
+	 color: #535353;
+ }
+
+/*重命名弹框*/
+.changeName{
+	display:block;
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0,0.4)
+}
+.nameToast{
+	position:absolute;
+	left:12%;
+	top:50%;
+	width:76%;
+	/*height:14rem;*/
+	-webkit-transform:translateY(-50%);
+	-ms-transform:translateY(-50%);
+	-moz-transform:translateY(-50%);
+	transform:translateY(-50%);
+	background:#fff;
+	border-radius:8px;
+	overflow:hidden;
+}
+.nameToast .inputname{
+	margin:0 5%;
+	width:90%;	
+	overflow:hidden;
+}
+.nameToast span{
+	display:block;
+	width:100%;
+	height:5.3rem;
+	line-height:5.3rem;
+	text-align:center;
+	font-size:1.7rem;
+	color:#555;
+}
+/*.nameToast .name{
+	margin:0 5%;
+	width:90%;
+	background:#f2f2f2;
+	border-radius:5px;
+	overflow:hidden;
+}*/
+.nameToast input{
+	display:block;
+	float:left;
+	padding-left:5%;
+	width:85%;
+	height:3.6rem;
+	line-height:3.6rem;
+	border:0;
+	font-size:1.4rem;
+	background:#f2f2f2;
+}
+.nameToast i{
+	display:none;
+	float:right;
+	width:10%;
+	height:3.6rem;
+	background:url(../fonts/icon_del_01.png) no-repeat center center;
+	background-size:1.6rem auto;
+}
+.nameToast p{
+	align-content: center;
+	text-align: left;
+	margin-top: 40px;
+	color: #000000;
+}
+.nameToast .choose_1{
+	margin-top:2rem;
+	border-top:1px solid #d9d9d9;
+}
+.nameToast .choose_1 a{
+	display:block;
+	box-sizing: border-box;
+	float:left;
+	width:50%;
+	height:5.5rem;
+	line-height:5.5rem;
+	text-align:center;
+	border-right:1px solid #d9d9d9;
+	font-size:1.5rem;
+	color:#555;
+}
+.nameToast .choose_1 em:last-child{
+	border-right:0;
+}
+
+/*遮罩层*/
+.mask_layer{
+	display:none;
+	position:fixed;
+	z-index:1000;
+	left:0;
+	top:6.4rem;
+	width:100%;
+	height:calc(100% - 6.4rem);
+	text-align:center;
+	background:rgba(0,0,0,0.7)
+}
+.mask_layer i{
+	display:inline-block;
+	width:8rem;
+	height:8rem;
+	margin-top:15rem;
+	background:url(../fonts/icon_new.png) no-repeat center center;
+	background-size:8rem auto;
+}
+.mask_layer span{
+	display:block;
+	width:100%;
+	height:5rem;
+	line-height:5rem;
+	text-align:center;
+	font-size:1.6rem;
+	color:#fff;
+}
+
+/*正在保存toast*/
+.comToast{
+	display: block;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 60%;
+	text-align:center;
+	overflow: hidden;
+	text-align: center;
+	padding-top: 1rem;
+	padding-bottom:1rem;
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+	border-radius: 5px;
+}
+.comToast i{
+	display:inline-block;
+	height:2rem;
+	line-height:2rem;
+	font-size:1.4rem;
+	color:#fff;
+}
+@-webkit-keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+@keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+.comToast i em{
+	display:block;
+	float:left;
+	width:2rem;
+	height:2rem;
+	margin-right:1rem;
+	background:url(../fonts/icon_loading.png) center center;
+	background-size: 2rem auto;
+}
+.comToast i em.rotate{
+	-webkit-animation: rotate 0.7s linear infinite;
+	animation: rotate 0.7s linear infinite;
+}

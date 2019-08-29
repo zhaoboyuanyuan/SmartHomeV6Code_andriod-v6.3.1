@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智敬联排三路开关</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/device.css" />
+		<script src="../../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../../skinSource/css/skin.css" />
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript: history.go(-1);"></a>
+				<a class="deviceName autoSwitchLanguager" href="javascript:;" id="device_Bu_choose_device">选择设备</a>
+				<a class="help" href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="chooseSwitch">
+			<ul class="deviceList">
+				<!--<li>-->
+					<!--<div class="left">-->
+						<!--<p>新联排一路开关</p>-->
+						<!--<p><em class="online">在线</em><em>[未分区]</em></p>-->
+					<!--</div>-->
+					<!--<i></i>-->
+				<!--</li>-->
+			</ul>
+		</section>
+		<section class="hintPopup iphoneX" id="helpAlert">
+			<div class="hintAlert">
+				<p class="autoSwitchLanguager" id="device_Bu_control_help">通过设置多联多控，可实现两个智能开关对一个用电设备的控制，广泛用于楼梯、走廊、客厅、卧室等照明方案中。由于采用无线连接，安装方便，操作简单，免去凿墙布线的烦恼。</p>
+				<button class="know autoSwitchLanguager" id="Add_batches_i_know">我知道了</button>
+			</div>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/more.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/deviceList.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+        var info = window.sysfun;
+        info.init("device_Bw");
+        var devID_Bw = info.getItem("devID_Bw");
+
+		initlan();
+        plus.plusReady(function() {
+
+            plus.gatewayCmd.getDeviceList(function(data) {
+                if(data){
+                    var str = "";
+                    for(var i in data){
+                        var name,icon,mode,roomName;
+                        if(data[i].devID !== devID_Bw){
+                            if(window.deviceList[data[i].type]){
+                                name = data[i].name.indexOf("#$default$#") != -1 ? window.deviceList[data[i].type].name + data[i].name.split("#")[2] : data[i].name;
+                                icon = window.deviceList[data[i].type].icon;
+                                if(data[i].mode != 3){
+                                    mode = data[i].mode == 2 ? lang_offLine : lang_onLine;
+                                }
+                                roomName = data[i].roomName ? data[i].roomName : lang_group;
+                                if(roomName.length > 15){
+                                    roomName = "[" + roomName.substr(0,15) + "...]";
+                                }
+                                if (!(data[i].relationFlag == '2' || data[i].relationFlag == '3' || data[i].isShared == true)) {
+                                    if(data[i].endpoints){
+                                        var endpoints = data[i].endpoints;
+                                        var nameList = [];
+                                        for(var j in endpoints){
+                                            var endpointName = endpoints[j].endpointName ? endpoints[j].endpointName :
+                                                lang_device_switch + endpoints[j].endpointNumber;
+                                            nameList.push(endpointName);
+                                        }
+                                        info.setItem("nameList"+data[i].devID,JSON.stringify(nameList));
+                                    }
+                                    str += '<li data-id="'+data[i].devID+'" data-type="'+data[i].type+'">' +
+                                        '<div class="left" style="background:url('+icon+') no-repeat left center;background-size:4.75rem auto;">' +
+                                        '<p>'+name+'</p>' +
+                                        '<p>' +
+                                        '<em class="online">'+mode+'</em>' +
+                                        '<em>'+roomName+'</em>' +
+                                        '</p>' +
+                                        '</div>' +
+                                        '<i></i>' +
+                                        '</li>';
+                                }
+
+                            }
+                        }
+                    }
+                    $(".deviceList").html(str);
+                    $(".deviceList li").on("click",function(){
+                        var id = $(this).attr("data-id");
+                        var type = $(this).attr("data-type");
+                        info.setItem("other_devID",id);
+                        info.setItem("deviceType",type);
+                        window.location = "device_other_switch.html";
+                    })
+                }
+            });
+
+            $('.help').on('click', function () {
+                $('.hintPopup').css('display', 'block');
+            });
+
+            $('#Add_batches_i_know').on('click', function () {
+                $('.hintPopup').css('display', 'none');
+            });
+
+        });
+	</script>
+</html>

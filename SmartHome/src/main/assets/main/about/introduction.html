@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>功能介绍</title>
+	</head>
+	<script src="rem.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="about.css" />
+
+	<body>
+		<section class="module" style="margin-top:1rem;">
+			<strong class="autoSwitchLanguager" id="introd_title_01">1. 全新风格 </strong>
+			<span class="autoSwitchLanguager" id="introd_txt_01">整体风格简洁清晰，给人焕然一新的感觉，更加人性化的设计，带来更舒适的体验 </span>
+			<div><img src="fonts/img_01.png" alt="" style="width:86.666666%;" /></div>
+		</section>
+		<section class="module" style="margin-top:1rem;">
+			<strong class="autoSwitchLanguager" id="introd_title_02">2. 登录界面 </strong>
+			<span class="autoSwitchLanguager" id="introd_txt_02">增加第三方登录功能，更快速地登录 APP </span>
+			<div><img src="fonts/img_02.png" alt="" style="width:70%;" /></div>
+		</section>
+		<section class="module" style="margin-top:1rem;">
+			<strong class="autoSwitchLanguager" id="introd_title_03">3. 首页添加快捷方式 </strong>
+			<span class="autoSwitchLanguager" id="introd_txt_03">首页添加快捷方式方便您快速浏览信息和便捷操作 </span>
+			<div><img src="fonts/img_03.png" alt="" style="width:80.66666666%;" /></div>
+		</section>
+		<section class="module" style="margin-top:1rem;">
+			<strong class="autoSwitchLanguager" id="introd_title_04">4. 场景控制 </strong>
+			<span class="autoSwitchLanguager" id="introd_txt_04">用户可以自定义多个场景模式。只需轻轻一按，即可一次 性完成家中多个设备的控制，从此告别逐个开关的繁琐操控方式 </span>
+			<div><img src="fonts/img_04.png" alt="" style="width:44%;" /></div>
+		</section>
+		<section class="module" style="margin-top:1rem;">
+			<strong class="autoSwitchLanguager" id="introd_title_05">5. 联动控制 </strong>
+			<span class="autoSwitchLanguager" id="introd_txt_05">智能家居设备之间存在联动关系，用户可以根据需要自由组合使用，构建属于自己的个性化智能家居系统  </span>
+			<div><img src="fonts/img_05.png" alt="" style="width:50%;" /></div>
+		</section>
+		<section class="module" style="margin-top:1rem;">
+			<strong class="autoSwitchLanguager" id="introd_title_06">6. 定时控制 </strong>
+			<span class="autoSwitchLanguager" id="introd_txt_06">可按照您每日的生活、工作习惯设定各种丰富的定时功能。 满足各种对定时开关有需求的客户。功能强大，操作简单，让您规律的生活更加井井有条</span>
+			<div><img src="fonts/img_06.png" alt="" style="width:81.6%;" /></div>
+		</section>
+	</body>
+	<script src="lang/lang.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		initlan()
+
+		function changePic() {
+			var arr = document.getElementsByTagName("img");
+			for(var i = 0; i < arr.length; i++) {
+				arr[i].src = "fonts/en_img_0" + (i+1) + ".png";
+			}
+		}
+	</script>
+
+</html>

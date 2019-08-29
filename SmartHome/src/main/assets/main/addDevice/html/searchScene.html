@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>添加设备</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" href="../css/searchList.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="searchHeader header" style="position: fixed;top: 0rem;">
+    <a href="javascript:;"></a>
+    <div class="search_input search_input1">
+        <span class="delete" style=""></span>
+        <input class="autoSwitchLanguager" id="searchScene_search" type="text" placeholder="搜索"/>
+        <i></i>
+    </div>
+    <a class="autoSwitchLanguager" id="searchScene_cancal" href="addDeviceNew.html">取消</a>
+</header>
+<section class="get_list" style="margin-top:6.8rem ;">
+    <div>
+        <!--<a pinyin="shuxingwangguan" initial="sxwg" href="javascript:;" onclick="window.location='addGateway01.html'"><i class="left"></i><span class="autoSwitchLanguager gateway" href="javascript:;" id="addScene_gateway">竖型网关</span></a>-->
+        <!--<a pinyin="menciganyingqi" initial="mcgyq" href="javascript:;" onclick="jump('addDevice_Common_01.html','03')"><i class="left"></i><span class="autoSwitchLanguager" href="javascript:;" id="addScene_doorContack">门磁感应器</span></a>-->
+        <!--<li pinyin="qiangmianchazuo" initial="qmcz" onclick="jump('addDevice_Common_01.html','50')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addScene_socket">墙面插座</a></li>-->
+        <!--<li pinyin="shengguangbaojingqi" initial="sgbjq" onclick="jump('addDevice_Common_01.html','01')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_01_name">声光报警器</a></li>-->
+        <!--<li pinyin="shuijinjianceqi" initial="sjjcq" onclick="jump('addDevice_Common_01.html','06')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_06_name">水浸监测器</a></li>-->
+        <!--<li pinyin="yanwujianceqi" initial="ywjcq" onclick="jump('addDevice_Common_01.html','43')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_43_name">烟雾监测器</a></li>-->
+        <!--<li pinyin="wenshidujianceqi" initial="wsdjcq" onclick="jump('addDevice_Common_01.html','17')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_17_name">温湿度监测器</a></li>-->
+        <!--<li pinyin="keranqitixieloujianceqi" initial="krqtxl"onclick="jump('addDevice_Common_01.html','09')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_09_name">可燃气体泄漏监测器</a></li>-->
+        <!--<li pinyin="hongwairuqintanceqi" initial="hwrqtcq" onclick="jump('addDevice_Common_01.html','02')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_02_name">红外入侵探测器</a></li>-->
+        <!--<li pinyin="zhiwenmimamensuo" initial="zwmmms" onclick="window.location='addDoorLockVOCFingerprint1.html'"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addScene_doorLockVocFingerprint">密码指纹锁</a></li>-->
+        <!--<li pinyin="mimakasuo" initial="mmks" onclick="window.location='addDoorLockVOCCard1.html'"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addScene_doorLockVocCard">密码卡锁</a></li>-->
+        <!--<li class="startCamera" id="CMICA1" pinyin="maoyan" initial="my"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_maoy">猫眼</a></li>-->
+        <!--<li pinyin="wangluozhinengsuo" initial="wlzns" onclick="window.location='DoorLock_Bc_01.html'"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="Device_List_Networklock">网络智能锁</a></li>-->
+        <!--<li class="startCamera" id="CMICA2" pinyin="suibiankan" initial="sbk"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="Lookever">随便看</a></li>-->
+        <!--<li class="startCamera" id="CMICY1" pinyin="zhinengmaoyanmini" initial="znmymn"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="Device_Default_Name_CMICY1">智能猫眼mini</a></li>-->
+        <!--<li pinyin="xuanwuhuwangluosuo" initial="xwhwls" onclick="window.location='addDevice_op_01.html'"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_op_title">玄武湖网络锁</a></li>-->
+        <!--<li pinyin="wangluosuo" initial="wls" onclick="window.location='DoorLock_Bd_01.html'"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_Bd_title">网络锁</a></li>-->
+        <!--<li pinyin="jinshuchuangliankongzhiqi" initial="jsclkzq" onclick="jump('addDevice_Common_01.html','Ar')"><a href="javascript:;"><i></i><span class="autoSwitchLanguager" id="addDevice_Ar_name">金属窗帘控制器</span></a></li>-->
+        <!--<li pinyin="liuluchangjingkaiguan" initial="llcjkg" onclick="jump('addDevice_Common_01.html','37')"><a href="javascript:;"><i></i><span class="autoSwitchLanguager" id="addDevice_37_name">六路场景开关</span></a></li>-->
+        <!--<li pinyin="neiqianshilinghuoyilukaiguan" initial="nqslhylkg" onclick="jump('addDevice_Common_01.html','Aj')"><a href="javascript:;"><i></i><span class="autoSwitchLanguager" id="addDevice_Aj_name">内嵌式零火一路开关</span></a></li>-->
+        <!--<li pinyin="jinshudanlukaiguan" initial="jsdlkg" onclick="jump('addDevice_Common_01.html','Am')"><a href="javascript:;"><i></i><span class="autoSwitchLanguager" id="device_Am_name">金属单路开关</span></a></li>-->
+        <!--<li pinyin="jinshulianglukaiguan" initial="jsllkg" onclick="jump('addDevice_Common_01.html','An')"><a href="javascript:;"><i></i><span class="autoSwitchLanguager" id="device_An_name">金属两路开关</span></a></li>-->
+        <!--<li pinyin="jinshusanlukaiguan" initial="jsslkg" onclick="jump('addDevice_Common_01.html','Ao')"><a href="javascript:;"><i></i><span class="autoSwitchLanguager" id="device_Ao_name">金属三路开关</span></a></li>-->
+        <!--<li pinyin="chuanliandianji" initial="cldj" onclick="jump('addDevice_Common_01.html','80')"><a href="javascript:;"><i></i><span class="autoSwitchLanguager" id="device_80_name">窗帘电机</span></a></li>-->
+        <!--<li pinyin="neiqianshilinghuoerlukaiguan" initial="nqslhelkg" onclick="jump('addDevice_Common_01.html','At')"><a href="javascript:;"><i></i><span class="autoSwitchLanguager" id="addDevice_At_name">内嵌式零火二路开关</span></a></li>-->
+        <!--<li pinyin="zijinshansuo" initial="zjss" onclick="jump('addDevice_Common_01.html','OW')"><a href="javascript:;"><i></i><span class="autoSwitchLanguager" id="addDevice_OW_name">紫金山锁</span></a></li>-->
+        <!--<li class="startCamera" id="CMICA3" pinyin="qieshexiangji" initial="qesxj"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addScene_penguin">企鹅摄像机</a></li>-->
+        <!--<li pinyin="jinjianniu" initial="jjan" onclick="jump('addDevice_Common_01.html','04')"><a href="javascript:;"><i></i><span class="autoSwitchLanguager" id="addDevice_04_name">紧急按钮</span></a></li>-->
+        <!--<li pinyin="hongwaizhuanfaqi" initial="hwzfq" onclick="jump('addDevice_Common_01.html','23')"><a href="javascript:;"><i></i><span class="autoSwitchLanguager" id="AddDevice_23_Infraredtransponder">红外转发器</span></a></li>-->
+        <!--<li pinyin="dongtinghusuo" initial="dths" onclick="window.location='addDevice_Bg_01.html'"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_Bg_name">洞庭湖锁</a></li>-->
+        <!--<li pinyin="wangluosuo" initial="wls" onclick="window.location='addDevice_Bf_01.html'"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_Bf_title">网络锁02型</a></li>-->
+        <!--<li pinyin="chuangliankongzhiqi" initial="clkzq" onclick="jump('addDevice_Common_01.html','65')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_65_name">窗帘控制器02型</a></li>-->
+        <!--<li pinyin="zhongjiqi" initial="zjq" onclick="jump('addDevice_Common_01.html','31')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_31_name">中继器</a></li>-->
+        <!--<li pinyin="shuangguishuangquzidongchuanglian" initial="sgsqzdcl" onclick="jump('addDevice_Common_01.html','81')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_81_name">双轨双驱自动窗帘</a></li>-->
+        <!--<li pinyin="wuliandanhuoxianlinghuokaiguan" initial="wldhxlgkg" onclick="jump('addDevice_Common_01.html','12')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_12_name">Wulian单火线单路触摸调光开关</a></li>-->
+        <!--<li pinyin="yilubangdingkaiguan" initial="ylbdkg" onclick="jump('addDevice_Common_01.html','52')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_52_name">一路绑定开关</a></li>-->
+        <!--<li pinyin="lianglubangdingkaiguan" initial="llbdkg" onclick="jump('addDevice_Common_01.html','54')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_54_name">两路绑定开关</a></li>-->
+        <!--<li pinyin="sanlubangdingkaiguan" initial="slbdkg" onclick="jump('addDevice_Common_01.html','55')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_55_name">三路绑定开关</a></li>-->
+        <!--<li pinyin="dinjiliangkaiguan" initial="dinjlkg" onclick="jump('addDevice_Common_01.html','Ai')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_Ai_name">DIN计量开关</a></li>-->
+        <!--<li pinyin="yidongjiliangchazuo" initial="ydjlcz" onclick="jump('addDevice_Common_01.html','77')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_77_name">移动计量插座</a></li>-->
+        <!--<li pinyin="menlingshengguangqi" initial="mlsgq" onclick="jump('addDevice_Common_01.html','A6')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_A6_name">门铃声光器</a></li>-->
+        <!--<li pinyin="menlinganniu" initial="mlan" onclick="jump('addDevice_Common_01.html','A5')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_A5_name">门铃按钮02型</a></li>-->
+        <!--<li pinyin="eryanghuatanjianceqi" initial="eyhtjcq" onclick="jump('addDevice_Common_01.html','42')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_42_name">二氧化碳监测器</a></li>-->
+        <!--<li pinyin="meibiaowenkongqi" initial="mbwkq" onclick="jump('addDevice_Common_01.html','82')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_82_name">美标温控器</a></li>-->
+        <!--<li pinyin="kongtiaokongzhiqi" initial="ktkzq" onclick="jump('addDevice_Common_01.html','Oi')"><i class="left"></i><a class="autoSwitchLanguager" href="javascript:;" id="addDevice_Oi_name">空调控制器</a></li>-->
+    </div>
+</section>
+<section class="error autoSwitchLanguager" id="searchScene_noSearch"
+         style="display:none;width:100%;height:4rem;line-height:4rem;text-align:center;margin-top:5rem;color:#999;font-size:1.4rem;">
+    无搜索结果
+</section>
+<section class="gw_toast autoSwitchLanguager" id="addScene_scene_toast">网关登录情况下不能进行添加网关操作</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<!--<script src="../js/addDeviceModel.js" type="text/javascript" charset="utf-8"></script>-->
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6addDevice");
+    plus.tools.getProject(function (result) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        result = result || "wulian_app";
+
+        if(result == "smartRoom_app" || result == "ASH_app" || result == "Kamande_app" 
+		|| result == "IOTX_app" || result == "B_Gaon_app" || result == "LAVO_app" || result == "SmartCom_app" || result == "fjh_app"){
+            result = "wulian_app";
+            script.src = "../deviceModel/addDeviceModel.js";
+        }else if(result == "Legrand_app"){
+            result = "Legrand_app";
+            script.src = "../deviceModel/Legrand_addDeviceModel.js";
+        }else if(result == "zmartplus_app"){
+            result = "zmartplus_app";
+            script.src = "../deviceModel/zmartplus_addDeviceModel.js";
+        }else if(result == "hubb_app"){
+            result = "hubb_app";
+            script.src = "../deviceModel/hubb_addDeviceModel.js";
+        }else if(result == "wulian_app"){
+            script.src = "../deviceModel/addDeviceModel.js";
+        }
+        document.getElementsByTagName('head')[0].appendChild(script);
+        script.onload = function(){
+            $(".get_list").find("ul").html("");
+            var list = window.addDeviceModel[result];
+            for (var i in list) {
+                var deviceList = list[i].deviceList;
+                for (var j in deviceList) {
+                    var icon = deviceList[j].deviceType;
+                    if (deviceList[j].deviceIcon) {
+                        icon = deviceList[j].deviceIcon;
+                    }
+                    if (window.addDeviceModel[result][i].categoryType == "smart_control"){
+                        //不展示智能设备
+                        // var li = '<a class="smart_click" href="javascript:;" pinyin="' + deviceList[j].pinyin + '" initialPY="' + deviceList[j].initialPY + '" english="' + deviceList[j].english + '" initialE="' + deviceList[j].initialE + '"><i class="left" style="background:url(../../source/deviceIcon/device_icon_' + icon + '.png) no-repeat left center;background-size:4rem auto;"></i><span class="autoSwitchLanguager gateway" id="' + deviceList[j].deviceName + '">' + languageUtil.getResource(deviceList[j].deviceName) + '</span></a>'
+                        // $(".get_list").find("div").append(li);
+                    } else {
+                        var li = '<a href="javascript:;" pinyin="' + deviceList[j].pinyin + '" initialPY="' + deviceList[j].initialPY + '" english="' + deviceList[j].english + '" initialE="' + deviceList[j].initialE + '" onclick="jump(\'' + deviceList[j].deviceHref + '\',\'' + deviceList[j].deviceType + '\',\'' + list[i].categoryType + '\')"><i class="left" style="background:url(../../source/deviceIcon/device_icon_' + icon + '.png) no-repeat left center;background-size:4rem auto;"></i><span class="autoSwitchLanguager gateway" id="' + deviceList[j].deviceName + '">' + languageUtil.getResource(deviceList[j].deviceName) + '</span></a>'
+                        $(".get_list").find("div").append(li);
+                    }
+                }
+            }
+            // $(".smart_click").on("click",function(){
+            //     plus.tools.startSmart(function(){});
+            // });
+        }
+        // getSearchList(result, ".get_list");
+        initlan();
+    });
+    function jump(url, type, categoryType) {
+        plus.tools.getLoginType(function (data) {
+            if (categoryType == "gateway") {
+                if (data == "100") {
+                    if (type == "GW01") {
+                        //竖型网关
+                        window.location = "addGateway01.html"
+                    } else if (type == "GW06"||type == "GW12") {
+                        //02型增强网关
+                        window.location = "addDevice_gateway_02_01.html"
+                    } else if (type == "GW08") {
+                        //墙面网关跳转
+                        plus.tools.qrScan(function () {
+                        })
+                    }
+                } else {
+                    $(".gw_toast").show()
+                    $(".gw_toast").html(addScene_scene_toast)
+                    setTimeout(function () {
+                        $(".gw_toast").hide()
+                    }, 3000)
+                }
+            } else if (categoryType == "camera") {
+                if (data == "100") {
+                    plus.tools.startCamera(type, function () {
+                    })
+                } else {
+                    $(".gw_toast").html(addScene_txt_01)
+                    $(".gw_toast").show()
+                    setTimeout(function () {
+                        $(".gw_toast").hide()
+                    }, 3000)
+                }
+            } else {
+                plus.gatewayCmd.getCurrentGWInfo(function(result){
+                    if(result.gwType === "GW14"){
+                        var param = {
+                            "gatewayType":"GW14",
+                            "deviceType":type
+                        };
+                        plus.gatewayCmd.checkGatewaySupportDevice(param,function(resultData){
+                            if(resultData){
+                                info.setItem("deviceType", type);
+                                window.location = url;
+                            }else{
+                                window.showDialog.show("litter网关暂不支持添加该设备",3000);
+                            }
+                        });
+                    }
+                });
+            }
+        })
+    }
+    plus.plusReady(function () {
+
+        $("#searchScene_search").on("input propertychange", function () {
+            $(".delete").css({
+                "background": "url(../fonts/del.png) no-repeat center center",
+                "background-size": "1rem auto"
+            })
+            var $self = $(this)
+            var value = $self.val()
+            if ($self.val().trim() == "") {
+                //alert()
+                $(".get_list div").find("a").show()
+//				$(".error").show();
+            } else {
+                $(".get_list div a").each(function () {
+                    var pinyin = $(this).attr("pinyin")
+                    var initialPY = $(this).attr("initialPY");
+                    var initialE = $(this).attr("initialE");
+                    var english = $(this).attr("english");
+                    var name = $(this).find("span").html()
+                    if (pinyin.toLowerCase().indexOf(value.toLowerCase()) != -1 || name.indexOf(value) != -1 || initialPY.toLowerCase().indexOf(value.toLowerCase()) != -1 || initialE.toLowerCase().indexOf(value.toLowerCase()) != -1 || english.toLowerCase().indexOf(value.toLowerCase()) != -1) {
+                        $(this).show()
+//						$(".error").hide();
+                    } else {
+                        $(this).hide()
+                    }
+                })
+            }
+        });
+        $(".delete").on("click", function () {
+            $("#searchScene_search").val("")
+            $(".get_list div").find("a").show()
+        });
+    })
+</script>
+</html>

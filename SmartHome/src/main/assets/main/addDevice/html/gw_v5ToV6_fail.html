@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/fail.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="addDeviceNew.html"></a>
+				<a href="javascript:;" class="addDoorC autoSwitchLanguager" key="Device_upgrade_Entrance">v5网关升级</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="add_fail">
+			<img src="../fonts/icon_failure.png" alt="" />
+			<span class="autoSwitchLanguager" id="Cateyemini_Setup_Upgradefailed">升级失败</span>
+			<p style="padding:0 10%;margin-top:5rem;font-size:1.5rem;" class="autoSwitchLanguager" id="V5_V6_upgrade_fail_hint"></p>
+		</section>
+		<section class="add_advise" style="overflow-y: auto;height: 25rem;margin-top: 1rem;">
+			<ul>
+			</ul>
+		</section>
+		<section class="addSensorBtn">
+			<a class="autoSwitchLanguager" id="addDevice_fail_begin" href="javascript:;" style="opacity:1;bottom:10rem;">重试</a>
+		</section>
+		<section class="toBindGw">
+			<a class="autoSwitchLanguager" id="addDevice_bind" href="javascript:;">去绑定</a>
+		</section>
+	</body>
+	<script src="../js/getUrl.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan();
+        var deviceId = getUrlParam("deviceId");
+		plus.plusReady(function() {
+			$(".addSensorBtn a").unbind("click").bind("click",function(){
+			    window.location = "gw_v5ToV6_02.html?deviceId="+deviceId;
+			});
+            $(".toBindGw a").unbind("click").bind("click",function(){
+                plus.tools.goToBindGateway(deviceId,function(){});
+            })
+		})
+	</script>
+
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/thermostat.css"/>
+    <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/mui/js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+        /**********************************************************************
+        *                              重写 picker样式
+        **********************************************************************/
+        .mui-poppicker-body {
+            height: 18rem;
+            clear: both;
+            border-top: solid 0px #ddd;
+        }
+
+        .mui-poppicker {
+            border-top: solid 0px #ccc;
+            background-color: #F7F7F7;
+        }
+
+        .mui-poppicker-clear {
+            overflow: hidden;
+            text-align: center;
+            position: absolute;
+            left: 50%;
+            padding: 3px 0 0 0;
+            -webkit-transform: translate(-50%);
+            -moz-transform: translate(-50%);
+            -ms-transform: translate(-50%);
+            -o-transform: translate(-50%);
+            transform: translate(-50%);
+            color: #373737;
+            height: inherit;
+            line-height: inherit;
+            font-size: 1.6rem;
+        }
+
+        .mui-backdrop {
+            background-color: transparent;
+        }
+
+        .mui-btn {
+            background: transparent;
+            border: none;
+            color: #8dd652;
+            font-size: 1.6rem !important;
+        }
+
+        .mui-picker {
+            background: #fff;
+        }
+
+        .mui-pciker-rule {
+            font-size: 1.8rem !important;
+        }
+
+        .mui-backdrop {
+            position: fixed;
+            z-index: 998;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0,0,0,.3);
+        }
+
+        .switchOnView li span{
+            float: left;
+            display: block;
+            width: 50%;
+            height: 4rem;
+            font-size: 1.4rem;
+            color: #555;
+            line-height: 4.4rem;
+        }
+    </style>
+</head>
+
+<body style="background:#fff;">
+<header class="header" style="position: fixed;left:0;top:0;width:100%;">
+    <div class="header_top">
+        <a href="javascript:history.back(-1);"></a>
+        <a href="javascript:;" class="autoSwitchLanguager" key="setDeviceStatus">设置设备状态</a>
+        <a href="javascript:;" id="save" key="saveScene" class="autoSwitchLanguager">保存</a>
+    </div>
+</header>
+<section id="content" style="padding-top:6.4rem;">
+    <div class="switch">
+        <span key="editScene_OZ_Open" class="autoSwitchLanguager">开关</span>
+        <div>
+            <em id="switchClick" data-state="off"><i></i></em>
+        </div>
+    </div>
+    <ul class="switchOnView">
+        <li id="modeSet">
+            <span key="editScene_OZ_Type" class="autoSwitchLanguager">模式</span>
+            <span data-id="01" class="mode autoSwitchLanguager" key="editScene_OZ_Type1">制冷</span>
+        </li>
+        <li id="tempSet">
+            <span key="editScene_OZ_Temperature" class="autoSwitchLanguager">温度/℃</span>
+            <span data-id="26" class="temp">26℃</span>
+        </li>
+        <li id="windSet">
+            <span key="editScene_OZ_Speed" class="autoSwitchLanguager">风速</span>
+            <span data-id="01" class="wind autoSwitchLanguager" key="editScene_OZ_Speed3">低</span>
+        </li>
+        <li id="directionSet">
+            <span key="editScene_OZ_Direction" class="autoSwitchLanguager">风向</span>
+            <span data-id="0001" class="direction autoSwitchLanguager">1</span>
+        </li>
+    </ul>
+</section>
+</body>
+<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Scene");
+    initlan();
+    var deviceID = info.getItem("deviceID");
+    var gwID;
+    var dID;
+    var modeList = [];
+    var windDirectionList = [];//默认支持风向停止
+    var windSpeedList = [];
+    var coolMinTemperature = 16;
+    var coolMaxTemperature = 32;
+    var hotMinTemperature = 16;
+    var hotMaxTemperature = 32;
+    /*============================ 选择器 ==============================*/
+    var picker1, picker2, picker3, picker4;
+    /*=====================模式： 0-4 10进制==========================*/
+    var modeArr = [];
+    /*=====================温度：温度16-30 10进制==========================*/
+    var tempArr = [];
+    var windSpeedArr = [];
+    var windDirectionArr = [];
+    console.log(tempArr);
+    /*==========================================*/
+    function goBack() {
+        javascript:history.back(-1);
+    }
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(deviceID, function (data) {
+            gwID = data.gwID;
+            dID = data.devID;
+            handleData(data)
+            if (data.mode === 2) {
+            } else if (data.mode === 3) {
+            } else {
+                if(modeList.length == 0){
+                    sendCmd(772,["0101"]);
+                }
+            }
+        })
+
+        plus.gatewayCmdRush.newDataRefresh(function (data) {
+            if (data.cmd == "500" && data.devID == dID) {
+                handleData(data)
+            }  else if (data.cmd == "501" && data.devID == dID) {
+                if(data.retCode == 3){//设备不存在或离线
+                }
+            }
+            gwID = data.gwID;
+            dID = data.devID;
+        })
+
+        plus.gatewayCmd.androidBack(function () {
+            goBack();
+        });
+    });
+
+    /*=========================== 保存存储管家命令AAAA000E010009aabbccddeeeeffgghh =================================*/
+    function save() {
+        var onOff = $("#switchClick").attr("data-state");
+        var epData;
+        if (onOff === "off") {
+            epData = "00ffffffffffffffff";
+            var name1 = lang_closeSingle;
+            info.setItem("deviceState", name1);
+        } else if (onOff === "on") {
+            var modeSend = "01" + $(".mode").attr("data-id");
+            var tempSend = "ffff";
+            if($(".temp").attr("data-id") != undefined && $(".temp").attr("data-id") != ""){
+                var tempVaule = parseInt($(".temp").attr("data-id"));
+                tempSend = tempVaule.toString(16) + "ff";
+            }
+            var directionSend = "ffff";
+            if($(".direction").attr("data-id") != undefined && $(".direction").attr("data-id") != ""){
+                directionSend = $(".direction").attr("data-id");
+            }
+            var speedSend = "ffffff";
+            if($(".wind").attr("data-id") != undefined && $(".wind").attr("data-id") != ""){
+                speedSend = $(".wind").attr("data-id") + "ffff";
+            }
+            epData = modeSend + tempSend + directionSend + speedSend;
+            var bbText = " " + $(".mode").html();
+            var ccText = $(".temp").html();
+            var name = lang_openSingle + bbText;
+            if(ccText != "--"){
+                name = name + " " + ccText
+            }
+            console.log(name);
+            info.setItem("deviceState", name);
+        }
+        info.setItem("epData", "AAAA000E010009" + epData);
+        console.log(epData);
+        window.location = "addDelay.html";
+    }
+
+    /*================================= 点击事件 ==================================*/
+    //开关按钮打开或关闭
+    $("#switchClick").on("click", function () {
+        if ($(this).attr("data-state") === "off") {
+            $(this).attr("data-state", "on");
+            $(".switchOnView").slideDown();
+        } else {
+            $(this).attr("data-state", "off");
+            $(".switchOnView").slideUp();
+        }
+    });
+    $("#modeSet").on("click", function () {
+        var _this = $(this);
+        if (!picker1) {
+            picker1 = new mui.PopPicker({
+                layer: 1
+            });
+            $(".mui-backdrop").css("opacity", "0");
+            $(this).attr("data-click", "show");
+            picker1.setData(modeArr);
+        }
+        $(".mui-poppicker-clear").html(lang_OZ_Type);
+        $(".mui-poppicker-btn-cancel").html(lang_OZ_Cancel);
+        $(".mui-poppicker-btn-ok").html(lang_OZ_Confirm);
+        var selectValue = $(this).find("span").eq(1).attr("data-id");
+        for(var i=0; i<modeArr.length; i++){
+            if(modeArr[i].value == selectValue){
+                picker1.pickers[0].setSelectedIndex(i);
+                break;
+            }
+        }
+        picker1.show(function (item) {
+            console.log(item);
+            var modeStr = item[0].text;
+            var modeSend = item[0].value;
+            $(_this).find("span").eq(1).html(modeStr);
+            $(_this).find("span").eq(1).attr("data-id", modeSend);
+            if(modeSend == "03"){//送风不可调温度
+                $(".temp").html("--");
+                $(".temp").attr("data-id", "");
+            }else if(modeSend == "05"){//除湿不调条温度 风速
+                $(".temp").html("--");
+                $(".temp").attr("data-id", "");
+                $(".wind").html("--");
+                $(".wind").attr("data-id", "");
+            }else if(modeSend == "01"){//制冷
+                for (var i = coolMinTemperature; i <= coolMaxTemperature; i++) {
+                    var param = {
+                        "text": i + ''
+                    };
+                    tempArr.push(param);
+                }
+            }else if(modeSend == "02"){//制热
+                for (var i = hotMinTemperature; i <= hotMaxTemperature; i++) {
+                    var param = {
+                        "text": i + ''
+                    };
+                    tempArr.push(param);
+                }
+            }
+        });
+    });
+    $("#tempSet").on("click", function () {
+        var mode = $(".mode").attr("data-id");
+        if(mode != "01" && mode != "02"){
+            return;
+        }
+        var _this = $(this);
+        if (!picker2) {
+            picker2 = new mui.PopPicker({
+                layer: 1
+            });
+            picker2.setData(tempArr);
+        }
+//        console.log(tempArr)
+        $(".mui-poppicker-clear").html(lang_OZ_Temperature);
+        $(".mui-poppicker-btn-cancel").html(lang_OZ_Cancel);
+        $(".mui-poppicker-btn-ok").html(lang_OZ_Confirm);
+        var selectValue = $(this).find("span").eq(1).attr("data-id");
+        for(var i=0; i<tempArr.length; i++){
+            if(tempArr[i].text == selectValue){
+                picker2.pickers[0].setSelectedIndex(i);
+                break;
+            }
+        }
+        picker2.show(function (item) {
+            console.log(item);
+            var tempStr = item[0].text;
+            $(_this).find("span").eq(1).html(tempStr + "℃");
+            $(_this).find("span").eq(1).attr("data-id", tempStr);
+        });
+    })
+
+    $("#windSet").on("click", function () {
+        var mode = $(".mode").attr("data-id");
+        if(mode == "05"){
+            return;
+        }
+        var _this = $(this);
+        if (!picker3) {
+            picker3 = new mui.PopPicker({
+                layer: 1
+            });
+            picker3.setData(windSpeedArr);
+        }
+        $(".mui-poppicker-clear").html(lang_OZ_Speed);
+        $(".mui-poppicker-btn-cancel").html(lang_OZ_Cancel);
+        $(".mui-poppicker-btn-ok").html(lang_OZ_Confirm);
+        var selectValue = $(this).find("span").eq(1).attr("data-id");
+        for(var i=0; i<windSpeedArr.length; i++){
+            if(windSpeedArr[i].value == selectValue){
+                picker3.pickers[0].setSelectedIndex(i);
+                break;
+            }
+        }
+        picker3.show(function (item) {
+            console.log(item);
+            var windStr = item[0].text;
+            var windSend = item[0].value;
+            $(_this).find("span").eq(1).html(windStr);
+            $(_this).find("span").eq(1).attr("data-id", windSend);
+        });
+    });
+
+    $("#directionSet").on("click", function () {
+        var _this = $(this);
+        if (!picker4) {
+            picker4 = new mui.PopPicker({
+                layer: 1
+            });
+            picker4.setData(windDirectionArr);
+        }
+        $(".mui-poppicker-clear").html(lang_OZ_Direction);
+        $(".mui-poppicker-btn-cancel").html(lang_OZ_Cancel);
+        $(".mui-poppicker-btn-ok").html(lang_OZ_Confirm);
+        var selectValue = $(this).find("span").eq(1).attr("data-id");
+        for(var i=0; i<windDirectionArr.length; i++){
+            if(windDirectionArr[i].value == selectValue){
+                picker4.pickers[0].setSelectedIndex(i);
+                break;
+            }
+        }
+        picker4.show(function (item) {
+            console.log(item);
+            var directionStr = item[0].text;
+            var directionSend = item[0].value;
+            $(_this).find("span").eq(1).html(directionStr);
+            $(_this).find("span").eq(1).attr("data-id", directionSend);
+        });
+    })
+
+    $("#save").on("click", function () {
+        save()
+    });
+
+    function handleData(result) {
+        if (result.mode === 2) {
+        } else if (result.mode === 3) {
+        } else {
+            if(result.endpoints[0].clusters[0].clusterId != 513){
+                return;
+            }
+            var attributes = result.endpoints[0].clusters[0].attributes;
+            for (var ii = 0; ii < attributes.length; ii++) {
+                var attributeId = attributes[ii].attributeId;
+                var attributeValue = attributes[ii].attributeValue
+                fillData(attributeId, attributeValue)
+            }
+            setData()
+        }
+    }
+
+    function fillData(id, value) {
+        switch (id) {
+            case 33793://设备模式
+                for (var i = 0; i < value.length; i++) {
+                    var flag = value.substring(i, i + 1);
+                    if (flag == 1) {
+                        var modeIndex = i + 1;
+                        modeList.push(modeIndex < 10 ? "0" + modeIndex : modeIndex);
+                    }
+                }
+                break;
+            case 33794://制热温度下限
+                hotMinTemperature = parseInt(value);
+                break;
+            case 33795://制热温度上限
+                hotMaxTemperature = parseInt(value);
+                break;
+            case 33796://制冷温度上限
+                coolMaxTemperature = parseInt(value);
+                break;
+            case 33797://制冷温度下限
+                coolMinTemperature = parseInt(value);
+                break;
+            case 33800://风向风量
+                //1110110011100000
+                for (var i = 0; i < value.length; i++) {
+                    switch (i){
+                        // case 0://第1位：风向自动   0：无      1：有
+                        //     var directionAutoflag = value.substring(0, 1);
+                        //     if(directionAutoflag == 1){
+                        //         windDirectionList.push("00");
+                        //     }
+                        //     break;
+                        case 1://第2位：风量自动   0：无   1：有
+                            var speedAutoflag = value.substring(1, 2);
+                            if(speedAutoflag == 1){
+                                windSpeedList.push("00");
+                            }
+                            break;
+                        case 2://第3位：风量调节   0：无   1：有
+                            var speedAdjustflag = value.substring(2, 3);
+                            if(speedAdjustflag == 1){
+                                var speedStepsBin = value.substring(3, 6);
+                                var speedSteps = parseInt(speedStepsBin,2);
+                                for(var j=1; j<=speedSteps; j++){
+                                    windSpeedList.push("0" + j);
+                                }
+                            }
+                            break;
+                        // case 6://第7位：风向摆动   0：无      1：有
+                        //     var directionSwingflag = value.substring(6, 7);
+                        //     if(directionSwingflag == 1){
+                        //         windDirectionList.push("07");
+                        //     }
+                        //     break;
+                        // case 8://第9位：风向调节（上下） 0：无     1：有
+                        //     var directionUpDownAdjustflag = value.substring(8, 9);
+                        //     if(directionUpDownAdjustflag == 1){
+                        //         var directionUpDownAdjustStepsBin = value.substring(9,12);
+                        //         var directionUpDownAdjustSteps = parseInt(directionUpDownAdjustStepsBin,2);
+                        //         for(var j=1; j<=directionUpDownAdjustSteps; j++){
+                        //             windDirectionList.push("000" + j);
+                        //         }
+                        //     }
+                        //     break;
+                        // case 12://第13位：风向调节（左右）0：无     1：有
+                        //     var directionLeftRightAdjustflag = value.substring(12,13);
+                        //     if(directionLeftRightAdjustflag == 1){
+                        //         var directionLeftRightAdjustStepsBin = value.substring(13,16);
+                        //         var directionLeftRightAdjustSteps = parseInt(directionLeftRightAdjustStepsBin,2);
+                        //         for(var j=1; j<=directionLeftRightAdjustSteps; j++){
+                        //             windDirectionList.push("010" + j);
+                        //         }
+                        //     }
+                        //     break;
+                    }
+                }
+                break;
+        }
+    }
+
+    function setData() {
+        for (var i = coolMinTemperature; i <= coolMaxTemperature; i++) {
+            var param = {
+                "text": i + ''
+            };
+            tempArr.push(param);
+        }
+
+        for(var i = 0; i < modeList.length; i++){
+            var param1;
+            switch(modeList[i]){
+                case "01":
+                    param1 = {
+                        "text": lang_OZ_Type1,
+                        "value": modeList[i]
+                    };
+                    modeArr.push(param1);
+                    break;
+                case "02":
+                    param1 = {
+                        "text": lang_OZ_Type2,
+                        "value": modeList[i]
+                    };
+                    modeArr.push(param1);
+                    break;
+                case "03":
+                    param1 = {
+                        "text": lang_OZ_Type3,
+                        "value": modeList[i]
+                    };
+                    modeArr.push(param1);
+                    break;
+                case "05":
+                    param1 = {
+                        "text": lang_OZ_Type4,
+                        "value": modeList[i]
+                    };
+                    modeArr.push(param1);
+                    break;
+            }
+        }
+
+        // for(var i = 0; i < windDirectionList.length; i++){
+        //     var param1;
+        //     switch (windDirectionList[i]) {
+        //         case "00"://自动
+        //             param1 = {
+        //                 "text": lang_OZ_Speed4,
+        //                 "value": windDirectionList[i]
+        //             };
+        //             break;
+        //         case "07"://摆动
+        //             param1 = {
+        //                 "text": windDirectionList[i],
+        //                 "value": windDirectionList[i]
+        //             };
+        //             break;
+        //         case "09"://停止
+        //             param1 = {
+        //                 "text": windDirectionList[i],
+        //                 "value": windDirectionList[i]
+        //             };
+        //             break;
+        //         default:
+        //             param1 = {
+        //                 "text": windDirectionList[i],
+        //                 "value": windDirectionList[i]
+        //             };
+        //             break;
+        //     }
+        //     windDirectionArr.push(param1);
+        // }
+
+        for(var i = 0; i < 4; i++){
+            var param1;
+            switch (i) {
+                case 0://1
+                    param1 = {
+                        "text": "1",
+                        "value": "0001"
+                    };
+                    break;
+                case 1://2
+                    param1 = {
+                        "text": "2",
+                        "value": "0002"
+                    };
+                    break;
+                case 2://3
+                    param1 = {
+                        "text": "3",
+                        "value":"0004"
+                    };
+                    break;
+                case 3://摆动
+                    param1 = {
+                        "text": direction_swing,
+                        "value": "0007"
+                    };
+                    break;
+            }
+            windDirectionArr.push(param1);
+        }
+
+
+        for(var i = 0; i < windSpeedList.length; i++){
+            var param1;
+            switch (windSpeedList[i]) {
+                case "00"://自动
+                    param1 = {
+                        "text": lang_OZ_Speed4,
+                        "value": windSpeedList[i]
+                    };
+                    break;
+                case "01"://低
+                    param1 = {
+                        "text": lang_OZ_Speed3,
+                        "value": windSpeedList[i]
+                    };
+                    break;
+                case "02"://中
+                    param1 = {
+                        "text": lang_OZ_Speed2,
+                        "value": windSpeedList[i]
+                    };
+                    break;
+                case "03"://高
+                    param1 = {
+                        "text": lang_OZ_Speed1,
+                        "value": windSpeedList[i]
+                    };
+                    break;
+            }
+            windSpeedArr.push(param1);
+        }
+    }
+
+    function sendCmd(commandId,parameter,isNotShow){
+        var jsonData = {}
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = dID;
+        jsonData.endpointNumber = 1;
+        jsonData.clusterId = 513;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter != undefined){
+            jsonData.parameter = parameter;
+        }
+        // if(!isNotShow){
+        //     showLoad(true);
+        // }
+        // setTimeout(function() {
+        //     showLoad(false);
+        // }, 10000);
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+</script>
+
+</html>

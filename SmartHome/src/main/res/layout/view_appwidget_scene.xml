@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="230dp"
+    android:background="#E6ffffff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_scene_row0"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/default_padding_small">
+
+        <LinearLayout
+            android:id="@+id/layout_scene_item0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_scene_icon0"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitXY"
+                    tools:background="@drawable/scene_quick_01" />
+
+                <FrameLayout
+                    android:id="@+id/loading_layout0"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="#08ffffff"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/loading_icon0"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="13dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/scene_loading" />
+                </FrameLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_scene_name0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:paddingEnd="@dimen/default_padding_small"
+                android:paddingStart="@dimen/default_padding_small"
+                android:textColor="@color/v6_text_gray_dark"
+                android:textSize="14sp"
+                tools:text="测试一下桌面widget的长度" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_scene_item1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_scene_icon1"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitXY" />
+
+                <FrameLayout
+                    android:id="@+id/loading_layout1"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="#08ffffff"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/loading_icon1"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="13dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/scene_loading" />
+                </FrameLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_scene_name1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:paddingEnd="@dimen/default_padding_small"
+                android:paddingStart="@dimen/default_padding_small"
+                android:textColor="@color/v6_text_gray_dark"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_scene_item2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_scene_icon2"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitXY" />
+
+                <FrameLayout
+                    android:id="@+id/loading_layout2"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="#08ffffff"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/loading_icon2"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="13dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/scene_loading" />
+                </FrameLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_scene_name2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:paddingEnd="@dimen/default_padding_small"
+                android:paddingStart="@dimen/default_padding_small"
+                android:textColor="@color/v6_text_gray_dark"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_scene_item3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_scene_icon3"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitXY" />
+
+                <FrameLayout
+                    android:id="@+id/loading_layout3"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="#08ffffff"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/loading_icon3"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="13dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/scene_loading" />
+                </FrameLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_scene_name3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:paddingEnd="@dimen/default_padding_small"
+                android:paddingStart="@dimen/default_padding_small"
+                android:textColor="@color/v6_text_gray_dark"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_scene_row1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/default_padding_small">
+
+        <LinearLayout
+            android:id="@+id/layout_scene_item4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_scene_icon4"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitXY"
+                    tools:background="@drawable/scene_quick_02" />
+
+                <FrameLayout
+                    android:id="@+id/loading_layout4"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="#08ffffff"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/loading_icon4"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="13dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/scene_loading" />
+                </FrameLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_scene_name4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:paddingEnd="@dimen/default_padding_small"
+                android:paddingStart="@dimen/default_padding_small"
+                android:textColor="@color/v6_text_gray_dark"
+                android:textSize="14sp"
+                tools:text="测试一下桌面widget的长度" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_scene_item5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_scene_icon5"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitXY" />
+
+                <FrameLayout
+                    android:id="@+id/loading_layout5"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="#08ffffff"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/loading_icon5"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="13dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/scene_loading" />
+                </FrameLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_scene_name5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:paddingEnd="@dimen/default_padding_small"
+                android:paddingStart="@dimen/default_padding_small"
+                android:textColor="@color/v6_text_gray_dark"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_scene_item6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_scene_icon6"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitXY" />
+
+                <FrameLayout
+                    android:id="@+id/loading_layout6"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="#08ffffff"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/loading_icon6"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="13dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/scene_loading" />
+                </FrameLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_scene_name6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:paddingEnd="@dimen/default_padding_small"
+                android:paddingStart="@dimen/default_padding_small"
+                android:textColor="@color/v6_text_gray_dark"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_scene_item7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_scene_icon7"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitXY" />
+
+                <FrameLayout
+                    android:id="@+id/loading_layout7"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="#08ffffff"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/loading_icon7"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="13dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/scene_loading" />
+                </FrameLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_scene_name7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:paddingEnd="@dimen/default_padding_small"
+                android:paddingStart="@dimen/default_padding_small"
+                android:textColor="@color/v6_text_gray_dark"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>
+			局域网下的子机
+		</title>
+	</head>
+	<link rel="stylesheet" type="text/css" href="css/base.css" />
+	<link rel="stylesheet" type="text/css" href="css/deviceList.css" />
+	<link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+	<script type="text/javascript" charset="UTF-8" src="../source/js/jquery-3.1.1.min.js"></script>
+	<script src="../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/deviceList.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/managerDeal.js" type="text/javascript" charset="UTF-8"></script>
+	<script src="js/model.js" type="text/javascript" charset="UTF-8"></script>
+	<script src="js/waiting.js" type="text/javascript" charset="UTF-8"></script>
+	<link rel="stylesheet" type="text/css" href="css/waiting.css" />
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a class="back" href="ManagerGWIndex.html"></a>
+				<a class="deviceName autoSwitchLanguager" href="javascript:;" langKey='Fog_calculation_LAN_under_machine'>
+					局域网下的子机
+				</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<div class="get_list" style="display: none;">
+			<ul>
+			</ul>
+		</div>
+		<section class="nodata" style="display: block;">
+			<img src="fonts/nodata.png" />
+			<p class="autoSwitchLanguager" langKey='Fog_calculation_no_Sub_machine'>暂无子机!</p>
+			<p class="autoSwitchLanguager" langKey='Fog_calculation_no_Sub_machine_hinte'>请将子机与雾计算主机连接在同一局域网内或点击右上角刷新</p>
+		</section>
+		<section class="waiting" style="display: none">
+			<i></i>
+			<span class="autoSwitchLanguager" langKey="Fog_calculation_Bind_ing">处理中...</span>
+		</section>
+
+	</body>
+	<script>
+		initlan();
+		var gwId;
+		var appId;
+		var allSubGWList = [];
+		var info = window.sysfun;
+		info.init("ManagerGW");
+		plus.plusReady(function() {
+			 	plus.gatewayCmd.getCurrentAppID(function(data){
+                appId = data;
+                plus.gatewayCmd.getCurrentGatewayID(function(data){
+                		gwId = data;
+                		searchLanGW();
+                });
+     		});
+		});
+		
+		function lanListDeal(result)
+		{
+			$(".get_list ul").html("");
+			allSubGWList = result;
+			if (allSubGWList.length > 0) {
+				$(".nodata").css("display","none");
+				$(".get_list").css("display","block");
+			} else{
+				$(".nodata").css("display","block");
+				$(".get_list").css("display","none");
+			}
+			for(var i = 0; i < allSubGWList.length; i++) {
+				var model = allSubGWList[i];
+				var gwModel = GetGWModel(model.gwName,model.subid,model.masterid,model.gwType);
+				createGWCell(gwModel);
+			}
+		}
+	</script>
+
+</html>

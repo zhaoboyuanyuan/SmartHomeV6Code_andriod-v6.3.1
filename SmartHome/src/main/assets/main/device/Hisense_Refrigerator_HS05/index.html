@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title class="autoSwitchLanguager" key="device_DD_name">冰箱</title>
+        <link rel="stylesheet" type="text/css" href="css/base.css"/>
+        <link rel="stylesheet" type="text/css" href="css/main.css"/>
+        <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+        <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    </head>
+    <body onload="onload()">
+        <header class="header">
+            <a id="back" class="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" href="javascript:;">冰箱</a>
+            <a id="more" href="javascript:;"></a>
+        </header>
+        <section>
+            <ul class="container">
+                <!--冷藏室-->
+                <li class="card cardCold">
+                    <div class="title">
+                        <i class="name">冷藏室</i>
+                        <span class="door doorCold" m-state="open">
+                            门打开
+                        </span>
+                    </div>
+                    <div class="temp">
+                        <span class="tempCeil tempCurr">
+                            <div>当前温度</div>
+                            <div>
+                                <strong class="tempText tempCurrCold">5</strong>
+                                <i>℃</i>
+                            </div>
+                        </span>
+                        <span class="tempCeil tempReal">
+                            <div>实际温度</div>
+                            <div>
+                                <strong class="tempText tempRealCold">6</strong>
+                                <i>℃</i>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="ctrl">
+                        <span class="ctrlTempStart">
+                            <span>2</span>
+                            <span>℃</span>
+                        </span>
+                        <div class="slideBar slideBarCold" m-room="Cold">
+                            <span class="slideExpand"></span>
+                            <i class="slideCircle"></i>
+                        </div>
+                        <span class="ctrlTempEnd">
+                            <span>8</span>
+                            <span>℃</span>
+                        </span>
+                    </div>
+                </li>
+                <!--变温室-->
+                <li class="card cardUnset">
+                    <div class="title">
+                        <i class="name">变温室</i>
+                        <span class="door doorUnset" m-state="open">
+                            门打开
+                        </span>
+                    </div>
+                    <div class="temp">
+                        <span class="tempCeil tempCurr">
+                            <div>当前温度</div>
+                            <div>
+                                <strong class="tempText tempCurrUnset">-3</strong>
+                                <i>℃</i>
+                            </div>
+                        </span>
+                        <span class="tempCeil tempReal">
+                            <div>实际温度</div>
+                            <div>
+                                <strong class="tempText tempRealUnset">-3</strong>
+                                <i>℃</i>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="ctrl">
+                        <span class="ctrlTempStart">
+                            <span>-18</span>
+                            <span>℃</span>
+                        </span>
+                        <div class="slideBar slideBarUnset" m-room="Unset">
+                            <span class="slideExpand"></span>
+                            <i class="slideCircle"></i>
+                        </div>
+                        <span class="ctrlTempEnd">
+                            <span>5</span>
+                            <span>℃</span>
+                        </span>
+                    </div>
+                </li>
+                <!--冷冻室-->
+                <li class="card cardFreeze">
+                    <div class="title">
+                        <i class="name">冷冻室</i>
+                        <span class="door doorFreeze" m-state="open">
+                            门打开
+                        </span>
+                    </div>
+                    <div class="temp">
+                        <span class="tempCeil tempCurr">
+                            <div>当前温度</div>
+                            <div>
+                                <strong class="tempText tempCurrFreeze">-22</strong>
+                                <i>℃</i>
+                            </div>
+                        </span>
+                        <span class="tempCeil tempReal">
+                            <div>实际温度</div>
+                            <div>
+                                <strong class="tempText tempRealFreeze">-20</strong>
+                                <i>℃</i>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="ctrl">
+                        <span class="ctrlTempStart">
+                            <span>-25</span>
+                            <span>℃</span>
+                        </span>
+                        <div class="slideBar slideBarFreeze" m-room="Freeze">
+                            <span class="slideExpand"></span>
+                            <i class="slideCircle"></i>
+                        </div>
+                        <span class="ctrlTempEnd">
+                            <span>-15</span>
+                            <span>℃</span>
+                        </span>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="mode">模式</div>
+                    <div class="modeContainer">
+                        <span class="modeCeil modeSmart">
+                            <div class="modeBg"><i class="modeIcon"></i></div>
+                            <div class="modeText">智能</div>
+                        </span>
+                        <span class="modeCeil modeFast">
+                            <div class="modeBg"><i class="modeIcon"></i></div>
+                            <div class="modeText">速冻</div>
+                        </span>
+                    </div>
+                </li>
+            </ul>
+        </section>
+        <section class="mask_layer" style="display:none;"><i></i><span id="offLine" class="autoSwitchLanguager"></span></section>
+    </body>
+    <script>
+
+        /**********************************************************************
+         *                              变量
+         **********************************************************************/
+        var mTempCurrCold = 3;
+        var mTempCurrUnset = -3;
+        var mTempCurrFreeze = -22;
+        var mTempRealCold = 7;
+        var mTempRealUnset = -3;
+        var mTempRealFreeze = -20;
+
+        // 门状态 0 关 1 开
+        var mDoorStateCold = 0;
+        var mDoorStateUnset = 1;
+        var mDoorStateFreeze = 0;
+
+        var devID, gwID;
+        /**********************************************************************
+         *                              初始化
+         **********************************************************************/
+        // plus.plusReady(function () {
+        //     plus.gatewayCmd.getDeviceInfo(function (data) {
+        //         gwID = data.gwID;
+        //         devID = data.devID;
+        //         getMoreConfig(devID);
+        //         reloadUI(data);
+        //     });
+        //     plus.gatewayCmd.newDataRefresh(function (data) {
+        //         reloadUI(data);
+        //     });
+        // });
+        
+        function reloadUI() {
+            updateTemp();
+            updateDoor();
+        }
+        function onload() {
+            $('.ctrlTempStart').css('line-height', $('.ctrlTempStart').height() + 'px');
+            $('.ctrlTempEnd').css('line-height', $('.ctrlTempEnd').height() + 'px');
+
+            updateTemp();
+            updateDoor();
+        }
+
+        /**********************************************************************
+         *                              更新界面
+         **********************************************************************/
+        // 更新温度
+        function updateTemp() {
+            updateTempCold();
+            updateTempUnset();
+            updateTempFreeze();
+        }
+        // 更新 冷藏室温度
+        function updateTempCold() {
+            $('.tempCurrCold').html(mTempCurrCold);
+            $('.tempRealCold').html(mTempRealCold);
+            var delta = (mTempCurrCold - 2) / (8 - 2) * 100;
+
+            var me = $('.slideBarCold');
+            me.find('.slideExpand').css('width', delta + '%');
+            me.find('.slideCircle').css('left', delta + '%');
+        }
+        // 更新 变温室温度
+        function updateTempUnset() {
+            $('.tempCurrUnset').html(mTempCurrUnset);
+            $('.tempRealUnset').html(mTempRealUnset);
+            var delta = (mTempCurrUnset + 18) / (5 + 18) * 100;
+
+            var me = $('.slideBarUnset');
+            me.find('.slideExpand').css('width', delta + '%');
+            me.find('.slideCircle').css('left', delta + '%');
+        }
+        // 更新 冷冻室温度
+        function updateTempFreeze() {
+            $('.tempCurrFreeze').html(mTempCurrFreeze);
+            $('.tempRealFreeze').html(mTempRealFreeze);
+            var delta = (mTempCurrFreeze + 25) / (-15 + 25) * 100;
+
+            var me = $('.slideBarFreeze');
+            me.find('.slideExpand').css('width', delta + '%');
+            me.find('.slideCircle').css('left', delta + '%');
+        }
+
+        // 更新 门状态
+        function updateDoor() {
+            updateDoorCold();
+            updateDoorUnset();
+            updateDoorFreeze();
+        }
+        function updateDoorCold() {
+            $('.doorCold').attr('m-state', mDoorStateCold == 0 ? 'close' : 'open');
+            $('.doorCold').html(mDoorStateCold == 0 ? '门关闭' : '门打开');
+        }
+        function updateDoorUnset() {
+            $('.doorUnset').attr('m-state', mDoorStateUnset == 0 ? 'close' : 'open');
+            $('.doorUnset').html(mDoorStateUnset == 0 ? '门关闭' : '门打开');
+        }
+        function updateDoorFreeze() {
+            $('.doorFreeze').attr('m-state', mDoorStateFreeze == 0 ? 'close' : 'open');
+            $('.doorFreeze').html(mDoorStateFreeze == 0 ? '门关闭' : '门打开');
+        }
+
+        /**********************************************************************
+         *                              控制
+         **********************************************************************/
+         function setTemp(room, t) {
+             var temp;
+             switch (room) {
+                 case 'Cold':
+                     temp = Math.round(t * (8 - 2)) + 2;
+                     mTempCurrCold = temp;
+                     updateTempCold();
+                     break;
+                 case 'Unset':
+                     temp = Math.round(t * (5 + 18)) - 18;
+                     mTempCurrUnset = temp;
+                     updateTempUnset();
+                     break;
+                 case 'Freeze':
+                     temp = Math.round(t * (-15 + 25)) - 25;
+                     mTempCurrFreeze = temp;
+                     updateTempFreeze();
+                     break;
+             }
+         }
+
+        /**********************************************************************
+         *                              绑定事件
+         **********************************************************************/
+        $('#more').click(function () {
+
+        });
+        $('.slideCircle').on('touchstart', function (e) {
+            var parent = $(this).parents('.slideBar');
+            var touch = e.touches[0]; //获取第一个触点
+            var left = parent.offset().left;
+            var width = parent.width();
+            var x = touch.pageX;
+            var per = (x - left) / width;
+            // console.log('========== 开始滑动 ==========');
+        });
+        $('.slideCircle').on('touchmove', function (e) {
+            var parent = $(this).parents('.slideBar');
+            var touch = e.touches[0]; //获取第一个触点
+            var left = parent.offset().left;
+            var width = parent.width();
+            var x = touch.pageX;
+            var per = (x - left) / width;
+            if (per < 0) {
+                per = 0;
+            } else if (per > 1) {
+                per = 1;
+            }
+            per = per * 100;
+            parent.find('.slideExpand').css('width', per + '%');
+            parent.find('.slideCircle').css('left', per + '%');
+            parent.siblings('.spanVoicePer').html(~~per + '%');
+            // console.log('滑动中 : ' + per + '%');
+        });
+        $('.slideCircle').on('touchend', function (e) {
+            var parent = $(this).parents('.slideBar');
+            var touch = e.changedTouches[0]; //获取第一个触点
+            var left = parent.offset().left;
+            var width = parent.width();
+            var x = touch.pageX;
+            var per = (x - left) / width;
+            if (per < 0) {
+                per = 0;
+            } else if (per > 1) {
+                per = 1;
+            }
+            console.log('========== 滑动结束 ==========');
+            console.log(parent.attr('m-room') + ': ' + per);
+            setTemp(parent.attr('m-room'), per)
+        });
+    </script>
+</html>

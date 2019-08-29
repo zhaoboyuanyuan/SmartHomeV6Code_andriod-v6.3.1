@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>设备操作</title>
+	</head>
+	<link rel="stylesheet" type="text/css" href="css/base.css" />
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css">
+		* {
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+	</style>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName" href="javascript:;"></a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="curtainDiv">
+			<div id="Device_curtain_1" class="curtainButton autoSwitchLanguager" style="border-radius:4px 0 0 4px;">窗帘1</div>
+			<div id="Device_curtain_2" class="curtainButton autoSwitchLanguager" style="background-color: white;color: #7DD141;border-radius: 0 4px 4px 0;">窗帘2</div>
+		</section>
+		<section style="width: 100%;height: 27rem;background-color: white;text-align: center; margin-top: 3rem;">
+			<div style="width: 90%;margin-top: 0rem;height: 20rem;display: inline-block;background: url(fonts/pic_window.png) center center no-repeat;background-size: 80% 80%;">
+				<img id="curtainImg" style="width: 100%" src="fonts/0.png" />
+			</div>
+		</section>
+		<section style="width: 100%;height: 5rem;background-color: white;margin-top: 1.5rem;">
+			<div id="bar1" style="auto;width: 100%;background-color: none;height: 2rem;padding-top: 1rem;">
+				<div id="bar3" style="border-radius: 1rem;margin-left: 10%;width: 80%;height: 1rem;background-color: gainsboro;">
+					<div id="bar2" style=" width: 0%;float: left;background-color: #F9D92C;height: 1rem;border-radius: 3rem;">
+						<div id="Btn" style="box-shadow: 0rem 0rem 0.4rem 0.4rem gainsboro;position: absolute;width: 3rem;border-radius: 3rem;background-color: white;height: 3rem;margin-top: -1rem;margin-right: -1rem;">
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="bottomview" style="background:#f3f3f3;">
+			<div id="openBtn" style="width: 6.5rem; height: 6.5rem;">
+				<img src="fonts/open_nor.png" />
+			</div>
+			<div id="stopBtn" style="margin-top: -0.75rem;width: 8rem; height: 8rem;">
+				<img src="fonts/stop_nor.png" />
+			</div>
+			<div id="closeBtn" style="width: 6.5rem; height: 6.5rem;">
+				<img src="fonts/close_nor.png" />
+			</div>
+		</section>
+		<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" id="offline">设备已离线</span></section>
+	</body>
+	<script>
+		initlan();
+		var currentSelect = 1; //当前选中窗帘，默认1
+		var shadow = document.getElementsByClassName("mask_layer")[0];
+		var deviceName = document.getElementsByClassName("deviceName")[0];
+		var bar = document.getElementById("Btn");
+		var openbtn = document.getElementById("openBtn");
+		var endpointDic = {
+			"EP1Value": "0",
+			"EP2Value": "0"
+		};
+		openbtn.ontouchstart = function() {
+			this.getElementsByTagName("img")[0].src = "fonts/open_pre.png";
+		}
+		openbtn.ontouchend = function() {
+			this.getElementsByTagName("img")[0].src = "fonts/open_nor.png";
+		}
+		var stopbtn = document.getElementById("stopBtn");
+		stopbtn.ontouchstart = function() {
+			this.getElementsByTagName("img")[0].src = "fonts/stop_pre.png";
+		}
+		stopbtn.ontouchend = function() {
+			this.getElementsByTagName("img")[0].src = "fonts/stop_nor.png";
+		}
+		var closebtn = document.getElementById("closeBtn");
+		closebtn.ontouchstart = function() {
+			this.getElementsByTagName("img")[0].src = "fonts/close_pre.png";
+		}
+		closebtn.ontouchend = function() {
+			this.getElementsByTagName("img")[0].src = "fonts/close_nor.png";
+		}
+		plus.plusReady(function() {
+			openbtn.addEventListener("click", function() {
+				controlCutrain(0, 0);
+			});
+			stopbtn.addEventListener("click", function() {
+				controlCutrain(2, 0);
+			});
+			closebtn.addEventListener("click", function() {
+				controlCutrain(1, 0);
+			});
+			plus.gatewayCmd.getDeviceInfo(function(result) {
+				deviceInfo = result;
+				DEVICEID = result.devID;
+				GWID = result.gwID;
+				getMoreConfig(DEVICEID)
+				if(!isNull(result.name)) {
+					name = result.name.indexOf("#$default$#") != -1 ? lang_81 + result.name.split("#")[2] : result.name;
+				}
+				deviceName.textContent = name;
+				setEndPoints(result);
+				reloadUI();
+				if(result.mode == 2 || result.mode == 3) {
+					shadow.style.display = "block";
+				} else {
+					shadow.style.display = "none";
+				}
+				rush_500(DEVICEID, GWID);
+			});
+			document.getElementById("back").addEventListener("click", function() {
+				plus.tools.back(function() {});
+			});
+			document.getElementsByClassName("more")[0].addEventListener("click", function() {
+				plus.tools.more(moreConfig, function() {});
+			});
+		});
+		document.getElementsByClassName("curtainButton")[0].addEventListener("click", function() {
+			currentSelect = 1;
+			refreshButtonStatus();
+			reloadUI();
+		});
+		document.getElementsByClassName("curtainButton")[1].addEventListener("click", function() {
+			currentSelect = 2;
+			refreshButtonStatus();
+			reloadUI();
+		});
+
+		function refreshButtonStatus() {
+			document.getElementsByClassName("curtainButton")[0].style.backgroundColor = currentSelect == 1 ? "#7DD141" : "white";
+			document.getElementsByClassName("curtainButton")[0].style.color = currentSelect == 1 ? "white" : "#7DD141";
+			document.getElementsByClassName("curtainButton")[1].style.color = currentSelect == 1 ? "#7DD141" : "white";
+			document.getElementsByClassName("curtainButton")[1].style.backgroundColor = currentSelect == 1 ? "white" : "#7DD141";
+		}
+
+		function setEndPoints(result) {
+			var endPoints = result.endpoints;
+			for(var i = 0; i < endPoints.length; i++) {
+				var endPoint = endPoints[i];
+				var endPointNum = endPoint.endpointNumber;
+				var clusters = endPoint.clusters;
+				for(var j = 0; j < clusters.length; j++) {
+					var cluster = clusters[j];
+					var clusterId = cluster.clusterId;
+					var attributes = cluster.attributes;
+					for(var k = 0; k < attributes.length; k++) {
+						var attribute = attributes[k];
+						var attributeid = attribute.attributeId;
+						var attributeValue = attribute.attributeValue;
+						if(clusterId == 258 && attributeid == 8) {
+							if(endPointNum == 1) {
+								endpointDic['EP1Value'] = attributeValue;
+							} else if(endPointNum == 2) {
+								endpointDic['EP2Value'] = attributeValue;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		function controlCutrain(commandId, parameter) {
+			var jsonData = {
+				"cmd": "501",
+				"gwID": GWID,
+				"devID": DEVICEID,
+				"endpointNumber": currentSelect,
+				"clusterId": 258,
+				"commandType": 01,
+				"commandId": commandId,
+			};
+			if(commandId == 8) {
+				jsonData.parameter = [parseInt(parameter) + ''];
+			}
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result" + result);
+			})
+		}
+
+		function rush_500(dID, gID) {
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				if(result.cmd == "502") {
+					var name = "";
+					if(!isNull(result.name)) {
+						name = result.name;
+					}
+					deviceName.textContent = name;
+				}
+				if(dID == result.devID && gID == result.gwID && result.cmd == "500") {
+					var name = "";
+					if(!isNull(result.name)) {
+						name = result.name.indexOf("#$default$#") != -1 ? lang_81 + result.name.split("#")[2] : result.name;
+					}
+					deviceName.textContent = name;
+					switch(parseInt(result.mode)) {
+						case 0:
+							{
+								//设备状态变化
+								shadow.style.display = "none";
+								setEndPoints(result);
+								reloadUI();
+							}
+							break;
+						case 1:
+							{
+								//设备上线
+								shadow.style.display = "none";
+							}
+							break;
+						case 2:
+							{
+								//设备离线
+								shadow.style.display = "block";
+							}
+							break;
+						case 3:
+							{
+								//设备主动退网
+								shadow.style.display = "block";
+							}
+							break;
+						case 4:
+							{
+								//设备第一次上线
+								shadow.style.display = "none";
+							}
+							break;
+					}
+				}
+			})
+		}
+
+		//刷新滑动条
+		function reloadUI() {
+			var attributeValue;
+			if(currentSelect == 1) {
+				attributeValue = endpointDic['EP1Value']
+			} else if(currentSelect == 2) {
+				attributeValue = endpointDic['EP2Value']
+			}
+			var bar = document.getElementById("Btn");
+			var bar2 = document.getElementById("bar2");
+			var bar3 = document.getElementById("bar3");
+			var openX = Number(bar3.offsetLeft);
+			var closeX = Number(bar3.offsetLeft + bar3.offsetWidth);
+			console.log((Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2));
+			if(attributeValue != 255) {
+				if (attributeValue > 100) {
+					attributeValue = 0;
+				}
+				var ratio = (attributeValue / 100);
+				document.getElementById("curtainImg").src = "fonts/" + parseInt(attributeValue / 10) + ".png"
+				bar2.style.width = Number(bar3.offsetWidth) * ratio + "px"
+				bar.style.left = Number(bar2.offsetWidth) + openX + "px"
+			} else {
+				attributeValue = 50;
+				var ratio = (attributeValue / 100);
+				document.getElementById("curtainImg").src = "fonts/" + parseInt(attributeValue / 10) + ".png"
+				bar2.style.width = Number(bar3.offsetWidth) * ratio + "px"
+				bar.style.left = Number(bar2.offsetWidth) + openX + "px"
+			}
+			console.log(endpointDic);
+		}
+
+		bar.addEventListener("touchend", function(evt) {
+			var bar2 = document.getElementById("bar2");
+			var bar3 = document.getElementById("bar3");
+			console.log((Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2));
+			controlCutrain(8, (Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2) * 100);
+		})
+		bar.addEventListener("touchstart", function(evt) {
+			var bar1 = document.getElementById("bar1");
+			var bar2 = document.getElementById("bar2");
+			var bar3 = document.getElementById("bar3");
+			var openX = Number(bar3.offsetLeft);
+			var closeX = Number(bar3.offsetLeft + bar3.offsetWidth);
+			var touch = evt.touches[0];
+			var x = Number(touch.pageX)
+			var y = Number(touch.pageY)
+			bar1.addEventListener("touchmove", function(e) {
+				var touch1 = e.touches[0];
+				var xx = Number(touch1.pageX)
+				var yy = Number(touch1.pageY)
+				if(Math.abs(Number(bar.offsetLeft) - Number(touch1.pageX)) > 20) {
+					if(openX >= Number(touch1.pageX)) {
+						bar.style.left = openX + "px";
+						bar2.style.width = 0 + "px"
+						return;
+					}
+					if(closeX <= Number(touch1.pageX)) {
+						bar.style.left = closeX + "px";
+						bar2.style.width = bar3.offsetWidth + "px"
+						return;
+					}
+					bar.style.left = touch1.pageX + "px";
+					bar2.style.width = bar.offsetLeft - bar3.offsetLeft + "px";
+				}
+			})
+		})
+	</script>
+
+</html>

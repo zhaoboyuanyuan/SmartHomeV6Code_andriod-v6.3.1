@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>粉尘检测器</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+    <header class="header">
+        <a class="back" href="javascript:;"></a>
+        <a href="javascript:;" class="autoSwitchLanguager deviceName" id="device_44_name">粉尘检测器</a>
+        <a class="more" href="javascript:;"></a>
+    </header>
+    <section class="top_tip">
+        <a id="cartogram" href="javascript:;"></a>
+        <div class="tip_img autoSwitchLanguager"></div>
+        <span class="tip_text autoSwitchLanguager"></span>
+    </section>
+    <section class="device_details">
+        <div class="cd_data">
+            <dl class="ppm">
+                <dt>--<em style="font-size: 1.5rem;">   ug/m3</em></dt>
+                <dd class="autoSwitchLanguager" id="Dust_index">当前粉尘指数</dd>
+            </dl>
+        </div>
+    </section>
+    <section class="mask_layer" style="display: none">
+        <i></i>
+        <span class="autoSwitchLanguager" id="Device_OffLine">设备已离线</span>
+    </section>
+    <section class="gw_toast autoSwitchLanguager" id="device_toast">通过账号登录后才可查看</section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var deviceId = '';
+    initlan();
+    plus.plusReady(function() {
+        plus.gatewayCmd.getDeviceInfo(function(data) {
+            if (data.mode == 2) {
+                $(".mask_layer").show();
+            } else {
+                $(".mask_layer").hide();
+                editHtml(data);
+            }
+            var name = data.name.indexOf("#$default$#") != -1 ? title_name + data.name.split("#")[2] : data.name;
+            $(".deviceName").html(name)
+            deviceId = data.devID;
+            getMoreConfig(deviceId);
+        })
+        plus.gatewayCmd.newDataRefresh(function(data) {
+            if (data.cmd == "502") {
+                if (data.name != undefined || data.name != '') {
+                    $(".deviceName").html(data.name)
+                }
+            } else if (data.cmd == "500" && deviceId == data.devID) {
+                if (data.mode == 2) {
+                    $(".mask_layer").show()
+                } else {
+                    $(".mask_layer").hide()
+                    editHtml(data)
+                }
+                var name = data.name.indexOf("#$default$#") != -1 ? title_name + data.name.split("#")[2] : data.name
+                $(".deviceName").html(name)
+            }
+        })
+    });
+    $(".back").on("click", function() {
+        plus.tools.back(function() {})
+    });
+    $(".more").on("click", function() {
+        plus.tools.more(moreConfig, function() {})
+    });
+    //绘制界面
+    function editHtml(data) {
+        var ppm;
+        if (data.endpoints[0].endpointNumber == 1) {
+            var attributeId = data.endpoints[0].clusters[0].attributes[0].attributeId;
+            ppm = data.endpoints[0].clusters[0].attributes[0].attributeValue
+            if (attributeId != undefined && attributeId == 32771 && ppm != undefined) {
+                $(".ppm").find("dt").html(ppm + '<em style="font-size: 1.5rem;">   ug/m3</em>');
+                judge(ppm);
+            }
+        }
+    }
+    //判断CO2值
+    function judge(ppm) {
+        $(".tip_img").removeClass("tip_img_01");
+        $(".tip_img").removeClass("tip_img_02");
+        $(".device_details").removeClass("device_details_01");
+        $(".device_details").removeClass("device_details_02");
+        if (ppm <= 75) {
+            $(".tip_img").html(device_state_1);
+            $(".tip_text").html(device_tip_1);
+        } else if (ppm <= 150) {
+            $(".tip_img").html(device_state_2);
+            $(".tip_text").html(device_tip_2);
+            $(".tip_img").addClass("tip_img_01")
+            $(".device_details").addClass("device_details_01");
+        } else {
+            $(".tip_img").html(device_state_3);
+            $(".tip_text").html(device_tip_3);
+            $(".tip_img").addClass("tip_img_02")
+            $(".device_details").addClass("device_details_02");
+        }
+    }
+    //判断网关登录还是云登录
+    $("#cartogram").on("click", function() {
+        plus.tools.getLoginType(function(data) {
+            if (data == "100") {
+                window.location = "history.html"
+            } else {
+                $(".gw_toast").show()
+                setTimeout(function() {
+                    $(".gw_toast").hide()
+                }, 3000)
+            }
+        })
+    })
+</script>
+
+</html>

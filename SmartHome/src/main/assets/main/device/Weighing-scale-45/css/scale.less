@@ -1,0 +1,176 @@
+//体重分析头部报警内容宽度
+@scale_header_width:34.4rem;
+//体重分析头部报警内容上下距离
+@scale_header_margin:3.48rem;
+//体重分析头部报警内容边框圆角
+@scale_header_border_radius:1.12rem;
+//体重分析头部报警内容背景色
+@scale_header_background_color:#0ddf75;
+//体重分析头部报警内容背景开始色
+@scale_header_start_background_color:#93ffbe;
+//体重分析头部报警内容字体颜色
+@scale_header_font_color:#ffffff;
+//体重分析头部报警内容首行字体大小
+@scale_header_font_size:1.68rem;
+//体重分析头部报警内容第二行字体大小
+@scale_header_second_font_size:1.38rem;
+//体重分析头部报警内容第三行距离上面距离
+@scale_header_third_margin:1.02rem;
+//体重分析头部报警内容第三行距离下面距离
+@scale_header_third_bottom:3rem;
+//体重分析头部报警内容第三行字体大小
+@scale_header_third_font_size:4.5rem;
+//体重分析标题记录字体大小
+@scale_title_record:1.62rem;
+//体重分析标题记录字体颜色
+@scale_title_record_color:#000000;
+//体重分析记录详情上下距离
+@scale_record_margin:2.7rem;
+//体重分析记录详情后面字体颜色
+@scale_record_last_font_color:#999999;
+//体重分析超重背景色开始色
+@scale_abnormal_start: #ec846d;
+//体重分析超重背景色结束色
+@scale_abnormal_end: #ef5a58;
+//主界面体重秤距离顶部高度
+@index_scale_margin_top:10rem;
+//主界面下按钮的距离
+@index_button_top:0rem;
+//主界面按钮的宽度高度
+@index_button_height: 3.4rem;
+@index_button_width:11rem;
+//主界面按钮字体大小
+@index_button_font_size: 1.4rem;
+//主界面按钮边框圆角
+@index_button_border_radious:0.5rem;
+//主界面按钮字体颜色
+@index_button_font_color:#333333;
+//主界面第二个按钮背景色
+@index_button_background_color: #8dd652;
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  /*padding: 0rem @scale_header_font_size;*///改过
+  padding: 0rem 0rem;
+}
+.scale_analysis_header{
+  margin: @scale_header_margin auto;
+  width: @scale_header_width;
+  border-radius: @scale_header_border_radius;
+  font-size: 0;
+  letter-spacing: 0;
+  h5:first-child{
+    color: @scale_header_font_color;
+    font-weight: bold;
+    font-size: @scale_header_font_size;
+    text-align: center;
+    padding-top: @scale_header_font_size;
+  }
+  h5:nth-child(2){
+    font-size: @scale_header_second_font_size;
+    color: @scale_header_font_color;
+    text-align: center;
+    margin-top: @scale_header_font_size;
+  }
+  h5:nth-child(3){
+    color: @scale_header_font_color;
+    text-align: center;
+    margin-top: @scale_header_third_margin;
+    font-size: @scale_header_third_font_size;
+    font-weight: bold;
+    line-height:3.75rem;
+    padding-bottom: @scale_header_third_bottom;
+    span{
+      font-size:@scale_header_font_size;
+    }
+  }
+}
+.normal{
+  background-image: -webkit-linear-gradient(top left,@scale_header_start_background_color , @scale_header_background_color 55%);
+}
+
+.abnormal{
+  background-image: -webkit-linear-gradient(top left,@scale_abnormal_start ,@scale_abnormal_end 55%);
+}
+
+.scale_analysis_title_record{
+  color: @scale_title_record_color;
+  font-weight: bold;
+  font-size: @scale_title_record;
+  line-height: 1.875rem;
+  padding: 0rem 1.5rem;
+}
+
+#scale_analysis_record_detail{
+  li{
+    margin: @scale_record_margin 0rem;
+    list-style-type: none;
+    font-size: 0;
+    padding: 0rem 1.5rem;
+    span:first-child{
+      color: @scale_title_record_color;
+      font-size: @scale_header_second_font_size;
+    }
+    span:nth-child(2){
+      font-size: @scale_header_second_font_size;
+      color: @scale_record_last_font_color;
+      float: right;
+    }
+  }
+}
+
+//主界面
+.progress{
+  width: 100%;
+  text-align: center;
+  margin-top: @index_scale_margin_top;
+  div{
+    margin-top: @index_button_top;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+    -webkit-justify-content: center;
+  }
+  button{
+    width: @index_button_width;
+    height: @index_button_height;
+    font-size: @index_button_font_size;
+    border-radius: @index_button_border_radious;
+    outline:none;
+  }
+  button:first-child{
+    background-color: @scale_header_font_color;
+    border: 1px solid @index_button_font_color;
+    color: @index_button_font_color;
+    margin-right: 3rem;
+  }
+  button:nth-child(2){
+    color: @scale_header_font_color;
+    border: none;
+  }
+}
+.keep_record{
+  background-color: @index_button_background_color;
+}
+.finish_keep{
+  background-color: @scale_record_last_font_color;
+}
+
+.remove{
+  text-decoration:none;
+}
+
+.if_show{
+  width: 100%;
+  color: #eeeeee;
+  transform: translate(-50%,-50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: none;
+}
+

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <title></title>
+    <link href="css/scale.css" rel="stylesheet">
+    <link href="css/base.css" rel="stylesheet">
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+        body,html{
+            background-color: #f1f4f8;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a href="javascript:;" key="Balanec_45_name" class="deviceName autoSwitchLanguager remove"></a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<div class="progress">
+<canvas id="canvas">
+</canvas>
+    <div>
+        <button id="scale_analysis" key="Balanec_button_1" class="autoSwitchLanguager" type="button">体重分析</button>
+        <button id="keep" key="Balanec_button_2" class="autoSwitchLanguager keep_record" type="button"></button>
+    </div>
+</div>
+<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="Device_OffLine" id="offline">设备已离线</span></section>
+<script>
+    initlan();
+    var deviceInfo;
+    var attributeValue;
+    var createTime;
+    var deviceId;
+    var userID;
+    var token;
+    var gwID;
+    var currentTime;
+    var average = 100/180;
+    var deviceName = document.getElementsByClassName("deviceName")[0];
+    var shadow = document.getElementsByClassName("mask_layer")[0];
+    //跳详情
+    document.getElementById("scale_analysis").onclick = function () {
+        window.location.href = "./scale-analysis-abnormal.html?token="+token+"&uId="+userID+"&deviceId="+deviceId;
+    };
+
+    document.getElementById("back").addEventListener("click", function() {
+        plus.tools.back(function() {});
+    });
+    document.getElementsByClassName("more")[0].addEventListener("click", function() {
+        plus.tools.more(moreConfig, function() {});
+    });
+    //保存数据
+    document.getElementById("keep").onclick = function () {
+        var paramToNative = {};
+        paramToNative.weight = attributeValue;
+        paramToNative.createTime = (new Date()).valueOf();
+        plus.gatewayCmd.saveWeight(paramToNative, function (result) {
+            if (result.resultCode == "0") {
+                $("#keep").text(Balanec_button_3);
+                $("#keep").css("background-color","#999999");
+                $("#keep").attr("disabled","disabled");
+            }
+        })
+    };
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(function (result) {
+            deviceInfo = result;
+            getMoreConfig(deviceInfo.devID);
+            attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+            createTime = result.time;
+            deviceId = result.devID;
+            gwID = result.gwID;
+            userID = decodeURI(getUrlParam("uId"));
+            token = decodeURI(getUrlParam("token"));
+            toCanvas('canvas', average*attributeValue);
+            plus.tools.getLoginType(function (data) {
+                    if (data == "101") {
+                        $("#scale_analysis").hide();
+                        $("#keep").hide();
+                    }
+            });
+            if(!isNull(result.name)) {
+                name = result.name.indexOf("#$default$#") != -1 ? Balanec_45_name + result.name.split("#")[2] : result.name;
+            }
+            deviceName.textContent = name;
+            if(result.mode == 2 || result.mode == 3) {
+                shadow.style.display = "block";
+            } else {
+                shadow.style.display = "none";
+            }
+            rush_500(deviceId, gwID);
+        });
+    })
+
+  function rush_500(dID, gID) {
+        plus.gatewayCmd.newDataRefresh(function(result) {
+            if(result.cmd == "502") {
+                var name = "";
+                if(!isNull(result.name)) {
+                    name = result.name;
+                }
+                deviceName.textContent = name;
+            }
+            if(dID == result.devID && gID == result.gwID && result.cmd == "500") {
+                var name = "";
+                if(!isNull(result.name)) {
+                    name = result.name.indexOf("#$default$#") != -1 ? Balanec_45_name + result.name.split("#")[2] : result.name;
+                }
+                deviceName.textContent = name;
+                switch(parseInt(result.mode)) {
+                    case 0:
+                    {
+                        //设备状态变化
+                        shadow.style.display = "none";
+                        attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+                        createTime = result.time;
+                        if($("#keep").text()== Balanec_button_3){
+                            $("#keep").text(Balanec_button_2);
+                            $("#keep").css("background-color","#8DD652");
+                            $("#keep").attr("disabled",false);
+                        }
+                        toCanvas('canvas', average*attributeValue);
+                    }
+                        break;
+                    case 1:
+                    {
+                        //设备上线
+                        shadow.style.display = "none";
+                    }
+                        break;
+                    case 2:
+                    {
+                        //设备离线
+                        shadow.style.display = "block";
+                    }
+                        break;
+                    case 3:
+                    {
+                        //设备主动退网
+                        shadow.style.display = "block";
+                    }
+                        break;
+                    case 4:
+                    {
+                        //设备第一次上线
+                        shadow.style.display = "none";
+                    }
+                        break;
+                }
+            }
+        })
+    }
+
+    /*
+    第一部分实现整体功能，第二部分调用：
+　　第一部分功能原理大概是，画两个圆，一个是底色圆，第二个是动态加载的圆弧，进度通过定时器加载；颜色加渐变色；*/
+    function toCanvas(id, progress) {
+            //获取屏幕的宽度
+            var clientWidth = document.documentElement.clientWidth;
+            var canvasWidth = Math.floor(clientWidth*300/375);
+            var canvas = document.getElementById(id);
+            canvas.setAttribute('width',canvasWidth+'px');
+            canvas.setAttribute('height',canvasWidth+'px');
+
+            //canvas进度条
+            var ctx = canvas.getContext("2d"),
+            percent = progress,  //最终百分比
+            circleX = canvas.width / 2,
+            circleY = canvas.height / 2,
+            radius = canvasWidth/2.2, //圆环半径
+            lineWidth = canvasWidth/30,  //圆形线条的宽度
+            fontSize = canvasWidth/7.5; //字体大小
+            ctx.clearRect(0, 0, circleX * 2, circleY * 2);
+        //画圆
+        function circle(cx, cy, r) {
+            ctx.beginPath();
+            //ctx.moveTo(cx + r, cy);
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = '#eee';
+            ctx.arc(cx, cy, r, Math.PI * 2 / 3, Math.PI * 1 / 3);
+            ctx.stroke();
+        }
+        //画弧线
+        function sector(cx, cy, r, startAngle, endAngle, anti) {
+            ctx.beginPath();
+            //ctx.moveTo(cx, cy + r); // 从圆形底部开始画
+            ctx.lineWidth = lineWidth;
+            // 渐变色 - 可自定义
+            var linGrad = ctx.createLinearGradient(
+                circleX - radius - lineWidth, circleY, circleX + radius + lineWidth, circleY
+            );
+            linGrad.addColorStop(0.0, '#f0dd73');
+            //linGrad.addColorStop(0.5, '#9bc4eb');
+            linGrad.addColorStop(1.0, '#f0a20b');
+            ctx.strokeStyle = linGrad;
+            //圆弧两端的样式
+            ctx.lineCap = 'round';
+            //圆弧
+            ctx.arc(
+                cx, cy, r,
+                (Math.PI * 2 / 3),
+                (Math.PI * 2 / 3) + endAngle / 100 * (Math.PI * 5 / 3),
+                false
+            );
+            ctx.stroke();
+        }
+        //刷新
+        function loading() {
+            if (process >= percent) {
+                clearInterval(circleLoading);
+            }
+            //清除canvas内容
+            ctx.clearRect(0, 0, circleX * 2, circleY * 2);
+            //中间的字
+            ctx.font = fontSize + 'px April';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#999';
+            if(percent==0){
+                ctx.fillText("--",circleX, circleY);
+            }else{
+                ctx.fillText(attributeValue+"kg",circleX, circleY);
+            }
+            //圆形
+            circle(circleX, circleY, radius);
+            //圆弧
+            sector(circleX, circleY, radius, Math.PI * 2 / 3, process);
+            //控制结束时动画的速度
+            if (process / percent > 0.90) {
+                process += 0.30;
+            } else if (process / percent > 0.80) {
+                process += 0.55;
+            } else if (process / percent > 0.70) {
+                process += 0.75;
+            } else {
+                process += 1.0;
+            }
+        }
+        var process = 0.0;  //进度
+        var circleLoading = window.setInterval(function () {
+            loading();
+        }, 20);
+
+    }
+    //第二部分，调用封装好的代码：
+    /*toCanvas('canvas', 100);*/
+</script>
+</body>
+</html>

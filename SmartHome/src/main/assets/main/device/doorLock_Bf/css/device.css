@@ -1,0 +1,255 @@
+@charset "utf-8";
+
+html{
+	background:#8dd652;
+}
+html,body{
+	height:100%;
+}
+button{
+	border:0;
+}
+/*头部*/
+.header{
+	background:#8dd652;
+}
+/*新增详情页*/
+.lockState{
+	position:relative;
+	box-sizing: border-box;
+	display:block;
+	width:100%;
+	height:calc(100% - 6.4rem);
+	padding-top:5rem;
+}
+.stateImg{
+	display:block;
+	position:relative;
+	width:100%;
+	height:30.9rem;
+}
+.stateImg img{
+	position:absolute;
+	left:0;
+	top:0;
+	display:block;
+	width:100%;
+	height:auto;
+}
+.stateImg[data-init="init"] img{
+	display:none;
+}
+.stateImg[data-init="init"] img:nth-child(7){
+	display:block;
+}
+.stateImg .door{
+	display:none;
+}
+.doorOpen[state-door="open"]{
+	display:block;
+}
+.doorClose[state-door="close"]{
+	display:block;
+}
+.doorNotClosed[state-door="notClose"]{
+	display:block;
+}
+.stateImg .insurance{
+	display:none;
+}
+.stateImg .locked{
+	display:none;
+}
+.lockInsurance[state-insurance="insurance"]{
+	display:block;
+}
+.lockLocked[state-locked="locked"]{
+	display:block;
+}
+.doorIsOpen{
+	display:none;
+	width:100%;
+	height:30.9rem;
+}
+.doorIsOpen img{
+	display:block;
+	width:100%;
+	height:auto;
+}
+.stateTxt{
+	width:100%;
+	height:4rem;
+	line-height:4rem;
+	text-align:center;
+	margin-top:2rem;
+}
+.stateTxt span{
+	display:inline-block;
+	line-height:4rem;
+	font-size:1.5rem;
+	color:#000000;
+}
+.stateTxt span:nth-child(2){
+	padding:0 1rem;
+}
+.slideUpOpenDoor{
+	display:block;
+	position:fixed;
+	left:0;
+	bottom:0;
+	width:100%;
+	height:6.5rem;
+	/*background:pink;*/
+}
+.slideUpOpenDoor span,.slideUpOpenDoor i{
+	display:block;
+	width:100%;
+}
+.slideUpOpenDoor span{
+	height:2rem;
+	text-align:center;
+	line-height:2rem;
+	font-size:1.4rem;
+	color:#666666;
+}
+.slideUpOpenDoor i{
+	height:3.5rem;
+	background:url(../fonts/icon_up.png) no-repeat center center;
+	background-size:1.8rem auto;
+}
+
+/*电量显示*/
+.electricity{
+	position:absolute;
+	right:5%;
+	top:0;
+	width:4rem;
+	height:6rem;
+}
+.electricity i{
+	display:block;
+	width:100%;
+	height:100%;
+}
+.electricity i[state-elec="empty"]{
+	background:url(../fonts/state/icon_elec_0.png) no-repeat center center;
+	background-size:3rem auto;
+}
+.electricity i[state-elec="small"]{
+	background:url(../fonts/state/icon_elec_1.png) no-repeat center center;
+	background-size:3rem auto;
+}
+.electricity i[state-elec="large"]{
+	background:url(../fonts/state/icon_elec_2.png) no-repeat center center;
+	background-size:3rem auto;
+}
+.electricity i[state-elec="all"]{
+	background:url(../fonts/state/icon_elec_3.png) no-repeat center center;
+	background-size:3rem auto;
+}
+
+/*背景图*/
+.lockPassword{
+	display:none;
+	position:fixed;
+	top:6.4rem;
+	left:0;
+	width: 100%;
+	height: 94%;
+}
+.content_bg{
+	width:100%;
+	height:100%;
+	background:#fff;
+}
+.lock_img{
+	width:100%;
+	visibility: hidden;
+	height:2rem;
+	background:url(../fonts/icon_doorLock_off.png) no-repeat center center;
+	background-size:3.5rem auto;
+}
+.pwd-show{
+	width:70%;
+	height:5rem;
+	margin:1rem auto;
+	border:2px solid #a6a6a6;
+	border-radius:5rem;
+	text-align:center;
+}
+.pwd_toast{
+	width:100%;
+	height:3.2rem;
+	line-height:3.2rem;
+	text-align:center;
+	font-size:1.5rem;
+	color:#666666;
+}
+.pwd-show i{
+	display:inline-block;
+	box-sizing: border-box;
+	width:1.2rem;
+	height:1.2rem;
+	margin-top:1.9rem;
+	margin-right:1rem;
+	/*background:pink;*/
+	border:2px solid #a6a6a6;
+	border-radius: 1.2rem;
+	font-size:0;
+}
+.pwd-show i.bgColor{
+	border:0;
+	background:#a6a6a6;
+}
+.pwd-show i:last-child{
+	margin-right:0;
+}
+.btn-i{
+    position: relative;
+	width:80%;
+	overflow:hidden;
+	margin:0 auto;
+}
+.btn-i span{
+	display:block;
+	float:left;
+	width:33.3333333333333333%;
+	height:6.5rem;
+	margin-top:2rem;
+	text-align:center;
+}
+.btn-i span i{
+	display:inline-block;
+	box-sizing: border-box;
+	width:6.5rem;
+	height:6.5rem;
+	text-align:center;
+	line-height:6.5rem;
+	border-radius:50%;
+	background:#e5e5e5;
+	font-size:2.8rem;
+	color:#000000;
+	font-style: normal;
+}
+.btn-i span.not_click i{
+    color:#000000;
+}
+.btn-i .noClick{
+    display:none;
+    position: absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+}
+.remove i em{
+	display:block;
+	width:100%;
+	height:100%;
+	background:url(../fonts/backspace.png) no-repeat center center;
+	background-size:3.15rem auto;
+}
+.btn-i .removeAll i{
+	color:#000000;
+	font-size:2.8rem;
+}

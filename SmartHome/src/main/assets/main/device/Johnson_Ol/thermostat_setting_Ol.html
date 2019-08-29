@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="../../source/js/rem.js"></script>
+  <script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/base.css"/>
+  <link rel="stylesheet" type="text/css" href="css/setting.css"/>
+</head>
+<body style="width:100%;background-color: #e7e7e7">
+<header class="header" style="position:fixed;left:0;top:0;z-index:10000;">
+  <div class="header_top">
+    <a href="thermostat_Ol.html"></a>
+    <a class="deviceName autoSwitchLanguager" key="device_Ol_set" href="javascript:;">设置</a>
+  </div>
+</header>
+<section class="mainListView">
+  <ul>
+    <li onclick="clickliAction(this)"><a class="autoSwitchLanguager" key="device_Ol_Low_temperature_protection_1">低温保护</a><dd><i><em></em></i></dd></li>
+  </ul>
+</section>
+<section class="saveToast" style="display:none;">
+  <div>
+    <i><em class="rotate"></em></i>
+  </div>
+</section>
+</body>
+<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="js/more.js"></script>
+<script type="text/javascript">
+    initlan();
+    var info = window.sysfun;
+    info.init("device_Ol");
+    $(".mask_loading").show();
+    //返回到设备详情页
+    $("#back").on("click",function(){
+        plus.tools.back(function() {})
+    });
+    var devID;
+    var gwID;
+    var appID;
+    var fakeLoadertime;//超时处理用
+    var switchStatus = false;
+    var ep = parseInt(info.getItem("endpointNumber"));
+
+    plus.plusReady(function(){
+        plus.gatewayCmd.getCurrentAppID(function(result){
+            appID = result;
+        });
+        plus.gatewayCmd.getDeviceInfo(null,function(data){
+            console.log(data);
+            devID = data.devID;
+            gwID = data.gwID;
+            requestThermostatAntiFreezingSwitchState();
+            if(data.cmd == "500" && devID == data.devID){
+                handleData(data);
+            }
+        });
+        plus.gatewayCmdRush.newDataRefresh(function(data){
+            if(data.cmd == "500" && devID == data.devID){
+                handleData(data);
+                hideLoading();
+            }
+        });
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".mainListView")[0].style.marginTop = "9.6rem";
+        }
+
+    });
+    function showLoading () {
+        $(".saveToast").show();
+        fakeLoadertime = setTimeout(function () {
+            hideLoading();
+        },10000)
+    };
+
+    function hideLoading() {
+        window.clearInterval(fakeLoadertime);
+        $(".saveToast").hide();
+    };
+
+    function clickliAction(e) {
+        // switchStatus = !switchStatus;
+        // updateStatus();
+        //发送指令
+        requestThermostatAntiFreezingSwitch(!switchStatus);
+
+    }
+
+    function updateStatus() {
+        if(switchStatus) {
+            $(".mainListView").find("ul").find("li").find("i").removeClass("off")
+            $(".mainListView").find("ul").find("li").find("i").addClass("on")
+        } else {
+            $(".mainListView").find("ul").find("li").find("i").removeClass("on")
+            $(".mainListView").find("ul").find("li").find("i").addClass("off")
+        }
+    }
+
+    function requestThermostatAntiFreezingSwitch(boolValue) {
+        if (devID){
+            if (boolValue){
+                //开
+                showLoading();
+                sendCmd(gwID,devID,ep,0x8006,["1"]);
+            } else {
+                showLoading();
+                sendCmd(gwID,devID,ep,0x8006,["0"]);
+            }
+
+        } else{
+
+        }
+    }
+
+    function requestThermostatAntiFreezingSwitchState() {
+        if (devID){
+            sendCmd(gwID,devID,ep,0x8009,["1"]);
+        } else{
+
+        }
+    }
+
+    function handleData(data){
+        // drawDeviceList(data);
+        for (var i = 0; i < data.endpoints.length; i++) {
+            var endpoint = data.endpoints[i];
+            if (endpoint.endpointType && endpoint.endpointType == 0x0301){
+                if(endpoint.endpointNumber == ep){
+                    var clusters = endpoint.clusters;
+                    for (var k = 0; k < clusters.length; k++) {
+                        var attributes = clusters[k].attributes;
+                        if (attributes){
+                            for (var j = 0;j < attributes.length;j++){
+                                refreshUI(attributes[j]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function refreshUI(attributeData) {
+        var attributeId = attributeData.attributeId;
+        var attributeValue = attributeData.attributeValue;
+        switch (attributeId) {
+            case 0x0006:
+                //（0 : 关 1 : 开）
+                hideLoading();
+                switchStatus = (attributeValue == "1")?true:false;
+                updateStatus();
+                break;
+
+        }
+    }
+
+    //发送设备控制命令
+    function sendCmd(gwID,dID,endpointNumber,commandId,parameter){
+        var jsonData = {}
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = dID;
+        jsonData.endpointNumber = endpointNumber;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+    //请求设备详情列表
+    function sendCmd_510(gwID,devID,appID){
+        var jsonData = {}
+        jsonData.cmd = "510";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+</script>
+</html>

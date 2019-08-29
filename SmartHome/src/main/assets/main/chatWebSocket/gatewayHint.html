@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>model search</title>
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="css/custom.css" />
+		<script type="text/javascript" src="js/plus.js" charset="utf-8"></script>
+		<script type="text/javascript" src="js/tools.js" charset="utf-8"></script>
+		<script type="text/javascript" src="lang/lang.js" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+		<script src="../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<style type="text/css">
+		html {
+			background: aliceblue;
+		}
+		
+		.chatCell {
+			width: 100%;
+			float: left;
+			margin-top: 10px;
+		}
+		
+		.arrowImg {
+			width: 10px;
+			height: 10px;
+		}
+		
+		.arrowDiv {}
+		
+		.headImg {
+			display: block;
+			width: 40px;
+			height: 40px;
+			width: 40px;
+		}
+		
+		.chatText {
+			border-radius: 8px;
+			padding: 8px;
+			word-wrap: break-word;
+			word-break: break-all;
+			max-width: 200px;
+			min-width: 40px;
+			min-height: 40px;
+		}
+		
+		#foot {
+			width: 100%;
+			position: fixed;
+			bottom: 0px;
+			background-color: white;
+		}
+		
+		#inputText {
+			overflow-y: hidden;
+			width: 100%;
+			float: left;
+			height: 40px;
+			min-height: 20px;
+		}
+		
+		.timeHint {
+			display: inline-block;
+			background: black;
+			opacity: 0.1;
+			color: white;
+			border-radius: 5px;
+			font-size: 12px;
+			padding: 2px 10px 2px 10px
+		}
+	</style>
+
+	<body style="background-color: aliceblue;">
+		<header class="header mui-bar mui-bar-nav custom-nav" style="position: fixed;top: 0px;padding-top: 20px;height: 64px;">
+			<button id="gobackBtn" style="color: white;" class="custom-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+				<span class="mui-icon mui-icon-left-nav"></span><span id="about_back"></span>
+			</button>
+			<h1 class="mui-title"><span key="OnlineService" class="autoSwitchLanguager">在线客服</span></h1>
+		</header>
+		<!--<header class="header">
+			<div class="header_top">
+				<a href="addDeviceNew.html"></a>
+				<a href="javascript:;" class="autoSwitchLanguager" id="OnlineService">在线客服</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>-->
+		<section style="width: 100%;">
+			<img style="width: 70%;margin-left: 15%;margin-top: 100px;" src="img/customBigPic.png" />
+		</section>
+		<p key="OnlineService_gateway" class="autoSwitchLanguager" style="width: 100%;padding: 20px 10px 0px 10px;">您的设备处于局域网环境，可拨打以下售后服务电话进行咨询</p>
+		<h4 key="OnlineService_ServiceTel" class="autoSwitchLanguager" style="width: 100%;padding: 0px 10px 20px 10px;">服务电话：4009289288</h4>
+		<h4 key="OnlineService_workhour" class="autoSwitchLanguager" style="width: 100%;padding: 0px 10px 20px 10px;">服务时间：周一～周五，8:30~17:30</h4>
+		<script>
+			initlan();
+			plus.plusReady(function() {
+				var iphoneX = { sysFunc: "getItem:", room: "iphoneX", id: "iphoneX", data: "" };
+				var iStr = '';
+				if(!window.v6sysfunc) {
+					iStr = prompt(JSON.stringify(iphoneX))
+				}
+				if(iStr == "iphoneX") {
+					document.getElementsByClassName("header")[0].style.height = "88px";
+					document.getElementsByClassName("header")[0].style.paddingTop = "44px";
+				}
+				document.getElementById("gobackBtn").addEventListener("click", function() {
+					plus.tools.back(function() {})
+				})
+			});
+		</script>
+	</body>
+
+</html>

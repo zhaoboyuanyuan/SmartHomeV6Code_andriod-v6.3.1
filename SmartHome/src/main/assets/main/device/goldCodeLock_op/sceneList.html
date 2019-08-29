@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>绑定场景</title>
+	<link rel="stylesheet" href="css/base.css">
+	<link rel="stylesheet" href="css/scene.css">
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+<header class="header">
+	<div class="header_top">
+		<a id="back" href="javascript:window.history.back(-1);"></a>
+		<a class="deviceName autoSwitchLanguager" key="lock_Scenes_bind" href="javascript:;">绑定场景</a>
+		<a class="sure autoSwitchLanguager" key="lock_Scenes_bind_ok" href="javascript:;">确定</a>
+	</div>
+</header>
+<section class="content">
+	<ul class="sceneList">
+		<li id="" class="autoSwitchLanguager" key="lock_Scenes_bind_dont">不绑定</li>
+		<!--<li>离家</li>-->
+		<!--<li>回家</li>-->
+	</ul>
+</section>
+<section class="toast autoSwitchLanguager" style="display:none;" key="lock_Scenes_bind_time_out">请求超时，请重试</section>
+<section class="saveToast" style="display:none;">
+	<div><i><em class="rotate"></em><span class="autoSwitchLanguager" key="lock_Scenes_bind_binding">正在绑定</span></i></div>
+</section>
+<script type="text/javascript" src="../../source/js/rem.js"></script>
+<script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="lang/lang.js"></script>
+<script type="text/javascript">
+    initlan();
+	var getSceneID = decodeURI(getUrlParam("sceneID"));
+	var getUt = decodeURI(getUrlParam("ut"));
+	var getTk = decodeURI(getUrlParam("tk"));
+	var getPwd = decodeURI(getUrlParam("pwd"));
+	var getName = decodeURI(getUrlParam("name"));
+	var getUid = decodeURI(getUrlParam("uid"));
+	var devID;
+	var gwID;
+	var appID;
+    var info = window.sysfun;
+    info.init("Token_OP");
+	/*
+	* "tk":"tk","uid":"uid","ut":"ut","pwd":"pwd","st":"st","et":"et",
+	 "name":"name","sceneId":"sceneId"
+	* */
+    plus.plusReady(function(){
+        if(getSceneID == ""){
+            $(".sceneList li").eq(0).append("<i></i>");
+        }
+        plus.gatewayCmd.getDeviceInfo(function(data){
+            devID = data.devID;
+            gwID = data.gwID;
+            appID = data.appID;
+            rush_520();
+			plus.gatewayCmd.getSceneList(function(result){
+				if(result){
+					for(var i=0;i<result.length;i++){
+					    var str = "<li id='"+result[i].sceneID+"' style='background:url(../../source/sceneIcon/scene_normal_"+result[i].sceneIcon+".png) no-repeat 4% center;background-size:2.8rem auto;'>"+result[i].sceneName+"</li>";
+                        if(getSceneID != ""){
+                            if(result[i].sceneID == getSceneID){
+                                str = "<li id='"+result[i].sceneID+"' style='background:url(../../source/sceneIcon/scene_normal_"+result[i].sceneIcon+".png) no-repeat 4% center;background-size:2.8rem auto;'>"+result[i].sceneName+"<i></i></li>";
+                            }
+                        }
+                        $(".sceneList").append(str);
+					}
+				}
+				$(".sceneList li").on("click",function(){
+					$(".sceneList li").find("i").remove();
+                    getSceneID = $(this).attr("id");
+					$(this).append("<i></i>");
+				});
+			});
+            $(".sure").on("click",function(){
+                $(".saveToast").show();
+                send520Cmd(getSceneID);
+                //请求超时
+                RequestTimout();
+            })
+        });
+    });
+    function send520Cmd(sceneId) {
+        var jsonData = {};
+        jsonData.cmd = "520";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.operType = 4;
+        jsonData.appID = appID;
+        var param = {
+            "tk": getTk,
+            "pwd": getPwd,
+            "name": getName,
+            "ut": getUt,
+            "uid": getUid,
+			"sceneId":sceneId
+        };
+        jsonData.data = param;
+        console.log(jsonData);
+        plus.gatewayCmd.controlDevice(jsonData, function() {
+
+        })
+    }
+    function rush_520(){
+		plus.gatewayCmd.newDataRefresh(function(data){
+		    if(data.cmd == "520" && data.devID == devID){
+		        if(data.operType == 4){
+		            info.setItem("liData",JSON.stringify(data.data));
+					console.log(data);
+					if(getUt == "0"){
+                        window.location = "accountUser.html";
+					}else if(getUt == "1"){
+                        window.location = "normalUser.html";
+					}
+				}
+			}
+		})
+	}
+    //请求超时
+    function RequestTimout(){
+        setTimeout(function(){
+            $(".saveToast").hide();
+            showToast(lock_Scenes_bind_time_out);
+        },20000)
+    }
+    function showToast(txt){
+        window.showDialog.show(txt,3000);
+    }
+</script>
+</body>
+</html>

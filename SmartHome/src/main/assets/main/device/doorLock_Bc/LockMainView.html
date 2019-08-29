@@ -1,0 +1,647 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>网络智能锁</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/device.css" />
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="data/moreSetting.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<style type="text/css">
+		.hintBox {
+			width: 80%;
+			margin-left: 10%;
+			height: 18rem;
+			background-color: white;
+			border-radius: 5px;
+			margin-top: 250px;
+		}
+		
+		.hintBox div:nth-child(1) {
+			width: 100%;
+			text-align: left;
+			font-size: 18px;
+			border-bottom: 1px solid;
+			height: 13rem;
+		}
+		
+		.hintBox div:nth-child(2) {
+			float: left;
+			text-align: center;
+			height: 5rem;
+			width: 49%;
+			line-height: 5rem;
+			border-right: 1px solid;
+		}
+		
+		.hintBox div:nth-child(3) {
+			float: left;
+			text-align: center;
+			height: 5rem;
+			width: 49%;
+			line-height: 5rem;
+			color: green;
+		}
+		
+		.hintBox p {
+			padding-top: 5rem;
+			padding-left: 2rem;
+			padding-right: 2rem;
+			font-size: 2rem;
+		}
+	</style>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName" href="javascript:;"></a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<div class="lockbackimageview">
+			<section class="lockstate" style="height:2rem;">
+				<a style="display: none;" class="lockstateClosed"></a>
+			</section>
+			<section class="lockPWDInput">
+				<i class="lockPWDInputBg">
+		</i>
+			</section>
+			<section class="lockStateNotice">
+				<a class="autoSwitchLanguager" key="inputPassWord">请输入密码</a>
+			</section>
+			<section class="lockKeyBoard">
+				<a href="javascript:;"><button>1</button></a>
+				<a href="javascript:;"><button>2</button></a>
+				<a href="javascript:;"><button>3</button></a>
+				<a href="javascript:;"><button>4</button></a>
+				<a href="javascript:;"><button>5</button></a>
+				<a href="javascript:;"><button>6</button></a>
+				<a href="javascript:;"><button>7</button></a>
+				<a href="javascript:;"><button>8</button></a>
+				<a href="javascript:;"><button>9</button></a>
+				<a href="javascript:;"><button id="lockKeyBoard_Clean"></button></a>
+				<a href="javascript:;"><button>0</button></a>
+				<!--<a href="javascript:;"><button id="lockKeyBoard_Submit"><i></i></button></a>-->
+				<a href="javascript:;"><button id="lockKeyBoard_backspace"></button></a>
+				<a href="javascript:;"><button style="opacity: 0"></button></a>
+				<a href="javascript:;"><button id="camera"></button></a>
+			</section>
+			<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="offline">设备已离线</span></section>
+			<section class="mask_layer" style="display:none;">
+				<div class="hintBox">
+					<div>
+						<p class="autoSwitchLanguager" key="setWifi">摄像机尚未连接网络，是否进行WiFi配置？</p>
+					</div>
+					<div class="autoSwitchLanguager" key="cancel" onclick="noWifi(1)">取消</div>
+					<div class="autoSwitchLanguager" key="sure" onclick="noWifi(2)">确定</div>
+				</div>
+			</section>
+		</div>
+	</body>
+	<script src="js/doorControl.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		initlan()
+		var info = window.sysfun;
+		info.init("V6DoorLockVOC");
+		var deviceInfo;
+		var endpointNumber;
+		var endpointType;
+		var clusterId;
+		var cameraId;
+		var wifiName;
+		var shadow = document.getElementsByClassName("mask_layer")[0];
+		var shadow_noWifi = document.getElementsByClassName("mask_layer")[1];
+		var deviceName = document.getElementsByClassName("deviceName")[0];
+		plus.plusReady(function() {
+			plus.gatewayCmd.getDeviceInfo(function(result) {
+				deviceInfo = result;
+				endpointNumber = result.endpoints[0].endpointNumber;
+				endpointType = result.endpoints[0].endpointType;
+				clusterId = result.endpoints[0].clusterId;
+				devID = result.devID;
+				gwID = result.gwID;
+				getMoreConfig(gwID, devID);
+				if(result.mode == 2) {
+					shadow.style.display = "block";
+				} else {
+					shadow.style.display = "none";
+				}
+				var name = "";
+				if(!isNull(result.name)) {
+					name = result.name.indexOf("#$default$#") != -1 ? alarmSet_js_01 + result.name.split("#")[2] : result.name;
+				}
+				deviceName.textContent = name;
+				achieveUserID();
+				openCamera();
+				rush_500(devID, gwID);
+				document.getElementById("camera").addEventListener("click", function() {
+					beginCamera();
+				})
+			});
+			document.getElementById("back").addEventListener("click", function() {
+				plus.tools.back(function() {});
+			});
+			document.getElementsByClassName("more")[0].addEventListener("click", function() {
+				console.log("more cameraId" + cameraId);
+				if(isNull(cameraId) == false) {
+					moreSettingData.cameraId = cameraId;
+					moreSettingData.cameraWifi = wifiName;
+					plus.tools.more(moreSettingData, function() {});
+				} else {
+					achieveUserID("more");
+				}
+			});
+
+			function rush_500(dID, gID) {
+				plus.gatewayCmd.newDataRefresh(function(result) {
+					if(result.cmd == "500" && deviceInfo.devID == result.devID) {
+						var name = "";
+						if(!isNull(result.name)) {
+							name = result.name.indexOf("#$default$#") != -1 ? alarmSet_js_01 + result.name.split("#")[2] : result.name;
+						}
+						deviceName.textContent = name;
+						if(result.mode == 2) {
+							shadow.style.display = "block";
+						} else if(result.mode == 1) {
+							shadow.style.display = "none";
+						} else {
+							shadow.style.display = "none";
+						}
+					} else if(result.cmd == "502") {
+						var name = "";
+						if(!isNull(result.name)) {
+							name = result.name;
+						}
+						deviceName.textContent = name;
+					}
+					if(dID == result.devID && gID == result.gwID && result.cmd == "500") {
+						switch(parseInt(result.mode)) {
+							case 0:
+								{
+									//设备状态变化
+									clearTimer();
+									shadow.style.display = "none";
+									var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+									var attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+									reloadUI(parseInt(attributeId), parseInt(attributeValue));
+								}
+								break;
+							case 1:
+								{
+									//设备上线
+									shadow.style.display = "none";
+									var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+									var attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+									reloadUI(parseInt(attributeId), parseInt(attributeValue));
+								}
+								break;
+							case 2:
+								{
+									//设备离线
+									shadow.style.display = "block";
+								}
+								break;
+							case 3:
+								{
+									//设备主动退网
+									shadow.style.display = "block";
+								}
+								break;
+							case 4:
+								{
+									//设备第一次上线
+									shadow.style.display = "none";
+								}
+								break;
+							default:
+								{
+
+								}
+								break;
+						}
+					}
+				})
+			}
+
+			function reloadUI(attributeId, attributeValue) {
+				switch(attributeId) {
+					case 0x0000:
+						{
+							doorLockStatue(attributeValue);
+						}
+						break;
+					case 0x8001:
+						{
+							doorLockAlarm(attributeValue);
+						}
+						break;
+					case 0x8002:
+						{
+							doorLockUser(attributeValue);
+						}
+						break;
+					case 0x8003:
+						{
+							doorLockVerifyPWD(attributeValue);
+						}
+						break;
+					case 0x8006:
+						{
+							doorLockRightJudge(attributeValue);
+						}
+						break;
+					case 0x8008:
+						{
+							doorStatue(attributeValue);
+						}
+						break;
+					default:
+						{
+
+						}
+						break;
+				}
+			}
+			/*
+			 * 门状态
+			 */
+			function doorStatue(attributeValue) {
+				switch(attributeValue) {
+					case 15:
+						{
+							//门未关好
+							cleanpassword();
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = alarmSet_js_02;
+						}
+						break;
+					default:
+						{
+
+						}
+						break;
+				}
+			}
+			/*
+			 * 锁状态
+			 */
+			function doorLockStatue(attributeValue) {
+				cleanpassword();
+				switch(attributeValue) {
+					case 1:
+						{
+							//上锁
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = alarmSet_js_03; //"请输入密码"
+							var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+							lockstate.className = "lockstateClosed";
+						}
+						break;
+					case 2:
+						{
+							//上保险
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = alarmSet_js_04; //"上保险"
+						}
+						break;
+					case 3:
+						{
+							//解除保险
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = alarmSet_js_05 //"解除保险";
+						}
+						break;
+					case 5:
+						{
+							//解除反锁
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = alarmSet_js_06; //"解除反锁"
+						}
+						break;
+					case 4:
+						{
+							//反锁
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = alarmSet_js_07; //"门已反锁"
+							var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+							lockstate.className = "lockstateClosed";
+						}
+						break;
+					default:
+						{
+
+						}
+						break;
+				}
+			}
+			/*
+			 * 锁告警
+			 */
+			function doorLockAlarm(attributeValue) {
+				switch(attributeValue) {
+					case 1:
+						{
+							//入侵报警
+						}
+						break;
+					case 2:
+						{
+							//报警解除
+						}
+						break;
+					case 3:
+						{
+							//破坏告警
+						}
+						break;
+					case 4:
+						{
+							//密码连续出错
+						}
+						break;
+					case 5:
+						{
+							//欠压报警
+						}
+						break;
+					default:
+						{
+
+						}
+						break;
+				}
+			}
+
+			/*
+			 * 用户开锁信息
+			 */
+			function doorLockUser(attributeValue) {
+				cleanpassword();
+				var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+				notice.textContent = alarmSet_js_08; //"门锁已开";
+				var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+				lockstate.className = "lockstateOpened";
+				setTimeout(function() {
+					var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+					notice.textContent = alarmSet_js_03; //"请输入密码"
+					var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+					lockstate.className = "lockstateClosed";
+				}, 3000);
+			}
+
+			/*
+			 * 密码验证状态
+			 */
+			function doorLockVerifyPWD(attributeValue) {
+				cleanpassword();
+				switch(attributeValue) {
+					case 1:
+						{
+							//密码验证成功
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = alarmSet_js_08; //"门锁已开";
+							var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+							lockstate.className = "lockstateOpened";
+							setTimeout(function() {
+								var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+								notice.textContent = alarmSet_js_03; //"请输入密码"
+								var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+								lockstate.className = "lockstateClosed";
+							}, 3000);
+						}
+						break;
+					case 2:
+						{
+							//密码验证失败
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = alarmSet_js_09; //"密码错误，请重试"
+							var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+							lockstate.className = "lockstateClosed";
+							setTimeout(function() {
+								var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+								notice.textContent = alarmSet_js_03; //"请输入密码"
+								var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+								lockstate.className = "lockstateClosed";
+							}, 3000);
+						}
+						break;
+					case 3:
+						{
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = alarmSet_js_10; //"强制上锁"
+							//强制上锁
+							var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+							lockstate.className = "lockstateClosed";
+						}
+						break;
+					case 4:
+						{
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = alarmSet_js_11 //"自动上锁";
+							//自动上锁
+							var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+							lockstate.className = "lockstateClosed";
+						}
+						break;
+					case 5:
+						{
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = alarmSet_js_12; //"登记密码";
+							//登记密码
+						}
+						break;
+					default:
+						{
+
+						}
+						break;
+				}
+			}
+		});
+
+		/*
+		 * 密码验证状态
+		 */
+		function doorLockRightJudge(attributeValue) {
+			cleanpassword();
+			switch(attributeValue) {
+				case 1:
+					{
+						//无线端密码开锁失败 
+						var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+						notice.textContent = alarmSet_js_13; //"无线端密码开锁失败 ，请重试";
+						var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+						lockstate.className = "lockstateClosed";
+					}
+					break;
+				case 2:
+					{
+						//密码验证失败
+						var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+						notice.textContent = alarmSet_js_09; //"密码错误，请重试"
+						var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+						lockstate.className = "lockstateClosed";
+						setTimeout(function() {
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = alarmSet_js_03; //"请输入密码"
+							var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+							lockstate.className = "lockstateClosed";
+						}, 3000);
+					}
+					break;
+				case 6:
+					{
+						//动态密码失败
+						var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+						notice.textContent = alarmSet_js_14; //"动态密码失败，请重试";
+						var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+						lockstate.className = "lockstateClosed";
+					}
+					break;
+				case 10:
+					{
+						//操作失败
+						var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+						notice.textContent = alarmSet_js_15; //"操作失败，请重试";
+						var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+						lockstate.className = "lockstateClosed";
+					}
+					break;
+				default:
+					{
+
+					}
+					break;
+			}
+		}
+
+		function clearTimer() {
+			if(timer) {
+				clearTimeout(timer);
+			}
+		}
+
+		function cleanpassword() {
+			if(openLock) {
+				clearTimer();
+				var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+				notice.textContent = alarmSet_js_16; //"请求超时!";
+				openLock = false;
+			}
+			lockPWD = "";
+			var imglength = document.getElementsByClassName("lockPWDInputBg")[0].getElementsByTagName("a").length;
+			if(imglength) {
+				for(var i = imglength; i > 0; i--) {
+					var parent = document.getElementsByClassName("lockPWDInputBg")[0];
+					var child = document.getElementsByClassName("lockPWDInputBg")[0].getElementsByTagName("a")[i - 1];
+					parent.removeChild(child);
+				}
+			}
+		}
+		/*
+		 * 设备控制
+		 */
+		function sendCmd(pwd) {
+			var jsonData = {
+				"cmd": "501",
+				"gwID": gwID,
+				"devID": devID,
+				"endpointNumber": endpointNumber,
+				"clusterId": 257,
+				"commandType": 01,
+				"commandId": 32772,
+				"parameter": [pwd],
+			};
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result" + result);
+			})
+		}
+
+		/*
+		 * 设备控制
+		 */
+		function achieveUserID(where) {
+			var jsonData = {
+				"key": devID + "Bc",
+				"m": 3
+			};
+			plus.gatewayCmd.cmd521(jsonData, function(result) {
+				if(result.m == "3" && result.k == devID + "Bc" && result) {
+					if(result.v.cameraId) {
+						cameraId = result.v.cameraId;
+						wifiName = result.v.wifiName;
+					} else {
+						cameraId = "";
+					}
+					if(where == "more") {
+						moreSettingData.cameraId = cameraId;
+						moreSettingData.cameraWifi = wifiName;
+						plus.tools.more(moreSettingData, function() {});
+						return;
+					}
+					if(where == "beginCamera") {
+						if(result.v == "" || !result.v.wifiName || result.v.wifiName == '') {
+							noWifi(0);
+							return;
+						}
+						beginCamera()
+					}
+				}
+			})
+		}
+		
+		function openCamera(){
+			var jsonData = {
+				"cmd": "501",
+				"gwID": gwID,
+				"devID": devID,
+				"endpointNumber": endpointNumber,
+				"clusterId": 257,
+				"commandType": 01,
+				"commandId": 32795,
+			};
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result" + result);
+			})
+		}
+
+		function isNull(arg) {
+			var isnull = arg == null || arg == undefined || arg == "undefined" || arg == "";
+			return isnull;
+		}
+		/*
+		 * 开启摄像头
+		 */
+		function beginCamera() {
+			console.log("beginCamera cameraId=" + cameraId);
+			if(isNull(cameraId)) {
+				achieveUserID("beginCamera");
+				return;
+			}
+			plus.gatewayCmd.BcCameraStart(cameraId, function() {
+				console.log("开启摄像机成功");
+			})
+		}
+
+		function noWifi(flag) {
+			if(flag == 1) {
+				shadow_noWifi.style.display = "none";
+			} else {
+				shadow_noWifi.style.display = "block";
+			}
+			if(flag == 2) {
+				shadow_noWifi.style.display = "none";
+				plus.gatewayCmd.toWiFiSetting(function() {})
+			}
+		}
+	</script>
+
+</html>

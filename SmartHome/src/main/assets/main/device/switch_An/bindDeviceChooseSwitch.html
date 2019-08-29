@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>选择按键</title>
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/bindDevice.css" />
+    <script src="js/devbase.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="js/control.js" type="text/javascript" charset="UTF-8"></script>
+      <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+<header class="header">
+    <a class="back" href="javascript:;"></a>
+    <a class="autoSwitchLanguager" href="javascript:;" key="chooseBtn">选择按键</a>
+    <a class="done autoSwitchLanguager" href="javascript:;" key="done">完成</a>
+</header>
+<section class="switch_list">
+    <div class="bindSwitch_Am">
+        <div class="switchName switchItem chooseSwitch_1 ">
+            <span class="autoSwitchLanguager" key="switch_1">开关1</span>
+            <span class="notSwitch1 autoSwitchLanguager" key="not_switch">非开关模式</span>
+        </div>
+        <hr>
+    </div>
+    <div class="bindSwitch_An">
+        <div class="switchName switchItem chooseSwitch_1" >
+            <span class="autoSwitchLanguager" key="switch_1">开关1</span>
+            <span class="notSwitch1 autoSwitchLanguager" key="not_switch">非开关模式</span>
+        </div>
+        <hr>
+        <div class="switchName switchItem chooseSwitch_2 ">
+            <span class="autoSwitchLanguager" key="switch_2">开关2</span>
+            <span class="notSwitch2 autoSwitchLanguager" key="not_switch">非开关模式</span>
+        </div>
+        <hr>
+    </div>
+    <div class="bindSwitch_Ao">
+        <div class="switchName switchItem chooseSwitch_1" >
+            <span class="autoSwitchLanguager" key="switch_1">开关1</span>
+            <span class="notSwitch1 autoSwitchLanguager" key="not_switch">非开关模式</span>
+        </div>
+        <hr>
+        <div class="switchName switchItem chooseSwitch_2 ">
+            <span class="autoSwitchLanguager" key="switch_2">开关2</span>
+            <span class="notSwitch2 autoSwitchLanguager" key="not_switch">非开关模式</span>
+        </div>
+        <hr>
+        <div class="switchName switchItem chooseSwitch_3">
+            <span class="autoSwitchLanguager" key="switch_3">开关3</span>
+            <span class="notSwitch3 autoSwitchLanguager" key="not_switch">非开关模式</span>
+        </div>
+        <hr>
+    </div>
+</section>
+<section id="fail" class="comToast" style="display:none;">
+    <p class="autoSwitchLanguager" id="toastText"></p>
+</section>
+</body>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("deviceAn");
+    initlan()
+    var isSending = false;
+    var switchData = JSON.parse(info.getItem("data"));
+    var deviceID = info.getItem("deviceID");
+    devID = info.getItem("deviceID");
+    var gwID = info.getItem("gwID");
+    var endpointNumber = info.getItem("endpointNumber");
+    var chooseIndex = -1;
+    var modeList = [];
+    var couldSubmit = true;
+    plus.plusReady(function () {
+        $(".bindSwitch_" + switchData.type).show();
+        $(".done").on("click", function() {
+            if (chooseIndex == -1) {
+                return;
+            }
+            if (!couldSubmit) {
+                return;
+            }
+            couldSubmit = false;
+            sendCmd();
+        });
+        plus.gatewayCmd.newDataRefresh(function(data){
+            if (isSending) {
+                closeToast();
+                //保存成功
+                setTimeout(function() {
+                    $(".comToast").hide();
+                    $("#fail").show();
+                    $("#toastText").html(languageUtil.getResource("saveSuccessful"));
+                    setTimeout(function() {
+                        $("#fail").hide();
+                        window.location = "switch_An.html"
+                    }, 400)
+                },300);
+            }
+        });
+
+        checkMode();
+    });
+    $(".back").on("click", function() {
+        info.setItem("flag", "0")
+//                window.location = "switch_An.html"
+        plus.tools.goBack(function () {
+
+        })
+    });
+
+    function checkMode() {
+        for (var i = 0; i < switchData.endpoints.length; i++) {
+            var endpoint = switchData.endpoints[i];
+            var endpointNumber = endpoint.endpointNumber;
+            var endpointName = endpoint.endpointName;
+            var endpointType = endpoint.endpointType;
+
+            if (endpointType != 0x0002) {
+                $(".notSwitch" + endpointNumber).show();
+                modeList[endpointNumber] = false;
+            } else {
+                $(".notSwitch" + endpointNumber).hide();
+                modeList[endpointNumber] = true;
+            }
+        }
+    }
+    $(".chooseSwitch_1").on("click", function () {
+        if (! modeList[1]) {
+            return;
+        }
+        $(".switchItem").removeClass("showChoose");
+        $(".chooseSwitch_1").addClass("showChoose");
+        chooseIndex = 1;
+    });
+    $(".chooseSwitch_2").on("click", function () {
+        if (! modeList[2]) {
+            return;
+        }
+        $(".switchItem").removeClass("showChoose");
+        $(".chooseSwitch_2").addClass("showChoose");
+        chooseIndex = 2;
+    });
+    $(".chooseSwitch_3").on("click", function () {
+        if (! modeList[3]) {
+            return;
+        }
+        $(".switchItem").removeClass("showChoose");
+        $(".chooseSwitch_3").addClass("showChoose");
+        chooseIndex = 3;
+    });
+
+    function sendCmd() {
+        createToast(languageUtil.getResource("isSaving"));
+        jsonData = {
+            "cmd": "501",
+            "gwID": gwID,
+            "devID": deviceID,
+            "endpointNumber": ~~endpointNumber,
+            "commandType": 1,
+            "commandId": 0x8011,
+            "parameter": [
+                {
+                    "ep":""+endpointNumber,
+                    "bindDevId":""+switchData.devID,
+                    "bindEp":"" + chooseIndex
+                }
+            ]
+        };
+
+        UnBindingDev(~~endpointNumber);
+        setTimeout(function () {
+            isSending = true;
+            plus.gatewayCmd.controlDevice(jsonData, function(result) {
+                console.log("result " + result);
+            })
+        }, 1000);
+
+        // 20 s超时
+        setTimeout(function() {
+            isSending = false;
+            $(".comToast").hide();
+            $("#fail").show();
+            $("#toastText").html(languageUtil.getResource("overTime"));
+            // 可以提交
+            couldSubmit = true;
+            setTimeout(function() {
+                $("#fail").hide();
+            }, 1000)
+        },20000)
+    }
+</script>
+</html>

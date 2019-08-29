@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>选择按键</title>
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/base_ao.css" />
+		<link rel="stylesheet" type="text/css" href="css/bindDevice.css" />
+		<script src="js/devbase.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	</head>
+
+	<body>
+		<header class="header">
+			<a class="back" href="javascript:;"></a>
+			<a class="deviceName autoSwitchLanguager" style="width: 70%;" href="javascript:;" key="switch_Ao_ChooseBtn">选择按键</a>
+			<a class="done autoSwitchLanguager" id="btnCompate" href="javascript:;" key="swtich_Ao_Complete" style="display: none;">完成</a>
+		</header>
+		<section class="switch_list">
+			<div class="bindSwitch_Am">
+				<div class="switchName switchItem chooseSwitch_1 ">
+					<span class="autoSwitchLanguager" key="switch_1" id="switchAm_1">开关1</span>
+					<span class="notSwitch1 autoSwitchLanguager" key="switch_Ao_NoSwitchMode">非开关模式</span>
+				</div>
+				<hr>
+			</div>
+			<div class="bindSwitch_An">
+				<div class="switchName switchItem chooseSwitch_1">
+					<span class="autoSwitchLanguager" key="switch_1" id="switchAn_1">开关1</span>
+					<span class="notSwitch1 autoSwitchLanguager" key="switch_Ao_NoSwitchMode">非开关模式</span>
+				</div>
+				<hr>
+				<div class="switchName switchItem chooseSwitch_2 ">
+					<span class="autoSwitchLanguager" key="switch_2" id="switchAn_2">开关2</span>
+					<span class="notSwitch2 autoSwitchLanguager" key="switch_Ao_NoSwitchMode">非开关模式</span>
+				</div>
+				<hr>
+			</div>
+			<div class="bindSwitch_Ao">
+				<div class="switchName switchItem chooseSwitch_1">
+					<span class="autoSwitchLanguager" key="switch_1" id="switchAo_1">开关1</span>
+					<span class="notSwitch1 autoSwitchLanguager" key="switch_Ao_NoSwitchMode">非开关模式</span>
+				</div>
+				<hr>
+				<div class="switchName switchItem chooseSwitch_2 ">
+					<span class="autoSwitchLanguager" key="switch_2" id="switchAo_2">开关2</span>
+					<span class="notSwitch2 autoSwitchLanguager" key="switch_Ao_NoSwitchMode">非开关模式</span>
+				</div>
+				<hr>
+				<div class="switchName switchItem chooseSwitch_3">
+					<span class="autoSwitchLanguager" key="switch_3" id="switchAo_3">开关3</span>
+					<span class="notSwitch3 autoSwitchLanguager" key="switch_Ao_NoSwitchMode">非开关模式</span>
+				</div>
+				<hr>
+			</div>
+		</section>
+	</body>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("deviceAn");
+		initlan(function() {
+			document.getElementById("switchAm_1").innerText = switch_Ao_01 + "1";
+			document.getElementById("switchAn_1").innerText = switch_Ao_01 + "1";
+			document.getElementById("switchAn_2").innerText = switch_Ao_01 + "2";
+			document.getElementById("switchAo_1").innerText = switch_Ao_01 + "1";
+			document.getElementById("switchAo_2").innerText = switch_Ao_01 + "2";
+			document.getElementById("switchAo_3").innerText = switch_Ao_01 + "3";
+		})
+		var isSending = false;
+		var switchData = JSON.parse(info.getItem("data"));
+		var deviceID = info.getItem("deviceID");
+		var gwID = info.getItem("gwID");
+		var isBindAr = info.getItem("isBindAr");
+		console.log("isBindAr=" + isBindAr);
+		var endpointNumber = info.getItem("endpointNumber");
+		var chooseIndex = -1;
+		var modeList = [];
+		var isCompating = false;
+		plus.plusReady(function() {
+			isCompating = false;
+			$(".bindSwitch_" + switchData.type).show();
+
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				var isright = result != null &&
+					result != undefined &&
+					result.cmd == "500" &&
+					result.devID == deviceID;
+				if(isright && isSending) {
+					closeToast();
+					//保存成功
+					showSucToast(switch_Ao_saveSuc, function() {
+						window.location = "switch_ao_main.html"
+					});
+				}
+			});
+
+			checkMode();
+		});
+		$(".done").on("click", function() {
+			if(isCompating == false) {
+				isCompating = true;
+				if(isBindAr == "1" || isBindAr == 1) { /*如果绑定的是金属窗帘控制器，需要都先全部清空*/
+					createToast(switch_Ao_Saving); //正在保存..
+					showTimeOutCallBack(switch_Ao_timeout, function() {
+						isCompating = false;
+					});
+					console.log("发送清空命令");
+					UnBindingDev(0);
+					setTimeout(function() {
+						console.log("发送绑定命令");
+						sendCmd();
+					}, 1500);
+				} else {
+					createToast(switch_Ao_Saving); //正在保存..
+					showTimeOutCallBack(switch_Ao_timeout, function() {
+						isCompating = false;
+					});
+					console.log("发送清空命令");
+					var epNum = parseInt(endpointNumber);
+					UnBindingDev(epNum);
+					setTimeout(function() {
+						console.log("发送绑定命令");
+						sendCmd();
+					}, 2000);
+				}
+			}
+
+		});
+		$(".back").on("click", function() {
+			info.setItem("flag", "0")
+			//                window.location = "switch_An.html"
+			plus.tools.goBack(function() {
+
+			})
+		});
+
+		function checkMode() {
+			for(var i = 0; i < switchData.endpoints.length; i++) {
+				var endpoint = switchData.endpoints[i];
+				var endpointNumber = endpoint.endpointNumber;
+				var endpointName = endpoint.endpointName;
+				var endpointType = endpoint.endpointType;
+
+				if(endpointType != 0x0002) {
+					$(".notSwitch" + endpointNumber).show();
+					modeList[endpointNumber] = false;
+				} else {
+					$(".notSwitch" + endpointNumber).hide();
+					modeList[endpointNumber] = true;
+				}
+			}
+		}
+		$(".chooseSwitch_1").on("click", function() {
+			if(!modeList[1]) {
+				return;
+			}
+			document.getElementById("btnCompate").style.display = "block";
+			$(".switchItem").removeClass("showChoose");
+			$(".chooseSwitch_1").addClass("showChoose");
+			chooseIndex = 1;
+		});
+		$(".chooseSwitch_2").on("click", function() {
+			if(!modeList[2]) {
+				return;
+			}
+			document.getElementById("btnCompate").style.display = "block";
+			$(".switchItem").removeClass("showChoose");
+			$(".chooseSwitch_2").addClass("showChoose");
+			chooseIndex = 2;
+		});
+		$(".chooseSwitch_3").on("click", function() {
+			if(!modeList[3]) {
+				return;
+			}
+			document.getElementById("btnCompate").style.display = "block";
+			$(".switchItem").removeClass("showChoose");
+			$(".chooseSwitch_3").addClass("showChoose");
+			chooseIndex = 3;
+		});
+
+		function sendCmd() {
+			if(chooseIndex == -1) {
+				return;
+			}
+			isSending = true;
+			jsonData = {
+				"cmd": "501",
+				"gwID": gwID,
+				"devID": deviceID,
+				"endpointNumber": ~~endpointNumber,
+				"commandType": 1,
+				"commandId": 0x8011,
+				"parameter": [{
+					"ep": "" + endpointNumber,
+					"bindDevId": "" + switchData.devID,
+					"bindEp": "" + chooseIndex
+				}]
+			};
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result " + result);
+			})
+		}
+		/*解绑，ep=0表示清除所有的绑定关系*/
+		function UnBindingDev(ep) {
+			sendCmdForAo(ep, 0x8012, [ep + ""]);
+		}
+		/*向三键金属开关发送命令
+		 * endpointNumber：0表示对所有按键都有作用
+		 * commandId：表示执行不同的操作
+		 * param:参数,注意，这个是数组
+		 * */
+		function sendCmdForAo(endpointNumber, commandId, param) {
+			var jsonData;
+			if(param != null) {
+				jsonData = {
+					"cmd": "501",
+					"gwID": gwID,
+					"devID": deviceID,
+					"endpointNumber": endpointNumber,
+					"commandType": 1,
+					"commandId": commandId,
+					"parameter": param
+				};
+			} else {
+				jsonData = {
+					"cmd": "501",
+					"gwID": gwID,
+					"devID": deviceID,
+					"endpointNumber": endpointNumber,
+					"commandType": 1,
+					"commandId": commandId
+				};
+			}
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result " + result);
+			})
+		}
+	</script>
+
+</html>

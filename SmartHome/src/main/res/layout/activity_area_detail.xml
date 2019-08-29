@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="cc.wulian.smarthomev6.main.device.AreaDetailActivity"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/area_detail_text_AreaName"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:gravity="center_vertical"
+                tools:text="客厅"
+                android:paddingStart="16dp"
+                android:textColor="@color/v6_text_gray"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/area_detail_recycler_Area"
+                android:layout_width="match_parent"
+                android:scrollbars="none"
+                android:background="@color/white"
+                android:layout_height="wrap_content"
+                app:layoutManager="LinearLayoutManager"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/v6_line"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:gravity="center_vertical"
+                android:text="@string/Device_NoneArea"
+                android:paddingStart="16dp"
+                android:textColor="@color/v6_text_gray"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/area_detail_recycler_NoneArea"
+                android:layout_width="match_parent"
+                android:scrollbars="none"
+                android:background="@color/white"
+                android:layout_height="wrap_content"
+                app:layoutManager="LinearLayoutManager" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

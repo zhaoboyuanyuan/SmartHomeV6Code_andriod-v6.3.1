@@ -1,0 +1,3131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>定时任务</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mobiscroll.custom-2.5.2.min.css" />
+    <link rel="stylesheet" href="../css/circumstances.css" />
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/slip.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <header class="header">
+        <a id="back" href="javascript:;"></a>
+        <a id="pageTitle" class="title autoSwitchLanguager" href="javascript:;" key="timeTask1_title">定时任务</a>
+        <a class="complete autoSwitchLanguager" id="timeTask1_save" href="javascript:;" style="color:#fff;">保存</a>
+    </header>
+    <!--定时任务-->
+    <div class="content_1 iphoneX" style="display:block;">
+        <section class="circums">
+            <h5 class="taskName" id="changeTaskName">
+                <a href="javascript:;">
+                    <b class="autoSwitchLanguager" id="circumstances_name">名称</b>
+                    <i></i>
+                    <span class="autoSwitchLanguager" id="timeTask1_title">定时任务</span>
+                </a>
+            </h5>
+        </section>
+        <section class="circums">
+            <h5 class="timeTask autoSwitchLanguager" id="timeTask1_txt01">当时间到达</h5>
+            <ul class="quest timeQuest">
+                <li id="setTime">
+                    <a class="doorC timing" href="javascript:;">
+                        <span class="time_task" style="margin-top:0.8rem;">09:00&nbsp
+                            <em></em>
+                            <em class="week">Mon,Tue,Wed,Thu,Fri,Sat,Sun</em>
+                        </span>
+                        <i></i>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <section class="circums">
+            <h5 class="addDeviceTask">
+                <b class="autoSwitchLanguager" id="circumstances_dotask">执行以下任务</b>
+                <i class="cir_add"></i>
+            </h5>
+            <div class="no_task autoSwitchLanguager" id="circumstances_notask">还未添加任务</div>
+            <ul class="quest" id="task">
+                <!--同情景任务一样先去掉i标签<li><a class="doorC" href="javascript:;"><span><strong>门磁感应器门磁感应器门磁感应器&nbsp;</strong><em>[客厅客厅客厅客厅客厅]</em><em>设防</em><em>五分钟后执行</em></span><i></i></a><div class="delete">删除</div></li>-->
+                <!--<li><a class="doorC" href="javascript:;"><span><strong>门磁感应器门磁感应器门磁感应器&nbsp;</strong><em>[客厅客厅客厅客厅客厅]</em><em>开关1</em><em>设防</em><em>五分钟后执行</em></span><i></i></a><div class="delete">删除</div></li>-->
+            </ul>
+        </section>
+    </div>
+    <!--修改定时时间-->
+    <div class="content_2 iphoneX" style="display:none;">
+        <strong class="timeTitle autoSwitchLanguager" id="timetask_time_setting">时间</strong>
+        <div class="dwbw" id="mobiscroll" style="display:inline;overflow:hidden;"></div>
+        <section class="choose_week time_week">
+            <span class="autoSwitchLanguager" id="effectiveDate_txt03">重复</span>
+            <ul>
+                <li class="on">Sun</li>
+                <li class="on">Mon</li>
+                <li class="on">Tue</li>
+                <li class="on">Wed</li>
+                <li class="on">Thu</li>
+                <li class="on">Fri</li>
+                <li class="on">Sat</li>
+            </ul>
+        </section>
+    </div>
+    <div class="content_3 iphoneX" style="display:none;">
+        <ul class="addTask">
+            <li>
+                <a href="action_timeTask_deviceList.html" class="autoSwitchLanguager" id="circumstances_needdodevice">添加要执行的设备
+                    <i></i>
+                </a>
+            </li>
+            <li>
+                <a href="chooseScene.html" class="autoSwitchLanguager" id="circumstances_needdoscene">添加要执行的场景
+                    <i></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <section class="changeName" style="display:none;" id="rename">
+        <div class="nameToast">
+            <span class="autoSwitchLanguager" id="circumstances_rename" key="circumstances_name">名称</span>
+            <div class="name">
+                <input id="renameInput" maxlength="20" class="autoSwitchLanguager" type="text" placeholder="请重新命名"
+                    style="outline:none;" />
+                <i id="clearname" onclick="clearname();"></i>
+            </div>
+            <div class="choose_1">
+                <a class="autoSwitchLanguager" id="addDelay_cancel" href="javascript:;" onclick="cancel()">取消</a>
+                <a class="autoSwitchLanguager sure_click" id="customScene_sure" href="javascript:;" onclick="surename()">确定</a>
+            </div>
+        </div>
+    </section>
+    <!--<section class="toast autoSwitchLanguager" id="circumstances_toast">-->
+    <!--名称长度为1-20个字符！-->
+    <!--</section>-->
+    <!--编辑弹框-->
+    <section class="changeName" style="display:none;" id="giveUpEdit">
+        <div class="nameToast giveUp">
+            <span class="autoSwitchLanguager" id="circumstances_giveup">是否放弃编辑</span>
+            <div class="choose_1 choose_2">
+                <a href="javascript:;" class="isNo autoSwitchLanguager" key="addDelay_cancel">取消</a>
+                <a class="giveUpSure autoSwitchLanguager" key="customScene_sure" href="javascript:;">确定</a>
+            </div>
+        </div>
+    </section>
+    <section class="saveToast" style="display:none;">
+        <div>
+            <i>
+                <em class="rotate"></em>
+            </i>
+            <p key="device_HS05_Loading" class="autoSwitchLanguager">正在加载...</p>
+        </div>
+    </section>
+    <section class="overTime autoSwitchLanguager" key="device_B9_out_of_time">请求超时，请重试</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../model/housekeeper.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/mobiscroll.custom-2.5.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/navigator.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/addDelay1.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/leftDelete.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var gwID;
+    var appID;
+    var overtime;
+    window.saveBtnColor = "#909192";
+    var actionDic = {}
+    initlan();
+    $(".giveUpSure").on("click",function(){
+        info.clear();
+        plus.tools.back(function(){})
+    });
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            info.clear();
+            plus.tools.back(function(){});
+        });
+        //任务名称
+        if (info.getItem("programName")) {
+            $(".taskName").find("span").html(info.getItem("programName"));
+        }
+        plus.gatewayCmd.getCurrentGatewayID(function (data) {
+            gwID = data;
+            plus.gatewayCmd.getCurrentAppID(function (list) {
+                appID = list;
+                //编辑管家任务进入的条件programID
+                if (decodeURI(getUrlParam("programID")) != '') {
+                    $(".saveToast").show();
+                    overtimeWarn();
+                    info.setItem("programID", decodeURI(getUrlParam("programID")))
+                    //507查询
+                    //判断缓存中已存在数据  不执行507的数据缓存
+                    // info.clear();
+                    // read_507(decodeURI(getUrlParam("programID")))
+                    var actionArr = JSON.parse(info.getItem("actionArray"))
+                    if (actionArr != null) {
+                        if (actionArr.length > 0) {
+                            $(".saveToast").hide();
+                            clearOvertimeWarn();
+                            edit();
+                        }
+                    } else {
+                        read_507(decodeURI(getUrlParam("programID")))
+                    }
+                } else {
+                    //若不是编辑管家任务进入
+                    edit();
+                }
+            })
+        })
+    });
+    $("#renameInput").on("blur", function () {
+        var value = $(this).val();
+        var valueFace = noFace(value);
+        console.log(valueFace);
+        $(this).val(valueFace);
+    });
+
+    function noFace(param) {
+        var regRule = /\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g;
+        param = param.replace(/(^\s*)|(\s*$)/g, "");
+        if (param.match(regRule)) {
+            param = param.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, "");
+            return param;
+        } else {
+            return param;
+        }
+    }
+
+    //定时时间
+    if (info.getItem("hour") != null) {
+        $(".time_task").html(info.getItem("hour") + ":" + info.getItem("min") + "&nbsp;<em></em><em style='max-width:60%;'>" + info.getItem(
+            "weekStr") + "</em>")
+    }
+
+    function read_507(id) {
+
+        var param = {
+            "cmd": "507",
+            "gwID": gwID,
+            "appID": appID,
+            "operType": "R",
+            "programID": id
+        }
+        //507查询
+        plus.gatewayCmd.houserkeep_507(param, function (result) {
+            $(".saveToast").hide();
+            clearOvertimeWarn();
+            if (result.programID == id) {
+                info.setItem("status", result.status)
+                $(".taskName").find("span").html(result.programName);
+                console.log($(".taskName").find("span").html());
+                info.setItem("programName", result.programName);
+                var week = result.triggerArray[0].exp.split(" ")[4].split(",")
+                var week1;
+                for (var i = 0; i < week.length; i++) {
+                    if (i == 0) {
+                        week1 = weekNum(week[0])
+                    } else {
+                        week1 = week1 + "," + weekNum(week[i])
+                    }
+                }
+                console.log(week1)
+                info.setItem("hour", result.triggerArray[0].exp.split(" ")[1])
+                info.setItem("min", result.triggerArray[0].exp.split(" ")[0])
+                info.setItem("weekStr", week1)
+                $(".time_task").html(result.triggerArray[0].exp.split(" ")[1] + ":" + result.triggerArray[0].exp
+                    .split(" ")[0] + "&nbsp;<em></em><em style='max-width:60%;'>" + week1 + "</em>")
+                var arr1 = [];
+                result.actionArray.map(function (item, i) {
+                    var detaJson;
+                    if (item.type == 2) {
+                        detaJson = {
+                            "type": "2",
+                            "name": "",
+                            "delay": "",
+                            "epData": item.epData,
+                            "object": item.object,
+                            "deviceState": "",
+                            "deviceIcon": "",
+                            "roomName": item.roomName
+                        }
+                        if (item.object.split(">")[2] == "03") {
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_03.png)"
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_03 +
+                                item.name.split("#")[2] : item.name
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt18
+                            } else {
+                                detaJson.deviceState = lang_txt19
+                            }
+                            detaJson.editUrl = "setDoorState.html";
+                        } else if (item.object.split(">")[2] == "50") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_50 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_50.png)"
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt_close
+                            } else {
+                                detaJson.deviceState = lang_txt_open
+                            }
+                            detaJson.editUrl = "setDoorState.html";
+                        } else if (item.object.split(">")[2] == "Bt") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Bt +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Bt.png)"
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt_close
+                            } else {
+                                detaJson.deviceState = lang_txt_open
+                            }
+                            detaJson.editUrl = "setDoorState.html";
+                        } else if (item.object.split(">")[2] == "06") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_06 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_06.png)"
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt18
+                            } else {
+                                detaJson.deviceState = lang_txt19
+                            }
+                            detaJson.editUrl = "setDoorState.html";
+                        } else if (item.object.split(">")[2] == "02") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_02 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_02.png)"
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt18
+                            } else {
+                                detaJson.deviceState = lang_txt19
+                            }
+                            detaJson.editUrl = "setDoorState.html";
+                        } else if (item.object.split(">")[2] == "09") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_09 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_09.png)"
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt18
+                            } else {
+                                detaJson.deviceState = lang_txt19
+                            }
+                            detaJson.editUrl = "setDoorState.html";
+                        } else if (item.object.split(">")[2] == "43") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_43 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_43.png)"
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt18
+                            } else {
+                                detaJson.deviceState = lang_txt19
+                            }
+                            detaJson.editUrl = "setDoorState.html";
+                        } else if (item.object.split(">")[2] == "01") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_01 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_01.png)"
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt22
+                            } else if (item.epData == "1") {
+                                detaJson.deviceState = lang_txt20
+                            } else if (item.epData == "2") {
+                                detaJson.deviceState = lang_txt21
+                            }
+                            detaJson.editUrl = "setDoorState.html";
+                        } else if (item.object.split(">")[2] == "Ar") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Ar +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Ar.png)"
+                            if (item.epData == "2") {
+                                detaJson.deviceState = lang_txt_open
+                            } else if (item.epData == "3") {
+                                detaJson.deviceState = lang_txt_close
+                            } else if (item.epData == "1") {
+                                detaJson.deviceState = lang_txt_stop
+                            }
+                            detaJson.editUrl = "setDoorState.html";
+                        } else if (item.object.split(">")[2] == "Au") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Au + item.name.split("#")[2] : item.name;
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Au.png)";
+                            if (item.epData == "2") {
+                                detaJson.deviceState = lang_txt_open
+                            } else if (item.epData == "3") {
+                                detaJson.deviceState = lang_txt_close
+                            } else if (item.epData == "1") {
+                                detaJson.deviceState = lang_txt_stop
+                            }
+                            detaJson.editUrl = "setDoorState.html";
+                        } else if (item.object.split(">")[2] == "Aj") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Aj +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Aj.png)"
+                            var num = item.epData.length - 1;
+                            for (var n = 0; n < num; n++) {
+                                if (item.epData.substr(n + 1, 1) == 0) {
+                                    detaJson.deviceState += (n + 1) + ":" + lang_switch_off + " ";
+                                } else if (item.epData.substr(n + 1, 1) == 1) {
+                                    detaJson.deviceState += (n + 1) + ":" + lang_switch_on + " ";
+                                } else if (item.epData.substr(n + 1, 1) == 3) {
+                                    detaJson.deviceState += (n + 1) + ":" + lang_switch_cut + " ";
+                                }
+                            }
+                            detaJson.editUrl = "action_timeTask_setSwitch.html";
+                        } else if (item.object.split(">")[2] == "80") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_80 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_80.png)";
+                            detaJson.editUrl = "curtain_80_timeTask.html";
+                            var deviceData = item.epData.substring(1, 4);
+                            if (deviceData === "000") {
+                                detaJson.deviceState = lang_txt_close
+                            } else if (deviceData === "100") {
+                                detaJson.deviceState = lang_txt_open
+                            } else if (deviceData === "255") {
+                                detaJson.deviceState = lang_txt_stop
+                            } else {
+                                detaJson.deviceState = Number(item.epData.substring(1, 4)) + "%";
+                            }
+                        } else if (item.object.split(">")[2] == "Co") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Co +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Co.png)";
+                            detaJson.editUrl = "curtain_80_timeTask.html";
+                            var deviceData = item.epData;
+                            if (deviceData === "000") {
+                                detaJson.deviceState = lang_txt_close
+                            } else if (deviceData === "100") {
+                                detaJson.deviceState = lang_txt_open
+                            } else if (deviceData === "255") {
+                                detaJson.deviceState = lang_txt_stop
+                            } else {
+                                detaJson.deviceState = Number(item.epData) + "%";
+                            }
+                        } else if (item.object.split(">")[2] == "At") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_At +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_At.png)"
+                            var num = item.epData.length - 1;
+                            for (var n = 0; n < num; n++) {
+                                if (item.epData.substr(n + 1, 1) == 0) {
+                                    detaJson.deviceState += (n + 1) + ":" + lang_switch_off + " ";
+                                } else if (item.epData.substr(n + 1, 1) == 1) {
+                                    detaJson.deviceState += (n + 1) + ":" + lang_switch_on + " ";
+                                } else if (item.epData.substr(n + 1, 1) == 3) {
+                                    detaJson.deviceState += (n + 1) + ":" + lang_switch_cut + " ";
+                                }
+                            }
+                            detaJson.editUrl = "action_timeTask_setSwitch.html";
+                        } else if (item.object.split(">")[2] == "Am") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Am +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Am.png)";
+                            detaJson.editUrl = "action_timeTask_setSwitch_lock.html";
+                            var num = item.epData.length;
+                            if (item.epData.substr(0, 1) == "1") {
+                                if (item.epData.substr(2, 1) == 0) {
+                                    detaJson.deviceState += 1 + ":" + lang_switch_off + " ";
+                                } else if (item.epData.substr(2, 1) == 1) {
+                                    detaJson.deviceState += 1 + ":" + lang_switch_on + " ";
+                                } else if (item.epData.substr(2, 1) == 3) {
+                                    detaJson.deviceState += 1 + ":" + lang_switch_cut + " ";
+                                }
+                            } else {
+                                for (var n = 1; n < num; n++) {
+                                    if (item.epData.substr(n, 1) == 0) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(n, 1) == 1) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(n, 1) == 3) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "An") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_An +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_An.png)";
+                            detaJson.editUrl = "action_timeTask_setSwitch_lock.html";
+                            var num = item.epData.length;
+                            if (item.epData.substr(0, 1) == "1") {
+                                if (item.epData.substr(1, 1) == "1") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_cut + " ";
+                                    }
+                                } else if (item.epData.substr(1, 1) == "2") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            } else {
+                                for (var n = 1; n < num; n++) {
+                                    if (item.epData.substr(n, 1) == 0) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(n, 1) == 1) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(n, 1) == 3) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "Ao") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Ao +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Ao.png)";
+                            detaJson.editUrl = "action_timeTask_setSwitch_lock.html";
+                            var num = item.epData.length;
+                            if (item.epData.substr(0, 1) == "1") {
+                                if (item.epData.substr(1, 1) == 0) {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        for (var m = 0; m < num; m++) {
+                                            detaJson.deviceState += (m + 1) + ":" + lang_switch_off +
+                                                " ";
+                                        }
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        for (var m = 0; m < num; m++) {
+                                            detaJson.deviceState += (m + 1) + ":" + lang_switch_on +
+                                                " ";
+                                        }
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        for (var m = 0; m < num; m++) {
+                                            detaJson.deviceState += (m + 1) + ":" + lang_switch_cut +
+                                                " ";
+                                        }
+                                    }
+                                } else if (item.epData.substr(1, 1) == "1") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_cut + " ";
+                                    }
+                                } else if (item.epData.substr(1, 1) == "2") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_cut + " ";
+                                    }
+                                } else if (item.epData.substr(1, 1) == "3") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 3 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 3 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 3 + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            } else {
+                                for (var n = 1; n < num; n++) {
+                                    if (item.epData.substr(n, 1) == 0) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(n, 1) == 1) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(n, 1) == 3) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            }
+                        }  else if (item.object.split(">")[2] == "61" || item.object.split(">")[2] == "62" ||
+                            item.object.split(">")[2] == "63" || item.object.split(">")[2] == "64") {
+                            var deviceNameList = {
+                                "61":lang_name_61,
+                                "62":lang_name_62,
+                                "63":lang_name_63,
+                                "64":lang_name_64
+                            }
+                            var deviceType = item.object.split(">")[2];
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? deviceNameList[deviceType] +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_"+deviceType+".png)";
+                            detaJson.editUrl = "action_timeTask_setSwitch.html";
+                            var num = item.epData.length;
+                            for (var n = 0; n < num; n++) {
+                                if (item.epData.substr(n, 1) == 0) {
+                                    detaJson.deviceState += (n + 1) + ":" + lang_switch_off + " ";
+                                } else if (item.epData.substr(n, 1) == 1) {
+                                    detaJson.deviceState += (n + 1) + ":" + lang_switch_on + " ";
+                                } else if (item.epData.substr(n, 1) == 3) {
+                                    detaJson.deviceState += (n + 1) + ":" + lang_switch_cut + " ";
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "Bu") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Bu +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Bu.png)";
+                            detaJson.editUrl = "action_timeTask_setSwitch_lock.html";
+                            var num = item.epData.length;
+                            if (item.epData.substr(0, 1) == "1") {
+                                if (item.epData.substr(2, 1) == 0) {
+                                    detaJson.deviceState += 1 + ":" + lang_switch_off + " ";
+                                } else if (item.epData.substr(2, 1) == 1) {
+                                    detaJson.deviceState += 1 + ":" + lang_switch_on + " ";
+                                } else if (item.epData.substr(2, 1) == 3) {
+                                    detaJson.deviceState += 1 + ":" + lang_switch_cut + " ";
+                                }
+                            } else {
+                                for (var n = 1; n < num; n++) {
+                                    if (item.epData.substr(n, 1) == 0) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(n, 1) == 1) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(n, 1) == 3) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "Bv") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Bv +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Bv.png)";
+                            detaJson.editUrl = "action_timeTask_setSwitch_lock.html";
+                            var num = item.epData.length;
+                            if (item.epData.substr(0, 1) == "1") {
+                                if (item.epData.substr(1, 1) == "1") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_cut + " ";
+                                    }
+                                } else if (item.epData.substr(1, 1) == "2") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            } else {
+                                for (var n = 1; n < num; n++) {
+                                    if (item.epData.substr(n, 1) == 0) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(n, 1) == 1) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(n, 1) == 3) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "Bw") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Bw +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Bw.png)";
+                            detaJson.editUrl = "action_timeTask_setSwitch_lock.html";
+                            var num = item.epData.length;
+                            if (item.epData.substr(0, 1) == "1") {
+                                if (item.epData.substr(1, 1) == 0) {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        for (var m = 0; m < num; m++) {
+                                            detaJson.deviceState += (m + 1) + ":" + lang_switch_off +
+                                                " ";
+                                        }
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        for (var m = 0; m < num; m++) {
+                                            detaJson.deviceState += (m + 1) + ":" + lang_switch_on +
+                                                " ";
+                                        }
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        for (var m = 0; m < num; m++) {
+                                            detaJson.deviceState += (m + 1) + ":" + lang_switch_cut +
+                                                " ";
+                                        }
+                                    }
+                                } else if (item.epData.substr(1, 1) == "1") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_cut + " ";
+                                    }
+                                } else if (item.epData.substr(1, 1) == "2") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_cut + " ";
+                                    }
+                                } else if (item.epData.substr(1, 1) == "3") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 3 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 3 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 3 + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            } else {
+                                for (var n = 1; n < num; n++) {
+                                    if (item.epData.substr(n, 1) == 0) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(n, 1) == 1) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(n, 1) == 3) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "Cl") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Cl +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Cl.png)";
+                            detaJson.editUrl = "action_timeTask_setSwitch_lock.html";
+                            var num = item.epData.length;
+                            if (item.epData.substr(0, 1) == "1") {
+                                if (item.epData.substr(2, 1) == 0) {
+                                    detaJson.deviceState += 1 + ":" + lang_switch_off + " ";
+                                } else if (item.epData.substr(2, 1) == 1) {
+                                    detaJson.deviceState += 1 + ":" + lang_switch_on + " ";
+                                } else if (item.epData.substr(2, 1) == 3) {
+                                    detaJson.deviceState += 1 + ":" + lang_switch_cut + " ";
+                                }
+                            } else {
+                                for (var n = 1; n < num; n++) {
+                                    if (item.epData.substr(n, 1) == 0) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(n, 1) == 1) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(n, 1) == 3) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "Cm") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Cm +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Cm.png)";
+                            detaJson.editUrl = "action_timeTask_setSwitch_lock.html";
+                            var num = item.epData.length;
+                            if (item.epData.substr(0, 1) == "1") {
+                                if (item.epData.substr(1, 1) == "1") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_cut + " ";
+                                    }
+                                } else if (item.epData.substr(1, 1) == "2") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            } else {
+                                for (var n = 1; n < num; n++) {
+                                    if (item.epData.substr(n, 1) == 0) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(n, 1) == 1) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(n, 1) == 3) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "Cn") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Cn +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Cn.png)";
+                            detaJson.editUrl = "action_timeTask_setSwitch_lock.html";
+                            var num = item.epData.length;
+                            if (item.epData.substr(0, 1) == "1") {
+                                if (item.epData.substr(1, 1) == 0) {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        for (var m = 0; m < num; m++) {
+                                            detaJson.deviceState += (m + 1) + ":" + lang_switch_off +
+                                                " ";
+                                        }
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        for (var m = 0; m < num; m++) {
+                                            detaJson.deviceState += (m + 1) + ":" + lang_switch_on +
+                                                " ";
+                                        }
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        for (var m = 0; m < num; m++) {
+                                            detaJson.deviceState += (m + 1) + ":" + lang_switch_cut +
+                                                " ";
+                                        }
+                                    }
+                                } else if (item.epData.substr(1, 1) == "1") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 1 + ":" + lang_switch_cut + " ";
+                                    }
+                                } else if (item.epData.substr(1, 1) == "2") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 2 + ":" + lang_switch_cut + " ";
+                                    }
+                                } else if (item.epData.substr(1, 1) == "3") {
+                                    if (item.epData.substr(2, 1) == 0) {
+                                        detaJson.deviceState += 3 + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(2, 1) == 1) {
+                                        detaJson.deviceState += 3 + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(2, 1) == 3) {
+                                        detaJson.deviceState += 3 + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            } else {
+                                for (var n = 1; n < num; n++) {
+                                    if (item.epData.substr(n, 1) == 0) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_off + " ";
+                                    } else if (item.epData.substr(n, 1) == 1) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_on + " ";
+                                    } else if (item.epData.substr(n, 1) == 3) {
+                                        detaJson.deviceState += (n) + ":" + lang_switch_cut + " ";
+                                    }
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "D8") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_D8 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_D8.png)";
+                            detaJson.editUrl = "D8VoiceOrLight.html?Task=timeTask";
+                            var mode = item.epData.substring(0, 3)
+                            var mode_1 = item.epData.substring(3, 5)
+                            var voiceOrLight = item.epData.substring(0, 1)
+                            var deviceState;
+                            if (mode == "301") {
+                                deviceState = lang_D8_voice1
+                            } else if (mode == "302") {
+                                deviceState = lang_D8_voice2
+                            } else if (mode == "303") {
+                                deviceState = lang_D8_voice3
+                            } else if (mode == "304") {
+                                deviceState = lang_D8_voice4
+                            } else if (mode == "305") {
+                                deviceState = lang_D8_voice5
+                            } else if (mode == "306") {
+                                deviceState = lang_D8_voice6
+                            } else if (mode == "307") {
+                                deviceState = lang_D8_voice7
+                            } else if (mode == "308") {
+                                deviceState = lang_D8_voice8
+                            } else if (mode == "309") {
+                                deviceState = lang_D8_voice9
+                            } else if (mode == "310") {
+                                deviceState = lang_D8_voice10
+                            } else if (mode == "311") {
+                                deviceState = lang_D8_voice11
+                            }
+                            if (mode == "101") {
+                                deviceState = lang_D8_color1
+                            } else if (mode == "105") {
+                                deviceState = lang_D8_color2
+                            } else if (mode == "106") {
+                                deviceState = lang_D8_color3
+                            } else if (mode == "103") {
+                                deviceState = lang_D8_color4
+                            } else if (mode == "102") {
+                                deviceState = lang_D8_color5
+                            } else if (mode == "107") {
+                                deviceState = lang_D8_color6
+                            }
+                            if(voiceOrLight == "1"){
+                                if (mode_1 == "00") {
+                                    deviceState = lang_D8_mode1;
+                                } else if (mode_1 == "01") {
+                                    deviceState = lang_D8_mode2 + " " + deviceState;
+                                } else if (mode_1 == "02") {
+                                    deviceState = lang_D8_mode3 + " " + deviceState;
+                                } else if (mode_1 == "03") {
+                                    deviceState = lang_D8_mode4 + " " + deviceState;
+                                } else if (mode_1 == "04") {
+                                    deviceState = lang_D8_mode5 + " " + deviceState;
+                                }
+                            }else if(voiceOrLight == "3"){
+                                deviceState = deviceState + " " + parseInt(mode_1) + "%";
+                            }
+                            detaJson.deviceState = deviceState;
+                        } else if (item.object.split(">")[2] == "65") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_65 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_65.png)";
+                            detaJson.editUrl = "setDoorState.html";
+                            if (item.epData == "2") {
+                                detaJson.deviceState = lang_txt_open
+                            } else if (item.epData == "3") {
+                                detaJson.deviceState = lang_txt_close
+                            } else if (item.epData == "1") {
+                                detaJson.deviceState = lang_txt_stop
+                            }
+                        } else if (item.object.split(">")[2] == "Ai") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Ai +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Ai.png)";
+                            detaJson.editUrl = "setDoorState.html";
+                            if (item.epData == "10") {
+                                detaJson.deviceState = lang_switch_off
+                            } else if (item.epData == "11") {
+                                detaJson.deviceState = lang_switch_on
+                            } else {
+                                detaJson.deviceState = lang_switch_cut
+                            }
+                        } else if (item.object.split(">")[2] == "77") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_77 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_77.png)";
+                            detaJson.editUrl = "setDoorState.html";
+                            if (item.epData == "10") {
+                                detaJson.deviceState = lang_switch_off
+                            } else {
+                                detaJson.deviceState = lang_switch_on
+                            }
+                        } else if (item.object.split(">")[2] == "12") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_12 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_12.png)";
+                            detaJson.editUrl = "setSecurityDevice.html";
+                            detaJson.deviceState = Number(item.epData) + "%";
+                            if (Number(item.epData) == 0) {
+                                detaJson.switchName = lang_switch_off;
+                            } else {
+                                detaJson.switchName = lang_switch_on;
+                            }
+                        } else if (item.object.split(">")[2] == "81") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_81 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_81.png)";
+                            detaJson.editUrl = "switch_At_timeTask.html";
+                            var deviceData = item.epData;
+                            if (deviceData.substr(0, 1) == '9') {
+                                if (deviceData.substr(5, 3) == "000") {
+                                    detaJson.deviceState = "2:" + lang_closeSingle;
+                                } else if (deviceData.substr(5, 3) == "100") {
+                                    detaJson.deviceState = "2:" + lang_openSingle;
+                                } else if (deviceData.substr(5, 3) == "255") {
+                                    detaJson.deviceState = "2:" + lang_stopSingle;
+                                } else {
+                                    detaJson.deviceState = "2:" + Number(deviceData.substr(5, 3)) + "%";
+                                }
+                            } else if (deviceData.substr(4, 1) == '9') {
+                                if (deviceData.substr(1, 3) == "000") {
+                                    detaJson.deviceState = "1:" + lang_closeSingle;
+                                } else if (deviceData.substr(1, 3) == "100") {
+                                    detaJson.deviceState = "1:" + lang_openSingle;
+                                } else if (deviceData.substr(1, 3) == "255") {
+                                    detaJson.deviceState = "1:" + lang_stopSingle;
+                                } else {
+                                    detaJson.deviceState = "1:" + Number(deviceData.substr(1, 3)) + "%";
+                                }
+                            } else if (deviceData.substr(0, 1) != '9' && deviceData.substr(4, 1) != '9') {
+                                if (deviceData.substr(5, 3) == "000" || deviceData.substr(1, 3) ==
+                                    "000") {
+                                    detaJson.deviceState = "1:" + lang_closeSingle + " 2:" +
+                                        lang_closeSingle;
+                                } else if (deviceData.substr(5, 3) == "100" || deviceData.substr(1, 3) ==
+                                    "000") {
+                                    detaJson.deviceState = "1:" + lang_openSingle + " 2:" +
+                                        lang_openSingle;
+                                } else if (deviceData.substr(5, 3) == "255" || deviceData.substr(1, 3) ==
+                                    "000") {
+                                    detaJson.deviceState = "1:" + lang_stopSingle + " 2:" +
+                                        lang_stopSingle;
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "A5") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_A5 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_A5.png)";
+                            detaJson.editUrl = "setDoorState.html";
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt18
+                            } else {
+                                detaJson.deviceState = lang_txt19
+                            }
+                        } else if (item.object.split(">")[2] == "Bh") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Bh +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Bh.png)";
+                            detaJson.editUrl = "switch_At_timeTask.html";
+                            var epDataBh = item.epData.substr(1,2);
+                            for (var g = 0; g < epDataBh.length; g++) {
+                                var state = epDataBh[g];
+                                if (state === "1") {
+                                    detaJson.deviceState += ((g == 0) ? "1:" : " 2:") + lang_stopSingle;
+                                } else if (state === "2") {
+                                    detaJson.deviceState += ((g == 0) ? "1:" : " 2:") + lang_openSingle
+                                } else if (state === "3") {
+                                    detaJson.deviceState += ((g == 0) ? "1:" : " 2:") + lang_closeSingle
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "Av") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Av +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Av.png)";
+                            detaJson.editUrl = "device_Av_timeTask.html";
+                            if (Number(item.epData) == 20) {
+                                detaJson.switchName = lang_switch_off;
+                                detaJson.deviceState = "0%";
+                            } else {
+                                detaJson.switchName = lang_switch_on;
+                                detaJson.deviceState = Number(item.epData.substring(1)) + "%";
+                            }
+                        } else if (item.object.split(">")[2] == "Ap") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Ap +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Ap.png)";
+                            detaJson.editUrl = "device_Ap_timeTask.html";
+                            var state = item.epData.substr(0, 2);
+                            var temp = item.epData.substr(4, 4);
+                            if (state == "20") {
+                                detaJson.switchName = lang_txt_close;
+                            } else {
+                                detaJson.switchName = lang_txt_open;
+                                temp = parseInt(temp) / 100;
+                                detaJson.deviceState = '' + temp + '℃';
+                            }
+                        } else if (item.object.split(">")[2] == "Bm") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Bm +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Bm.png)";
+                            detaJson.editUrl = "device_Bm_timeTask.html";
+                            var state = item.epData.substr(0, 4);
+                            var temp = item.epData.substr(7, 4);
+                            if (state == "0100") {
+                                detaJson.switchName = lang_txt_close;
+                            } else {
+                                detaJson.switchName = lang_txt_open;
+                                temp = parseInt(temp, 16) / 10;
+                                detaJson.deviceState = '' + temp + '℃';
+                            }
+                        } else if (item.object.split(">")[2] == "Oi") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Oi +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Oi.png)";
+                            detaJson.editUrl = "device_Oi_timeTask.html";
+                            //09aabbccddeeeeffgghh09：长度，aa:开关，bb：模式，cc：温度，dd：湿度，eeee:风向，ff：风量，gg:换气模式，hh:辅热）备注：当某一设置项缺省时，填 0xFF。
+                            var state = item.epData.substr(14, 2);
+                            var bb = item.epData.substr(16, 2);
+                            var cc = item.epData.substr(18, 2);
+                            var ee = item.epData.substr(24, 2);
+                            var ff = item.epData.substr(26, 2);
+                            if (bb == "01") {
+                                bb = languageUtil.getResource("houseKeeper1_Oi_Type1") //"制冷";
+                            } else if (bb == "02") {
+                                bb = languageUtil.getResource("houseKeeper1_Oi_Type2") //"制re";
+                            } else if (bb == "03") {
+                                bb = languageUtil.getResource("houseKeeper1_Oi_Type3") //"";
+                            } else if (bb == "05") {
+                                bb = languageUtil.getResource("houseKeeper1_Oi_Type4") //"制冷";
+                            } else {
+                                bb = "";
+                            }
+                            if (cc == "FF") {
+                                cc = "";
+                            }
+                            if (ee == "00") {
+                                ee = languageUtil.getResource("houseKeeper1_Oi_Speed4");
+                            } else {
+                                ee = "";
+                            }
+                            if (ff == "00") {
+                                ff = languageUtil.getResource("houseKeeper1_Oi_Speed4");
+                            } else {
+                                ff = "";
+                            }
+                            if (state == "00") {
+                                detaJson.deviceState = lang_txt_close;
+                            } else {
+                                detaJson.deviceState = lang_txt_open;
+                            }
+                        } else if (item.object.split(">")[2] == "82") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_82 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_82.png)";
+                            detaJson.editUrl = "device_82_timeTask.html";
+                            var result = item.epData.split(",");
+                            var state;
+                            for (var l = 0; l < result.length; l++) {
+                                if (result[l].substr(0, 1) == "2") {
+                                    state = result[l].substr(1, 1);
+                                } else if (result[l].substr(0, 1) == "23") {
+
+                                } else if (result[l].substr(0, 1) == "4") {
+
+                                }
+                            }
+                            if (state == "0") {
+                                detaJson.deviceState = lang_txt_close;
+                            } else {
+                                detaJson.deviceState = lang_txt_open;
+                            }
+                        } else if (item.object.split(">")[2] == "16") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_16 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_16.png)";
+                            detaJson.editUrl = "setDoorState.html";
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_switch_off
+                            } else {
+                                detaJson.deviceState = lang_switch_on
+                            }
+                        } else if (item.object.split(">")[2] == "25") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_25 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_25.png)";
+                            detaJson.editUrl = "setDoorState.html";
+                            if (item.epData == "3") {
+                                detaJson.deviceState = lang_txt_close
+                            } else if (item.epData == "2") {
+                                detaJson.deviceState = lang_txt_open
+                            }
+                        } else if (item.object.split(">")[2] == "D7") {
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_D7.png)";
+                            detaJson.editUrl = "device_D7_timeTask.html";
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_D7 +
+                                item.name.split("#")[2] : item.name
+                            if (item.epData.length == 10) {
+                                var mode = item.epData.substr(9, 1);
+                                if (mode == 0) {
+                                    detaJson.deviceState = "OFF";
+                                } else if (mode == 1) {
+
+                                } else if (mode == 2) {
+                                    detaJson.deviceState = lang_D7_mode_dinner;
+                                } else if (mode == 3) {
+                                    detaJson.deviceState = lang_D7_mode_moon;
+                                } else if (mode == 4) {
+                                    detaJson.deviceState = lang_D7_mode_blue;
+                                } else if (mode == 5) {
+                                    detaJson.deviceState = lang_D7_mode_green;
+                                }
+                            } else if (item.epData.indexOf(",") > 0) {
+                                var result = item.epData.split(",");
+                                if (result[0].length == 18 && result[1].length == 12) {
+                                    detaJson.switchName = lang_D7_rgb + result[0].substr(10, 6);
+                                    detaJson.deviceState = lang_D7_light + parseInt(result[1].substr(8,
+                                        2), 16).toString() + "%"
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "D9") {
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_D9.png)";
+                            detaJson.editUrl = "device_D9_timeTask.html";
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_D9 +
+                                item.name.split("#")[2] : item.name;
+                            var result = item.epData.split(",");
+                            var state = '';
+                            var vol = '';
+                            for (var l = 0; l < result.length; l++) {
+                                if (result[l].substr(0, 1) == "1") {
+                                    state = languageUtil.getResource("Radio_houseKeeper_play");
+                                } else if (result[l].substr(0, 1) == "3") {
+                                    var stateStr = result[l].substr(1, 1);
+                                    state = (stateStr == '0') ? languageUtil.getResource(
+                                        "Radio_houseKeeper_play") : languageUtil.getResource(
+                                        "Radio_houseKeeper_stop");
+                                } else if (result[l].substr(0, 1) == "4") {
+                                    vol = result[l].substr(1, result[l].length - 1) + '%';
+                                }
+                                detaJson.deviceState = state + " " + vol;
+                            }
+                        } else if (item.object.split(">")[2] == "DD") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_DD +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_DD.png)";
+                            detaJson.editUrl = "device_DD_timeTask.html";
+
+                            var arrrrr = item.epData.split(',');
+                            var state = item.epData.substr(0, 1);
+                            var voice1 = '',
+                                voice2 = '',
+                                voice3 = '',
+                                voice4 = '';
+                            for (var ii = 1; ii < arrrrr.length; ii++) {
+                                var s = arrrrr[ii].substr(0, 1);
+                                var v = arrrrr[ii].substring(1);
+                                switch (s) {
+                                    case '1':
+                                        voice1 = lang_DD_1 + v;
+                                        break;
+                                    case '2':
+                                        voice2 = lang_DD_2 + v;
+                                        break;
+                                    case '3':
+                                        voice3 = lang_DD_3 + v;
+                                        break;
+                                    case '4':
+                                        voice4 = lang_DD_4 + v;
+                                        break;
+                                }
+                            }
+                            var voiceStr = voice1 + ' ' + voice2 + ' ' + voice3 + ' ' + voice4;
+                            if (state == "1") {
+                                // 暂停
+                                detaJson.deviceState = lang_DD_stop;
+                            } else {
+                                // 播放
+                                detaJson.deviceState = lang_DD_play + ' ' + voiceStr;
+                            }
+                        } else if (item.object.split(">")[2] == "OF") {
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_OF.png)";
+                            detaJson.editUrl = "device_OF.html";
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_OF +
+                                item.name.split("#")[2] : item.name
+                            var a = item.epData.split(',');
+                            if (a[0] != '') {
+                                if (a[0] == '0') {
+                                    // 暂停
+                                    detaJson.switchName = languageUtil.getResource(
+                                        "clothes_hanger_time_out");
+                                } else if (a[0] == '1') {
+                                    // 上升
+                                    detaJson.switchName = languageUtil.getResource("clothes_hanger_up")
+                                } else {
+                                    // 下降
+                                    detaJson.switchName = languageUtil.getResource(
+                                        "clothes_hanger_decline")
+                                }
+                            } else if (a[3] != '') {
+                                if (a[3] == '1') {
+                                    // 照明开
+                                    detaJson.switchName = languageUtil.getResource(
+                                            "clothes_hanger_light") +
+                                        ': ' +
+                                        languageUtil.getResource("clothes_hanger_open")
+                                } else {
+                                    // 照明关
+                                    detaJson.switchName = languageUtil.getResource(
+                                            "clothes_hanger_light") +
+                                        ': ' +
+                                        languageUtil.getResource("clothes_hanger_close")
+                                }
+                            } else if (a[4] != '') {
+                                if (a[4].substr(0, 1) == '0') {
+                                    // 风干关
+                                    detaJson.switchName = languageUtil.getResource(
+                                            "clothes_hanger_Air_dry") +
+                                        ': ' +
+                                        languageUtil.getResource("clothes_hanger_close")
+                                } else {
+                                    // 风干开
+                                    var time = parseInt(a[4].substr(1, 3));
+                                    var hour = parseInt(time / 60);
+                                    var min = time % 60;
+                                    var timeText = '';
+                                    if (time < 60) {
+                                        timeText = min + languageUtil.getResource("clothes_hanger_mine")
+                                    } else {
+                                        timeText = hour +
+                                            languageUtil.getResource("clothes_hanger_hour") +
+                                            min +
+                                            languageUtil.getResource("clothes_hanger_mine")
+                                    }
+                                    detaJson.switchName = languageUtil.getResource(
+                                            "clothes_hanger_Air_dry") +
+                                        ': ' +
+                                        timeText
+                                }
+                            } else if (a[5] != '') {
+                                if (a[5].substr(0, 1) == '0') {
+                                    // 烘干关
+                                    detaJson.switchName = languageUtil.getResource(
+                                            "clothes_hanger_drying") +
+                                        ': ' +
+                                        languageUtil.getResource("clothes_hanger_close")
+                                } else {
+                                    // 烘干开
+                                    var time = parseInt(a[5].substr(1, 3));
+                                    var hour = parseInt(time / 60);
+                                    var min = time % 60;
+                                    var timeText = '';
+                                    if (time < 60) {
+                                        timeText = min + languageUtil.getResource("clothes_hanger_mine")
+                                    } else {
+                                        timeText = hour +
+                                            languageUtil.getResource("clothes_hanger_hour") +
+                                            min +
+                                            languageUtil.getResource("clothes_hanger_mine")
+                                    }
+                                    detaJson.switchName = languageUtil.getResource(
+                                        "clothes_hanger_drying") + ': ' + timeText
+                                }
+                            } else {
+                                if (a[6] == '') {
+                                    // 杀菌关
+                                    detaJson.switchName = languageUtil.getResource(
+                                            "clothes_hanger_Disinfection") +
+                                        ': ' +
+                                        languageUtil.getResource("clothes_hanger_close")
+                                } else if (a[6].substr(0, 1) == '0') {
+                                    // 杀菌关
+                                    detaJson.switchName = languageUtil.getResource(
+                                            "clothes_hanger_Disinfection") +
+                                        ': ' +
+                                        languageUtil.getResource("clothes_hanger_close")
+                                } else {
+                                    // 杀菌开
+                                    var time = parseInt(a[5].substr(1, 3));
+                                    detaJson.switchName = languageUtil.getResource(
+                                            "clothes_hanger_Disinfection") +
+                                        ': ' +
+                                        time +
+                                        languageUtil.getResource("clothes_hanger_mine")
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "90") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_90 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_90.png)";
+                            detaJson.editUrl = "setColorfulLight_90.html";
+                            if (item.epData.length > 0) {
+                                var result = item.epData.split(",");
+                                var state = '';
+                                for (var l = 0; l < result.length; l++) {
+                                    if (result[l].substr(0, 1) == "1") {
+                                        var rgb = result[l].substr(1, result[l].length);
+                                        var r = parseInt(rgb.substr(0, 3)).toString(16).toUpperCase();
+                                        var g = parseInt(rgb.substr(3, 3)).toString(16).toUpperCase();
+                                        var b = parseInt(rgb.substr(6, 3)).toString(16).toUpperCase();
+                                        state += rgb_str + "#" + (r.length < 2 ? "0" + r : r) + (g.length <
+                                            2 ? "0" + g : g) + (b.length < 2 ? "0" + b : b);
+                                    } else if (result[l].substr(0, 1) == "2") {
+                                        var light = result[l].substr(1, 3)
+                                        if (parseInt(light) > 0) {
+                                            state += " " + light_str + Math.round(parseInt(result[l].substr(
+                                                1, 3)) / 255.0 * 100) + "%";
+                                        }
+                                    } else if (result[l].substr(0, 1) == "3") {
+                                        var ms = parseInt(result[l].substr(1, 5));
+                                        state += " " + LEDlight_90_Interval + parseInt(ms / 1000) +
+                                            "s " + parseInt(ms % 1000) + "ms";
+                                    } else if (result[l].substr(0, 1) == "9") {
+                                        state += LEDlight_90_Colorful;
+                                    } else if (result[l].substr(0, 1) == "D") {
+                                        var light = result[l].substr(1, 3)
+                                        if (parseInt(light) == 0) {
+                                            state += "OFF";
+                                        } else {
+                                            state += LEDlight_90_sunlight + " " + light_str + Math.round(
+                                                    parseInt(result[l].substr(1, 3)) / 255.0 * 100) +
+                                                "%";
+                                        }
+                                    }
+                                    detaJson.deviceState = state;
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "Aw") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? device_name_Aw +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Aw.png)";
+                            detaJson.editUrl = "setDoorState.html";
+                            if (item.epData == "10") {
+                                detaJson.deviceState = lang_switch_off
+                            } else if (item.epData == "11") {
+                                detaJson.deviceState = lang_switch_on
+                            } else if (item.epData == "13") {
+                                detaJson.deviceState = lang_switch_cut
+                            } else if (item.epData == "50") {
+                                detaJson.deviceState = aw_bell_short
+                            } else if (item.epData == "510") {
+                                detaJson.deviceState = aw_bell_stop
+                            } else if (item.epData == "511") {
+                                detaJson.deviceState = aw_bell_long
+                            }
+                        } else if (item.object.split(">")[2] == "Ax") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? device_name_Ax +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Ax.png)";
+                            detaJson.editUrl = "switch_At_timeTask.html";
+                            if (item.epData == "1022" || item.epData == "1202" || item.epData == "1220") {
+                                detaJson.deviceState = lang_switch_off
+                            } else if (item.epData == "1122" || item.epData == "1212" || item.epData ==
+                                "1221") {
+                                detaJson.deviceState = lang_switch_on
+                            } else {
+                                detaJson.deviceState = lang_switch_cut
+                            }
+                            detaJson.switchName = device_switch + item.object.split(">")[1]
+                        } else if (item.object.split(">")[2] == "Ba") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? device_name_Ba +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Ba.png)";
+                            detaJson.editUrl = "device_Ba.html";
+                            if (item.epData.length > 2) {
+                                var result = item.epData;
+                                var switch1 = result.substring(1, 2);
+                                var switch2 = result.substring(2, 3);
+                                var state = '';
+                                if (switch1 == "0") {
+                                    state += device_Ba_SocketName + "1" + "&nbsp;&nbsp;&nbsp;&nbsp;" +
+                                        device_Ba_PowerFailure;
+                                } else if (switch1 == "1") {
+                                    state += device_Ba_SocketName + "1" + "&nbsp;&nbsp;&nbsp;&nbsp;" +
+                                        device_Ba_Electricity;
+                                }
+                                if (switch2 == "0") {
+                                    state += device_Ba_SocketName + "2" + "&nbsp;&nbsp;&nbsp;&nbsp;" +
+                                        device_Ba_PowerFailure;
+                                } else if (switch2 == "1") {
+                                    state += device_Ba_SocketName + "2" + "&nbsp;&nbsp;&nbsp;&nbsp;" +
+                                        device_Ba_Electricity;
+                                }
+                                detaJson.deviceState = state;
+                            }
+                        } else if (item.object.split(">")[2] == "22") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_22 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_22.png)";
+                            detaJson.editUrl = "javascript:;";
+                            if (item.description != undefined && item.description.length > 0) {
+                                detaJson.deviceState = item.description;
+                                detaJson.description = item.description;
+                            }
+                        } else if (item.object.split(">")[2] == "23") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_23 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_23.png)";
+                            detaJson.editUrl = "javascript:;";
+                            if (item.description != undefined && item.description.length > 0) {
+                                detaJson.deviceState = item.description;
+                                detaJson.description = item.description;
+                            }
+                        } else if (item.object.split(">")[2] == "Oj") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Oj +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Oj.png)";
+                            detaJson.editUrl = "device_Oj.html";
+                            var a = item.epData.split(',');
+                            if (a[0] == '0') {
+                                detaJson.deviceState = languageUtil.getResource("airsystem_Oj_close");
+                            } else if (a[1] != '') {
+                                var text = 'AUTO';
+                                if (a[1] == '01') {
+                                    text = languageUtil.getResource("airsystem_Oj_Wind_speed_low");
+                                } else if (a[1] == '02') {
+                                    text = languageUtil.getResource("airsystem_Oj_Wind_speed_medium");
+                                } else if (a[1] == '03') {
+                                    text = languageUtil.getResource("airsystem_Oj_Wind_speed_high");
+                                }
+                                detaJson.deviceState = languageUtil.getResource(
+                                    "airsystem_Oj_Wind_speed_02") + text;
+                                if (a[2] != '') {
+                                    var text_type = languageUtil.getResource(
+                                        "airsystem_Oj_mode_Ventilation");
+                                    if (a[2] == '01') {
+                                        text_type = languageUtil.getResource(
+                                            "airsystem_Oj_mode_Ventilation");
+                                    } else if (a[2] == '02') {
+                                        text_type = languageUtil.getResource(
+                                            "airsystem_Oj_mode_Exhaust");
+                                    }
+                                    detaJson.deviceState = text_type + " " + languageUtil.getResource(
+                                        "airsystem_Oj_Wind_speed_02") + text;
+                                }
+                            } else if (a[1] == "") {
+                                if (a[2] != '') {
+                                    var text_type = languageUtil.getResource(
+                                        "airsystem_Oj_mode_Ventilation");
+                                    if (a[2] == '03') {
+                                        text_type = languageUtil.getResource("airsystem_Oj_mode_smart");
+                                    } else if (a[2] == '04') {
+                                        text_type = languageUtil.getResource("airsystem_Oj_mode_strong");
+                                    } else if (a[2] == '05') {
+                                        text_type = languageUtil.getResource(
+                                            "airsystem_Oj_mode_Power_saving");
+                                    }
+                                    detaJson.deviceState = text_type;
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "Be") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? device_name_Be +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Be.png)";
+                            detaJson.editUrl = "device_Be.html";
+                            if (item.epData.length > 1) {
+                                var result = item.epData;
+                                var type = result.substring(0, 2);
+                                var state = "";
+                                if (type == "40") {
+                                    state += switch_off;
+                                } else if (type == "41") {
+                                    state += switch_on;
+                                } else if (type == "43") {
+                                    state += lang_switch_cut;
+                                } else {
+                                    var light = result.substring(1, 4);
+                                    state += switch_on + "&nbsp;&nbsp;&nbsp;&nbsp;" + lang_D7_light +
+                                        parseInt(light) + "%"
+                                }
+                                detaJson.deviceState = state;
+                            }
+                        } else if (item.object.split(">")[2] == "OZ") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_OZ +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_OZ.png)";
+                            detaJson.editUrl = "device_OZ_01.html";
+                            var modeList = {
+                                "01": lang_OZ_Type1,
+                                "02": lang_OZ_Type2,
+                                "03": lang_OZ_Type3,
+                                "04": lang_OZ_Type4,
+                                "05": lang_OZ_Type5,
+                                "06": lang_OZ_Type6,
+                                "07": lang_OZ_Type7,
+                                "08": lang_OZ_Type8,
+                                "09": lang_OZ_Type9,
+                                "10": lang_OZ_Type10,
+                                "11": lang_OZ_Type11,
+                                "12": lang_OZ_Type12
+                            };
+                            if (item.description && item.description.length > 0) {
+                                detaJson.description = item.description;
+                            }
+                            var nameArr = detaJson.description.split("-");
+                            var epDataList = item.epData.split(",");
+                            console.log(epDataList);
+                            for (var k = 0; k < epDataList.length; k++) {
+                                //510126FF000401FFFF
+                                //123:开 制冷 26℃ 4 低,8:开 制冷 26℃ 4 低
+                                console.log(epDataList);
+                                var onOff = epDataList[k].substr(2, 1) === "0" ? lang_close : lang_open;
+                                if (epDataList[k].substr(2, 1) === "0") {
+                                    if (k === 0) {
+                                        detaJson.deviceState = nameArr[k] + ":" + onOff
+                                    } else {
+                                        detaJson.deviceState += "," + nameArr[k] + ":" + onOff
+                                    }
+                                } else {
+                                    var mode1 = " " + modeList[epDataList[k].substr(3, 2)];
+                                    var temp1 = " " + parseInt(epDataList[k].substr(5, 3)) + "℃";
+                                    if (k === 0) {
+                                        detaJson.deviceState = nameArr[k] + ":" + onOff + mode1 + temp1
+                                    } else {
+                                        detaJson.deviceState += "," + nameArr[k] + ":" + onOff + mode1 +
+                                            temp1
+                                    }
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "a0") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_a0 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_a0_01.png)";
+                            detaJson.editUrl = "device_a0_01.html";
+                            var modeList = {
+                                "0": lang_a0_Type1,
+                                "1": lang_a0_Type2,
+                                "2": lang_a0_Type3,
+                                "7": lang_a0_Type4
+                            };
+                            if (item.description && item.description.length > 0) {
+                                detaJson.description = item.description;
+                            }
+                            var nameArr = detaJson.description.split("-");
+                            var epDataList = item.epData.split(",");
+                            console.log(epDataList);
+                            for (var k = 0; k < epDataList.length; k++) { //01 1 1 261 //1:开 1:制冷 26:温度 1 低
+                                console.log(epDataList);
+                                var onOff = epDataList[k].substr(2, 1) === "0" ? lang_close : lang_open;
+                                if (epDataList[k].substr(2, 1) === "0") {
+                                    if (k === 0) {
+                                        detaJson.deviceState = nameArr[k] + ":" + onOff
+                                    } else {
+                                        detaJson.deviceState += "," + nameArr[k] + ":" + onOff
+                                    }
+                                } else {
+                                    var mode1 = " " + modeList[epDataList[k].substr(3, 1)];
+                                    var temp1 = " " + parseInt(epDataList[k].substr(4, 2)) + "℃";
+                                    if (k === 0) {
+                                        detaJson.deviceState = nameArr[k] +
+                                            ":" + onOff + mode1 + temp1
+                                    } else {
+                                        detaJson.deviceState += "," + nameArr[k] + ":" + onOff + mode1 +
+                                            temp1
+                                    }
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "24") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_24 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_24.png)";
+                            detaJson.editUrl = "javascript:;";
+                            if (item.description != undefined && item.description.length > 0) {
+                                detaJson.deviceState = item.description;
+                                detaJson.description = item.description;
+                            }
+                        } else if (item.object.split(">")[2] == "28") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_28 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_28.png)";
+                            detaJson.editUrl = "device_water_valve_28.html";
+                            var epdata = item.epData;
+                            detaJson.deviceState = lang_txt16 + "  " + epdata / 60 + 'min' +
+                                device_28_close_after;
+                        } else if (item.object.split(">")[2] == "Ad") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Ad +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Ad.png)";
+                            detaJson.editUrl = "setDoorState.html";
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt18
+                            } else {
+                                detaJson.deviceState = lang_txt19
+                            }
+                        } else if (item.object.split(">")[2] == "C0") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_C0 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_C0.png)";
+                            detaJson.editUrl = "setDoorState.html";
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt18
+                            } else {
+                                detaJson.deviceState = lang_txt19
+                            }
+                        } else if (item.object.split(">")[2] == "A1") {
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_a1_01.png)";
+                            detaJson.editUrl = "setSwitch.html";
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_A1 +
+                                item.name.split("#")[2] : item.name
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt18
+                            } else {
+                                detaJson.deviceState = lang_txt19
+                            }
+                            if (item.epName) {
+                                detaJson.switchName = item.epName
+                            }
+                        } else if (item.object.split(">")[2] == "A2") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_A2 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_A2.png)";
+                            detaJson.editUrl = "device_A2.html";
+                            if (item.description != undefined && item.description.length > 0) {
+                                detaJson.deviceState = item.description;
+                                detaJson.description = item.description;
+                            }
+                        } else if (item.object.split(">")[2] == "B9") {
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_B9.png)";
+                            detaJson.editUrl = "switch_At_timeTask.html";
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_B9 +
+                                item.name.split("#")[2] : item.name
+                            if (item.object.split(">")[1] == 1) {
+                                if (item.epData == "0") {
+                                    detaJson.deviceState = lang_txt18
+                                } else {
+                                    detaJson.deviceState = lang_txt19
+                                }
+                            } else if (item.object.split(">")[1] == 2) {
+                                if (item.description && item.description.length > 0) {
+                                    detaJson.deviceState = item.description;
+                                    detaJson.description = item.description;
+                                }
+                            }
+
+                            if (item.epName) {
+                                detaJson.switchName = item.epName;
+                            }
+                        } else if (item.object.split(">")[2] == "Bo") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Bo +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Bo.png)";
+                            detaJson.editUrl = "device_Bo.html";
+                            if (item.description != undefined && item.description.length > 0) {
+                                detaJson.deviceState = item.description;
+                                detaJson.description = item.description;
+                            }
+                        } else if (item.object.split(">")[2] == "Ol") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Ol +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Ol.png)";
+                            detaJson.editUrl = "device_Ol_01.html";
+                            var modeList = {
+                                "1": device_Ol_mode_cool,
+                                "2": device_Ol_mode_heat,
+                                "3": device_Ol_mode_fan,
+                                "4": device_Ol_mode_warm,
+                                "5": device_Ol_mode_warm_heat,
+                            };
+                            if (item.description && item.description.length > 0) {
+                                detaJson.description = item.description;
+                            }
+                            var nameArr = detaJson.description.split("-");
+                            var epDataList = item.epData.split(",");
+                            console.log(epDataList);
+                            for (var k = 0; k < epDataList.length; k++) {
+                                //510126FF000401FFFF
+                                //123:开 制冷 26℃ 4 低,8:开 制冷 26℃ 4 低
+                                console.log(epDataList);
+                                var onOff = epDataList[k].substr(2, 1) === "0" ? lang_close : lang_open;
+                                if (epDataList[k].substr(2, 1) === "0") {
+                                    if (k === 0) {
+                                        detaJson.deviceState = nameArr[k] + ":" + onOff
+                                    } else {
+                                        detaJson.deviceState += "," + nameArr[k] + ":" + onOff
+                                    }
+                                } else {
+                                    var mode1 = " " + modeList[epDataList[k].substr(3, 1)];
+                                    var temp1 = " " + parseInt(epDataList[k].substr(4, 3)) / 10.0 + "℃";
+                                    if (k === 0) {
+                                        detaJson.deviceState = nameArr[k] + ":" + onOff + mode1 + temp1
+                                    } else {
+                                        detaJson.deviceState += "," + nameArr[k] + ":" + onOff + mode1 +
+                                            temp1
+                                    }
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "Ok") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? device_Ok_name +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Ok.png)";
+                            detaJson.editUrl = "set_device_Ok.html";
+                            var cmds = item.epData.split(",");
+                            var onOff;
+                            var mode = "";
+                            var temp = "";
+                            for (var j = 0; j < cmds.length; j++) {
+                                var code = cmds[j].substring(0, 4);
+                                var value = cmds[j].substring(4, cmds[j].length);
+                                if ("0104" == code) {
+                                    if ("0" == value) {
+                                        onOff = lang_close;
+                                    } else {
+                                        onOff = lang_open;
+                                    }
+                                } else if ("0103" == code) {
+                                    if ("0" == value) {
+                                        mode = lang_OZ_Type3;
+                                    } else if ("1" == value) {
+                                        mode = lang_OZ_Type2;
+                                    } else if ("2" == value) {
+                                        mode = lang_OZ_Type1;
+                                    } else if ("3" == value) {
+                                        mode = lang_OZ_Type4;
+                                    } else if ("4" == value) {
+                                        mode = lang_OZ_Type6;
+                                    }
+                                } else if ("0105" == code) {
+                                    temp = value + "℃";
+                                }
+                            }
+                            detaJson.deviceState = onOff + " " + mode + " " + temp;
+                        } else if (item.object.split(">")[2] == "On") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_On +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_On.png)";
+                            detaJson.editUrl = "device_On_01.html";
+                            var cmds = item.epData.split(",");
+                            var onOff;
+                            var fan = "";
+                            onOff = (cmds[0].substring(0, 1) == "1") ? lang_txt16 : lang_txt17;
+                            if (cmds.length > 1 && cmds[1]) {
+                                fan = (cmds[1].substring(0, 2) == "01") ?
+                                    lang_airsystem_Oj_Wind_speed_low :
+                                    lang_airsystem_Oj_Wind_speed_high;
+                            }
+
+                            detaJson.deviceState = onOff + " " + fan
+                        } else if (item.object.split(">")[2] == "Af") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Af +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Af.png)";
+                            detaJson.editUrl = "device_Af.html";
+                            var arr = item.epData.split(',');
+                            var deviceState = "";
+                            var status = "";
+                            var mode = "";
+                            var temp = "";
+                            var fan = "";
+                            for (var indexAf = 0; indexAf < arr.length; indexAf++) {
+                                switch (indexAf) {
+                                    case 0:
+                                        {
+                                            status = arr[0];
+                                            deviceState = (status == '0') ? lang_close : lang_open;
+                                        }
+                                        break;
+                                    case 1:
+                                        {
+                                            mode = arr[1];
+                                            if (mode == '1') {
+                                                modeStr = " " + lang_houseKeeper1_82_Type2;
+                                            } else if (mode == '2') {
+                                                modeStr = " " + lang_houseKeeper1_82_Type1;
+                                            } else if (mode == '3') {
+                                                modeStr = " " + lang_houseKeeper1_82_Type3;
+                                            } else if (mode == '4') {
+                                                modeStr = " " + device_Af_Hot;
+                                            } else if (mode == '5') {
+                                                modeStr = " " + device_Af_Cool;
+                                            }
+                                            deviceState += modeStr;
+                                        }
+                                        break;
+                                    case 2:
+                                        {
+                                            if (arr[2].length == 8) {
+                                                if (mode == '1') {
+                                                    //制热
+                                                    var tempStr = arr[2].substring(0, 4);
+                                                    temp = parseFloat(tempStr);
+                                                    if (temp > 100) {
+                                                        temp = temp / 100;
+                                                    }
+                                                    deviceState = deviceState + " " + temp;
+                                                } else if (mode == '2') {
+                                                    //制冷
+                                                    var tempStr = arr[2].substring(4, 8);
+                                                    temp = parseFloat(tempStr);
+                                                    if (temp > 100) {
+                                                        temp = temp / 100;
+                                                    }
+                                                    deviceState = deviceState + " " + temp;
+                                                }
+                                            }
+
+                                        }
+                                        break;
+                                    case 3:
+                                        {
+                                            if (arr[3] == "1") {
+                                                fan = " " + lang_OZ_Speed3;
+                                            } else if (arr[3] == "2") {
+                                                fan = " " + lang_OZ_Speed2;
+                                            } else if (arr[3] == "3") {
+                                                fan = " " + lang_OZ_Speed1;
+                                            } else if (arr[3] == "4") {
+                                                fan = " " + lang_OZ_Speed4;
+                                            }
+                                            deviceState += fan;
+                                        }
+                                        break;
+                                }
+                            }
+                            detaJson.deviceState = deviceState;
+                        } else if (item.object.split(">")[2] == "Br") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Br +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Br.png)";
+                            detaJson.editUrl = "device_Af.html";
+                            var arr = item.epData.split(',');
+                            var deviceState = "";
+                            var status = "";
+                            var mode = "";
+                            var temp = "";
+                            var fan = "";
+                            var tempStr = "";
+                            for (var indexAf = 0; indexAf < arr.length; indexAf++) {
+                                switch (indexAf) {
+                                    case 0:
+                                        {
+                                            status = arr[0];
+                                            deviceState = (status == '0') ? lang_close : lang_open;
+                                        }
+                                        break;
+                                    case 1:
+                                        {
+                                            mode = arr[1];
+                                            if (mode == '1') {
+                                                modeStr = " " + lang_houseKeeper1_82_Type2;
+                                            } else if (mode == '2') {
+                                                modeStr = " " + lang_houseKeeper1_82_Type1;
+                                            } else if (mode == '3') {
+                                                modeStr = " " + lang_houseKeeper1_82_Type3;
+                                            } else if (mode == '4') {
+                                                modeStr = " " + device_Af_Hot;
+                                            } else if (mode == '5') {
+                                                modeStr = " " + device_Af_Cool;
+                                            }
+                                            deviceState += modeStr;
+                                        }
+                                        break;
+                                    case 2:
+                                        {
+                                            if (arr[2].length == 8 || arr[2].length == 5 || arr[2].length ==
+                                                3) {
+                                                if (mode == '1') {
+                                                    //制热
+                                                    if (item.object.split(">")[2] == "Br") {
+                                                        tempStr = arr[2].substring(1, 5);
+                                                    } else {
+                                                        tempStr = arr[2].substring(0, 4);
+                                                    }
+                                                    temp = parseFloat(tempStr);
+                                                    if (temp > 100) {
+                                                        temp = temp / 100;
+                                                    }
+                                                    deviceState = deviceState + " " + temp;
+                                                } else if (mode == '2') {
+                                                    //制冷
+                                                    if (item.object.split(">")[2] == "Br") {
+                                                        tempStr = arr[2].substring(1, 5);
+                                                    } else {
+                                                        tempStr = arr[2].substring(4, 8);
+                                                    }
+                                                    temp = parseFloat(tempStr);
+                                                    if (temp > 100) {
+                                                        temp = temp / 100;
+                                                    }
+                                                    deviceState = deviceState + " " + temp;
+                                                }
+                                            }
+
+                                        }
+                                        break;
+                                    case 3:
+                                        {
+                                            if (arr[3] == "1") {
+                                                fan = " " + lang_OZ_Speed3;
+                                            } else if (arr[3] == "2") {
+                                                fan = " " + lang_OZ_Speed2;
+                                            } else if (arr[3] == "3") {
+                                                fan = " " + lang_OZ_Speed1;
+                                            } else if (arr[3] == "4") {
+                                                fan = " " + lang_OZ_Speed4;
+                                            }
+                                            deviceState += fan;
+                                        }
+                                        break;
+                                }
+                            }
+                            detaJson.deviceState = deviceState;
+                        } else if (item.object.split(">")[2] == "Bs") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? device_name_Bs +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Bs.png)";
+                            detaJson.editUrl = "device_Bs.html";
+                            var arr = item.epData.split(',');
+                            var deviceState = "";
+                            var status = "";
+                            var mode = "";
+                            var tempStr = "";
+                            var temp;
+                            for (var Bs = 0; Bs < arr.length; Bs++) {
+                                switch (Bs) {
+                                    case 0:
+                                        {
+                                            status = arr[0];
+                                            deviceState = (status == '20') ? lang_closeSingle : lang_openSingle;
+                                        }
+                                        break;
+                                    case 1:
+                                        {
+                                            mode = arr[1];
+                                            var modeStr = "";
+                                            if (mode == '31') {
+                                                modeStr = " " + Device_Bs_01;
+                                            } else if (mode == '32') {
+                                                modeStr = " " + Device_Bs_02;
+                                            } else if (mode == '33') {
+                                                modeStr = " " + Device_Bs_03;
+                                            } else if (mode == '34') {
+                                                modeStr = " " + Device_Bs_04;
+                                            }
+                                            deviceState += modeStr;
+                                        }
+                                        break;
+                                    case 2:
+                                        {
+                                            if (arr[2].substr(2, 1) == "0") {
+                                                tempStr = (parseFloat(arr[2].substring(3))) / 10;
+                                            } else if (arr[2].substr(1, 1) == "0" && arr[2].substr(2, 1) !==
+                                                "0") {
+                                                tempStr = (parseFloat(arr[2].substring(2))) / 10;
+                                            }
+                                            deviceState = deviceState + " " + tempStr;
+                                        }
+                                        break;
+                                }
+                            }
+                            detaJson.deviceState = deviceState;
+                        } else if (item.object.split(">")[2] == "Bp") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Bp +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Bp.png)";
+                            detaJson.editUrl = "set_device_Bp.html";
+                            var cmds = item.epData.substring(14, item.epData.length);
+                            var onOff = cmds.substring(0, 2) == "01" ? lang_open : lang_close;
+                            var mode = cmds.substring(2, 4);
+                            var modeStr = "";
+                            switch (mode) {
+                                case "01":
+                                    modeStr = lang_OZ_Type1;
+                                    break;
+                                case "02":
+                                    modeStr = lang_OZ_Type2;
+                                    break;
+                                case "03":
+                                    modeStr = lang_OZ_Type3;
+                                    break;
+                                case "05":
+                                    modeStr = lang_OZ_Type4;
+                                    break;
+                            }
+                            var temp = cmds.substring(4, 6) == "ff" ? "" : parseInt(cmds.substring(4, 6),
+                                16) + "℃";
+                            detaJson.deviceState = onOff + " " + modeStr + " " + temp;
+                        } else if (item.object.split(">")[2] == "Bx") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Bx +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Bx.png)";
+                            detaJson.editUrl = "device_Bx.html";
+                            var state = item.epData.substr(0, 4);
+                            var temp = item.epData.substr(7, 4);
+                            if (state == "0100") {
+                                detaJson.switchName = lang_txt_close;
+                            } else {
+                                detaJson.switchName = lang_txt_open;
+                                temp = parseInt(temp, 16) / 10;
+                                detaJson.deviceState = '' + temp + '℃';
+                            }
+                        } else if (item.object.split(">")[2] == "By") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_By +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_By.png)";
+                            detaJson.editUrl = "device_By.html";
+                            var cmds = item.epData.substring(14, item.epData.length);
+                            var onOff = cmds.substring(0, 2) == "01" ? lang_open : lang_close;
+                            var mode = cmds.substring(2, 4);
+                            var windDer = cmds.substring(8, 12);
+                            var wind = cmds.substring(12, 14);
+                            var modeStr = "";
+                            var windDerStr = "";
+                            var windStr = "";
+                            switch (mode) {
+                                case "01":
+                                    modeStr = lang_OZ_Type1;
+                                    break;
+                                case "02":
+                                    modeStr = lang_OZ_Type2;
+                                    break;
+                                case "03":
+                                    modeStr = lang_OZ_Type3;
+                                    break;
+                                case "05":
+                                    modeStr = lang_OZ_Type4;
+                                    break;
+                            }
+                            var temp = cmds.substring(4, 6) == "ff" ? "" : parseInt(cmds.substring(4, 6), 16) + "℃";
+                            switch (wind) {
+                                case "01":
+                                    windStr = lang_OZ_Speed3;
+                                    break;
+                                case "02":
+                                    windStr = lang_OZ_Speed2;
+                                    break;
+                                case "03":
+                                    windStr = lang_OZ_Speed1;
+                                    break;
+                                case "00":
+                                    windStr = lang_OZ_Speed4;
+                                    break;
+                            }
+                            switch (windDer) {
+                                case "0001":
+                                    windDerStr = direction_03;
+                                    break;
+                                case "0002":
+                                    windDerStr = direction_02;
+                                    break;
+                                case "0004":
+                                    windDerStr = direction_01;
+                                    break;
+                                case "0007":
+                                    windDerStr = direction_04;
+                                    break;
+                            }
+                            detaJson.deviceState = onOff + " " + modeStr + " " + temp + " " + windStr + " " + windDerStr;
+                        } else if (item.object.split(">")[2] == "91") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_91 +
+                                item.name.split("#")[2] : item.name;
+                            detaJson.editUrl = "device_91_1.html";
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_91.png)"
+                            var eplist = item.epData.split(",");
+                            var light = eplist.pop()
+                            if (light.indexOf('2') === 0) {
+                                if (light.substring(1, 4) == "000") {
+                                    detaJson.deviceState = switch_off
+                                } else {
+                                    detaJson.deviceState = switch_on
+                                }
+                            } else {
+                                detaJson.deviceState = switch_off
+                            }
+                        } else if (item.object.split(">")[2] == "Cc") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? languageUtil.getResource("device_name_Cc") +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Cc.png)";
+                            detaJson.editUrl = "device_Cc.html";
+                            if (Number(item.epData) == 20) {
+                                detaJson.switchName = lang_switch_off;
+                                detaJson.deviceState = "0%";
+                            } else {
+                                detaJson.switchName = lang_switch_on;
+                                detaJson.deviceState = Number(item.epData.substring(1)) + "%";
+                            }
+                        } else if (item.object.split(">")[2] == "Ca") {
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Ca.png)"
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? languageUtil.getResource("device_name_Ca") +
+                                item.name.split("#")[2] : item.name;
+                            detaJson.editUrl = "device_Ca.html";
+                            if (item.epData == "1") {
+                                detaJson.deviceState = lang_txt_stop;
+                            } else if(item.epData == "2") {
+                                detaJson.deviceState = lang_txt_open;
+                            }else if(item.epData == "3"){
+                                detaJson.deviceState = lang_txt_close
+                            }
+                        } else if (item.object.split(">")[2] == "Cb") {
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Cb.png)"
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? languageUtil.getResource("device_name_Cb") +
+                                item.name.split("#")[2] : item.name;
+                            detaJson.editUrl = "device_Cb.html";
+                            for (var c = 0; c < item.epData.length; c++) {
+                                var state = item.epData[c];
+                                if(state === "1") {
+                                    detaJson.deviceState += ((c == 0) ? "1" : " 2") + device_A1_way + lang_txt_stop;
+                                } else if(state === "2"){
+                                    detaJson.deviceState += ((c == 0) ? "1" : " 2") + device_A1_way + lang_txt_open
+                                } else if(state === "3") {
+                                    detaJson.deviceState += ((c == 0) ? "1" : " 2") + device_A1_way + lang_txt_close
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "13") {
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_13.png)"
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? languageUtil.getResource("device_name_13") +
+                                item.name.split("#")[2] : item.name;
+                            detaJson.editUrl = "device_13.html";
+                            var epData = item.epData;
+                            var range1 = Number(epData.substr(0,3));
+                            var range2 = Number(epData.substr(3,3));
+                            range1 = range1 === 0 ? lang_closeSingle : range1;
+                            range1 = range1 === 100 ? lang_openSingle : range1;
+                            range1 = (range1 === lang_openSingle || range1 === lang_closeSingle) ? range1 : range1+"%";
+                            range2 = range2 === 0 ? lang_closeSingle : range2;
+                            range2 = range2 === 100 ? lang_openSingle : range2;
+                            range2 = (range2 === lang_openSingle || range2 === lang_closeSingle) ? range2 : range2+"%";
+                            detaJson.deviceState = "1:"+range1+" 2:"+range2;
+                        }else if (item.object.split(">")[2] == "a1") {
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_a1.png)"
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_a1 +
+                                item.name.split("#")[2] : item.name
+                            if (item.epData == "0") {
+                                detaJson.deviceState = lang_txt18
+                            } else {
+                                detaJson.deviceState = lang_txt19
+                            }
+                            detaJson.editUrl = "setDoorState.html";
+                        } else if (item.object.split(">")[2] == "Cj") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Cj +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Cj.png)";
+                            detaJson.editUrl = "device_Bx.html";
+                            var state = item.epData.substr(0, 4);
+                            var temp = item.epData.substr(7, 2);
+                            if (state == "0100") {
+                                detaJson.switchName = lang_txt_close;
+                            } else {
+                                detaJson.switchName = lang_txt_open;
+                                temp = parseInt(temp, 16);
+                                detaJson.deviceState = '' + temp + '℃';
+                            }
+                        } else if(item.object.split(">")[2] == "Op") {
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Op_1.png)"
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Op +
+                                item.name.split("#")[2] : item.name;
+                            detaJson.editUrl = "device_triple_Op.html";
+                            if (item.description && item.description.length > 0) {
+                                detaJson.description = item.description;
+                            }
+                            var nameArr = detaJson.description.split("-");
+                            var epDataList = item.epData.split(",");
+                            console.log(epDataList);
+                            var type = epDataList[0].substr(3, 1);
+                            var categoryName = "空调";
+                            if(type == "1") {
+                                categoryName = "新风";
+                            } else if (type == "2") {
+                                categoryName = "地暖";
+                            }
+                            var onOff = epDataList[0].substr(3, 1) === "0" ? lang_closeSingle : lang_openSingle;
+                            detaJson.deviceState = categoryName + " " + onOff
+                            for (var k = 0; k < epDataList.length; k++) {
+                                if(k == 0) {
+                                    detaJson.deviceState += " " + nameArr[k];
+                                } else {
+                                    detaJson.deviceState += "," + nameArr[k];
+                                }
+                            }
+                        } else if(item.object.split(">")[2] == "Ck") {
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_Ck.png)"
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_Ck +
+                                item.name.split("#")[2] : item.name;
+                            detaJson.editUrl = "device_Ck.html";
+                            if (item.description && item.description.length > 0) {
+                                detaJson.description = item.description;
+                            }
+                            var epDataList = item.epData.split(",");
+                            console.log(epDataList);
+                            var onOff = epDataList[0] === "0" ? lang_txt32 : lang_txt31;
+                            var speed = epDataList[1];
+                            if (onOff === lang_txt32) {
+                                detaJson.deviceState = onOff;
+                            } else if (onOff === lang_txt31) {
+                                switch (speed) {
+                                    case "1":
+                                        detaJson.deviceState = onOff + " " + lang_airsystem_Oj_Wind_speed_low;
+                                        break;
+                                    case "2":
+                                        detaJson.deviceState = onOff + " " + lang_airsystem_Oj_Wind_speed_mid;
+                                        break;
+                                    case "3":
+                                        detaJson.deviceState = onOff + " " + lang_airsystem_Oj_Wind_speed_high;
+                                        break;
+                                }
+
+                            }
+                        }
+
+                        detaJson.object = item.object
+                        detaJson.delay = item.delay
+                        detaJson.epData = item.epData
+                        arr1[i] = detaJson
+                    } else if (item.type == 3) {
+                        detaJson = {
+                            "type": "3",
+                            "name": "",
+                            "delay": "",
+                            "epData": item.epData,
+                            "object": item.object,
+                            "deviceState": "",
+                            "deviceIcon": "",
+                            "roomName": ''
+                        }
+                        if (item.object.split(">")[2] == "CMICA4") {
+                            detaJson.name = item.name.indexOf("#$default$#") != -1 ? lang_name_CMICA4 +
+                                item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_CMICA4.png)";
+                            detaJson.editUrl = "setCameraAction.html";
+                            if (item.description != undefined && item.description.length > 0) {
+                                detaJson.deviceState = item.description;
+                                detaJson.description = item.description;
+                            }
+                        } else if (item.object.split(">")[2] == "CMICA3") {
+                            detaJson.editUrl = "setCameraAction.html";
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_CMICA3.png)"
+                            detaJson.name = languageUtil.getResource("camera_houseKeeper_CMICA3");
+                            detaJson.deviceState = languageUtil.getResource("camera_houseKeeper_task");
+                        } else if (item.object.split(">")[2] == "CMICA6") {
+                            detaJson.editUrl = "setCameraAction.html";
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_CMICA3.png)"
+                            detaJson.name = languageUtil.getResource("camera_houseKeeper_CMICA6")
+                            detaJson.deviceState = languageUtil.getResource("camera_houseKeeper_task");
+                        } else if (item.object.split(">")[2] == "CMICA2") {
+                            detaJson.editUrl = "setCameraAction.html";
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_CMICA2.png)"
+                            detaJson.name = languageUtil.getResource("camera_houseKeeper_CMICA2");
+                            detaJson.deviceState = languageUtil.getResource("camera_houseKeeper_task")
+                        }
+
+                        detaJson.object = item.object
+                        detaJson.delay = item.delay
+                        detaJson.epData = item.epData
+                        arr1[i] = detaJson
+                    } else if (item.type == 4) {
+                        detaJson = {
+                            "type": "4",
+                            "name": "",
+                            "delay": "",
+                            "epData": item.epData,
+                            "object": item.object,
+                            "deviceState": "",
+                            "deviceIcon": "",
+                            "roomName": ''
+                        }
+                        if (item.object.split(">")[2] == "XW01") {
+                            detaJson.name = lang_name_XW01; //item.name.indexOf("#$default$#") != -1 ? lang_name_XW01 + item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_XW01.png)";
+                            detaJson.editUrl = "music_XW01.html";
+                            console.log(item.epdata);
+                            var epdata = JSON.parse(item.epData);
+                            var epdataArr = epdata.endpoint;
+                            if (epdataArr != undefined) {
+                                if (epdataArr.length == 1) {
+                                    var action = epdataArr[0].action;
+                                    for (var key in action) {
+                                        if (key == "Play") {
+                                            var play = action.Play;
+                                            if (play.value == "stop") {
+                                                detaJson.deviceState = lang_XW01_stop;
+                                            }
+                                        }
+                                    }
+                                } else if (epdataArr.length == 2) {
+                                    var playState;
+                                    var volume;
+                                    for (var j = 0; j < epdataArr.length; j++) {
+                                        var action = epdataArr[j].action;
+                                        for (var key in action) {
+                                            if (key == "Play") {
+                                                var play = action.Play;
+                                                if (play.value == "play") {
+                                                    playState = lang_XW01_play;
+                                                }
+                                            }
+                                            if (key == "Volume") {
+                                                volume = action.Volume.value;
+                                            }
+                                        }
+                                    }
+                                    detaJson.deviceState = playState + " " + lang_XW01_volume + ":" +
+                                        volume;
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "HS05") {
+                            detaJson.name = lang_name_HS05; //item.name.indexOf("#$default$#") != -1 ? lang_name_XW01 + item.name.split("#")[2] : item.name
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_HS05.png)";
+                            detaJson.editUrl = "set_HS05.html";
+                            console.log(item.epdata);
+                            var epdata = JSON.parse(item.epData);
+                            var epdataArr = epdata.endpoint;
+                            if (epdataArr != undefined) {
+                                for (var j = 0; j < epdataArr.length; j++) {
+                                    var action = epdataArr[j].action;
+                                    for (var key in action) {
+                                        if (key == "Temperature") {
+                                            var Temperature = action.Temperature;
+                                            if (Temperature.zone == "1") {
+                                                detaJson.deviceState += Temperature.value + "℃  ";
+                                            } else if (Temperature.zone == "2") {
+                                                detaJson.deviceState += Temperature.value + "℃  ";
+                                            } else if (Temperature.zone == "3") {
+                                                detaJson.deviceState += Temperature.value + "℃  ";
+                                            }
+                                        }
+                                        if (key == "FridgeMode") {
+                                            var FridgeMode = action.FridgeMode;
+                                            if (FridgeMode.value == "0") {
+                                                detaJson.deviceState += lang_HS05_model + "：" +
+                                                    lang_HS05_model_0;
+                                            } else if (FridgeMode.value == "1") {
+                                                detaJson.deviceState += lang_HS05_model + "：" +
+                                                    lang_HS05_model_1;
+                                            } else if (FridgeMode.value == "2") {
+                                                detaJson.deviceState += lang_HS05_model + "：" +
+                                                    lang_HS05_model_2;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (item.object.split(">")[2] == "IF02") {
+                            detaJson.name = lang_name_IF01;
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_IF02.png)";
+                            detaJson.editUrl = "javascript:;";
+                            console.log(item.epData);
+                            var epdata = JSON.parse(item.epData);
+                            var extraData = epdata.extraData;
+                            if (extraData != undefined) {
+                                var blockName = extraData.blockName;
+                                if (blockName != undefined) {
+                                    detaJson.deviceState = blockName;
+                                }
+                            }
+                        }
+                        detaJson.object = item.object
+                        detaJson.delay = item.delay
+                        detaJson.epData = item.epData
+                        detaJson.icon = item.icon
+                        arr1[i] = detaJson
+                    } else if (item.type == 1) {
+                        detaJson = {
+                            "type": "1",
+                            "name": "",
+                            "delay": "",
+                            "epData": item.epData,
+                            "object": item.object,
+                            "deviceState": "",
+                            "deviceIcon": "",
+                            "roomName": ''
+                        }
+                        if (item.object.split(">")[2] == "CMICA2") { //随便看
+                            detaJson.name = lang_name_CMICA2;
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_CMICA2.png)";
+                            detaJson.editUrl = "setCameraAction.html";
+                            console.log(item.epData);
+                            var epdata = JSON.parse(item.epData);
+                            if (epdata.action === 'startSafety') {
+                                detaJson.deviceState = lang_camera_safety_open
+                            } else if (epdata.action === 'stopSafety') {
+                                detaJson.deviceState = lang_camera_safety_close
+                            }
+                        }
+                        if (item.object.split(">")[2] == "CMICA3") { //企鹅
+                            detaJson.name = lang_name_CMICA3;
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_CMICA3.png)";
+                            detaJson.editUrl = "setCameraAction.html";
+                            console.log(item.epData);
+                            var epdata = JSON.parse(item.epData);
+                            if (epdata.action === 'startSafety') {
+                                detaJson.deviceState = lang_camera_safety_open
+                            } else if (epdata.action === 'stopSafety') {
+                                detaJson.deviceState = lang_camera_safety_close
+                            }
+                        }
+                        if (item.object.split(">")[2] == "CMICA4") { //小物
+                            detaJson.name = lang_name_CMICA4;
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_CMICA4.png)";
+                            detaJson.editUrl = "setCameraAction.html";
+                            console.log(item.epData);
+                            var epdata = JSON.parse(item.epData);
+                            if (epdata.action === 'startSafety') {
+                                detaJson.deviceState = lang_camera_safety_open
+                            } else if (epdata.action === 'stopSafety') {
+                                detaJson.deviceState = lang_camera_safety_close
+                            }
+                        }
+                        if (item.object.split(">")[2] == "CMICA5") { //户外摄像机
+                            detaJson.name = lang_name_CMICA5;
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_CMICA5.png)";
+                            detaJson.editUrl = "setCameraAction.html";
+                            console.log(item.epData);
+                            var epdata = JSON.parse(item.epData);
+                            if (epdata.action === 'startSafety') {
+                                detaJson.deviceState = lang_camera_safety_open
+                            } else if (epdata.action === 'stopSafety') {
+                                detaJson.deviceState = lang_camera_safety_close
+                            }
+                        }
+                        if (item.object.split(">")[2] == "CMICA6") { //企鹅4G
+                            detaJson.name = lang_name_CMICA6;
+                            detaJson.deviceIcon = "url(../../source/deviceIcon/device_icon_CMICA3.png)";
+                            detaJson.editUrl = "setCameraAction.html";
+                            console.log(item.epData);
+                            var epdata = JSON.parse(item.epData);
+                            if (epdata.action === 'startSafety') {
+                                detaJson.deviceState = lang_camera_safety_open
+                            } else if (epdata.action === 'stopSafety') {
+                                detaJson.deviceState = lang_camera_safety_close
+                            }
+                        }
+
+
+                        detaJson.object = item.object
+                        detaJson.delay = item.delay
+                        detaJson.epData = item.epData
+                        detaJson.icon = item.icon
+                        arr1[i] = detaJson
+                    } else {
+                        detaJson = {
+                            "type": "0",
+                            "name": "",
+                            "delay": "",
+                            "epData": item.epData,
+                            "object": item.object,
+                            "icon": item.icon
+                        }
+                        detaJson.name = item.name;
+                        detaJson.object = item.object
+                        detaJson.delay = item.delay
+                        detaJson.epData = item.epData
+                        arr1[i] = detaJson
+                    }
+                })
+                if (info.getItem("actionArray") == null) {
+                    info.setItem("actionArray", JSON.stringify(arr1))
+                } else {
+                    var actArr = JSON.parse(info.getItem("actionArray"))
+                    actArr = actArr.concat(arr1)
+                    info.setItem("actionArray", JSON.stringify(actArr))
+                }
+                edit()
+            }
+        })
+    }
+
+    //编辑页面
+    function edit() {
+        var actionArr = JSON.parse(info.getItem("actionArray"))
+
+        // 初始化排序字典
+        actionDic = {}
+
+        if (actionArr == null) {
+            $(".no_task").show();
+        } else {
+            $(".no_task").hide();
+            $("#task").find("li").remove();
+            var n = 1;
+            actionArr.map(function (list, i) {
+                // alert(list.type)
+
+                // 生成用于排序的数据缓存
+                actionDic[i] = list
+
+                n++;
+                if (list.type == "0") {
+                    var str;
+                    if (list.name == "") {
+                        str =
+                            '<li data-taskType="0" data-order=' + i +
+                            ' ><a class="offline" href="javascript:;" style="line-height: 5rem;font-size:1.5rem ;">' +
+                            lang_scene_delete + '</a><div class="delete deleteAction">' + lang_txt26 +
+                            '</div></li>'
+                    } else {
+                        var displayDelay = formatDelayTime(list.delay);
+                        str =
+                            "<li data-taskType='0' data-order=" + i +
+                            "><a href='javascript:;' style='background:url(../../source/sceneIcon/scene_normal_" +
+                            list.icon +
+                            ".png) no-repeat left center;background-size:4.3rem auto'><span style='margin-top:0.7rem;'><strong>" +
+                            list.name + "&nbsp;</strong><em></em><em>" +
+                            displayDelay +
+                            "</em></span>" +
+                            '<b class="reorder-icon list-instant"></b>' +
+                            "</a><div class='delete deleteAction'>" + lang_txt26 + "</div></li>"
+                    }
+                } else {
+                    var devID = list.object.split(">")[0];
+                    if (list.name == "") {
+                        str =
+                            '<li data-taskType="2" data-devID="' + devID +
+                            '" data-url="javascript:;" data-order=' + i +
+                            ' ><a class="offline" href="javascript:;" style="line-height: 5rem;font-size:1.5rem ;">' +
+                            lang_device_delete + '</a><div class="delete deleteAction">' + lang_txt26 +
+                            '</div></li>'
+                    } else {
+                        //							list.roomName = list.roomName.length == 0 ? lang_group : list.roomName;
+                        var roomName = !list.roomName ? lang_group : list.roomName
+                        var roomStr = "<em class='roomName' data-roomName='" + roomName + "'>[" + roomName +
+                            "]</em>"
+                        if (list.object.split(">")[2] == "CMICA2" || list.object.split(">")[2] == "CMICA3" ||
+                            list.object.split(">")[2] == "CMICA4" || list.object.split(">")[2] == "CMICA5" ||
+                            list.object.split(">")[2] == "CMICA6") {
+                            roomStr = "<em class='roomName'></em>"
+                            list.name = languageUtil.getResource("device_name_" + list.object.split(">")[2]);
+                        }
+                        if (list.object.split(">")[2] == "XW01" || list.object.split(">")[2] == "HS05" || list.object
+                            .split(">")[2] == "IF02") {
+                            roomStr = "<em class='roomName' data-roomName=''></em>"
+                        }
+                        var cssStr = "3%";
+                        if (list.switchName == undefined || list.switchName == null || list.switchName == "") {
+                            list.switchName = ''
+                            cssStr = "0";
+                        }
+                        var displayDelay = formatDelayTime(list.delay);
+                        //<li><a class="doorC" href="javascript:;"><span><strong>门磁感应器门磁感应器门磁感应器&nbsp;</strong><em>[客厅客厅客厅客厅客厅]</em><em>开关1</em><em>设防</em><em>五分钟后执行</em></span><i></i></a><div class="delete">删除</div></li>
+                        var deviceType = list.object.split('>')[2];
+                        var sss = "";
+                        var num = list.object.split(">")[1];
+                        if (deviceType == 'DD' ||
+                            deviceType == '90' ||
+                            deviceType == 'OZ' ||
+                            deviceType == 'Ol' ||
+                            deviceType == "62" ||
+                            deviceType == "63" ||
+                            deviceType == "At" ||
+                            deviceType == "Ao" ||
+                            deviceType == "An" ||
+                            deviceType == "Bv" ||
+                            deviceType == "Bw" ||
+                            deviceType == "By" ||
+                            deviceType == "Cm" ||
+                            deviceType == "Cn"
+                        ) {
+                            sss = 'style="max-width: 100%;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;"';
+                        }else if(deviceType== "64"){
+                            sss = 'style="max-width: 90%;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;"';
+                        }
+                        str = "<li data-taskType='2' class='doTask' data-order=" + i + " data-devID='" + devID +
+                            "' data-url='" + list.editUrl +
+                            "' data-num='" + num + "' data-type='" + deviceType + "'>" +
+                            "<a href='javascript:;' style='background:" + list.deviceIcon +
+                            " no-repeat left center;background-size:4.3rem auto'>" +
+                            "<span>" +
+                            "<strong>" + list.name + "&nbsp;</strong>" +
+                            roomStr +
+                            "<em style='margin-right:" + cssStr + ";'>" + list.switchName + "</em>" +
+                            "<em " + sss + ">" + list.deviceState + "</em>" +
+                            "<em style='max-width:80%;'>" + displayDelay + "</em>" +
+                            "</span>" +
+                            '<b class="reorder-icon list-instant"></b>' +
+                            "</a>" +
+                            "<div class='delete deleteAction'>" + lang_txt26 + "</div>" +
+                            "</li>"
+
+                    }
+                }
+                $("#task").append(str)
+            });
+            //左滑
+            $("#task li").leftDelete({
+                marginLeft: "-20%"
+            });
+            //list.editUrl
+            $("#task li").on("click", function (e) {
+                e.stopPropagation();
+                //再编辑增加返回弹出是否放弃修改弹窗
+                info.setItem("editFlag", "yes");
+
+                var taskType = $(this).attr("data-taskType");
+                if (taskType == "2") {
+                    var devID = $(this).attr("data-devID");
+                    var url = $(this).attr("data-url");
+                    var index = $(this).index();
+                    var _this = $(this);
+                    plus.gatewayCmd.getDeviceInfo(devID, function (data) {
+                        info.setItem("taskType", "timeTask");
+                        if (data) {
+                            if (data.type == "At" ||
+                                data.type == "62" ||
+                                data.type == "63" ||
+                                data.type == "64" ||
+                                data.type == "A1" ||
+                                data.type == "B9" ||
+                                data.type == "Aj" ||
+                                data.type == "61" ||
+                                data.type == "Ao" ||
+                                data.type == "An" ||
+                                data.type == "Am" ||
+                                data.type == "Bu" ||
+                                data.type == "Bv" ||
+                                data.type == "Bw" ||
+                                data.type == "Cl" ||
+                                data.type == "Cm" ||
+                                data.type == "Cn"
+                            ) {
+                                var nameList = [];
+                                var translatorNameList = [];
+                                var translatorNumberList = [];
+                                if (data.endpoints) {
+                                    var endpoints = data.endpoints;
+                                    for (var j in endpoints) {
+                                        var endpointName = endpoints[j].endpointName ? endpoints[j].endpointName :
+                                            device_switch + endpoints[j].endpointNumber;
+                                        nameList.push(endpointName);
+                                        translatorNameList.push(endpointName);
+                                        translatorNumberList.push(endpoints[j].endpointNumber);
+                                    }
+                                }
+                                if (data.type == "B9") {
+                                    info.setItem("epNameList" + data.devID, JSON.stringify(
+                                        translatorNameList));
+                                    info.setItem("numList" + data.devID, JSON.stringify(
+                                        translatorNumberList));
+                                } else {
+                                    info.setItem("epNameList" + data.devID, JSON.stringify(nameList));
+                                }
+                                if (data.type == "Ao" ||
+                                    data.type == "An" ||
+                                    data.type == "Am" ||
+                                    data.type == "Bu" ||
+                                    data.type == "Bv" ||
+                                    data.type == "Bw" ||
+                                    data.type == "Cl" ||
+                                    data.type == "Cm" ||
+                                    data.type == "Cn") {
+                                    if (data) {
+                                        for (var i in data.endpoints) {
+                                            if (data.endpoints[i].endpointNumber == 1) {
+                                                if (data.endpoints[i].endpointType !== 2) {
+                                                    info.setItem("lockThree" + data.devID, 1 +
+                                                        "非");
+                                                } else {
+                                                    info.setItem("lockThree" + data.devID, 1 +
+                                                        "正");
+                                                }
+                                            } else if (data.endpoints[i].endpointNumber == 2) {
+                                                if (data.endpoints[i].endpointType !== 2) {
+                                                    info.setItem("locktwo" + data.devID, 2 + "非");
+                                                } else {
+                                                    info.setItem("locktwo" + data.devID, 2 + "正");
+                                                }
+                                            } else if (data.endpoints[i].endpointNumber == 3) {
+                                                if (data.endpoints[i].endpointType !== 2) {
+                                                    info.setItem("lockone" + data.devID, 3 + "非");
+                                                } else {
+                                                    info.setItem("lockone" + data.devID, 3 + "正");
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                }
+                            } else if (data.type == "Aw") {
+                                var endpoints = data.endpoints;
+                                endpoints.forEach(function (endpoint) {
+                                    var endpointNum = endpoint.endpointNumber;
+                                    if (endpointNum == 1) {
+                                        var clusters = endpoint.clusters;
+                                        clusters.forEach(function (cluster) {
+                                            var attributes = cluster.attributes;
+                                            attributes.forEach(function (attribute) {
+                                                var attributeId = attribute.attributeId;
+                                                var attributeValue = attribute.attributeValue;
+                                                if (attributeId == 2) {
+                                                    // 1：电铃模式  0：开关模式
+                                                    info.setItem("AwMode" +
+                                                        data.devID,
+                                                        attributeValue);
+                                                }
+                                            })
+                                        })
+                                    }
+                                });
+                            }
+                            info.setItem("deviceName", $(_this).find("strong").html());
+                            info.setItem("deviceID", $(_this).attr("data-devID"));
+                            info.setItem("num", $(_this).attr("data-num"));
+                            info.setItem("type", $(_this).attr("data-type"));
+                            info.setItem("deviceIcon", $(_this).find("a").css("background-image"));
+                            info.setItem("roomName", $(_this).find(".roomName").attr("data-roomName"));
+                            info.setItem("index", index);
+                            if ($(_this).attr("data-type") == "22" ||
+                                $(_this).attr("data-type") == "23" ||
+                                $(_this).attr("data-type") == "24") {
+                                var param = {
+                                    "deviceId": info.getItem("deviceID"),
+                                    "deviceName": info.getItem("deviceName"),
+                                    "deviceIcon": info.getItem("deviceIcon"),
+                                    "num": info.getItem("num"),
+                                    "type": info.getItem("type"),
+                                    "roomName": info.getItem("roomName")
+                                };
+                                plus.tools.infraredSceneOrHouseKepper(param, function (data) {
+
+                                });
+                            } else {
+                                window.location = url;
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        setupSlip(document.getElementById("task"));
+    }
+
+    //添加定时时间
+    $(".timing").on("click", function () {
+        $(".content_1").hide();
+        $(".content_2").show();
+        $(".title").html(lang_addTime);
+        info.setItem("editFlag", "yes");
+        $("#mobiscroll").mobiscroll('show')
+    })
+    //添加任务
+    $(".addDeviceTask").on("click", function () {
+        $(".content_1").hide();
+        $(".content_3").show();
+        $(".complete").html("")
+        $("#pageTitle").html(lang_addTask);
+        info.setItem("editFlag", "yes");
+        info.setItem("index", "add");
+    })
+    //选择星期数
+    $(".time_week ul li").on("click", function () {
+        if ($(this).attr("class") == "on") {
+            $(this).removeClass("on")
+        } else {
+            $(this).addClass("on")
+        }
+    });
+    $(".addTask li").on("click", function () {
+        info.setItem("flag", $(this).index() == 0 ? "2" : "0")
+    })
+    //返回
+    $("#back").on("click", function () {
+        //console.log($(".content_1").css("display"))
+        if ($(".content_1").css("display") == "block") {
+            $(".title").html(lang_title);
+            if (info.getItem("editFlag") == "yes") {
+                $("#giveUpEdit").show()
+            } else {
+                info.setItem("dataFlag", "0");
+                info.clear()
+                plus.tools.back(function(){});
+            }
+            //window.location = "stewardIndex.html"
+        } else if ($(".content_2").css("display") == "block") {
+            $(".content_1").show()
+            $(".title").html(lang_title)
+            $(".content_2").hide()
+            $("#mobiscroll").mobiscroll('hide')
+        } else if ($(".content_3").css("display") == "block") {
+            $(".content_1").show()
+            $(".title").html(lang_title)
+            $(".content_3").hide()
+            $(".complete").html(lang_save);
+            $("#pageTitle").html(lang_title);
+        }
+    })
+    //取消放弃编辑
+    $(".isNo").click(function () {
+        $("#giveUpEdit").hide()
+    })
+    //完成
+    $(".complete").on("click", function () {
+        //window.open("stewardIndex.html")
+
+        //        // 根据排序生成数据
+        //        var actionArr = []
+        //        $("#task").find("li").each(function () {
+        //            var dataId = $(this).data("order")
+        //            actionArr.push(actionDic[dataId])
+        //        })
+        //        info.setItem("actionArray", JSON.stringify(actionArr))
+
+
+        var weekStr = ''
+        var hour, min;
+        var timeArr = new Array()
+        var timeTask = {
+            "time": '',
+            "week": []
+        }
+        if ($(".content_1").css("display") == "block") {
+            if (info.getItem("hour") != null && info.getItem("min") != null) {
+                timeTask.time = info.getItem("hour") + " " + info.getItem("min")
+            } else {
+                timeTask.time = $(".time_task").text().split(":")[0] + " " + $(".time_task").text().split(":")[
+                    1].substr(0, 2)
+            }
+            if (info.getItem("weekStr") != null) {
+                var week = info.getItem("weekStr").split(",")
+            } else {
+                var week = $(".week").html().split(",")
+            }
+            if (timeTask.week == '') {
+                for (var i = 0; i < week.length; i++) {
+                    timeTask.week.push(weekNum(week[i]))
+                }
+            }
+            $(".saveToast").show();
+            overtimeWarn();
+            if (info.getItem("programID") != "" && info.getItem("programID") != null) {
+                changeSceneTask(timeTask.time, timeTask.week)
+            } else {
+                addSceneTask(timeTask.time, timeTask.week)
+            }
+        } else if ($(".content_2").css("display") == "block") {
+            $(".title").html(lang_title)
+            if ($(".choose_week ul .on").length == 0 || $(".choose_week ul .on").length == "0") {
+                window.showDialog.show(lang_text, 3000);
+                return;
+            }
+            //console.log($(".dwv").html())
+            timeTask.week = [];
+            timeTask.time = $(".dwv").html()
+            var len = $(".time_week ul .on").length;
+            for (var i = len - 1 ; i >= 0; i--) {
+                timeTask.week.push(weekNum($(".time_week ul .on").eq(i).html()));
+                if (i == 0 ) {
+                    weekStr = weekStr + $(".time_week ul .on").eq(i).html();
+                } else {
+                    weekStr = $(".time_week ul .on").eq(i).html() + "," + weekStr;
+                }
+            }
+            hour = timeTask.time.split(" ")[0]
+            min = timeTask.time.split(" ")[1];
+            min = min.length == 1 ? "0" + min : min;
+            info.setItem("hour", hour)
+            info.setItem("min", min)
+            info.setItem("weekStr", weekStr)
+            $(".time_task").html(info.getItem("hour") + ":" + info.getItem("min") + "&nbsp;<em></em><em style='max-width:60%'>" +
+                info.getItem("weekStr") + "</em>");
+            $(".content_1").show()
+            $(".content_2").hide()
+            $("#mobiscroll").mobiscroll('hide')
+        } else if ($(".content_3").css("display") == "block") {
+            $(".content_1").show()
+            $(".content_3").hide()
+        }
+    })
+    //重命名
+    $(".taskName").on("click", function () {
+        info.setItem("editFlag","yes");
+        $("#rename").show();
+        $("#renameInput").val($("#timeTask1_title").text());
+    })
+    $(".remove").on("click", function () {
+        $(this).siblings("input").val("")
+    })
+    $("#renameInput").on("input porpertychange", function () {
+        if ($(this).val().length >= 1) {
+            $(".sure_click").css("color", "#8DD652")
+        }
+    })
+
+    //重命名确定
+    function surename() {
+        var value = document.getElementById("renameInput").value;
+        if (value.length > 20 || value.length < 1) {
+            window.showDialog.show(lang_txt29, 3000);
+        } else {
+            $(".taskName").find("span").html(value);
+            info.setItem("programName", value);
+        }
+        cancel();
+    }
+
+    //重命名取消
+    function cancel() {
+        $(".changeName").hide();
+    }
+
+    //获取星期数
+    //Sun Mon Tue Wed Thu Fri Sat
+    function weekNum(zhWeek) {
+        switch (zhWeek) {
+            case "Sun":
+                return "1";
+            case "Mon":
+                return "2";
+            case "Tue":
+                return "3";
+            case "Wed":
+                return "4";
+            case "Thu":
+                return "5";
+            case "Fri":
+                return "6";
+            case "Sat":
+                return "7";
+            case "2":
+                return "Mon";
+            case "3":
+                return "Tue";
+            case "4":
+                return "Wed";
+            case "5":
+                return "Thu";
+            case "6":
+                return "Fri";
+            case "7":
+                return "Sat";
+            case "1":
+                return "Sun";
+        }
+    }
+
+    var p = new Array()
+
+    //创建管家任务
+    function addSceneTask(time, week) {
+        var param = houserkeeperModel.send_add_507;
+        param.gwID = gwID;
+        param.appID = appID;
+        param.operType = "C";
+        param.programName = $(".taskName").find("span").html()
+        param.programType = "2";
+        param.status = "1";
+        var arr = [{
+            "type": "1",
+            "object": "CURTIME",
+            "exp": cron(time, week)
+        }]
+        param.triggerArray = arr;
+        if (info.getItem("actionArray") == null || info.getItem("actionArray") == "[]") {
+            $(".saveToast").hide();
+            clearOvertimeWarn();
+            alert(lang_text30_1)
+        } else {
+            var p = JSON.parse(info.getItem("actionArray"))
+            for (var i = 0; i < p.length; i++) {
+                delete p[i].deviceIcon
+                delete p[i].switchName
+            }
+            param.actionArray = p
+            plus.gatewayCmd.houserkeep_507(param, function (data) {
+                $(".saveToast").hide();
+                clearOvertimeWarn();
+                if(data.cmd === "507"){
+                    // alert(JSON.stringify(data));
+                    if(data.errCode && data.errCode === 1){
+                        alert(languageUtil.getResource("switch_Aj_At_no_choose_hint"));
+                    }else{
+                        info.clear();
+                        plus.tools.back(function(){});
+                    }
+                }
+            })
+        }
+    }
+
+    //修改管家任务
+    function changeSceneTask(time, week) {
+        var param = {}
+        param.cmd = "507";
+        param.gwID = gwID;
+        param.appID = appID;
+        param.operType = "U";
+        param.programName = $(".taskName").find("span").html()
+        param.programType = "2";
+        param.programID = info.getItem("programID")
+        param.status = info.getItem("status");
+        var arr = [{
+            "type": "1",
+            "object": "CURTIME",
+            "exp": cron(time, week)
+        }]
+        param.triggerArray = arr;
+        if (info.getItem("actionArray") == null || info.getItem("actionArray") == "[]") {
+            $(".saveToast").hide();
+            clearOvertimeWarn();
+            alert(lang_txt30)
+        } else {
+            var p = JSON.parse(info.getItem("actionArray"))
+            for (var i = 0; i < p.length; i++) {
+                delete p[i].deviceIcon
+            }
+            param.actionArray = p
+            plus.gatewayCmd.houserkeep_507(param, function (data) {
+                $(".saveToast").hide();
+                clearOvertimeWarn();
+                if(data.cmd === "507" && data.programID === param.programID){
+                    // alert(JSON.stringify(data));
+                    if(data.errCode && data.errCode === 1){
+                        alert(languageUtil.getResource("switch_Aj_At_no_choose_hint"));
+                    }else{
+                        info.clear();
+                        plus.tools.back(function(){});
+                    }
+                }
+            })
+        }
+    }
+
+    //cron表达式
+    function cron(time, week) {
+        var hour = time.split(" ")[0];
+        hour = hour.length == 1 ? "0" + hour : hour;
+        var min = time.split(" ")[1];
+        min = min.length == 1 ? "0" + min : min;
+        var weekStr = week[0];
+        for (var i = 1; i < week.length; i++) {
+            weekStr = weekStr + "," + week[i]
+        }
+        return min + " " + hour + " " + "?" + " " + "*" + " " + weekStr;
+    }
+
+    function clearname() {
+        $("#renameInput").val("");
+        $("#renameInput").focus();
+    }
+
+    /*格式化执行时间*/
+    function formatDelayTime(delayValue) {
+        var displayValue = "";
+        if (delayValue == null || delayValue == undefined || delayValue == "undefined" || delayValue == "") {
+            /*如果为空，则是“立即执行”*/
+            displayValue = lang_immediatelyDo;
+        } else {
+            var intdelayValue = 0;
+            try {
+                intdelayValue = parseInt(delayValue);
+                var minValue = parseInt(intdelayValue / 60);
+                var secValue = parseInt(intdelayValue % 60);
+                if (minValue == 0 && secValue == 0) {
+                    displayValue = lang_immediatelyDo;
+                    /*如果是0，也是立即执行*/
+                } else if (minValue > 0 && secValue == 0) {
+                    displayValue = minValue + lang_afterMinsDo;
+                    /*某分后执行*/
+                } else if (minValue == 0 && secValue > 0) {
+                    displayValue = secValue + lang_afterSecDo;
+                    /*某秒后执行*/
+                } else { /*某分某秒后执行*/
+                    displayValue = minValue + lang_txt27 + secValue + lang_afterSecDo;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        return displayValue;
+    }
+
+    // 排序支持
+    function setupSlip(list) {
+        list.addEventListener('slip:beforereorder', function (e) {
+            // 禁止排序
+            if (e.target.classList.contains('list-no-reorder')) {
+                e.preventDefault();
+            }
+        }, false);
+
+        list.addEventListener('slip:beforeswipe', function (e) {
+            // 禁止左右滑动
+            e.preventDefault();
+        }, false);
+
+        list.addEventListener('slip:beforewait', function (e) {
+            // 立即开始排序
+            if (e.target.classList.contains('list-instant')) e.preventDefault();
+        }, false);
+
+        list.addEventListener('slip:afterswipe', function (e) {
+            // 滑动之后的处理
+            e.target.parentNode.appendChild(e.target);
+        }, false);
+
+        list.addEventListener('slip:reorder', function (e) {
+            // 排序之后的处理
+            e.target.parentNode.insertBefore(e.target, e.detail.insertBefore);
+            // 根据排序生成数据
+            var actionArr = []
+            $("#task").find("li").each(function () {
+                var dataId = $(this).data("order")
+                actionArr.push(actionDic[dataId])
+            })
+            info.setItem("actionArray", JSON.stringify(actionArr))
+            return false;
+        }, false);
+        return new Slip(list);
+    }
+    //超时提醒
+    function overtimeWarn() {
+        overtime = setTimeout(function () {
+            $(".overTime").show();
+            $(".saveToast").hide();
+            setTimeout(function () {
+                $(".overTime").hide();
+            }, 3000)
+        }, 15000);
+    }
+
+    function clearOvertimeWarn() {
+        clearTimeout(overtime);
+    }
+
+    // 键盘收起事件
+    document.body.addEventListener('focusout', function () {
+        console.log($("body").scrollTop) // 0
+        var u = navigator.userAgent,
+            app = navigator.appVersion;
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if (isiOS) {
+            window.scrollTo(0, 0);
+        }
+    })
+</script>
+
+</html>

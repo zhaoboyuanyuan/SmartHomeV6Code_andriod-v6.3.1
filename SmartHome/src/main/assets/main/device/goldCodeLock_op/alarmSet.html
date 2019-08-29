@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报警设置</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/set.css"/>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_op_alarm_tit" href="javascript:;">报警设置</a>
+            <a href="javascript:;"></a>
+        </div>
+    </header>
+    <ul class="alarmList">
+        <li>
+            <em class="autoSwitchLanguager" key="device_op_alarm_01">手机开锁报警</em>
+            <span data-state="on" id="0103072"><i></i></span>
+        </li>
+        <li>
+            <em class="autoSwitchLanguager" key="device_op_alarm_02">密码开锁报警</em>
+            <span data-state="on" id="0103092"><i></i></span>
+        </li>
+        <li>
+            <em class="autoSwitchLanguager" key="device_op_alarm_03">指纹开锁报警</em>
+            <span data-state="on" id="0103102"><i></i></span>
+        </li>
+        <li>
+            <em class="autoSwitchLanguager" key="device_op_alarm_04">上锁报警</em>
+            <span data-state="on" id="0103022"><i></i></span>
+        </li>
+    </ul>
+    <!--<section id="fail" class="toast" style="display:none;">-->
+        <!--<p class="autoSwitchLanguager" id="toastText" style="color:#fff;"></p>-->
+    <!--</section>-->
+</body>
+<script type="text/javascript" src="js/plus.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/gatewayCmd.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/tools.js" charset="utf-8"></script>
+<script type="text/javascript" src="lang/lang.js" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan()
+    var DEVICE;
+    plus.plusReady(function(){
+        plus.gatewayCmd.getDeviceInfo(function(result){
+            DEVICE = result.devID;
+            //查询
+            query()
+        })
+        $("#back").on("click",function(){
+            plus.tools.back(function(){})
+        })
+        $(".alarmList li").find("span").on("click",function(){
+            if($(this).attr("data-state") == "on"){
+                //发送保存命令
+                saveCmd($(this).attr("id"),0,$(this).parent().index())
+            }else{
+                saveCmd($(this).attr("id"),1,$(this).parent().index())
+            }
+        })
+    })
+    function query(){
+        var jsonData = {}
+        jsonData.deviceId = DEVICE;
+        jsonData.gradeType = 3;
+        jsonData.messageCode = "";
+        plus.gatewayCmd.queryUserPushInfo(jsonData,function(data){
+            if(data.resultCode == "0"){
+                //根据查询结果，显示列表信息
+                updateUI(data.data.userPushInfo)
+            }else{
+                errorCode(data)
+            }
+        })
+    }
+    function updateUI(list){
+        for(var i in list){
+            if(list[i].pushFlag == "0"){
+                $("#"+list[i].msgCode).addClass("gray")
+                $("#"+list[i].msgCode).attr("data-state","off")
+            }else{
+                $("#"+list[i].msgCode).removeClass("gray")
+                $("#"+list[i].msgCode).attr("data-state","on")
+            }
+        }
+    }
+    function saveCmd(msgCode,pushFlag,index){
+        var jsonData = {}
+        jsonData.deviceId = DEVICE;
+        jsonData.messageCode = msgCode;
+        jsonData.pushFlag = pushFlag;
+        jsonData.pushType = 2;
+        plus.gatewayCmd.saveUserPushInfo(jsonData,function(data){
+            //保存后返回值
+            if(data.resultCode == 0){//保存成功
+                if(pushFlag == 0){
+                    $(".alarmList li").eq(index).find("span").addClass("gray")
+                    $(".alarmList li").eq(index).find("span").attr("data-state","off")
+                }else{
+                    $(".alarmList li").eq(index).find("span").removeClass("gray")
+                    $(".alarmList li").eq(index).find("span").attr("data-state","on")
+                }
+                window.showDialog.show(alarmSet_txt_01,2000);
+            }else{
+                errorCode(data)
+            }
+        })
+    }
+
+    function errorCode(data){
+        switch (data.resultCode){
+            case "20101":
+            {
+                window.showDialog.show(alarmSet_txt_02,4000)//用户不存在
+            }
+                break;
+            case "20102":
+            {
+                window.showDialog.show(alarmSet_txt_03,4000)//用户密码错误
+            }
+                break;
+            case "20103":
+            {
+                window.showDialog.show(alarmSet_txt_04,4000)//token错误
+            }
+                break;
+            case "20104":
+            {
+                window.showDialog.show(alarmSet_txt_05,4000)//用户名已被使用
+            }
+                break;
+            case "20105":
+            {
+                window.showDialog.show(alarmSet_txt_06,4000)//手机号已被注册
+            }
+                break;
+            case "20106":
+            {
+                window.showDialog.show(alarmSet_txt_07,4000)//手机号未认证
+            }
+                break;
+            case "20107":
+            {
+                window.showDialog.show(alarmSet_txt_08,4000)//邮箱已被注册
+            }
+                break;
+            case "20108":
+            {
+                window.showDialog.show(alarmSet_txt_09,4000)//邮箱未认证
+            }
+                break;
+            case "20109":
+            {
+                window.showDialog.show(alarmSet_txt_10,4000)//手机验证码错误
+            }
+                break;
+            case "20110":
+            {
+                window.showDialog.show(alarmSet_txt_11,4000)//设备不存在
+            }
+                break;
+            case "20111":
+            {
+                window.showDialog.show(alarmSet_txt_12,4000)//该设备不是网关
+            }
+                break;
+            case "20112":
+            {
+                window.showDialog.show(alarmSet_txt_13,4000)//设备密码错误
+            }
+                break;
+            case "20113":
+            {
+                window.showDialog.show(alarmSet_txt_14,4000)//用户不是设备的拥有者
+            }
+                break;
+            case "20114":
+            {
+                window.showDialog.show(alarmSet_txt_15,4000)//设备已与用户绑定
+            }
+                break;
+            case "20115":
+            {
+                window.showDialog.show(alarmSet_txt_16,4000)//设备与用户未绑定
+            }
+                break;
+            case "20116":
+            {
+                window.showDialog.show(alarmSet_txt_17,4000)//设备密码错误
+            }
+                break;
+            case "20117":
+            {
+                window.showDialog.show(alarmSet_txt_19,4000)//设备密码错误
+            }
+                break;
+            default:
+            {
+                window.showDialog.show(alarmSet_txt_18,4000)//查询失败，请稍后重试
+            }
+                break;
+        }
+    }
+</script>
+</html>

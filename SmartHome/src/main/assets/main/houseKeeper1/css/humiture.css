@@ -1,0 +1,15 @@
+@charset "utf-8";
+b,strong{font-weight:500;}
+.dwc{
+	display:block;
+	float:none;
+	margin:0 auto;
+}
+.dw-li.dw-v{
+	font-size:25px;
+}
+.choose span:first-child{
+	left:55%;
+	top:7.5%;
+	font-size:1.8rem;
+}

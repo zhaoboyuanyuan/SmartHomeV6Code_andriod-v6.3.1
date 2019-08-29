@@ -1,0 +1,167 @@
+@charset "utf-8";
+
+
+body {
+    height: 100%;
+    background-color: rgb(243, 243, 243);
+}
+
+.content {
+    height: 100%;
+    background-color: rgb(243, 243, 243);
+}
+
+.mui-input-range .mui-tooltip {
+    display: none;
+}
+
+.mui-input-range input[type='range']::-webkit-slider-thumb {
+    background-color: rgb(243, 243, 243);
+    border-color: lightgray;
+    height: 2.5rem;
+    width: 2.5rem;
+}
+.mui-input-range input[type='range'] {
+    height: .2rem;
+    background:lightgray;
+    background: lightgray;
+}
+
+.room {
+    margin-left: 0rem;
+    margin-top: 0rem;
+    margin-right: 0rem;
+    margin-bottom: 0.2rem;
+    display: inline-block;
+    /* flex-direction: column; */
+    width: 100%;
+    border-radius: 0rem;
+    height: 25%;
+    color: #ffffff;
+    background: white;
+}
+
+.roomTitle {
+    margin-left: 1rem;
+    padding-top: 0.8rem;
+    color: rgb(85, 85, 85);
+    font-size: 1.5rem;
+}
+
+.roomValue {
+    /* align-self: center; */
+    font-size: 1.8rem;
+    padding-top: 0rem;
+    text-align: center;	
+    width: 100%;
+    display: inline-block;
+    color: rgb(112, 112, 112);
+}
+
+.roomRange {
+    padding-top: 0rem;
+    padding-left: 20px;
+}
+
+.roomTip0 {
+    float: left;
+    padding-left: 20px;
+    font-size: 1.5rem;
+    color: gray;
+}
+
+.roomTip1 {
+    float: right;
+    padding-right: 20px;
+    font-size: 1.5rem;
+    color: gray;
+}
+
+ul {
+    width: 100%;
+    display: inline-block;
+    box-sizing: border-box;
+    background: white;
+}
+
+ul li {
+    width: 33.333%;
+    float: left;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+ul li img {
+    width: 70%;
+}
+
+ul li div {
+    color: gray;
+}
+
+
+/*正在加载*/
+.loadToast{
+	position:fixed;
+	left:0;
+	top: 6.4rem;
+	width:100%;
+	height: calc(100% - 6.4rem);
+	z-index:555;
+	background:rgba(0,0,0,0.3)
+}
+
+.loadToast div{
+	position: absolute;
+	left: 35%;
+	top: 50%;
+	width: 30%;
+	height: 8rem;
+	text-align: center;
+	background: rgba(0,0,0,0.4);
+	border-radius: 5px;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+	padding-top: 2rem;
+}
+.loadToast div i{
+	display: inline-block;
+	height: 5rem;
+	line-height: 5rem;
+	font-size: 1.4rem;
+	color: #fff;
+}
+.loadToast div p{
+	color:#fff;
+}
+@-webkit-keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+@keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+.loadToast div em{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	background: url(../fonts/icon_loading.png) no-repeat center center;
+	background-size: 20px auto;
+}
+.loadToast div em.rotate{
+	-webkit-animation: rotate 0.7s linear infinite;
+	animation: rotate 0.7s linear infinite;
+}

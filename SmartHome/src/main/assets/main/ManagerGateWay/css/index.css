@@ -1,0 +1,447 @@
+/*当前子机状态*/
+p {
+	font-size: 1.5rem;
+}
+
+body {
+	background-color: #EEF1F7;
+	/*background-color: white;*/
+}
+
+body section:nth-of-type(3) {
+	/*background-color: #EEF1F7;*/
+}
+
+.StatusOfEngine {
+	height: 24rem;
+	background-color: white;
+	align-content: center;
+}
+
+.StatusOfEnginePage {
+	margin-top: 2rem;
+	width: 90%;
+	margin-left: 5%;
+	box-shadow: 0px 0px 10px #666666;
+	border-radius: 5px;
+}
+
+.StatusOfEngineNOPage {
+	width: 100%;
+	margin-left: 0%;
+}
+
+.StatusOfEngine a {
+	display: block;
+	top: 3rem;
+	padding-top: 6.5rem;
+	height: 7.5rem;
+	background-size: 9.6rem 7.5rem;
+}
+
+.main_engine_img {
+	background: url(../fonts/mainEngine.png) no-repeat center bottom;
+}
+
+.sub_engine_img {
+	background: url(../fonts/subEngine.png) no-repeat center bottom;
+}
+
+.StatusOfEngine p {
+	text-align: center;
+	font-size: 1.8rem;
+	line-height: 1.8rem;
+	margin-top: 5.3rem;
+	color: black;
+}
+
+
+/*主机未绑定*/
+
+
+.main_engine_nobind div:nth-of-type(1),
+.sub_engine_nobind div:nth-of-type(1) {
+	display: block;
+	margin-top: 2rem;
+}
+
+.main_engine_nobind div:nth-of-type(2),
+.sub_engine_nobind div:nth-of-type(2) {
+	display: block;
+	height: 4.5rem;
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 7rem;
+	text-align: center;
+}
+
+.main_engine_nobind div:nth-of-type(2) a,
+.sub_engine_nobind div:nth-of-type(2) a {
+	display: block;
+	height: 5rem;
+	background-size: cover;
+	background: url(../fonts/icon_add.png) center center no-repeat;
+	width: 5rem;
+	position: relative;
+	margin-left: 50%;
+	left: -2.5rem;
+}
+
+.main_engine_nobind p,
+.sub_engine_nobind p {
+	position: absolute;
+	font-size: 1.5rem;
+	width: 80%;
+	left: 10%;
+	text-align: center;
+}
+
+.main_engine_nobind p:nth-of-type(1),
+.sub_engine_nobind p:nth-of-type(1) {
+	margin-top: 2rem;
+	color: #666666;
+}
+
+.main_engine_nobind p:nth-of-type(2),
+.sub_engine_nobind p:nth-of-type(2) {
+	bottom: 2rem;
+	color: black;
+	text-decoration: underline;
+}
+
+/*主机绑定网关*/
+
+.main_engine_bind p:nth-of-type(1),
+.sub_engine_bind p:nth-of-type(1) {
+	margin-top: 2rem;
+	padding-left: 2rem;
+	color: #666666;
+}
+
+.main_engine_bind div:nth-of-type(2),
+.sub_engine_bind div:nth-of-type(2) {
+	height: 4.5rem;
+	background-color: #EEF1F7;
+	width: 100%;
+}
+
+.main_engine_bind p:nth-of-type(1),
+.sub_engine_bind p:nth-of-type(1) {
+	margin-top: 1.5rem;
+	font-size: 1.2rem;
+	width: 90%;
+	left: 5%;
+	text-align: center;
+}
+
+.main_engine_bind div div:nth-of-type(1),
+.sub_engine_bind div div:nth-of-type(1) {
+	/*width: 80%;*/
+	margin-left: 2rem;
+	line-height: 4.5rem;
+	float: left;
+	color: #666666;
+}
+
+.main_engine_bind div div:nth-of-type(2) {
+	margin-top: 1rem;
+	height: 2.5rem;
+	width: 2.5rem;
+	margin-right: 2rem;
+	float: right;
+}
+
+.main_engine_bind div div:nth-of-type(2) a {
+	display: block;
+	height: 2.5rem;
+	background-size: cover;
+	background: url(../fonts/icon_add_new.png) center center no-repeat;
+}
+
+/*帮助*/
+.help_section {
+	display: none;
+	position: fixed;
+	top: 0rem;
+	height: 100%;
+	z-index: 3000;
+	margin: 0rem;
+	text-align: center;
+	background: rgba(0, 0, 0, 0.4);
+	overflow: auto;
+}
+
+.help_section>div {
+	position: static;
+	width: 90%;
+	margin-left: 5%;
+	/*height: 80%;*/
+	margin-top: 7rem;
+	background: white;
+	box-shadow: 0px 0px 10px #666666;
+	border-radius: 5px;
+	overflow: auto;
+}
+
+.help_section div p:nth-of-type(1) {
+	font-size: 1.8rem;
+	margin-top: 3.5rem;
+}
+
+.help_section>div>img {
+	height: 11.3rem;
+	width: 26.1rem;
+	margin-top: 5rem;
+}
+
+.help_section div p {
+	margin-left: 5%;
+	width: 90%;
+}
+
+.help_section div p:nth-of-type(2) {
+	font-size: 1.4rem;
+	margin-top: 5rem;
+	color: #666666;
+}
+
+.help_section div p:nth-of-type(3) {
+	font-size: 1.4rem;
+	margin-top: 1.4rem;
+	color: #666666;
+	text-align: left;
+}
+
+.help_section div p:nth-of-type(4) {
+	font-size: 1.2rem;
+	color: #666666;
+	text-align: left;
+}
+
+.help_section div p:nth-of-type(5) {
+	font-size: 1.2rem;
+	color: #666666;
+	text-align: left;
+}
+
+.help_section div p:nth-of-type(6) {
+	font-size: 1.2rem;
+	color: #666666;
+	text-align: left;
+}
+
+.help_section div div:nth-of-type(1) {
+	margin-top: 3.5rem;
+	font-size: 1.8rem;
+	color: #8cd451;
+	line-height: 4.5rem;
+	height: 4.5rem;
+	text-align: center;
+	border-top: solid 2px #F1F4F8;
+}
+
+/*列表*/
+.getMission {
+	overflow: hidden;
+	background: #fff;
+	border-top: 1px solid #d9d9d9;
+}
+
+.getMission dl {
+	width: 115%;
+	height: 6rem;
+	padding-left: 5%;
+	border-bottom: 1px solid #d9d9d9;
+}
+
+.getMission dl dt,
+.getMission dl dd {
+	float: left;
+	height: 6rem;
+}
+
+.getMission dl dt {
+	width: 79%;
+}
+
+.getMission dl dt a {
+	display: block;
+	height: 6rem;
+	padding-left: 7rem;
+	/*background:url(../fonts/stop_pre.png) no-repeat left center;*/
+	background-size: 2.5rem;
+	font-size: 1.5rem;
+	color: #000;
+}
+
+.getMission dl dt a span {
+	display: block;
+	width: 100%;
+	height: 2.2rem;
+	line-height: 2.2rem;
+	padding-top: 1rem;
+	font-size: 1.5rem;
+	color: #000;
+}
+
+.getMission dl dt em {
+	margin-right: 1rem;
+	font-size: 1.2rem;
+	color: #96999e;
+}
+
+.getMission dl dd {
+	width: 15%;
+	height: 4.3rem;
+	margin-left: 4%;
+	padding: 0;
+}
+
+.getMission dl dd b {
+	display: block;
+	float: left;
+	width: 100%;
+	height: 6rem;
+	line-height: 6rem;
+	text-align: center;
+	font-size: 1.3rem;
+	color: #fff;
+	background: #f64a4a;
+}
+
+/*---*/
+
+.getMission li {
+	width: 115%;
+	height: 6rem;
+	padding-left: 5%;
+	border-bottom: 1px solid #d9d9d9;
+}
+
+.getMission li dt,
+.getMission li dd {
+	float: left;
+	height: 6rem;
+}
+
+.getMission li dt {
+	width: 79%;
+	font-size: 17px;
+	line-height: 6rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.getMission li dd {
+	width: 15%;
+	height: 4.3rem;
+	margin-left: 4%;
+	padding: 0;
+}
+
+.getMission li dd b {
+	display: block;
+	float: left;
+	width: 100%;
+	height: 6rem;
+	line-height: 6rem;
+	text-align: center;
+	font-size: 1.3rem;
+	color: #fff;
+	background: #f64a4a;
+}
+
+
+/*子机绑定主机弹框*/
+.bindMainGW {
+	position: fixed;
+	top: 0rem;
+	width: 100%;
+	height: 100%;
+	z-index: 3000;
+	margin: 0rem;
+	text-align: center;
+	background: rgba(0, 0, 0, 0.4);
+}
+
+.bindMainGW div {
+	position: relative;
+	width: 28rem;
+	height: 26rem;
+	border-radius: 0.8rem;
+	background-color: white;
+	top: calc((100% - 25.9rem)/2);
+	left: calc((100% - 28rem)/2);
+	overflow: hidden;
+	text-align: center;
+}
+
+.bindMainGW div p:nth-of-type(1) {
+	margin-top: 1.5rem;
+	font-size: 18px;
+	color: black;
+	margin-bottom: 0.5rem;
+	height: 2rem;
+	line-height: 2rem;
+}
+
+.bindMainGW div p:nth-of-type(2) {
+	margin-top: 1.5rem;
+	font-size: 18px;
+	color: black;
+	margin-bottom: 0.5rem;
+	height: 2rem;
+	line-height: 2rem;
+}
+
+.bindMainGW div p:nth-of-type(3) {
+	padding: 0 10%;
+	text-align: left;
+	margin-top: 0.8rem;
+	font-size: 12px;
+	color: #999;
+	margin-bottom: 0.5rem;
+	height: 5rem;
+}
+
+.bindMainGW div input {
+	width: 80%;
+	height: 3rem;
+	background-color: #eef0f1;
+	border: none;
+	color: black;
+	text-align: center;
+	font-size: 16px;
+}
+
+.bindMainGW div span {
+	margin-top: 1.5rem;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	height: 4.5rem;
+	border-top: 1px solid #999;
+}
+
+.bindMainGW div span button {
+	background: none;
+	border: none;
+	font-size: 18px;
+}
+
+.bindMainGW div span button:first-of-type {
+	margin: 0 0 0 2.3rem;
+}
+
+.bindMainGW div span button:last-of-type {
+	margin: 0 2.3rem 0 0;
+	color: #8cd451;
+}
+
+.bindMainGW div span em {
+	width: 1px;
+	height: 100%;
+	display: block;
+	background-color: #999;
+}

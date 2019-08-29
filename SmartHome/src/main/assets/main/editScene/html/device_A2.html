@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>设置设备状态</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		
+		<style>
+			.addremote {
+				margin-top: 2rem;
+				width: 100%;
+			}
+
+			.addremoteUl {
+				width: 100%；
+			}
+
+			.addremote ul li {
+				float: left;
+				width: 32%;
+				margin-left: 12%;
+				margin-top: 2rem;
+				height: 3.5rem;
+				border: 1px solid #8DD652;
+				border-radius: 1.75rem;
+				text-align: center;
+				line-height: 3rem;
+				color: #8DD652;
+				font-size: 2rem;
+				text-overflow:ellipsis; 
+				white-space:nowrap; 
+				overflow:hidden;
+			}
+			
+			.no_btn{
+				display:block;
+				position:absolute;
+				left:0;
+				margin-top: calc(50% - 5rem);
+				z-index:1000;
+				width:100%;
+				height:94%;
+				z-index:100;
+				text-align:center;
+			}
+			.no_btn span{
+				display:block;
+				width:100%;
+				height:5rem;
+				line-height:5rem;
+				text-align:center;
+				font-size:1.6rem;
+				color:#666;
+			}
+
+		</style>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:window.history.back(-1);"></a>
+				<a href="javascript:;" key="setDeviceStatus" class="autoSwitchLanguager">设置设备状态</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<div class="addremote">
+			<ul class="addremoteUl">
+				
+			</ul>
+		</div>
+		<div class="no_btn">
+			<span class="autoSwitchLanguager" id="device_A2_no_button">暂无按键，请至设备页面添加</span>
+		</div>
+	</body>
+	<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Scene");
+		var remoteArr = new Array();
+    		var gwID;
+    		var devID = info.getItem("deviceID");
+    		var appID;
+		initlan()
+		
+//		window.onload = new function() {
+//			remoteArr = [{"index":"1","name":"gaga","epData":"010"},{"index":"2","name":"tutu","epData":"120"},{"index":"3","name":"gaga","epData":"010"}]
+//			drawDeviceList(remoteArr);
+//		}
+		plus.plusReady(function () {
+		
+			plus.gatewayCmd.getCurrentAppID(function(result){
+            		appID = result;
+        		});
+		
+			plus.gatewayCmd.getDeviceInfo(devID,function(data){
+				devID = data.devID;
+				gwID = data.gwID;
+				if (data.mode != 2) {
+					send518ControlOrder(4, null);
+				}
+			})
+
+			plus.gatewayCmdRush.newDataRefresh(function (data) {
+				if(data.cmd == "518" && devID == data.devID) {
+					if(data.operType == 4) {
+						if(data.data.length > 0) {
+							remoteArr = data.data;
+							drawDeviceList(remoteArr);
+							$(".no_btn").hide();
+						} else {
+							$(".no_btn").show();
+						}
+					}
+				}
+			})
+		})
+		
+		function send518ControlOrder(operType, data) {
+			var jsonData = {};
+        		jsonData.cmd = "518";
+        		jsonData.gwID = gwID;
+        		jsonData.devID = devID;
+        		jsonData.operType = operType;
+        		if(data) {
+        			jsonData.data = data;
+        		}
+       		plus.gatewayCmd.controlDevice(jsonData,function(){  });
+		}
+	
+		function drawDeviceList(data){
+         	$(".saveToast").hide();
+        	 	$(".addremoteUl").html("");
+         	var count = 0;
+         	for (var i = 0; i < data.length; i++) {
+            		var index = data[i].index;
+            		var name = data[i].name;
+            		var epData = data[i].epData;
+            		var str = '<li id="'+index+'">' + '<span data-name="'+name+'"data-epData="' + epData + '">'+ name +'</span>'+ '</li>';
+            		$(".addremoteUl").append(str);
+         	}
+    	 		$(".addremoteUl li").on("click",function(){
+        			var index = $(this).attr("id");
+        			var name = $(this).find("span:first-child").attr("data-name");
+        			var epData = $(this).find("span:first-child").attr("data-epData");
+       		
+       			info.setItem("epData",epData);
+				info.setItem("deviceState",name);
+				window.location = "addDelay.html";
+    			})
+    	 	}
+	</script>
+</html>

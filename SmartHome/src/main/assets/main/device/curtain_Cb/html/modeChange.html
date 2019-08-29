@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模式切换</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/device.css" />
+    <script src="../../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../../skinSource/css/skin.css" />
+</head>
+<body style="width:100%;height:100%;background:#f3f3f3">
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" href="javascript:;" id="device_Cb_mode">模式切换</a>
+            <a class="sure autoSwitchLanguager" style="display: none" href="javascript:;" key="device_Cb_ok">确定</a>
+        </div>
+    </header>
+    <section class="main" style="display: block">
+        <ul>
+            <li><span class="autoSwitchLanguager" key="device_Cb_1way">1路</span><i class="right"></i></li>
+            <li><span class="autoSwitchLanguager" key="device_Cb_2way">2路</span><i class="right"></i></li>
+        </ul>
+    </section>
+    <section class="main" style="display: none">
+        <ul>
+            <li>
+                <img src="../fonts/icon_modeCurtain.png">
+                <span class="autoSwitchLanguager" style="margin-left: 0.5rem" key="device_Cb_curtain">窗帘模式</span>
+                <i class="yes"></i>
+            </li>
+            <li>
+                <img src="../fonts/icon_modeSwitch.png">
+                <span class="autoSwitchLanguager" style="margin-left: 0.5rem" key="device_Cb_switch">触发开关模式</span>
+                <i></i>
+            </li>
+        </ul>
+    </section>
+    <section class="saveToast" style="display:none;">
+        <div>
+            <i><em class="rotate"></em></i>
+            <p key="Device_By_Loading2" class="autoSwitchLanguager">正在加载...</p>
+        </div>
+    </section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var info = window.sysfun;
+    info.init("device_Cb");
+    var DevID,GwID,AppID;
+    var curtainSelect = 1;
+    var isCurtainChoose = true;
+    var nowState = "";
+    var curtainModeDic = {
+        "EP1CurtainMode": "1",
+        "EP2CurtainMode": "1"
+    };
+    plus.plusReady(function(){
+        plus.gatewayCmd.getDeviceInfo(function(data){
+            DevID = data.devID;
+            GwID = data.gwID;
+            AppID = data.appID;
+            send_501(0x02,0,"");
+            nowMode(data);
+        });
+        plus.gatewayCmd.newDataRefresh(function(data){
+            if(data.cmd === "500" && DevID === data.devID){
+                $(".saveToast").hide();
+                clearOverTime();
+                nowMode(data);
+            }
+        });
+
+        $(".main").eq(0).find("li").unbind("click").bind("click",function(){
+
+            if($(this).index() == 0) {
+                curtainSelect = 1;
+            } else {
+                curtainSelect = 2;
+            }
+            isCurtainChoose = false;
+            $(".sure").css("display", "block");
+            $(".main").eq(1).show().siblings(".main").hide();
+
+            showUIState();
+        });
+
+        $(".main").eq(1).find("li").unbind("click").bind("click",function(){
+
+            $(".main").eq(1).find("i").removeClass("yes");
+            $(this).find("i").addClass("yes");
+        });
+
+        $(".sure").bind("click",function(){
+            if($(".main").eq(1).find("li").eq(0).find("i").attr("class") === "yes"){
+                send_501(0x00,curtainSelect,"1");
+                nowState = "1";
+                $(".saveToast").show();
+                overTime();
+            }else if($(".main").eq(1).find("li").eq(1).find("i").attr("class") === "yes"){
+                send_501(0x00,curtainSelect,"0");
+                nowState = "0";
+                $(".saveToast").show();
+                overTime();
+            }
+        });
+    });
+    $("#back").unbind("click").bind("click", function() {
+        if(isCurtainChoose) {
+            plus.tools.back(function() {});
+        } else {
+            isCurtainChoose = true;
+            $(".sure").css("display", "none");
+            $(".main").eq(0).show().siblings(".main").hide();
+        }
+
+    });
+
+    function nowMode(data) {
+        var endPoints = data.endpoints;
+        for (var i = 0; i < endPoints.length; i++) {
+            var endPoint = endPoints[i];
+            var endPointNum = endPoint.endpointNumber;
+            var clusters = endPoint.clusters;
+            for (var j = 0; j < clusters.length; j++) {
+                var cluster = clusters[j];
+                var clusterId = cluster.clusterId;
+                var attributes = cluster.attributes;
+                for (var k = 0; k < attributes.length; k++) {
+                    var attribute = attributes[k];
+                    var attributeid = attribute.attributeId;
+                    var attributeValue = attribute.attributeValue;
+                    if (clusterId == 0x0102 && attributeid == 0x8002) {
+                        if (endPointNum == 1) {
+                            curtainModeDic["EP1CurtainMode"] = attributeValue;
+                        } else {
+                            curtainModeDic["EP2CurtainMode"] = attributeValue;
+                        }
+
+                        if(curtainSelect == endPointNum & attributeValue === nowState){
+                            window.showDialog.show(languageUtil.getResource("device_Cb_Switch_success"),3000);
+                        }
+                    }
+                }
+            }
+        }
+
+        showUIState();
+    }
+    
+    function showUIState() {
+        var curtainMode = curtainModeDic["EP1CurtainMode"];
+        if(curtainSelect == 2) {
+            curtainMode = curtainModeDic["EP2CurtainMode"];
+        }
+        $(".main").eq(1).find("i").removeClass("yes");
+        if(curtainMode === "0") {
+            $(".main").eq(1).find("li").eq(1).find("i").addClass("yes");
+        }else {
+            $(".main").eq(1).find("li").eq(0).find("i").addClass("yes");
+        }
+    }
+    function send_501(commandId,num,parameter){
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = GwID;
+        jsonData.devID = DevID;
+        jsonData.appID = AppID;
+        jsonData.endpointNumber = num;
+        jsonData.clusterId = 0x0102;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = [parameter]
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+
+    //请求超时监听
+    var timer;
+    function overTime(){
+        timer = setTimeout(function(){
+            $(".saveToast").hide();
+            window.showDialog.show(languageUtil.getResource("device_Cb_time_out"),3000);
+        },15000)
+    }
+    function clearOverTime(){
+        clearTimeout(timer);
+    }
+</script>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/scene.css" />
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <style type="text/css">
+        body,html {
+            width: 100%;
+            background-color: #f1f4f8;
+        }
+        .secList {
+            margin-top: 6.4rem;
+        }
+        .list {
+            margin-top: 1.6rem;
+        }
+        .list li {
+            box-sizing:border-box;
+            width:100%;
+            height:4rem;
+            line-height:4rem;
+            padding:0 1.6rem;
+            border-bottom:1px solid #f1f4f8;
+            background-color: white;
+            font-size:1.6rem;
+            color:#000;
+        }
+    </style>
+</head>
+<body>
+<header  class="header">
+    <a href="javascript:window.history.back(-1);"></a>
+    <a class="deviceName autoSwitchLanguager" key="clothes_hanger_set_mode" href="javascript:;">设置设备模式</a>
+</header>
+<section class="secList">
+    <ul class="list">
+        <li class="autoSwitchLanguager" key="airsystem_Oj_Wind_speed_low">低风</li>
+        <li class="autoSwitchLanguager" key="airsystem_Oj_Wind_speed_medium">中风</li>
+        <li class="autoSwitchLanguager" key="airsystem_Oj_Wind_speed_high">高风</li>
+    </ul>
+</section>
+</body>
+<script>
+    initlan();
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var taskType = info.getItem("taskType");
+
+    info.setItem("type", "Ck");
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+    });
+
+    $('.list li').on('click', function () {
+        // console.log($(this).html());
+        switch ($(this).index()) {
+            case 0:
+                console.log('低风');
+                info.setItem('epData', '1,1');
+                info.setItem("deviceState", languageUtil.getResource("airsystem_Oj_open") + " " + languageUtil.getResource("airsystem_Oj_Wind_speed_low"));
+                if (taskType == 'timeTask') {
+                    window.location = "setDelay_timeTask.html";
+                } else {
+                    window.location = "setDelay_sceneTask.html";
+                }
+                break;
+            case 1:
+                console.log('中风');
+                info.setItem('epData', '1,2');
+                info.setItem("deviceState", languageUtil.getResource("airsystem_Oj_open") + " " + languageUtil.getResource("airsystem_Oj_Wind_speed_medium"));
+                if (taskType == 'timeTask') {
+                    window.location = "setDelay_timeTask.html";
+                } else {
+                    window.location = "setDelay_sceneTask.html";
+                }
+                break;
+            case 2:
+                console.log('高风');
+                info.setItem('epData', '1,3');
+                info.setItem("deviceState", languageUtil.getResource("airsystem_Oj_open") + " " + languageUtil.getResource("airsystem_Oj_Wind_speed_high"));
+                if (taskType == 'timeTask') {
+                    window.location = "setDelay_timeTask.html";
+                } else {
+                    window.location = "setDelay_sceneTask.html";
+                }
+                break;
+        }
+    });
+    var iphoneX = {sysFunc: "getItem:", room: "iphoneX", id: "iphoneX", data: ""};
+    var iStr ='';
+    if(!window.v6sysfunc) {
+        iStr = prompt(JSON.stringify(iphoneX))
+    }
+    if(iStr == "iphoneX"){
+        if(iStr == "iphoneX"){
+            $(".secList")[0].style.marginTop = "8.4rem";
+        }
+
+    }
+</script>
+</html>

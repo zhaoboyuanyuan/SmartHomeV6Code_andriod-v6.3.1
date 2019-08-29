@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>创建临时用户</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/mui.picker.min.css">
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/set.css" />
+		<link rel="stylesheet" type="text/css" href="css/device.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" key="DoorLookOne_timePassword" href="javascript:;">单次密码</a>
+			</div>
+		</header>
+		<section class="content mui-content">
+			<strong class="autoSwitchLanguager" key="DoorLookOne_timePasswordtip">单次密码限制时间、单次使用，自生效起3小时后失效</strong>
+			<div class="createInput">
+				<span class="autoSwitchLanguager" key="device_op_normal_04" style="width:27%">密码</span>
+				<input id="pwd" type="password" value=""><i class="look"></i>
+			</div>
+			<strong class="autoSwitchLanguager" key="device_op_temp_03">密码有效期</strong>
+			<div class="createInput mui-content-padded">
+				<span class="autoSwitchLanguager" key="DoorLookMoreEffectivetime" style="width:27%">开始</span>
+				<button id="pickDateBtn" type="button" class="btn mui-btn mui-btn-block">2016/05/24 05:30</button>
+			</div>
+			<div class="createInput" style="background: rgba(242,244,248,1);">
+				<span class="autoSwitchLanguager" key="DoorLookMoreDeadtime" style="width:27%">结束</span>
+				<button id="pickDateBtn1" type="button" style="background:none;" class="btn mui-btn mui-btn-block">2016/05/24 10:30</button>
+			</div>
+		</section>
+		<section class="createBtn addSensorBtn">
+			<a href="javascript:;" style="opacity:0.6" class="autoSwitchLanguager" id="createNormalUser" key="DoorLookMoreSetup">创建</a>
+		</section>
+		<section class="clearnBtn">
+			<u href="javascript:;" style="opacity:0.6" class="autoSwitchLanguager" id="delete_password" key="DoorLookMoreDeleteOne_timePassword">删除所有已创建的单次密码</u>
+		</section>
+		<!--<section id="fail" class="toast" style="display:none">-->
+			<!--<p class="autoSwitchLanguager" id="toastText" style="color:#fff;"></p>-->
+		<!--</section>-->
+		<!--删除确认弹框-->
+		<section class="changeName" id="giveUpEdit" style="display:none">
+			<div class="nameToast giveUp">
+				<span id="DoorLookTouchIDTip" class="autoSwitchLanguager" key="DoorLookMoreDeleteOne_timePasswordAffirm">确定删除所有单次密码？</span>
+				<div class="choose_1 choose_2">
+					<a id="DoorLookNeverNotify" href="javascript:;" class="isNo autoSwitchLanguager" key="DoorLookMorecancel">取消</a>
+					<a id="DoorLookToSetting" href="javascript:;" class="toSet autoSwitchLanguager" key="DoorLookMoreDelete">删除</a>
+				</div>
+			</div>
+		</section>
+	</body>
+	<script src="js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/completeToast.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/onceUser.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$("#pwd").on("input propertychange", function() {
+			if($(this).val().length >= 9) {
+				$(this).val($(this).val().substr(0, 9))
+			}
+		})
+		$("#back").on("click", function() {
+			plus.tools.goBack(function() {})
+		})
+		initlan()
+		Date.prototype.Format = function(fmt) { //author: meizz
+			var o = {
+				"M+": this.getMonth() + 1, //月份
+				"d+": this.getDate(), //日
+				"h+": this.getHours(), //小时
+				"m+": this.getMinutes(), //分
+				"s+": this.getSeconds(), //秒
+				"q+": Math.floor((this.getMonth() + 3) / 3), //季度
+				"S": this.getMilliseconds() //毫秒
+			};
+			if(/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+			for(var k in o)
+				if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+			return fmt;
+		}
+		//时间选择器
+		mui.init();
+		var isCreate = false;
+		var isSending = false;
+		var time = new Date()
+		console.log(time)
+		var year = time.getFullYear()
+		var month = time.getMonth() + 1
+		var month1 = (month + "").length == 1 ? "0" + month : month;
+		var day = (time.getDate() + "").length == 1 ? "0" + time.getDate() : time.getDate();
+		var hour = (time.getHours() + "").length == 1 ? "0" + time.getHours() : time.getHours();
+		var hour1 = parseInt(hour) + 3;
+		var hour2 = (hour1 + "").length == 1 ? "0" + hour1 : hour1 + '';
+		var minute = (time.getMinutes() + "").length == 1 ? "0" + time.getMinutes() : time.getMinutes();
+		var minute1 = parseInt(minute) + 1;
+		var minute2 = (minute1 + "").length == 1 ? "0" + minute1 : minute1 + '';
+		var day1 = day
+		if(hour2 == 24) {
+			hour2 = "00";
+			day1 = day1 + 1;
+		}
+		$("#pickDateBtn").html(year + "/" + month1 + "/" + day + " " + hour + ":" + minute)
+		$("#pickDateBtn1").html(year + "/" + month1 + "/" + day1 + " " + hour2 + ":" + minute)
+		document.getElementById("pickDateBtn").addEventListener("click", function() {
+			//初始化PopPicker组件
+			var picker = new mui.DtPicker({
+				type: "datetime",
+				labels: ['Year', 'Mon', 'Day', 'Hour', 'min'],
+				beginDate: new Date()
+			})
+			//console.log(time.toString())
+			console.log(year + "-" + month + "-" + day + "-" + hour + "-" + minute)
+			$(".mui-dtpicker").find(".btn-cancel").html(lang_DoorLookMorecancel)
+			$(".mui-dtpicker").find(".btn-ok").html(lang_DoorLookOK)
+			//设置默认值
+			picker.setSelectedValue(year + "-" + month + "-" + day + "-" + hour + "-" + minute)
+			picker.show(function(item) {
+				console.log(item)
+				$("#pickDateBtn").html(item.text.replace(/-/g, "/"))
+				var ss = new Date(item.y.text + "/" + item.m.text + "/" + item.d.text + " " + item.h.text + ":" + item.i.text)
+				var endDate = new Date(ss.getTime() + 3 * 60 * 60 * 1000).Format("yyyy/MM/dd hh:mm");
+				$("#pickDateBtn1").html(endDate)
+			})
+		})
+
+		var PWD, ST, ET, NAME, DEVICEID, GWID, APPID;
+		var endpointNumber;
+		var token;
+		var info = window.sysfun;
+		info.init("Token_OW");
+		token = info.getItem("Token_OW")
+		plus.plusReady(function() {
+			//取消删除
+			document.getElementsByClassName("isNo")[0].addEventListener("click", function() {
+				document.getElementById("giveUpEdit").style.display = "none";
+			})
+			//删除密码
+			document.getElementsByClassName("toSet")[0].addEventListener("click", function() {
+				createToast()
+				document.getElementById("giveUpEdit").style.display = "none";
+				deleteAllOncePwd();
+				setTimeout(function() {
+					if(!isSending) {
+						return;
+					}
+					$(".comToast").hide();
+                    window.showDialog.show(lang_DoorLookMoreValidatePassword4,2000);
+				}, 20000)
+			})
+			$("#delete_password").on("click", function() {
+				//弹框
+				document.getElementById("giveUpEdit").style.display = "block";
+			})
+
+			$("#createNormalUser").on("click", function() {
+				if($("#pwd").val() == '') {
+                    window.showDialog.show(lang_DoorLookMoreValidatePassword1,2000);
+				} else {
+					var reg = new RegExp("^[0-9]*$");
+					if($("#pwd").val().length < 6 || $("#pwd").val().length > 9 || !reg.test($("#pwd").val())) {
+                        window.showDialog.show(lang_DoorLookMoreValidatePassword1,2000);
+					} else {
+						createToast()
+						PWD = $("#pwd").val()
+						createOnceUser(PWD)
+						setTimeout(function() {
+							if(!isSending) {
+								return;
+							}
+							$(".comToast").hide();
+                            window.showDialog.show(lang_DoorLookMoreValidatePassword4,2000);
+						}, 20000)
+					}
+				}
+			})
+			plus.gatewayCmd.getCurrentAppID(function(result) {
+				APPID = result;
+			})
+			plus.gatewayCmd.getDeviceInfo(function(result) {
+				DEVICEID = result.devID;
+				GWID = result.gwID;
+				endpointNumber = result.endpoints[0].endpointNumber;
+				endpointType = result.endpoints[0].endpointType;
+				rush_500(DEVICEID, GWID)
+			})
+		})
+
+		/*
+		 * 设备控制
+		 */
+		function createOnceUser(pwd) {
+			if(isCreate) {
+				return;
+			}
+			isCreate = true;
+			isSending = true;
+			setTimeout(function() {
+				isCreate = false;
+			}, 500)
+			var jsonData = {
+				"cmd": "501",
+				"gwID": GWID,
+				"devID": DEVICEID,
+				"endpointNumber": endpointNumber,
+				"clusterId": 257,
+				"commandType": 01,
+				"commandId": 32785,
+				"token": token,
+			};
+			ST = timerModel($("#pickDateBtn").html());
+			ET = timerModel($("#pickDateBtn1").html());
+			var parameterData = [
+				pwd,
+				ST
+			];
+			jsonData.parameter = parameterData;
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result" + result);
+			})
+		}
+
+		function deleteAllOncePwd() {
+			if(isCreate) {
+				return;
+			}
+			isCreate = true;
+			isSending = true;
+			setTimeout(function() {
+				isCreate = false;
+			}, 500)
+			var jsonData = {
+				"cmd": "501",
+				"gwID": GWID,
+				"devID": DEVICEID,
+				"endpointNumber": endpointNumber,
+				"clusterId": 257,
+				"commandType": 01,
+				"commandId": 32786,
+				"token": token,
+			};
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result" + result);
+			})
+		}
+
+		function timerModel(time) {
+			time = time.replace(" ", "");
+			time = time.replace("/", "");
+			time = time.replace("／", "");
+			time = time.replace("/", "");
+			time = time.replace("／", "");
+			time = time.replace(":", "");
+			return time;
+		}
+
+		function rush_500(dID, gID) {
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				if(dID == result.devID && gID == result.gwID && result.cmd == "500") {
+					var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+					var attributeValueStr = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+					var attributeValue = parseInt(attributeValueStr);
+					isSending = false;
+					switch(attributeId) {
+						case 0x0000:
+							{
+								switch(attributeValue) {
+									case 4:
+										{
+											//反锁
+										}
+										break;
+									case 5:
+										{
+											//解除反锁
+										}
+										break;
+									case 10:
+										{
+											//普通用户添加已满
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword3,2000);
+										}
+										break;
+									case 11:
+										{
+											//单次用户添加已满
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword3,2000);
+											//分享
+										}
+										break;
+									case 12:
+										{
+											//临时用户添加已满
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword3,2000);
+										}
+										break;
+									case 14:
+										{
+											//时钟同步成功
+										}
+										break;
+								}
+							}
+							break;
+						case 0x8001:
+							{
+								switch(attributeValue) {
+									case 1:
+										{
+											//入侵报警
+										}
+										break;
+									case 2:
+										{
+											//报警解除
+										}
+										break;
+									case 3:
+										{
+											//破坏报警
+										}
+										break;
+									case 4:
+										{
+											//密码连续出错
+										}
+										break;
+									case 5:
+										{
+											//欠压报警
+										}
+										break;
+								}
+							}
+							break;
+						case 0x8006:
+							{
+								switch(attributeValue) {
+									case 7:
+										{
+											//密码重复
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword2,2000);
+										}
+										break;
+									case 8:
+										{
+											//密码非法
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword4,2000);
+										}
+										break;
+									case 9:
+										{
+											//时钟无效
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword4,2000);
+										}
+										break;
+									case 10:
+										{
+											//操作失败
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookMoreValidatePassword4,2000);
+										}
+										break;
+								}
+							}
+							break;
+						case 0x8007:
+							{
+								switch(attributeValue) {
+									case 01:
+										{
+											//管理员认证通过
+										}
+										break;
+									case 02:
+										{
+											//(普通、单次)用户添加成功
+											$(".comToast").hide();
+											var shareinfo = window.sysfun;
+											shareinfo.init("Share_OW");
+											shareinfo.clear();
+											shareinfo.setItem("state", "1");
+											shareinfo.setItem("password", PWD);
+											window.location = "createdSuccess.html"
+										}
+										break;
+									case 03:
+										{
+											//删除单次有效用户成功
+											$(".comToast").hide();
+                                            window.showDialog.show(lang_DoorLookDeleteSuccessed,2000);
+										}
+										break;
+								}
+							}
+							break;
+						default:
+							{
+
+							}
+							break;
+					}
+				}
+			})
+		}
+	</script>
+
+</html>

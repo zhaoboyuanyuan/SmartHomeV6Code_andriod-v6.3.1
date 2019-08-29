@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建普通用户</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/set.css"/>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="device_op_normal_01" href="javascript:;">创建普通用户</a>
+        <a class="complete autoSwitchLanguager" key="device_op_save" href="javascript:;">保存</a>
+    </div>
+</header>
+<section class="content">
+    <strong class="autoSwitchLanguager" key="device_op_normal_02">普通用户密码可长期有效</strong>
+    <div class="createInput">
+        <span class="autoSwitchLanguager" key="device_op_normal_03">用户名</span>
+        <input id="acname" type="text" maxlength="20" class="autoSwitchLanguager" key="device_op_normal_05" placeholder="请输入用户名">
+    </div>
+    <div class="createInput">
+        <span class="autoSwitchLanguager" key="device_op_normal_04">密码</span>
+        <input id="pwd" type="password" value=""><i class="look"></i>
+    </div>
+</section>
+<!--<section id="fail" class="toast" style="display:none;">-->
+    <!--<p class="autoSwitchLanguager" id="toastText" style="color:#fff;"></p>-->
+<!--</section>-->
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/completeToast.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/onceUser.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan()
+    $("#pwd").on("input propertychange",function(){
+        if($(this).val().length >= 6){
+            $(this).val($(this).val().substr(0,6))
+        }
+    });
+    $("#acname").on("blur",function(){
+        var value = $(this).val();
+        var valueFace = noFace(value);
+        console.log(valueFace);
+        $(this).val(valueFace);
+    });
+    $("#back").on("click",function(){
+        plus.tools.goBack(function(){})
+    })
+    var PWD, NAME, DEVICEID, GWID, APPID;
+    var token;
+    var info = window.sysfun;
+    info.init("Token_OP");
+    token = info.getItem("Token_OP")
+    plus.plusReady(function() {
+        $(".complete").on("click",function(){
+            if($("#acname").val() == '' && $("#pwd").val() == ''){
+                window.showDialog.show(normal_txt_01,2000);
+            }else if($("#acname").val() == ''){
+                window.showDialog.show(normal_txt_02,2000);
+            }else if($("#pwd").val() == ''){
+                window.showDialog.show(normal_txt_03,2000);
+            }else{
+                var reg = new RegExp("^[0-9]*$");
+                if($("#pwd").val().length <6 || !reg.test($("#pwd").val())){
+                    window.showDialog.show(normal_txt_03,2000);
+                }else{
+                    console.log($("#acname").val().length)
+                    createToast()
+                    send520Cmd()
+                    setTimeout(function() {
+                        $(".comToast").hide();
+                        window.showDialog.show(normal_txt_04,2000);
+                    }, 60000)
+                }
+            }
+        })
+        plus.gatewayCmd.getCurrentAppID(function(result) {
+            APPID = result;
+            plus.gatewayCmd.getDeviceInfo(function(result) {
+                DEVICEID = result.devID;
+                GWID = result.gwID;
+                rush_cmd(DEVICEID,APPID);
+            })
+        })
+    })
+
+    function send520Cmd() {
+        var jsonData = {};
+        jsonData.cmd = "520";
+        jsonData.gwID = GWID;
+        jsonData.devID = DEVICEID;
+        jsonData.operType = 2;
+        jsonData.appID = APPID;
+        PWD = $("#pwd").val()
+        NAME = $("#acname").val();
+        var data = {
+            "tk": token,
+            "ut": "1",
+            "pwd": PWD,
+            "name": NAME
+        }
+        jsonData.data = data;
+        plus.gatewayCmd.controlDevice(jsonData, function(resutl) {
+
+        })
+    }
+
+    /*
+ * 数据回调
+ */
+    function rush_cmd(DEVICEID,APPID) {
+        plus.gatewayCmd.newDataRefresh(function(result) {
+            if(result.cmd == "520" && result.devID == DEVICEID && result.appID == APPID) {
+                if(result.operType == 2) { //operType:2为新增，operType:4为修改
+                    if(result.data.code != 0) {
+                        $(".comToast").hide();
+                        errorCode(parseInt(result.data.code))
+                        return;
+                    }
+                    $(".comToast").hide();
+                    window.showDialog.show(alarm_txt_05,2000);
+                    setTimeout(function(){
+                        // window.location = "accountManage.html"
+                        var shareinfo = window.sysfun;
+                        shareinfo.init("Share_op");
+                        shareinfo.clear();
+                        shareinfo.setItem("state", "0");
+                        shareinfo.setItem("password", PWD);
+                        window.location = "createdSuccess.html"
+                    },1000)
+                }
+            }
+        })
+    }
+</script>
+</html>

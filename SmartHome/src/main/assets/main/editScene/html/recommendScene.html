@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>编辑场景</title>
+	<link rel="stylesheet" type="text/css" href="../css/base.css" />
+	<link rel="stylesheet" type="text/css" href="../css/editok.css" />
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/slip.js" type="text/javascript"></script>
+</head>
+
+<body>
+	<header class="header">
+		<div class="header_top">
+			<a href="javascript:;" id="goback"></a>
+			<a href="javascript:;" key="editScene" class="autoSwitchLanguager"></a>
+			<a id="finishScene" key="saveScene" class="autoSwitchLanguager" href="javascript:;"></a>
+		</div>
+	</header>
+	<section>
+		<div class="img_bg" style="padding:2rem 0 2rem;">
+			<a href="javascript:;">
+				<i></i>
+				<span style="height:3rem;line-height:3rem;"></span>
+				<em style="background:none;"></em>
+				<h5 class="sceneDescribe autoSwitchLanguager" style="padding:0 8%;text-align:center;line-height:1.6rem;font-size:1.2rem;color:#fff;margin-top:0.5rem;word-wrap: break-word;font-weight:normal"></h5>
+			</a>
+		</div>
+	</section>
+	<section>
+		<ul class="scene_list">
+			<li id="editScene_support_tasks" key="supportTasks" class="autoSwitchLanguager list-no-reorder">此场景支持以下任务</li>
+			<li id="editScene_add_tasks_quickly" key="noTask" class="null autoSwitchLanguager  list-no-reorder" style="display:none;">还没有添加任何任务，赶快添加吧</li>
+			<ul id="action_list" style="width: 100%;height:calc(100% - 36.5rem);position: fixed;overflow-y: scroll;overflow-x: hidden;">
+				<!--<li class="sce_list">-->
+				<!--<i style="background:url(../fonts/icon_5.png) no-repeat center center;background-size:3.9rem 4rem"></i>-->
+				<!--<div class="left"><span>墙面插座</span><em>[客厅]</em><em></em><em></em><em>打开</em><em>5分0秒后开始执行5分0秒后开始执行</em></div>-->
+				<!--<div class="delete">删除</div>-->
+				<!--</li>-->
+			</ul>
+			<!--<li class="sce_list">
+				<i style="background:url(../fonts/icon_4.png) no-repeat center center;background-size:3.9rem 4rem"></i>
+				<div class="left"><span>墙面插座</span><em>[客厅]</em><em></em><em></em><em>打开</em><em>5分0秒后开始执行5分0秒后开始执行</em></div>
+				<div class="delete">删除</div>
+				</li>-->
+			<!--<li class="sce_list">-->
+			<!--<i style="background:url(../fonts/icon_offline.png) no-repeat center center;background-size:3rem 3rem"></i>-->
+			<!--<div class="left" style="line-height: 7.4rem;">设备已删除</div>-->
+			<!--<div class="delete">删除</div>-->
+			<!--</li>-->
+		</ul>
+	</section>
+	<section class="addSensorBtn" id="button_1" style="position: fixed;left: 0;bottom: 0;width: 100%;height: 10rem;background: #fff;">
+		<a id="editScene_add_equipment" key="addTask" class="addDevice autoSwitchLanguager" href="javascript:;" style="position:fixed;">添加任务</a>
+	</section>
+	<section class="shade" style="display: none;">
+		<div class="bounce_list">
+			<a id="editScene_leave_scene" key="ifReturn" class="autoSwitchLanguager" href="javascript:;">编辑的场景尚未保存，是否退出</a>
+			<a id="editScene_leave" key="return" class="return autoSwitchLanguager" href="javascript:;">退出</a>
+			<a id="editScene_leave_save" key="returnAndSave" class="sendReturn autoSwitchLanguager" href="javascript:;">保存并退出</a>
+			<a id="editScene_cancel" key="cancel" class="close autoSwitchLanguager" href="javascript:;">取消</a>
+		</div>
+	</section>
+	<section class="saveToast" style="display:none;">
+		<div>
+			<i><em class="rotate"></em></i>
+			<p key="device_HS05_Loading" class="autoSwitchLanguager">正在加载...</p>
+		</div>
+	</section>
+	<section class="overTime autoSwitchLanguager" key="device_B9_out_of_time">请求超时，请重试</section>
+</body>
+<script src="../js/leftDelete.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../model/scene.js" type="text/javascript" charset="utf-8"></script>
+<script src="../model/housekeeper.js" type="text/javascript" charset="utf-8"></script>
+<!--<script src="../js/recommendDeviceList.js" type="text/javascript" charset="utf-8"></script>-->
+<script type="text/javascript">
+	var info = window.sysfun;
+	info.init("V6Scene");
+	//推荐场景为哪一个的唯一id
+	//排序字典
+    var actionDic = {};
+    initlan();
+	plus.plusReady(function(){
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        document.getElementsByTagName('head')[0].appendChild(script);
+        script.src = "../js/recommendDeviceList.js";
+        plus.gatewayCmd.androidBack(function () {
+            if ($(".shade").css("display") === "none") {
+                goBack();
+            } else {
+                $(".shade").hide();
+            }
+        });
+        plus.gatewayCmd.recommendSceneName(info.getItem("sceneName"),function(data){
+            info.setItem("sceneName",data);
+            $(".img_bg span").html(info.getItem("sceneName"));
+		});
+        $(".img_bg").css({
+            "background":"url(../../source/sceneImg/sceneImg_"+ info.getItem("sceneIcon") +".png) no-repeat center center",
+            "background-size":"100% 100%"
+        });
+        $(".img_bg i").css({
+            "background": "url(../../source/sceneIcon/scene_quick_" + info.getItem("sceneIcon") + ".png)",
+            "background-size": "4.75rem auto"
+        });
+        $(".sceneDescribe").html(languageUtil.getResource("recommendScene_"+info.getItem("sceneIcon")));
+        if (decodeURI(getUrlParam("edit")) == "true") {
+            $(".saveToast").show();
+            overtimeWarn();
+            //请求设备列表并渲染场景中的执行任务
+            getActionList(info.getItem("sceneIcon"));
+        }else if(decodeURI(getUrlParam("addTask")) == "true"){
+            //直接获取actionArray中的执行任务列表渲染页面
+            edit();
+		}
+        $(".addDevice").on("click",function(){
+            info.setItem("sourcePage","recommend");
+            window.location = "sceneList.html";
+        });
+        $("#goback").on("click",function(){
+            goBack();
+		});
+        $(".return").on("click",function(){
+            plus.tools.back(function () {});
+            info.clear();
+		});
+        $(".sendReturn").on("click",function(){
+            addSceneTask();
+		});
+        $(".close").on("click",function(){
+            $(".shade").hide();
+        });
+        $("#finishScene").on("click",function(){
+            addSceneTask();
+		})
+	});
+	function getActionList(id){
+        plus.gatewayCmd.getDeviceList(function(data){
+            if (data.length > 0) {
+                $(".saveToast").hide();
+                clearOvertimeWarn();
+                var arr = [];
+                for(var i=0;i<data.length;i++){
+                    if(window.recommedDeviceList[id][data[i].type]){
+                        var deviceObject = window.recommedDeviceList[id][data[i].type];
+                        for(var n=0;n<deviceObject.length;n++){
+                            var name = data[i].name.indexOf("#$default$#") != -1 ? deviceObject[n].name + data[i].name.split("#")[2] : data[i].name;
+                            var roomName = (data[i].roomName == undefined || data[i].roomName == '') ? lang_group : data[i].roomName;
+                            roomName = deviceObject[n].isRoomName === "true" ? roomName : "";
+                            var delay = deviceObject[n].delay ? deviceObject[n].delay : "0";
+                            var deviceState = deviceObject[n].deviceState;
+                            var param = {
+                                "type": "2",
+                                "deviceIcon": deviceObject[n].icon,
+                                "name": name,
+                                "object": data[i].devID + ">" + deviceObject[n].endpointNumber + ">" + data[i].type,
+                                "delay": delay,
+                                "deviceState": deviceState,
+                                "epData": deviceObject[n].epData,
+                                "roomName": roomName,
+                                "editUrl":deviceObject[n].stateUrl
+                            };
+                            if( data[i].type === "CMICA2" || data[i].type === "CMICA3" ||
+								data[i].type === "CMICA4" || data[i].type === "CMICA5"){
+                                param.object = data[i].devID + ">" + deviceObject[n].endpointNumber + ">" + data[i].type;
+                                deviceObject[n].epData["deviceId"] = data[i].devID;
+                                param.epData = JSON.stringify(deviceObject[n].epData);
+                                param.type = "1";
+							}else if(data[i].type === "XW01"){
+                                param.object = data[i].devID + ">" + deviceObject[n].endpointNumber + ">" + data[i].type;
+                                deviceObject[n].epData["deviceId"] = data[i].devID;
+                                param.epData = JSON.stringify(deviceObject[n].epData);
+                                param.type = "4";
+							}
+                            arr.push(param);
+                        }
+                    }
+                }
+                info.setItem("actionArray", JSON.stringify(arr));
+                console.log(info.getItem("actionArray"));
+                edit();
+            } else {
+                $(".saveToast").hide();
+                clearOvertimeWarn();
+                $(".null").show();
+                $("#action_list").hide();
+            }
+        });
+	}
+	function edit(){
+        var actionArr;
+        if (info.getItem("actionArray") != '' && info.getItem("actionArray") != undefined) {
+            actionArr = JSON.parse(info.getItem("actionArray"))
+        }
+        // 初始化排序字典
+        actionDic = {};
+        if (actionArr == null) {
+            $(".null").show();
+            $("#action_list").hide();
+        } else {
+            $(".null").hide();
+            $("#action_list").show();
+            $(".scene_list").find(".sce_list").remove();
+            actionArr.map(function (list, i) {
+                var cssStr = "3%";
+                if (list.switchName == undefined || list.switchName == null || list.switchName == "") {
+                    list.switchName = '';
+                    cssStr = "0";
+                }
+                var displayDelay = formatDelayTime(list.delay);
+                var deviceType = list.object.split('>')[2];
+                var num = list.object.split('>')[1];
+                var url = list.editUrl;
+                var sss = "";
+                var devID = list.object.split('>')[0];
+                if (deviceType == 'DD' || deviceType == '90' || deviceType == "OZ" ||
+                    deviceType == "63" || deviceType == "62" || deviceType == "At" ||
+                    deviceType == "Ao" || deviceType == "An" || deviceType == "a0" ||
+                    deviceType == "Bv" || deviceType == "Bw" || deviceType == "Cm" ||
+						deviceType == "Cn"
+                ) {
+                    sss = 'style="width: 100%;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;"';
+                }
+                var roomStr = "";
+                if(list.roomName){
+                    roomStr = "<em class='roomName' data-roomName='" + list.roomName + "'>[" + list.roomName + "]</em>";
+				}else {
+                    roomStr = "<em class='roomName' data-roomName=''></em>";
+				}
+                var str = '<li class="sce_list" data-order=' + i + ' ' +
+                    'data-devID="' + devID + '" data-url="' + url + '" data-num="' + num + '" ' +
+                    'data-type="' + deviceType + '">' +
+                    '<i data-icon="' + list.deviceIcon + '" style="background:url(' + list.deviceIcon + ') no-repeat center center;background-size:4rem auto;"></i>' +
+                    '<div class="left">' +
+                    '<span>' + list.name + '</span>' + roomStr +
+                    '<em></em><em style="margin-right:' + cssStr + ';">' + list.switchName + '</em>' +
+                    '<em ' + sss + '>' + list.deviceState + '</em>' +
+                    '<em>' + displayDelay + '</em>' +
+                    '<b class="reorder-icon list-instant"></b>' +
+                    '</div>' +
+                    '<div class="delete">' + lang_delete + '</div>' +
+                    '</li>';
+                $("#action_list").append(str);
+                if (list.switchName == undefined || list.switchName == null || list.switchName == "") {
+                    $(".scene_list li.sce_list .left").find("em").eq(4).css("margin-right", "0")
+                }
+            });
+            //左滑效果
+            $(".scene_list .sce_list").leftDelete({
+                marginLeft: "-18%"
+            });
+            $(".scene_list .sce_list").on("click", function (e) {
+                e.stopPropagation();
+                var devID = $(this).attr("data-devID");
+                var url = $(this).attr("data-url");
+                var index = $(this).index();
+                var _this = $(this);
+                info.setItem("sourcePage","recommend");
+                plus.gatewayCmd.getDeviceInfo(devID, function (data) {
+                    if (data) {
+                        if (data.type == "At" || data.type == "62" || data.type == "63" ||
+                            data.type == "A1" || data.type == "B9" || data.type == "Aj" ||
+                            data.type == "61" || data.type == "Ao" || data.type == "An" ||
+                            data.type == "Am" || data.type == "Bu" || data.type == "Bv" ||
+                            data.type == "Bw" || data.type == "Cl" || data.type == "Cm" ||
+							data.type == "Cn") {
+                            var nameList = [];
+                            var translatorNameList = [];
+                            var translatorNumberList = [];
+                            if (data.endpoints) {
+                                var endpoints = data.endpoints;
+                                for (var j in endpoints) {
+                                    var endpointName = endpoints[j].endpointName ? endpoints[j].endpointName :
+                                        device_switch + endpoints[j].endpointNumber;
+                                    nameList.push(endpointName);
+                                    translatorNameList.push(endpointName);
+                                    translatorNumberList.push(endpoints[j].endpointNumber);
+                                }
+                            }
+                            if (data.type == "B9") {
+                                info.setItem("epNameList" + data.devID, JSON.stringify(translatorNameList));
+                                info.setItem("numList" + data.devID, JSON.stringify(translatorNumberList));
+                            } else {
+                                info.setItem("epNameList" + data.devID, JSON.stringify(nameList));
+                            }
+                            if (data.type == "Ao" || data.type == "An" || data.type == "Am" ||
+                                data.type == "Bu" || data.type == "Bv" || data.type == "Bw" ||
+								data.type == "Cl" || data.type == "Cm" || data.type == "Cn") {
+                                for(var a in data.endpoints){
+                                    if (data.endpoints[a].endpointType !== 2) {
+                                        if(data.endpoints[a].endpointNumber == 3){
+                                            info.setItem("lockone" + data.devID, data.endpoints[a].endpointNumber + "非");
+										}else if(data.endpoints[a].endpointNumber == 2){
+                                            info.setItem("locktwo" + data.devID, data.endpoints[a].endpointNumber + "非");
+										}else if(data.endpoints[a].endpointNumber == 1){
+                                            info.setItem("lockThree" + data.devID, data.endpoints[a].endpointNumber + "非");
+										}
+                                    } else {
+                                        if(data.endpoints[a].endpointNumber == 3){
+                                            info.setItem("lockone" +  data.devID, data.endpoints[a].endpointNumber + "正");
+                                        }else if(data.endpoints[a].endpointNumber == 2){
+                                            info.setItem("locktwo" +  data.devID, data.endpoints[a].endpointNumber + "正");
+                                        }else if(data.endpoints[a].endpointNumber == 1){
+                                            info.setItem("lockThree" + data.devID, data.endpoints[a].endpointNumber + "正");
+                                        }
+                                    }
+								}
+                            }
+                        } else if (data.type == "Aw") {
+                            var endpoints = data.endpoints;
+                            endpoints.forEach(function (endpoint) {
+                                var endpointNum = endpoint.endpointNumber;
+                                if (endpointNum == 1) {
+                                    var clusters = endpoint.clusters;
+                                    clusters.forEach(function (cluster) {
+                                        var attributes = cluster.attributes;
+                                        attributes.forEach(function (attribute) {
+                                            var attributeId = attribute.attributeId;
+                                            var attributeValue = attribute.attributeValue;
+                                            if (attributeId == 2) {
+                                                // 1：电铃模式  0：开关模式
+                                                info.setItem("AwMode" + data.devID,
+                                                    attributeValue);
+                                            }
+                                        })
+                                    })
+                                }
+                            });
+                        }
+                        info.setItem("deviceName", $(_this).find("span").html());
+                        info.setItem("deviceID", $(_this).attr("data-devID"));
+                        info.setItem("num", $(_this).attr("data-num"));
+                        info.setItem("type", $(_this).attr("data-type"));
+                        info.setItem("deviceIcon", $(_this).find("i").attr("data-icon"));
+                        info.setItem("roomName", $(_this).find(".roomName").attr("data-roomName"));
+                        info.setItem("index", index);
+                        if ($(_this).attr("data-type") == "22" ||
+                            $(_this).attr("data-type") == "23" ||
+                            $(_this).attr("data-type") == "24") {
+                            var param = {
+                                "deviceId": info.getItem("deviceID"),
+                                "deviceName": info.getItem("deviceName"),
+                                "deviceIcon": info.getItem("deviceIcon"),
+                                "num": info.getItem("num"),
+                                "type": info.getItem("type"),
+                                "roomName": info.getItem("roomName")
+                            };
+                            plus.tools.infraredSceneOrHouseKepper(param, function (data) {
+
+                            });
+                        } else {
+                            window.location = url;
+                        }
+                    }
+                });
+            })
+        }
+        setupSlip(document.getElementById("action_list"));
+	}
+	//新建场景及保存场景任务
+	function addSceneTask(){
+	    $(".saveToast").show();
+        overtimeWarn();
+        var param = sceneModel.send_add_503;
+        param.name = info.getItem("sceneName");
+        param.icon = info.getItem("sceneIcon");
+        var AppID = "";
+        plus.gatewayCmd.getCurrentAppID(function(appIdData){
+            AppID = appIdData;
+        });
+        plus.gatewayCmd.getCurrentGatewayID(function(result) {
+            param.gwID = result;
+            plus.gatewayCmd.scene_503(param, function(data) {
+                info.setItem("sceneID",data.sceneID);
+                var param_507 = houserkeeperModel.send_add_507;
+                param_507.gwID = result;
+                param_507.appID = AppID;
+                param_507.programID = data.sceneID;
+                param_507.programName = info.getItem("sceneName");
+                var arr = {
+                    "type": "0",
+                    "object": data.sceneID,
+                    "exp": "on"
+                };
+                param_507.triggerArray.push(arr);
+                var p;
+                if (info.getItem("actionArray") == null || info.getItem("actionArray") == "[]") {
+                    plus.tools.back(function () {})
+                } else {
+                    p = JSON.parse(info.getItem("actionArray"));
+                    for (var i = 0; i < p.length; i++) {
+                        delete p[i].deviceState;
+                    }
+                    param_507.actionArray = p;
+                    plus.gatewayCmd.houserkeep_507(param_507, function (data_507) {
+                        if (data_507.triggerArray[0].object == info.getItem("sceneID")) {
+                            $(".saveToast").hide();
+                            info.clear();
+                            plus.tools.back(function () {})
+                        }
+                    })
+                }
+            })
+        })
+	}
+	//返回
+    function goBack() {
+	    if(info.getItem("actionArray") != '' && info.getItem("actionArray") != undefined){
+            $(".shade").show();
+		}else{
+            plus.tools.back(function () {});
+            info.clear();
+		}
+    }
+    //删除
+    function deleteDeviceTask(self) {
+        var index = $(self).parent().index()
+        $(self).parent().remove()
+        var data = info.getItem("actionArray")
+        var jsonData = JSON.parse(data)
+        //index-2 表示ul中有两条多余的li
+        jsonData.splice(index, 1)
+        var dataStr = JSON.stringify(jsonData)
+        info.setItem("actionArray", dataStr)
+    }
+    /*格式化执行时间*/
+    function formatDelayTime(delayValue) {
+        var displayValue = "";
+        if (delayValue == null || delayValue == undefined || delayValue == "undefined" || delayValue == "") {
+            /*如果为空，则是“立即执行”*/
+            displayValue = lang_immediatelyDo;
+        } else {
+            var intdelayValue = 0;
+            try {
+                intdelayValue = parseInt(delayValue);
+                var minValue = parseInt(intdelayValue / 60);
+                var secValue = parseInt(intdelayValue % 60);
+                if (minValue == 0 && secValue == 0) {
+                    displayValue = lang_immediatelyDo; /*如果是0，也是立即执行*/
+                } else if (minValue > 0 && secValue == 0) {
+                    displayValue = minValue + lang_afterMinsDo; /*某分后执行*/
+                } else if (minValue == 0 && secValue > 0) {
+                    displayValue = secValue + lang_afterSecDo; /*某秒后执行*/
+                } else { /*某分某秒后执行*/
+                    displayValue = minValue + lang_min + secValue + lang_afterSecDo;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        return displayValue;
+    }
+    // 排序支持
+    function setupSlip(list) {
+        list.addEventListener('slip:beforereorder', function (e) {
+            // 禁止排序
+            if (e.target.classList.contains('list-no-reorder')) {
+                e.preventDefault();
+            }
+        }, false);
+
+        list.addEventListener('slip:beforeswipe', function (e) {
+            // 禁止左右滑动
+            e.preventDefault();
+        }, false);
+
+        list.addEventListener('slip:beforewait', function (e) {
+            // 立即开始排序
+            if (e.target.classList.contains('list-instant')) e.preventDefault();
+        }, false);
+
+        list.addEventListener('slip:afterswipe', function (e) {
+            // 滑动之后的处理
+            e.target.parentNode.appendChild(e.target);
+        }, false);
+
+        list.addEventListener('slip:reorder', function (e) {
+            // 排序之后的处理
+            e.target.parentNode.insertBefore(e.target, e.detail.insertBefore);
+            // 根据排序生成数据
+            var arr = []
+            $("#action_list").find("li").each(function () {
+                var dataId = $(this).data("order")
+                arr.push(actionDic[dataId])
+            })
+            info.setItem("actionArray", JSON.stringify(arr))
+            return false;
+        }, false);
+        return new Slip(list);
+    }
+	function overtimeWarn() {
+		overtime = setTimeout(function () {
+			$(".overTime").show();
+			$(".saveToast").hide();
+			setTimeout(function () {
+				$(".overTime").hide();
+			}, 3000)
+		}, 15000);
+	}
+
+	function clearOvertimeWarn() {
+		clearTimeout(overtime);
+	}
+</script>
+
+</html>

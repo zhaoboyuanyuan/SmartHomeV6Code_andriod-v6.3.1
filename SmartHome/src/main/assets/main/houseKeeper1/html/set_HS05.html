@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+	<title>设置设备状态</title>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+	<link rel="stylesheet" href="../css/HS02.css">
+	<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="../css/thermostat.css"/> -->
+    <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/mui/js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+	<style>
+		.header a:nth-child(3){
+			background: none !important;
+			background-size:2.1rem auto;
+		}
+	</style>
+</head>
+
+<body>
+	<header class="header" style="box-sizing: content-box;-webkit-box-sizing: content-box;z-index: 105;">
+		<a href="javascript:window.history.back(-1);"></a>
+		<a id="setDeviceState_tittle" class="autoSwitchLanguager">设置设备状态</a>
+		<a id="save" key="circumstances_save" class="autoSwitchLanguager"></a>
+	</header>
+
+	<div class="content" style="margin-top:6.4rem;">
+
+		<p style="margin-top: 1rem; margin-left: 1rem;" class="autoSwitchLanguager" key="Refrigerator_temperature">温度</p>
+		<div class="room">
+			<p class="autoSwitchLanguager roomTitle" key="Refrigerator_cold_storage">冷藏室</p>
+			<label id="room0" class="roomValue">--℃</label>
+			<div class="mui-input-row mui-input-range roomRange">
+				<input id="range0" type="range" min="2" max="8" name="room0" oninput="silderChange(this.name, this.value)" onchange="silderChange(this.name, this.value)">
+			</div>
+			<div class="roomTip0">2℃</div><div class="roomTip1">8℃</div>
+		</div>
+
+		<div class="room">
+			<p class="roomTitle autoSwitchLanguager" key="Refrigerator_Greenhouses">变温室</p>
+			<label id="room1" class="roomValue">--℃</label>
+			<div class="mui-input-row mui-input-range roomRange">
+				<input id="range1" type="range" min="-18" max="5" name="room1" oninput="silderChange(this.name, this.value)" onchange="silderChange(this.name, this.value)">
+			</div>
+			<div class="roomTip0">-18℃</div><div class="roomTip1">5℃</div>
+		</div>
+
+
+		<div class="room">
+			<p class="roomTitle autoSwitchLanguager" key="Refrigerator_ColdRoom">冷冻室</p>
+			<label id="room2" class="roomValue">--℃</label>
+			<div class="mui-input-row mui-input-range roomRange">
+				<input id="range2" type="range" min="-25" max="-15" name="room2" oninput="silderChange(this.name, this.value)" onchange="silderChange(this.name, this.value)">
+			</div>
+			<div class="roomTip0">-25℃</div><div class="roomTip1">-15℃</div>
+		</div>
+
+		<p style="margin-left: 1rem; color:gray; margin-top: 1rem;" class="autoSwitchLanguager" key="Refrigerator_Pattern">模式</p>
+
+		<ul>
+			<li>
+				<div onclick="modelChange('model0')">
+					<img class="" id="model0Image" src="../fonts/model0_off.png" />
+					<div class="autoSwitchLanguager" key="Refrigerator_mode_Holiday" id="model0Title">假日</div>
+				</div>
+			</li>
+			<li>
+				<div onclick="modelChange('model1')">
+					<img class="" id="model1Image" src="../fonts/model1_off.png" />
+					<div class="autoSwitchLanguager" key="Refrigerator_mode_Intelligence" id="model1Title">智能</div>
+				</div>
+			</li>
+			<li>
+				<div onclick="modelChange('model2')">
+					<img class="" id="model2Image" src="../fonts/model2_off.png" />
+					<div class="autoSwitchLanguager" key="Refrigerator_mode_Quickfrozen" id="model2Title">速冻</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<section class="loadToast" style="display:none;">
+		<div>
+			<em class="rotate"></em>
+			<p key="Device_Ok_Details_Loading2" class="autoSwitchLanguager">正在加载...</p>
+		</div>
+	</section>
+	<section class="mask_layer" style="display:none;">
+		<i></i>
+		<span class="autoSwitchLanguager" id="device_A2_Offline">设备已离线</span>
+	</section>
+	
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+
+	var modelInner = -1;
+	var v1 = -99;
+	var v2 = -99;
+	var v3 = -99;
+
+    plus.gatewayCmd.androidBack(function () {
+        window.history.back(-1);
+    });
+	function silderChange(rangeName, value) {
+		var showI = document.getElementById(rangeName);
+		showI.innerText = value+"℃";
+	}
+
+	document.getElementById("range0").addEventListener("touchend", function() {
+		changeValue(this.name, this.value);
+	})
+	document.getElementById("range1").addEventListener("touchend", function() {
+		changeValue(this.name, this.value);
+	})
+	document.getElementById("range2").addEventListener("touchend", function() {
+		changeValue(this.name, this.value);
+	})
+
+	//变温
+	function changeValue(model, value) {
+		console.log(model, value);
+
+		modelInner = -1;
+		document.getElementById("model0Title").style.color = "gray";
+		document.getElementById("model1Title").style.color = "gray";
+		document.getElementById("model2Title").style.color = "gray";
+		document.getElementById("model0Image").src = "../fonts/model0_off.png";
+		document.getElementById("model1Image").src = "../fonts/model1_off.png";
+		document.getElementById("model2Image").src = "../fonts/model2_off.png";
+
+		if(model == "room0") {
+			//冷藏室
+			// requestSetTempeture("2", value);
+			v2 = value;
+		} else if(model == "room1") {
+			//变温室
+			// requestSetTempeture("1", value);
+			v1 = value;
+		} else if(model == "room2") {
+			//冷冻室
+			// requestSetTempeture("3", value);
+			v3 = value;
+		}
+	}
+
+	//变模式
+	function modelChange(modelValue) {
+		modelChangeUI(modelValue);
+		if (modelValue == "model0") {
+			console.log("假日");
+			modelInner = 0;
+		}else if(modelValue == "model1") {
+			console.log("智能");
+			modelInner = 1;
+		}else if(modelValue == "model2") {
+			console.log("速冻");
+			modelInner = 2;
+		}
+
+		document.getElementById("room0").innerText = "--℃";
+		document.getElementById("room1").innerText = "--℃";
+		document.getElementById("room2").innerText = "--℃";
+		
+		v1 = -99;
+		v2 = -99;
+		v3 = -99;
+	}
+
+	function modelChangeUI(modelValue) {
+
+		document.getElementById("model0Title").style.color = "gray";
+		document.getElementById("model1Title").style.color = "gray";
+		document.getElementById("model2Title").style.color = "gray";
+		document.getElementById("model0Image").src = "../fonts/model0_off.png";
+		document.getElementById("model1Image").src = "../fonts/model1_off.png";
+		document.getElementById("model2Image").src = "../fonts/model2_off.png";
+
+		if(modelValue != "-1") {
+			var modelTitle = document.getElementById(modelValue+"Title");
+			modelTitle.style.color = "black";
+			//id="model0Image"
+			var modelImage = document.getElementById(modelValue+"Image");
+			modelImage.src = "../fonts/"+modelValue+"_on.png";
+		}
+	}
+	var info = window.sysfun;
+    info.init("V6Housekeeper");
+	initlan();
+    var gwID;
+	var devID;
+	var ctrlDevID;
+	var appID;
+
+	var deviceID = info.getItem("deviceID");
+	
+	plus.plusReady(function() {
+        plus.gatewayCmd.getDeviceInfo(deviceID,function(data){
+			devID = data.devID;
+			gwID = data.gwID;
+			getStatus();
+		})
+
+		
+    });
+
+	//获取状态
+	function getStatus() {
+		var paramToNative = {};
+		var urlStr = "/iot/v2/users/{uId}/target-devices/"+devID+"?token={token}";
+		paramToNative.url = urlStr;
+
+		plus.gatewayCmd.WLHttpGetBase(paramToNative, function(result) {
+			console.log(result);
+			$(".loadToast").hide();
+			if(result.resultCode == 0) {
+				if (result.data) {
+					var endpoints = result.data[0].endpoints[0];
+					ctrlDevID = result.data[0].deviceId;
+					// var properties = endpoints.properties;
+					// var Temperature = properties.Temperature;
+
+					// for (var i = 0; i < Temperature.length; i++) {
+					// 	var item = Temperature[i];
+					// 	if(item.zone == "1") {
+					// 		document.getElementById("room1").innerText = item.value+"℃";
+					// 		document.getElementById("range1").value = item.value;
+					// 	}else if(item.zone == "2") {
+					// 		document.getElementById("room0").innerText = item.value+"℃";
+					// 		document.getElementById("range0").value = item.value;
+					// 	}else if(item.zone == "3") {
+					// 		document.getElementById("room2").innerText = item.value+"℃";
+					// 		document.getElementById("range2").value = item.value;
+					// 	}
+					// }
+
+					// if (properties.FridgeMode) {
+					// 	var FridgeMode = properties.FridgeMode.value;
+					// 	if (FridgeMode) {
+					// 		if (FridgeMode == "0") {
+					// 			modelChangeUI("model0");
+					// 		}else if (FridgeMode == "1") {
+					// 			modelChangeUI("model1");
+					// 		}else if (FridgeMode == "2") {
+					// 			modelChangeUI("model2");
+					// 		}
+					// 	}
+					// }else {
+					// 	modelChangeUI("-1");
+					// }
+					
+					
+				}
+			}
+		});
+	}
+	
+	$("#save").on("click", function () {
+		save()
+	});
+
+	function save() {
+
+		var data = {};
+		
+		data.deviceId = ctrlDevID;
+		
+		var endpoint = [];
+
+		if(modelInner != -1) {
+			//设置模式
+			var endpoint1 = {};
+			endpoint1.endpointNum = 1;
+			var action = {};
+			action.FridgeMode = {"value": parseInt(modelInner)};
+			endpoint1.action = action;
+			endpoint.push(endpoint1);
+			data.endpoint = endpoint;
+			data.action = "controlDevice";
+			data.extraData = {};
+			// info.setItem("deviceEpData", JSON.stringify(data));
+
+
+			// window.lang_name_HS05 = languageUtil.getResource("device_HS05_name");//"海信冰箱"
+			// window.lang_HS05_model = languageUtil.getResource("Refrigerator_Pattern");//"模式"
+			// window.lang_HS05_model_0 = languageUtil.getResource("Refrigerator_mode_Holiday");//"假日模式"
+			// window.lang_HS05_model_1 = languageUtil.getResource("Refrigerator_mode_Intelligence");//"智能模式"
+			// window.lang_HS05_model_2 = languageUtil.getResource("Refrigerator_mode_Quickfrozen");//"速冻模式"
+
+
+
+			var stateStr="";
+			if(modelInner == 0) {
+				stateStr = lang_HS05_model_0;
+			}else if(modelInner == 1) {
+				stateStr = lang_HS05_model_1;
+			}else if(modelInner == 2) {
+				stateStr = lang_HS05_model_2;
+			}
+			info.setItem("deviceState", stateStr);
+
+			if (info.getItem("taskType") == 'timeTask') {
+                info.setItem("epData",JSON.stringify(data));
+               	window.location = "setDelay_timeTask.html";
+           	} else {
+                info.setItem("epData",JSON.stringify(data));
+                window.location = "setDelay_sceneTask.html";
+            }
+		}else if(v1 != -99 || v2 != -99 || v3 != -99) {
+			//设置温度
+			var arr = [v1, v2, v3];
+			var stateStr="";
+			for(var i = 0; i < arr.length; i++) {
+				if (arr[i] != -99) {
+					var endpoint1 = {};
+					endpoint1.endpointNum = 1;
+					var action = {};
+					action.Temperature = {"zone":(i+1).toString(), "value":parseInt(arr[i])};
+					endpoint1.action = action;
+					endpoint.push(endpoint1);
+					stateStr += (arr[i]+"℃  ");
+				}
+			}
+			data.endpoint = endpoint;
+			data.action = "controlDevice";
+			data.extraData = {};
+			// info.setItem("epData", JSON.stringify(data));
+			info.setItem("deviceState", stateStr);
+			
+			if (info.getItem("taskType") == 'timeTask') {
+                info.setItem("epData",JSON.stringify(data));
+               	window.location = "setDelay_timeTask.html";
+           	} else {
+                info.setItem("epData",JSON.stringify(data));
+                window.location = "setDelay_sceneTask.html";
+            }
+		}
+
+		
+    }
+
+</script>
+
+</html>

@@ -1,0 +1,35 @@
+@charset "utf-8";
+.get_list{
+	width:100%;
+	overflow:hidden;
+	background:#fff;
+}
+.get_list div{
+	overflow:hidden;
+}
+.get_list div a{
+	display:block;
+	width:92%;
+	height:4rem;
+	padding:0.75rem 4%;
+	border-bottom:1px solid #ddd;
+}
+.get_list div a span{
+	display:inline-block;
+	width:85%;
+	height:4rem;
+	line-height:4rem;
+	color:#000;
+	font-size:1.5rem;
+}
+.get_list div a i{
+	display:block;
+	float:left;
+	width:4rem;
+	height:4rem;
+	background:url(../../source/deviceIcon/device_icon_GW01.png) no-repeat center center;
+	background-size:4rem auto;
+}
+.get_list div a i.left{
+	margin-right:1rem;
+}

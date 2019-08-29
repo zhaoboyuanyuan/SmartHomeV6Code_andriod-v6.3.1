@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>设置设备状态</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:;" onClick="javascript:history.back(-1);"></a>
+				<a href="javascript:;" key="setDeviceStatus" class="autoSwitchLanguager" id='setDeviceStatus'>设置设备状态</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section>
+			<ul class="set_list">
+				<li class="autoSwitchLanguager" id="LEDlight_90_colour"><i></i>颜色RGB</li>
+				<li class="autoSwitchLanguager" id="LEDlight_90_sunlight"><i></i>暖白</li>
+				<li class="autoSwitchLanguager" id="LEDlight_90_Colorful"><i></i>炫彩</li>
+				<li ><i></i>OFF</li>
+			</ul>
+		</section>
+	</body>
+	<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Scene");
+		function globalLang() {}
+		initlan()
+		plus.plusReady(function(){
+			plus.gatewayCmd.androidBack(function () {
+				window.history.back(-1);
+			});
+			$(".set_list li").on("click",function(){
+			    var index = $(this).index();
+				$(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon");
+				if(index == 0) {
+					window.location = "set_color_90.html";
+				} else if(index == 1) {
+					window.location = "set_light_90.html";
+				} else if(index == 2){
+                    window.location = "set_interval_90.html";
+				}else if(index == 3){
+                    info.setItem("epData","D000,2000");
+                    info.setItem("deviceState",$(this).text());
+                    window.location = "addDelay.html";
+                }
+			})
+		})
+		
+	</script>
+</html>

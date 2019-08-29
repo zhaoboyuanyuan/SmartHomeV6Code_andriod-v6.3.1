@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>设置设备状态</title>
+	<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="header">
+	<div class="header_top">
+		<a href="javascript:;" onClick="javascript:back();"></a>
+		<a href="javascript:;" class="autoSwitchLanguager" id='setDeviceState_tittle'>设置设备状态</a>
+	</div>
+</div>
+<section>
+	<ul class="set_list switch_name" style="margin-top: 0">
+		<li><i></i></li>
+		<li><i></i></li>
+	</ul>
+	<ul class="set_list state" style="display: none;margin-top: 0">
+		<li><i></i></li>
+		<li><i></i></li>
+	</ul>
+</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    var index;
+    info.init("V6Housekeeper");
+    var taskType = info.getItem("taskType");
+    initlan()
+	function back() {
+        if($(".switch_name").css("display") == 'none'){
+            $(".state").hide();
+            $(".switch_name").show();
+        }else{
+            window.history.back(-1);
+        }
+    }
+
+    plus.plusReady(function(){
+        plus.gatewayCmd.androidBack(function () {
+            if($(".switch_name").css("display") == 'none'){
+                $(".state").hide();
+                $(".switch_name").show();
+            }else{
+                window.history.back(-1);
+            }
+        });
+        $(".switch_name li").eq(0).html((device_Ba_SocketName +'1')+"<i></i>")
+        $(".switch_name li").eq(1).html((device_Ba_SocketName +'2')+"<i></i>")
+        $(".state li").eq(0).html((device_Ba_Electricity)+"<i></i>")
+        $(".state li").eq(1).html((device_Ba_PowerFailure)+"<i></i>")
+        $(".switch_name li").on("click",function(){
+            index = $(this).index()+1
+            $(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+            info.setItem("num",index)
+            $(".switch_name").hide();
+            $(".state").show();
+        })
+
+        $(".state li").on("click",function(){
+            $(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+            //两位插座
+            var state = $(this).text();
+            var deviceEpData;
+			var deviceState;
+            if(index == 1){
+                deviceEpData = "1" + (state == device_Ba_Electricity ? "1" : "0") + "2";
+            }else if(index == 2){
+                deviceEpData = "12" + (state == device_Ba_Electricity ? "1" : "0");
+            }
+            deviceState = device_Ba_SocketName + index + "&nbsp;&nbsp;&nbsp;&nbsp;" + state;
+            info.setItem("deviceState", deviceState)
+            if (taskType == 'timeTask') {
+                info.setItem("epData",deviceEpData);
+                window.location = "setDelay_timeTask.html";
+            } else {
+                info.setItem("epData",deviceEpData);
+                window.location = "setDelay_sceneTask.html";
+            }
+        })
+    })
+
+</script>
+</html>

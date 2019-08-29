@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>绑定场景</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/sceneRelate.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a href="javascript:;" class="autoSwitchLanguager" key = 'device_Ax_BindingScene'></a>
+        <a id="complete" href="javascript:;" class="autoSwitchLanguager" key = 'device_Ax_Done'></a>
+    </div>
+</header>
+<section class="binding">
+    <article binded = 'off' id = "unbinding">
+    </article>
+    <nav id="nav">
+    </nav>
+</section>
+<section class="mask_layer " style="display:none; ">
+    <i></i>
+    <span id="offline " class="autoSwitchLanguager" key = 'offLine'></span>
+</section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+<script>
+    initlan();
+    var deviceId;
+    var gwId;
+    var appId;
+    var bindSceneID = decodeURI(getUrlParam("sceneId"));
+    var endpointNum = decodeURI(getUrlParam("endpointNum"));
+    plus.plusReady(function () {
+        $("#unbinding").html(Device_Ax_Notbind + "<i></i>");
+        $("#back").on("click", function () {
+            window.location = 'deviceAxMain.html';
+        });
+        $("#unbinding").on("click", function () {
+            bindSceneID = '-1';
+            clearSelect();
+            $("#unbinding").attr('binded', "on");
+        });
+        $("#complete").on("click", function() {
+
+            if(bindSceneID == '-1') {
+                //解绑
+                send_513_del(endpointNum);
+            } else {
+                send_513_add(endpointNum, bindSceneID);
+            }
+            window.location = 'deviceAxMain.html';
+        });
+        plus.gatewayCmd.getDeviceInfo(function (result) {
+            deviceId = result.devID;
+            gwId = result.gwID;
+            appId = result.appID;
+            if (bindSceneID == '-1' || bindSceneID == ""){
+                $("#unbinding").attr('binded', "on");
+            }
+            //获取场景列表
+            plus.gatewayCmd.getSceneList(function(result) {
+                if(result != undefined) {
+                    sceneList = result;
+                    nav.innerHTML = '';
+                    for(var i = 0; i < sceneList.length; i++)
+                    {
+                        var scene = sceneList[i];
+                        var sceneID = scene.sceneID;
+                        var sceneName = scene.sceneName;
+                        var sceneIcon = scene.sceneIcon;
+                        sceneIcon = 'url(../../source/sceneIcon/scene_normal_' + sceneIcon + '.png)';
+                        addLi(sceneID,sceneName,sceneIcon);
+                    }
+                }
+            });
+        })
+    })
+
+    function addLi(sceneID,sceneName,sceneIcon) {
+        var sceneName = sceneName;
+        var sceneIcon = sceneIcon;
+        var li = document.createElement("li");
+        var em = document.createElement('em');
+        em.style.background = sceneIcon + ' no-repeat left center';
+        em.style.backgroundSize = '2.6rem auto';
+        var i = document.createElement('i');
+        if (sceneID == bindSceneID) {
+            li.setAttribute('binded', "on");
+        } else {
+            li.setAttribute('binded', "off");
+        }
+        li.innerText = sceneName;
+        nav.appendChild(li);
+        li.appendChild(em);
+        li.appendChild(i);
+
+        //添加事件
+        li.addEventListener('click',function(){
+            bindSceneID = sceneID;
+            clearSelect();
+            li.setAttribute('binded', "on");
+        });
+    }
+
+    function clearSelect() {
+        $("#unbinding").attr('binded', "off");
+        var arr = document.getElementsByTagName('li');
+        for (var i = 0; i < arr.length; i++){
+            var object = arr[i];
+            object.setAttribute('binded', "off");
+        }
+    }
+
+    function send_513_del(endpointNumber){
+        var param = {
+            "cmd":"513",
+            "devID":deviceId,
+            "gwID":gwId,
+            "appID":appId,
+            "mode":3,
+            "data":[{
+                "endpointNumber":endpointNumber
+            }]
+        };
+        plus.gatewayCmd.controlDevice(param,function(){})
+    }
+    function send_513_add(endpointNumber, sceneID){
+        var param = {
+            "cmd":"513",
+            "devID":deviceId,
+            "gwID":gwId,
+            "appID":appId,
+            "mode":1,
+            "data":[{
+                "endpointNumber":endpointNumber,
+                "sceneID":sceneID
+            }]
+        };
+        plus.gatewayCmd.controlDevice(param,function(){})
+    }
+</script>
+</html>

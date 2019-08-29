@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>设置设备状态</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<a href="javascript:window.history.back(-1);"></a>
+			<a class="autoSwitchLanguager" id="setDeviceState_tittle"  href="javascript:;">设置设备状态</a>
+			<a class="complete" id="finishState" href="javascript:;"></a>
+		</header>
+		<section style="margin-top:6.4rem;">
+			<ul class="set_list">
+				<li class="autoSwitchLanguager" id="colour"><i></i>RGB颜色</li>
+				<li class="autoSwitchLanguager" id="mode"><i></i>模式</li>
+				<li><i></i>OFF</li>
+			</ul>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Housekeeper");
+		initlan();
+		plus.plusReady(function(){
+            plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+            });
+            $(".set_list li").on("click",function(){
+                var index = $(this).index()
+                $(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+                if(index == 0) {
+					window.location = "device_D7_time_setColor.html";
+				} else if(index == 1) {
+					window.location = "device_D7_time_setMode.html";
+				} else {
+					info.setItem("epData","AA55050600");
+					info.setItem("deviceState",$(this).text());
+					window.location = "setDelay_timeTask.html";
+				}
+            })
+		})
+	</script>
+</html>

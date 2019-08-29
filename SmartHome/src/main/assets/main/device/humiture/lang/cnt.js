@@ -1,0 +1,36 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.addDevice_17_name = "溫濕度監測器";
+$lang.humiture_nowTemp = "當前溫度";
+$lang.humiture_nowHum = "當前濕度";
+$lang.offLine = "設備已離線";
+$lang.humiture_title_01 = "濕冷";
+$lang.humiture_title_02 = "偏冷";
+$lang.humiture_title_03 = "寒冷";
+$lang.humiture_title_04 = "乾冷";
+$lang.humiture_title_05 = "潮濕";
+$lang.humiture_title_06 = "舒適";
+$lang.humiture_title_07 = "乾燥";
+$lang.humiture_title_08 = "濕熱";
+$lang.humiture_title_09 = "偏熱";
+$lang.humiture_title_10 = "炎熱";
+$lang.humiture_title_11 = "乾熱";
+$lang.humiture_txt_01 = "註意保暖，建議除濕";
+$lang.humiture_txt_02 = "註意保暖";
+$lang.humiture_txt_03 = "防寒保暖，刻不容緩";
+$lang.humiture_txt_04 = "註意保暖，補充水分";
+$lang.humiture_txt_05 = "影響身體健康，建議除濕";
+$lang.humiture_txt_06 = "註意補充水分";
+$lang.humiture_txt_07 = "註意防暑降溫，建議除濕";
+$lang.humiture_txt_08 = "註意防暑降溫";
+$lang.humiture_txt_09 = "防暑降溫，刻不容緩";
+$lang.humiture_txt_10 = "註意防暑降溫，補充水分";
+$lang.humiture_title = "過去24小時溫濕度變化";
+$lang.humiture_toast = "通過賬號登錄後才可查看";
+$lang.history_temp = "溫度";
+$lang.history_hum = "濕度";
+$lang.Log = "日誌";
+$lang.Alarm = "報警消息";

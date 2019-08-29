@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>设置设备状态</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<a class="back" href="javascript:window.history.back(-1);"></a>
+			<a id="setDeviceState_tittle" class="autoSwitchLanguager" href="javascript:;">设置设备状态</a>
+			<a class="complete" id="finishState" href="javascript:;"></a>
+		</header>
+		<section style="margin-top:6.4rem;">
+			<ul class="set_list">
+				<li><b id="openSingle" class="autoSwitchLanguager">开</b><i></i></li>
+				<li><b id="closeSingle" class="autoSwitchLanguager">关</b><i></i></li>
+			</ul>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Housekeeper");
+		var arr = [];
+		initlan()
+		plus.plusReady(function(){
+            plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+            });
+		})
+		$(".set_list li").on("click",function(){
+			$(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+			info.setItem("deviceState",$(this).text())
+			if($(this).text() == lang_txt_close){
+				info.setItem("epData","0")
+			}else{
+				info.setItem("epData","1")
+			}
+			if(info.getItem("top") == "1"){
+				var data = {
+					"type":"2",
+					"object":info.getItem("deviceID")+">"+info.getItem("num")+">"+info.getItem("type"),
+					"name":info.getItem("deviceName"),
+					"deviceIcon":info.getItem("deviceIcon"),
+					"deviceState":$(this).text(),
+					"exp":"="+info.getItem("epData")
+				}
+				if(info.getItem("ldArr") == null){
+					arr.push(data)
+					info.setItem("ldArr",JSON.stringify(arr))
+				}else{
+					arr = JSON.parse(info.getItem("ldArr"));
+					arr.push(data)
+					info.setItem("ldArr",JSON.stringify(arr))
+				}
+				info.removeItem("deviceName")
+				info.removeItem("deviceIcon")
+				info.removeItem("deviceState")
+				info.removeItem("flag")
+				window.location = "circumstances.html"
+			}else{
+				window.location = "setDelay_sceneTask.html"
+			}
+		})
+	</script>
+</html>

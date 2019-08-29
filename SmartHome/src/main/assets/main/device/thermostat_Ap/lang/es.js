@@ -1,0 +1,53 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Device_Ap_Details_Name = "Controlador de calefacción";
+$lang.Device_Ap_Details_Temperature1 = "Habitación";
+$lang.Device_Ap_Details_Temperature2 = "Superficie";
+$lang.Device_Ap_Details_Time = "Tiempo";
+$lang.Device_Ap_Details_Open = "Power";
+$lang.Device_Ap_Details_Save = "Económico";
+$lang.Device_Ap_Details_Save1 = "Económico";
+$lang.Device_Ap_Details_Time1 = "On";
+$lang.Device_Ap_Details_Time2 = "Off";
+$lang.Device_Ap_Details_Time3 = "Editar";
+$lang.Device_Ap_Details_Time4 = "Activar";
+$lang.Device_Ap_Details_Time5 = "Cerrar";
+$lang.Device_Ap_Details_Time6 = "El tiempo de cuenta regresiva no puede ser 0";
+$lang.Device_Ap_Details_Time7 = "Hora";
+$lang.Device_Ap_Details_Time8 = "Min";
+$lang.Device_Ap_Details_Abnormal1 = "Anomalías del sensor interno del equipo， comuníquese con el personal， 4009-289-288.";
+$lang.Device_Ap_Details_Abnormal2 = "Anomalía del sensor externo del equipo， tres métodos para resolver:";
+$lang.Device_Ap_Details_Abnormal2_tips1 = "1. Si no necesita sensores externos， apague la protección de temperatura;";
+$lang.Device_Ap_Details_Abnormal2_tips2 = "2. Verifique los sensores externos conectados;";
+$lang.Device_Ap_Details_Abnormal2_tips3 = "3. Si los sensores externos se conectaron bien， también apareció la situación， póngase en contacto con el personal， 4009-289-288.";
+$lang.Device_Ap_Details_Abnormal3 = "Anomalías del sensor del equipo， póngase en contacto con el personal， 4009-289-288.";
+$lang.Device_Ap_Details_Prompt = "Pronto";
+$lang.Device_Ap_Details_Confirm = "Confirmar";
+$lang.Device_Ap_Details_Offline = "Dispositivo offline";
+$lang.Device_Ap_Details_System = "Sistema";
+$lang.Device_Ap_Details_System1 = "Electricidad";
+$lang.Device_Ap_Details_System2 = "Agua";
+$lang.Device_Ap_Details_System3 = "Cambiar a electricidad";
+$lang.Device_Ap_Details_System4 = "Cambiar a agua";
+$lang.Device_Ap_Details_Return = "Ajuste diferencial";
+$lang.Device_Ap_Details_Cancel = "Cancelar";
+$lang.Device_Ap_Details_Scale = "Formato Temperatura";
+$lang.Device_Ap_Details_Scale1 = "Celsius";
+$lang.Device_Ap_Details_Scale2 = "Fahrenheit";
+$lang.Device_Ap_Details_Sound = "Sonido Clic";
+$lang.Device_Ap_Details_Shock = "Vibrar ";
+$lang.Device_Ap_Details_Save = "Modo Económico";
+$lang.Device_Ap_Details_High_Protect = "Protección contra sobretemperatura";
+$lang.Device_Ap_Details_High_Protect_tips1 = "Después de desactivar la protección de sobrecalentamiento del suelo， existe el riesgo de sobrecalentamiento.";
+$lang.Device_Ap_Details_High_Protect_Value = "Temperatura";
+$lang.Device_Ap_Details_Low_Protect = "Protección contra heladas";
+$lang.Device_Ap_Details_Restore = "Restaurar la configuración de fábrica";
+$lang.Device_Ap_Details_Restore_tips = "Todos los ajustes se restablecen a la configuración de fábrica. ¿Está seguro?";
+$lang.moreSettingLog          = "Historial";
+$lang.moreSettingAlarm        = "Mensaje de alarma";
+$lang.Device_Ap_Details_Time_TIPS1 = "No se puede editar en estado abierto";
+$lang.Device_Ap_Details_Jiaozhun1 = "Calibración de temperatura interior";
+$lang.Device_Ap_Details_Jiaozhun2 = "Calibración de temperatura superficial";

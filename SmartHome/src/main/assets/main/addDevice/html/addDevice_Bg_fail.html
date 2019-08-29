@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!--<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />-->
+		<title>添加设备</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/setState.css"/>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:window.history.back(-1);"></a>
+				<a href="javascript:;" class="addDoorC autoSwitchLanguager" id="addDevice_Bg">添加洞庭湖网络锁</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="step_img">
+			<img src="../../skinSource/img/img_step5_01.png" alt="" />
+		</section>
+		<section class="step_main">
+			<img style="width: 50%;" src="../../source/addDeviceLock/gateway.png" alt="" />
+			<!--<p class="autoSwitchLanguager" key="gatewayAddDevice_fail">加网模式开启失败，请手动开启</p>-->
+			<!--<p class="explain autoSwitchLanguager" key="gatewayAddDevice_fail_01">加网模式开启失败，你可以手动打开加网模式，找到网关上 SET 键快速按4下。（如果您是首次启用添加新设备，可能设备正在建网，请三分钟后再试）</p>-->
+		</section>
+		<section class="step_main explain2">
+			<p class="explain3 autoSwitchLanguager" key="gatewayAddDevice_fail">加网模式开启失败，请手动开启</p>
+			<p style="margin-top: 1.6rem" class="explain openFail autoSwitchLanguager" key="gatewayAddDevice_fail_01">加网模式开启失败，你可以手动打开加网模式，找到网关上 SET 键快速按4下。（如果您是首次启用添加新设备，可能设备正在建网，请三分钟后再试）</p>
+		</section>
+		<section class="step_btn step_btn2">
+			<a style="bottom: 3rem" href="javascript:;" class="autoSwitchLanguager" id="addDoorContack1_nextStep" key="nextStep">下一步</a>
+			<a style="opacity: 0; display:none;" href="javascript:;"></a>
+		</section>
+	</body>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan();
+		plus.plusReady(function(){
+            plus.gatewayCmd.getCurrentGWInfo(function(data){
+                if(JSON.parse(data).gwType === "GW08"){
+                    $(".openFail").html(languageUtil.getResource("gatewayAddDevice_GW08fail_01"));
+                }else{
+                    $(".openFail").html(languageUtil.getResource("gatewayAddDevice_fail_01"));
+                }
+            });
+            $("#addDoorContack1_nextStep").unbind("click").on("click",function(){
+                if(decodeURI(getUrlParam("flag")) == "doorLockBgfail"){
+                    $(".addDoorC").html(lang_name_bc_01)
+                    window.location = "addDevice_Bg_02.html"
+                }
+            })
+		})
+	</script>
+</html>

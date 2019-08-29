@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginStart="@dimen/default_padding_large"
+        android:layout_marginEnd="@dimen/default_padding_large"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/widget_padding_vertical">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <cc.wulian.smarthomev6.support.customview.PinCodeView
+                    android:id="@+id/jzm_lock_pin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingStart="@dimen/widget_padding_horizontal"
+                    android:paddingEnd="@dimen/widget_padding_horizontal"
+                    app:pinCircleColor="@color/v6_text_dark"
+                    app:pinCount="6"/>
+
+                <TextView
+                    android:id="@+id/jzm_lock_text_toast"
+                    android:visibility="invisible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingStart="@dimen/widget_padding_horizontal"
+                    android:paddingEnd="@dimen/widget_padding_horizontal"
+                    android:gravity="center"
+                    android:background="@drawable/shape_home_widget_toast"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"
+                    tools:text=""/>
+
+                <EditText
+                    android:id="@+id/jzm_lock_edit_input_hide"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:cursorVisible="false"
+                    android:paddingStart="@dimen/widget_padding_horizontal"
+                    android:paddingEnd="@dimen/widget_padding_horizontal"
+                    android:paddingBottom="16dp"
+                    android:ems="6"
+                    android:maxEms="6"
+                    android:inputType="numberPassword"
+                    android:background="@drawable/shape_home_widget_lock_cheat"
+                    android:textColor="@color/transparent"
+                    android:textSize="@dimen/widget_secondary_text_size"
+                    tools:text="123456"/>
+            </FrameLayout>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/dialog_tv_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.5"
+            android:layout_marginBottom="@dimen/widget_padding_vertical"
+            android:textColor="@color/v6_text_red"
+            android:minLines="2"
+            android:gravity="center"
+            android:text="@string/Touch_ID_hint"
+            android:textSize="@dimen/mine_wl_text_size" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/rl_sensitive_low"
+        style="@style/device_setting_item"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_small"
+            android:text="@string/Low" />
+
+        <ImageView
+            android:id="@+id/iv_sensitive_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/icon_choose"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_sensitive_high"
+        style="@style/device_setting_item"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:text="@string/High"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/iv_sensitive_high"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/icon_choose"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,448 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>设备列表</title>
+    <script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <link rel="stylesheet" type="text/css" href="../css/base.css?v=1.1" />
+    <link rel="stylesheet" type="text/css" href="../css/scene.css" />
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+        .header_top a {
+            display: block;
+            float: left;
+            width: 13.7%;
+            height: 4.4rem;
+        }
+
+        .header_top a:nth-child(2) {
+            width: 63.3%;
+            padding-left: 9.3%;
+            text-align: center;
+            line-height: 4.4rem;
+            font-size: 1.6rem;
+            color: white;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        .header_top a:nth-child(3) {
+            width: 23%;
+            text-align: center;
+            line-height: 4.4rem;
+            font-size: 1.4rem;
+            box-sizing: border-box;
+            color: white;
+            -webkit-tap-highlight-color: transparent;
+            overflow:hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" style="position:fixed;left:0;top:0;width: 100%;z-index: 1000;padding-bottom: 2.3rem;">
+        <div class="header_top">
+            <a href="javascript:;" class="back"></a>
+            <a href="javascript:;" key="addDevice" class="autoSwitchLanguager">添加设备</a>
+            <a id="batchAdd" key="Add_in_batches" class="autoSwitchLanguager" href="javascript:;">批量</a>
+        </div>
+    </header>
+    <section class="get_list iphoneXList" style="padding-top:6.4rem;">
+        <div class="zone">
+            <div class="zoneMain">
+                <div class="room"><i class="zoneIcon autoSwitchLanguager" id="device_list_allAreas">全部分区</i></div>
+                <div class="className"><i class="zoneIcon autoSwitchLanguager" id="device_list_Categories">全部类别</i></div>
+            </div>
+            <div class="zoneList">
+                <nav class="zoneHide zoneOne">
+                    <!--<li>全部</li>-->
+                    <!--<li>测试区域2</li>-->
+                    <!--<li>ces</li>-->
+                    <!--<li>办公区</li>-->
+                    <!--<li>测试123</li>-->
+                    <!--<li>会议室1</li>-->
+                    <!--<li>大礼堂</li>-->
+                    <!--<li>大展架</li>-->
+                </nav>
+                <nav class="zoneHide zoneTwo">
+                    <!--<li data-id="0">全部类别</li>-->
+                    <!--<li data-id="1">智能门锁</li>-->
+                    <!--<li data-id="2">摄像机</li>-->
+                    <!--<li data-id="3">开关照明</li>-->
+                    <!--<li data-id="4">插座</li>-->
+                    <!--<li data-id="5">安防设备</li>-->
+                    <!--<li data-id="6">环境监测</li>-->
+                    <!--<li data-id="7">窗帘</li>-->
+                    <!--<li data-id="8">智能遥控</li>-->
+                    <!--<li data-id="9">中继器</li>-->
+                    <!--<li data-id="10">控制器</li>-->
+                    <!--<li data-id="11">背景音乐</li>-->
+                    <!--<li data-id="12">健康管理</li>-->
+                    <!--<li data-id="13">家用电器</li>-->
+                </nav>
+            </div>
+        </div>
+        <ul class="device-list" style="">
+            <!--<li data-num="1" data-category="3" data-id="41D1680F004B1200" data-type="At"-->
+            <!--data-src="../../source/deviceIcon/device_icon_At.png"><a href="setSwitch.html"><i class="left"-->
+            <!--style="background:url(../../source/deviceIcon/device_icon_At.png) no-repeat center center;background-size:4.75rem auto;padding-left: 4%"></i>-->
+            <!--<div class="right"><p>内嵌式二路开关</p>    <br> <em>在线</em> <span class="roomName">[测试区域2]</span></div>-->
+            <!--</a></li>-->
+            <!--<li data-num="1" data-category="3" data-id="840B1A05004B1200" data-type="90"-->
+            <!--data-src="../../source/deviceIcon/device_icon_90.png"><a href="setColorfulLight_90.html"><i class="left"-->
+            <!--style="background:url(../../source/deviceIcon/device_icon_90.png) no-repeat center center;background-size:4.75rem auto;padding-left: 4%"></i>-->
+            <!--<div class="right"><p>彩灯</p>    <br> <em>在线</em> <span class="roomName">[未分区]</span></div>-->
+            <!--</a></li>-->
+        </ul>
+        <div class="no_list autoSwitchLanguager" key="noDevice" id="not_device">没有可选择的设备</div>
+    </section>
+</body>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/js/getCategoryList.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Scene");
+    var reFlag;
+    initlan();
+    plus.plusReady(function () {
+        if (reFlag) return;
+        reFlag = true;
+        window.categoryList = getCategoryList();
+        for (var j in categoryList) {
+            var categoryStr = '<li data-id="' + categoryList[j].type + '">' + categoryList[j].name + '</li>';
+            $(".zoneTwo").append(categoryStr);
+        }
+        plus.gatewayCmd.androidBack(function () {
+            goBack();
+        });
+        plus.gatewayCmd.getGroupList(function (result) {
+            console.log(result);
+            $(".zoneOne").html("<li id=''>" + lang_allAreas + "</li><li id='0'>" + lang_group + "</li>");
+            for (var i in result) {
+                var str = '<li id="' + result[i].roomID + '">' + result[i].name + '</li>';
+                $(".zoneOne").append(str);
+            }
+            $(".zoneMain div").on("click", function (e) {
+                e.stopPropagation();
+                var index = $(this).index();
+                if ($(".zoneList nav").eq(index).css("display") == "block") {
+                    $(".zoneList").hide();
+                    $(".zoneList nav").eq(index).hide();
+                    $(this).find(".zoneIcon").css({
+                        "background": "url(../fonts/icon_down.png) no-repeat right center",
+                        "background-size": "1.4rem auto"
+                    })
+                } else {
+                    $(".zoneList").show();
+                    $(".zoneList nav").eq(index).show().siblings().hide();
+                    $(this).find(".zoneIcon").css({
+                        "background": "url(../fonts/icon_up.png) no-repeat right center",
+                        "background-size": "1.4rem auto"
+                    }).parent().siblings().find(".zoneIcon").css({
+                        "background": "url(../fonts/icon_down.png) no-repeat right center",
+                        "background-size": "1.4rem auto"
+                    })
+                }
+            });
+            $(document).on("click", function () {
+                $(".zoneList").hide();
+                $(".zoneList nav").hide();
+                $(".zoneMain div").find("i").css({
+                    "background": "url(../fonts/icon_down.png) no-repeat right center",
+                    "background-size": "1.4rem auto"
+                })
+            });
+        });
+        plus.gatewayCmd.getDeviceList(function (data) {
+            if (data.length > 0) {
+                $(".get_list ul").html('')
+                var name = '';
+                var icon = '';
+                var stateUrl = '';
+                var nameList = [];
+                console.log(data);
+                for (var i = 0; i < data.length; i++) {
+                    if (window.deviceList[data[i].type]) {
+                        name = data[i].name.indexOf("#$default$#") != -1 ? window.deviceList[data[i].type]
+                            .name + data[i].name.split("#")[2] : data[i].name;
+                        icon = window.deviceList[data[i].type].icon;
+                        stateUrl = window.deviceList[data[i].type].stateUrl;
+                        if (!(data[i].relationFlag == '2' || data[i].relationFlag == '3' || data[i].isShared ==
+                                true)) {
+                            modeTest(i, data, name, icon, stateUrl)
+                        }
+                        if (data[i].type == "At" ||
+                            data[i].type == "62" ||
+                            data[i].type == "63" ||
+                            data[i].type == "64" ||
+                            data[i].type == "A1" ||
+                            data[i].type == "B9" ||
+                            data[i].type == "Aj" ||
+                            data[i].type == "61" ||
+                            data[i].type == "Ao" ||
+                            data[i].type == "An" ||
+                            data[i].type == "Am" ||
+                            data[i].type == "Bu" ||
+                            data[i].type == "Bv" ||
+                            data[i].type == "Bw" ||
+                            data[i].type == "Cl" ||
+                            data[i].type == "Cm" ||
+                            data[i].type == "Cn"
+                        ) {
+                            nameList = [];
+                            var translatorNameList = [];
+                            var translatorNumberList = [];
+                            if (data[i].endpoints) {
+                                var endpoints = data[i].endpoints;
+                                for (var j in endpoints) {
+                                    var endpointName = endpoints[j].endpointName ? endpoints[j].endpointName :
+                                        device_switch + endpoints[j].endpointNumber;
+                                    nameList.push(endpointName);
+                                    translatorNameList.push(endpointName);
+                                    translatorNumberList.push(endpoints[j].endpointNumber);
+                                }
+                            }
+                            if (data[i].type == "B9") {
+                                info.setItem("endpointNameList" + data[i].devID, JSON.stringify(
+                                    translatorNameList));
+                                info.setItem("translatorNumberList" + data[i].devID, JSON.stringify(
+                                    translatorNumberList));
+                            } else {
+                                info.setItem("epNameList" + data[i].devID, JSON.stringify(nameList));
+                            }
+                            if (data[i].type == "Ao" ||
+                                data[i].type == "An" ||
+                                data[i].type == "Am" ||
+                                data[i].type == "Bv" ||
+                                data[i].type == "Bu" ||
+                                data[i].type == "Bw" ||
+                                data[i].type == "Cl" ||
+                                data[i].type == "Cm" ||
+                                data[i].type == "Cn") {
+                                plus.gatewayCmd.getDeviceInfo(data[i].devID, function (result) {
+                                    if (result) {
+                                        for (var i in result.endpoints) {
+                                            if (result.endpoints[i].endpointNumber == 1) {
+                                                if (result.endpoints[i].endpointType !== 2) {
+                                                    info.setItem("lockThree" + result.devID, 1 +
+                                                        "非");
+                                                } else {
+                                                    info.setItem("lockThree" + result.devID, 1 +
+                                                        "正");
+                                                }
+                                            } else if (result.endpoints[i].endpointNumber == 2) {
+                                                if (result.endpoints[i].endpointType !== 2) {
+                                                    info.setItem("locktwo" + result.devID, 2 +
+                                                        "非");
+                                                } else {
+                                                    info.setItem("locktwo" + result.devID, 2 +
+                                                        "正");
+                                                }
+                                            } else if (result.endpoints[i].endpointNumber == 3) {
+                                                if (result.endpoints[i].endpointType !== 2) {
+                                                    info.setItem("lockone" + result.devID, 3 +
+                                                        "非");
+                                                } else {
+                                                    info.setItem("lockone" + result.devID, 3 +
+                                                        "正");
+                                                }
+                                            }
+
+                                        }
+                                    }
+
+                                });
+                            }
+                        } else if (data[i].type == "Aw") {
+                            var endpoints = data[i].endpoints;
+                            endpoints.forEach(function (endpoint) {
+                                var endpointNum = endpoint.endpointNumber;
+                                if (endpointNum == 1) {
+                                    var clusters = endpoint.clusters;
+                                    clusters.forEach(function (cluster) {
+                                        var attributes = cluster.attributes;
+                                        attributes.forEach(function (attribute) {
+                                            var attributeId = attribute.attributeId;
+                                            var attributeValue = attribute.attributeValue;
+                                            if (attributeId == 2) {
+                                                // 1：电铃模式  0：开关模式
+                                                info.setItem("AwMode" + data[i]
+                                                    .devID, attributeValue);
+                                            }
+                                        })
+                                    })
+                                }
+                            });
+                        }
+                    }
+                }
+                var text = (info.getItem("roomID") == "undefined" || info.getItem("roomID") == null) ?
+                    "" : info.getItem("roomID");
+                var category = (info.getItem("categoryID") == "undefined" || info.getItem("categoryID") ==
+                    null) ? "0" : info.getItem("categoryID");
+                var zoneName = (info.getItem("zoneName") == null) ? lang_allAreas : info.getItem(
+                    "zoneName");
+                var categoryText = (info.getItem("categoryName") == null) ? lang_categories : info.getItem(
+                    "categoryName");
+                $(".device-list li").hide();
+                filterRoom(text, category);
+                $(".room").find("i").text(zoneName);
+                $(".className").find("i").text(categoryText);
+                $(".zoneOne li").on("click", function () {
+                    $(".room").find("i").text($(this).text());
+                    text = $(this).attr("id");
+                    zoneName = $(this).text();
+                    $(".device-list li").hide();
+                    filterRoom(text, category);
+                });
+                $(".zoneTwo li").on("click", function () {
+                    $(".className").find("i").text($(this).text());
+                    category = $(this).attr("data-id");
+                    categoryText = $(this).text();
+                    $(".device-list li").hide();
+                    filterCategory(text, category);
+                });
+                $(".get_list ul li").on("click", function (event) {
+                    var deviceId = $(this).attr("data-id");
+                    var _this = $(this);
+                    plus.gatewayCmd.isDeviceDisalbe(deviceId,function(data){
+                        if(data === "YES"){
+                            alert(languageUtil.getResource("device_device_Disable"));//"您的设备已被禁止使用，请与售卖经销商联系"
+                        }else{
+                            var value = $(_this).find("p").html();
+                            info.setItem("deviceName", value);
+                            info.setItem("deviceID", deviceId);
+                            info.setItem("deviceIcon", "url(" + $(_this).attr('data-src') + ")");
+                            info.setItem("num", $(_this).attr("data-num"));
+                            info.setItem("type", $(_this).attr("data-type"));
+                            var type = $(_this).attr("data-type");
+                            info.setItem("editUrl", $(_this).attr("data-aSrc"));
+                            //保存分区及类别
+                            info.setItem("roomID", text);
+                            info.setItem("categoryID", category);
+                            info.setItem("zoneName", zoneName);
+                            info.setItem("categoryName", categoryText);
+
+                            if (type == "XW01" || type == "CMICA2" || type == "CMICA3" ||
+                                type == "CMICA4" || type == "CMICA5" || type == "CMICA6" ||
+                                type == "HS05" || type == "IF02") {
+                                info.setItem("roomName", "");
+                            } else {
+                                info.setItem("roomName", $(_this).find("span").html().split("[")[1].split(
+                                    "]")[0])
+                            }
+
+                            if (type == "22" || type == "23" || type == "24" || type == "IF02") {
+                                var param = {
+
+                                    "deviceId": info.getItem("deviceID"),
+                                    "deviceName": info.getItem("deviceName"),
+                                    "deviceIcon": info.getItem("deviceIcon"),
+                                    "num": info.getItem("num"),
+                                    "type": info.getItem("type"),
+                                    "roomName": info.getItem("roomName")
+                                };
+                                plus.tools.infraredSceneOrHouseKepper(param, function (data) {
+
+                                });
+                            }else{
+                                var aSrc = $(_this).attr("data-aSrc");
+                                window.location = aSrc;
+                            }
+                        }
+                    });
+                })
+            } else {
+                $(".no_list").show()
+            }
+        })
+
+        function modeTest(i, data, name, icon, stateUrl) {
+            var modeState = ''
+            if (data[i].mode == "3") {
+                //					modeState = "设备主动退网"
+            } else {
+                var room = (data[i].roomName == undefined || data[i].roomName == '') ? lang_group : data[i].roomName
+                room = '[' + room + ']';
+                var roomID = (data[i].roomID == undefined || data[i].roomID == '') ? "0" : data[i].roomID
+                if (data[i].mode == "2") {
+                    modeState = lang_offLine;
+                } else {
+                    modeState = lang_onLine;
+                }
+                if (data[i].type == "Ad" || data[i].type == "C0") {
+                    for (var j = 0; j < data[i].endpoints.length; j++) {
+                        if (data[i].endpoints[j].clusters[0].clusterId == 1280) {
+                            createList(name, icon, modeState, room, stateUrl, data[i].endpoints[j].endpointNumber,
+                                data[i].devID, data[i].type, data[i].cat, roomID)
+                        }
+                    }
+                } else if (data[i].type == "CMICA2" || data[i].type == "CMICA3" || data[i].type == "CMICA4" ||
+                    data[i].type == "CMICA5" || data[i].type == "CMICA6" || data[i].type == "XW01" || data[i].type ==
+                    "HS05" || data[i].type == "IF02") {
+                    createList(name, icon, modeState, ' ', stateUrl, 1, data[i].devID, data[i].type, data[i].cat,
+                        roomID)
+                } else {
+                    createList(name, icon, modeState, room, stateUrl, data[i].endpoints[0].endpointNumber, data[
+                        i].devID, data[i].type, data[i].cat, roomID)
+                }
+            }
+        }
+
+        $(".back").on("click", function () {
+            goBack();
+        })
+
+        function goBack() {
+            info.setItem("flag", "0")
+            //				window.history.back(-1)
+            if(info.getItem("sourcePage") === "recommend"){
+                window.location = "recommendScene.html?addTask=true"
+            }else{
+                window.location = "editScene.html?addTask=true"
+            }
+        }
+
+        function createList(name, src, mode, area, aSrc, endpNum, devID, type, category, roomID) {
+            var str = '<li data-num="' + endpNum + '" data-id="' + devID + '" data-type="' + type +
+                '" data-src="' + src + '" data-category="' + category + '" data-aSrc="' + aSrc + '">' +
+                '<a href="javascript:;">' +
+                '<i class="left" style="background:url(' + src +
+                ') no-repeat center center;background-size:4.75rem auto;padding-left: 4%"></i>' +
+                '<div class="right">' +
+                '	<p>' + name + '</p>' +
+                '	<br />' +
+                '	<em>' + mode + '</em>' +
+                '	<span class="roomName" data-room="' + roomID + '">' + area + '</span>' +
+                '</div>' +
+                '</a>' +
+                '</li>'
+            //				if(type == "At"){
+            //				    str = '<li data-name2="' + name2 + '" data-name1="' + name1 + '" data-num="' + endpNum + '" data-id="' + devID + '" data-type="' + type + '"><a href="' + aSrc + '"><i class="left" style="background:url(' + src + ') no-repeat center center;background-size:4.75rem auto;"></i><div class="right"><p>' + name + '</p><br /><em>' + mode + '</em><span>[' + area + ']</span></div></a></li>'
+            //				}
+            $(".get_list ul").append(str)
+
+        }
+
+        plus.gatewayCmdRush.infraredCallBack(function (data) {
+            var deviceState = data.deviceState;
+            var deviceEpData = data.deviceEpData;
+            info.setItem("deviceState", deviceState);
+            info.setItem("epData", deviceEpData);
+            window.location = "addDelay.html";
+        })
+    })
+
+    // 批量添加
+    $("#batchAdd").on("click", function () {
+        window.location = "batchAdd_deviceList.html";
+    })
+</script>
+
+</html>

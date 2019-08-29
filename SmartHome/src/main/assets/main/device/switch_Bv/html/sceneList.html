@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<!--更多——>选择场景模式-->
+<html>
+
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+		<meta name="format-detection" content="telephone=no">
+		<meta charset="UTF-8">
+		<title key="chooseScene_js_01"></title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../../../source/mui/css/mui.min.css" />
+		<script type="text/javascript" src="../../../source/mui/js/mui.min.js"></script>
+		<link rel="stylesheet" href="../css/sceneRelate.css">
+		<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/toast.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/sceneList.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../../skinSource/css/skin.css" />
+	</head>
+
+	<body>
+		<header class="header" style="position: fixed;">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" href="javascript:;" key="chooseScene">选择场景</a>
+				<a id="bindingScene" class="autoSwitchLanguager" style="display: none;" key="device_Bv_Confirm">完成</a>
+			</div>
+		</header>
+		<div style="background: #efeff4;width: 100%;height: 15px;float: left;margin-top:6.4rem;"></div>
+		<section id="sceneView">
+			<div id="chooseTapCount">
+				<p data-curindex="" class="autoSwitchLanguager tapCountItemChoose" key="Press_once"></p>
+				<p data-curindex="1" class="autoSwitchLanguager" key="Press_twice"></p>
+			</div>
+			<div id="twiceDescribe" class="autoSwitchLanguager" key="Press_twice_hint" style="display:none;padding:0 4%;color:#666;">时间间隔小于1秒</div>
+			<div id="divSceneList" style="width: 100%;background-color: #efeff4;height: 100%;padding-top: 1px;margin-top: 1px;">
+
+			</div>
+		</section>
+		<section class="emptyView" style="display:none;">
+			<div style="width:100%;">
+				<img src="../fonts/icon_empty.png">
+			</div>
+			<span id="container" class="autoSwitchLanguager" key='device_34_NoScene'></span>
+		</section>
+		<section id="fail" class="toast" style="display:none;">
+			<p class="autoSwitchLanguager" id="toastText"></p>
+		</section>
+	</body>
+	<script type="text/javascript">
+		initlan(function() {
+
+		});
+		var epNum;
+		var gwID;
+		var devID;
+		var appID;
+		var pageMode;
+		var isSaving = 2;
+		var isSearch = false;
+        var isCompating = false;
+        var epNumPrefix = "";
+		var sl_sceneId1 = "";
+        var sl_sceneId2 = "";
+
+		var info = window.sysfun;
+		info.init("device_Bw");
+
+		plus.plusReady(function() {
+			isCompating = false;
+            plus.gatewayCmd.getDeviceInfo('',function (result) {
+				appID = result.appID;
+				deviceInfo = result;
+				endpointNumber = result.endpoints[0].endpointNumber;
+				devID = result.devID;
+				gwID = result.gwID;
+				epNum = decodeURI(getUrlParam("epNum"));
+                sl_sceneId1 = decodeURI(getUrlParam("sceneID"));
+                if (isNull(sl_sceneId1) ) {
+                    sl_sceneId1 = ""
+                }
+                sl_sceneId2 = decodeURI(getUrlParam("sceneID_D"));
+                if (isNull(sl_sceneId2) ) {
+                    sl_sceneId2 = ""
+				}
+				pageMode = decodeURI(getUrlParam("pageMode"));
+
+
+                bindingSceneid = sl_sceneId1;
+
+				//注册
+				rush_500(devID, gwID);
+				plus.gatewayCmd.getSceneList(function(result) {
+                    if(result.length !== 0){
+                        $("#sceneView").show();
+                        $(".emptyView").hide();
+                        $(".sure").show();
+
+                        createSceneList(result);
+
+                        if(bindingSceneid != null && bindingSceneid != "null") {
+
+                            chooseSceneid = bindingSceneid;
+                        } else {
+                            if(arrSceneid.length > 0) {
+                                chooseSceneid = arrSceneid[0];
+                            }
+                        }
+                        selectItem(chooseSceneid);
+                        //查询
+                        //					check();
+                        bindClick();
+					} else {
+                        $("#sceneView").hide();
+                        $(".emptyView").show();
+                        $(".sure").hide();
+					}
+				})
+			});
+		});
+
+		function closePage() {
+			if(pageMode == "0") {
+                javascript: history.go(-1);
+			}
+			else {
+				plus.tools.back(function() {});
+			}
+		}
+		document.getElementById("back").addEventListener("click", function() {
+			closePage();
+		});
+
+		function bindClick() {
+			$("#bindingScene").on("click", function() {
+
+				// if(chooseSceneid != null && chooseSceneid != undefined && chooseSceneid != "") {
+					if(isCompating == false) {
+						isCompating = true;
+						showTimeOutCallBack(lang_time_out, function() {
+							isCompating = false;
+						});
+						console.log("开始绑定");
+                        createToast(switch_Ao_Saving); //"正在绑定"
+						//需要判断每个端口是绑定还是解绑
+						bind(chooseSceneid);
+                        bindOtherEp();
+					}
+
+				// }
+			});
+		}
+
+		/*
+		 * 绑定场景
+		 */
+		function bind(chooseSceneid) {
+
+			if(epNum == "null" || epNum == undefined || epNum == null) {
+				epNum = info.getItem("epNum");
+			}
+
+			var epNum_b = epNumPrefix+epNum;
+
+			if (isNull(chooseSceneid)){
+                unbind(epNum_b);
+                return;
+			}
+
+			var jsonData = {
+				"cmd": "513",
+				"gwID": gwID,
+				"devID": devID,
+				"appID": appID,
+				"mode": 1,
+				"data": [{ "endpointNumber": epNum_b, "sceneID": chooseSceneid }]
+			};
+			sendCmd(jsonData);
+			shaoshi();
+		}
+        function bindOtherEp() {
+            if(epNum == "null" || epNum == undefined || epNum == null) {
+                epNum = info.getItem("epNum");
+            }
+
+            var sceneId = '';
+            var epNum_b = epNum;
+            if (epNumPrefix == ''){
+                sceneId = sl_sceneId2;
+                epNum_b = '1'+epNum;
+			} else {
+                sceneId = sl_sceneId1;
+			}
+
+            if (isNull(sceneId)){
+                unbind(epNum_b);
+                return;
+            }
+
+            var jsonData = {
+                "cmd": "513",
+                "gwID": gwID,
+                "devID": devID,
+                "appID": appID,
+                "mode": 1,
+                "data": [{ "endpointNumber": epNum_b, "sceneID": sceneId }]
+            };
+            sendCmd(jsonData);
+            shaoshi();
+        }
+
+		/*
+		 * 解除绑定
+		 */
+		function unbind(epNum_b) {
+
+			createToast(switch_Ao_Saving);
+
+			var jsonData = {
+				"cmd": "513",
+				"gwID": gwID,
+				"devID": devID,
+				"appID": appID,
+				"mode": 3,
+				"data": [{ "endpointNumber": epNum_b}]
+			};
+			sendCmd(jsonData);
+			shaoshi();
+		}
+
+		/*
+		 * 查询绑定
+		 */
+		function check() {
+			isSearch = true;
+			var jsonData = {
+				"cmd": "514",
+				"gwID": gwID,
+				"devID": devID
+			};
+			sendCmd(jsonData);
+		}
+
+		/*
+		 * 设备控制
+		 */
+		function sendCmd(jsonData) {
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result" + result);
+			})
+		}
+
+		function rush_500(dID, gID) {
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				console.log("newDataRefresh result=####" + result.cmd);
+				var isright = result != null &&
+					result != undefined &&
+					result.devID == devID;
+				if(isright) {
+					isright = result.data != null &&
+						result.data != undefined &&
+						result.data.length > 0;
+					if(result.cmd == "513") { //设置
+						if(isright && isSaving) {
+							$(".comToast").hide();
+							isSaving--;
+							if(isSaving == 0) {
+                                showDialog.show(saveSuccessful, 1000,function() {
+									closePage();
+								});
+							}
+						}
+					}
+				}
+
+			})
+		}
+
+		function toastShow(msg) {
+		    window.showDialog.show(msg,2000);
+		}
+
+		function shaoshi() {
+			setTimeout(function() {
+				isSaving = false;
+				$(".comToast").hide();
+                window.showDialog.show(lang_time_out,2000);
+			}, 60000)
+		}
+
+        $('#chooseTapCount p').on('click', function () {
+            epNumPrefix = $(this).data('curindex');
+
+
+            var imgid="sceneChoose_"+chooseSceneid;
+            document.getElementById(imgid).style.visibility="hidden";
+
+            if (epNumPrefix == '1'){
+                sl_sceneId1 = chooseSceneid;
+                chooseSceneid = sl_sceneId2;
+                $("#twiceDescribe").show();
+			} else {
+                sl_sceneId2 = chooseSceneid;
+                chooseSceneid = sl_sceneId1;
+                $("#twiceDescribe").hide();
+			}
+            selectItem(chooseSceneid);
+
+            el = $(this);
+            $('#chooseTapCount p').each(function () {
+                var index = $(this).data('curindex');
+				if (epNumPrefix == index){
+                    $(this).addClass('tapCountItemChoose');
+				} else {
+                    $(this).removeClass('tapCountItemChoose');
+				}
+            });
+        });
+
+	</script>
+
+</html>

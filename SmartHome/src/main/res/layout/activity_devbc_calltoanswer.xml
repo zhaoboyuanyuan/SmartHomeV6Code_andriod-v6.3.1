@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <ImageView android:id="@+id/iv_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/icon_bc_callbg"
+        android:scaleType="fitXY"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center">
+        <TextView android:id="@+id/txtDevName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="******"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/white"/>
+        <TextView android:id="@+id/txtdesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Cateyemini_Title_Doorbellcalls"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_below="@+id/txtDevName"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true">
+        <RelativeLayout android:id="@+id/layoutCallHangUp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <ImageView android:id="@+id/callhangUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_cateye_ring_hangup1"/>
+            <TextView android:id="@+id/txtHangUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/callhangUp"
+                android:text="@string/CateEye_Ring_Hangup"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"/>
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/layoutCallAnswer"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <ImageView android:id="@+id/callAnswer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_cateye_ring_connect"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerInside"/>
+            <TextView android:id="@+id/txtAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/callAnswer"
+                android:text="@string/CateEye_Ring_Connect"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

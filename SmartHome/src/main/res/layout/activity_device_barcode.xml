@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/rl_barcode_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/config_barcode_tips"
+            android:layout_marginTop="@dimen/default_padding_large"
+            android:layout_centerHorizontal="true"
+            style="@style/config_wifi_text"
+            android:paddingLeft="@dimen/default_padding_small"
+            android:paddingRight="@dimen/default_padding_small"
+            android:gravity="center"
+            android:text="@string/Config_Barcode_Tips"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/ll_barcode"
+            android:background="@color/white"
+            android:layout_marginTop="@dimen/default_padding_large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/default_padding_large"
+            android:layout_marginRight="@dimen/default_padding_large"
+            android:layout_below="@+id/config_barcode_tips"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/default_padding_small">
+
+            <ImageView
+                android:id="@+id/iv_barcode"
+                android:layout_width="260dp"
+                android:layout_height="260dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/Config_Barcode_Link"
+                android:scaleType="centerCrop" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_help"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_next_step"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:onClick="onClick"
+            android:text="@string/Config_No_Voice"
+            android:textColor="#474549"
+            android:textSize="@dimen/default_text_size" />
+
+        <Button
+            android:id="@+id/btn_next_step"
+            style="@style/config_next_button"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/config_device_btn_height"
+            android:text="@string/Config_Next_Step" />
+    </RelativeLayout>
+
+</LinearLayout>

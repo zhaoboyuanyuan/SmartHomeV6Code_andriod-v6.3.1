@@ -1,0 +1,246 @@
+@charset "utf-8";
+
+.device_list{
+    width:100%;
+    overflow: scroll;
+    position: relative;
+}
+.device_list a{
+    display:block;
+    width:92%;
+    height:4.4rem;
+    padding:0.5rem 4%;
+    background:#fff;
+    border-bottom:1px solid #eee;
+}
+.device_list a i,.device_list a span{
+    float:left;
+    display:block;
+    height:4.4rem;
+}
+.device_list a i{
+    width:15%;
+}
+.device_list a span{
+    width:85%;
+    line-height:4.4rem;
+    color:#333;
+    font-size:1.5rem;
+}
+.device_list a:nth-child(1) i{
+    background:url(../../source/deviceIcon/device_icon_GW01.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list a:nth-child(2) i{
+    background:url(../../source/deviceIcon/device_icon_GW06.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list a:nth-child(3) i{
+    background:url(../../source/deviceIcon/device_icon_GW06.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list a:nth-child(4) i{
+    background:url(../../source/deviceIcon/device_icon_GW09.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list a:nth-child(5) i{
+    background:url(../../source/deviceIcon/device_icon_GW11.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list1 a i{
+    background:none;
+}
+.device_list1 a:nth-child(1) i{
+    background:url(../../source/deviceIcon/device_icon_07.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list1 a:nth-child(2) i{
+    background:url(../../source/deviceIcon/device_icon_07.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list1 a:nth-child(3) i{
+    background:url(../../source/deviceIcon/device_icon_Bc.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list1 a:nth-child(4) i{
+    background:url(../../source/deviceIcon/device_icon_Bc.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list1 a:nth-child(5) i{
+    background:url(../../source/deviceIcon/device_icon_Bc.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list1 a:nth-child(6) i{
+    background:url(../../source/deviceIcon/device_icon_OP.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list1 a:nth-child(7) i{
+    background:url(../../source/deviceIcon/device_icon_OW.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list1 a:nth-child(8) i{
+    background:url(../../source/deviceIcon/device_icon_Bg.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list2 a i{
+    background:none;
+}
+.device_list2 a:nth-child(1) i{
+    background:url(../../source/deviceIcon/device_icon_CMICA2.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list2 a:nth-child(2) i{
+    background:url(../../source/deviceIcon/device_icon_CMICA3.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list2 a:nth-child(3) i{
+    background:url(../../source/deviceIcon/device_icon_CMICA1.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list2 a:nth-child(4) i{
+    background:url(../../source/deviceIcon/device_icon_CMICY1.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list2 a:nth-child(5) i{
+    background:url(../../source/deviceIcon/device_icon_CMICA4.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list2 a:nth-child(6) i{
+    background:url(../../source/deviceIcon/device_icon_CMICA5.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+
+.device_list3 a i{
+    background:none;
+}
+.device_list3 a:nth-child(1) i{
+    background:url(../../source/deviceIcon/device_icon_37.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list3 a:nth-child(2) i{
+    background:url(../../source/deviceIcon/device_icon_Aj.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list3 a:nth-child(3) i{
+    background:url(../../source/deviceIcon/device_icon_Am.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list3 a:nth-child(4) i{
+    background:url(../../source/deviceIcon/device_icon_An.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list3 a:nth-child(5) i{
+    background:url(../../source/deviceIcon/device_icon_Ao.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list3 a:nth-child(6) i{
+    background:url(../../source/deviceIcon/device_icon_At.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list3 a:nth-child(12) i{
+    background:url(../../source/deviceIcon/device_icon_52.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list3 a:nth-child(13) i{
+    background:url(../../source/deviceIcon/device_icon_54.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list3 a:nth-child(14) i{
+    background:url(../../source/deviceIcon/device_icon_55.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list4 a i{
+    background:none;
+}
+.device_list4 a:nth-child(1) i{
+    background:url(../../source/deviceIcon/device_icon_50.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+
+.device_list5 a i{
+    background:none;
+}
+.device_list5 a:nth-child(1) i{
+    background:url(../../source/deviceIcon/device_icon_Ar.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list5 a:nth-child(2) i{
+    background:url(../../source/deviceIcon/device_icon_80.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list5 a:nth-child(3) i{
+    background:url(../../source/deviceIcon/device_icon_65.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list5 a:nth-child(4) i{
+    background:url(../../source/deviceIcon/device_icon_81.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list5 a:nth-child(5) i{
+    background:url(../../source/deviceIcon/device_icon_Bh.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+
+.device_list6 a i{
+    background:none;
+}
+.device_list6 a:nth-child(1) i{
+    background:url(../../source/deviceIcon/device_icon_03.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list6 a:nth-child(2) i{
+    background:url(../../source/deviceIcon/device_icon_43.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list6 a:nth-child(3) i{
+    background:url(../../source/deviceIcon/device_icon_06.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list6 a:nth-child(4) i{
+    background:url(../../source/deviceIcon/device_icon_02.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list6 a:nth-child(5) i{
+    background:url(../../source/deviceIcon/device_icon_09.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list6 a:nth-child(6) i{
+    background:url(../../source/deviceIcon/device_icon_09_01.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list6 a:nth-child(7) i{
+    background:url(../../source/deviceIcon/device_icon_43_01.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list6 a:nth-child(8) i{
+    background:url(../../source/deviceIcon/device_icon_04.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list6 a:nth-child(9) i{
+    background:url(../../source/deviceIcon/device_icon_01.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list6 a:nth-child(10) i{
+    background:url(../../source/deviceIcon/device_icon_A6.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list6 a:nth-child(11) i{
+    background:url(../../source/deviceIcon/device_icon_A5.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list7 a:nth-child(1) i{
+    background:url(../../source/deviceIcon/device_icon_23.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list8 a:nth-child(1) i{
+    background:url(../../source/deviceIcon/device_icon_31.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list9 a:nth-child(1) i{
+	background:url(../../source/deviceIcon/device_icon_42.png) no-repeat left center;
+    background-size:3.8rem auto;
+}
+.device_list9 a:nth-child(2) i{
+    background:url(../../source/deviceIcon/device_icon_17.png) no-repeat left center;
+    background-size:3.8rem auto;
+}

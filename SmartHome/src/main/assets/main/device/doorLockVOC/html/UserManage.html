@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/device.css"/>
+    <script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/more.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../../skinSource/css/skin.css"/>
+    <script src="../../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body style="background:#f1f4f8 ;overflow-x: hidden">
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a id="device_70_User_Management" class="deviceName autoSwitchLanguager" href="javascript:;"></a>
+    </div>
+</header>
+
+<section>
+    <div style="margin: 2rem 2rem">
+        <span key = "device_70_set_name_hint" class="autoSwitchLanguager" style="color: #909192">在门锁上新增用户指纹或卡片后，请先进行一次开锁操作，信息会同步到下方列表，您可为其设置昵称</span>
+    </div>
+</section>
+
+<div class="noUserTips">
+    <span class="autoSwitchLanguager" key = "device_70_no_user">暂无用户信息</span>
+</div>
+
+<section>
+    <ul class="userManage" style="background: white;overflow-x: hidden">
+    </ul>
+</section>
+
+<section class="changeNamePopup">
+    <div class="rename">
+        <strong class="autoSwitchLanguager" key="device_70_set_name">设置昵称</strong>
+        <input id="renameInput" type="text"  placeholder="请输入用户名">
+        <div class="renameBtn">
+            <button class="cancel autoSwitchLanguager" key="device_70_cancel">取消</button>
+            <button class="sure autoSwitchLanguager" key="DoorLookOK" onclick="$(this).parents('.changeNamePopup').hide();">
+                确定
+            </button>
+        </div>
+    </div>
+</section>
+
+<!--编辑弹框-->
+<section class="changeName" style="display:none;" id="deletePopup">
+    <div class="nameToast giveUp">
+        <span id="device_70_delete_ok" class="autoSwitchLanguager">确定要删除吗？</span>
+        <div class="choose_1 choose_2">
+            <a id="device_70_cancel" class="isNo autoSwitchLanguager" onclick="hideDeletePopup()">取消</a>
+            <a class="autoSwitchLanguager" id="DoorLookOK" onclick="sureDelete()">确定</a>
+        </div>
+    </div>
+</section>
+
+</body>
+<script src="../js/leftDelete.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var deviceID;
+    var gwID
+    var obj;
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(function (result) {
+            deviceID = result.devID;
+            gwID = result.gwID;
+            var data = {};
+            send520Cmd(1, data); //查询所有列表
+        })
+        plus.gatewayCmd.newDataRefresh(function (result) {
+            if (result.cmd == "520" && result.devID == deviceID) {
+                parse520Data(result);
+            } else if (result.cmd == "500" && result.devID == deviceID) {
+
+            }
+        })
+    })
+
+    document.getElementById("back").addEventListener("click", function () {
+        plus.tools.back(function () {
+        });
+    });
+
+    /**
+     * 数据回调
+     * operType:1:表示获取用户列表  2：新增用户 3: 删除用户 4：修改用户信息 5：一键清除 6：设置防胁迫信息
+     */
+    function send520Cmd(operType, data) {
+        var jsonData = {};
+        jsonData.cmd = "520";
+        jsonData.gwID = gwID;
+        jsonData.devID = deviceID;
+        jsonData.operType = operType;
+        jsonData.data = data;
+        plus.gatewayCmd.controlDevice(jsonData, function (resutl) {
+
+        })
+    }
+
+    function parse520Data(result) {
+        if (result.data.code != "0") {
+            return;
+        } else {
+            if (result.operType == 1) {
+                if (result.data.list == null) {
+                    $(".noUserTips").show();
+                } else {
+                    $(".noUserTips").hide();
+                    createUsers(result.data.list);
+                }
+            }else if(result.operType == 4){
+                $("#hxc"+result.data.uid).find("span").eq(1).html(result.data.name);
+
+            }
+        }
+    }
+
+    function createUsers(list) {
+        var type;
+        if(list.length>0){
+            $(".userManage").html('')
+        }
+        for (var i = 0; i < list.length; i++) {
+            var listStr = JSON.stringify(list[i]);
+            type = getLockType(list[i].ut);
+            var str = "<li id = 'hxc"+list[i].uid+"' data-list = '"+listStr+"' class='addCondition'>" +
+                "<div class='userItem'>" +
+                    "<span class='userNumber'>" + type +'['+ list[i].uid+']' + "</span>" +
+                    "<img id=" + list[i].uid + " style='float: right;width: 2rem;height: 2rem;' src=../fonts/icon_edit.png>" +
+                    "<span class='userName'>" + list[i].name + "</span>" +
+                "</div>" +
+                "<div class='delete deleteUser'>" + device_70_delete + "</div></li>"
+            $(".userManage").append(str)
+        }
+        $(".userManage li").leftDelete({
+            marginLeft: "-20%"
+        });
+        setonClickListener(list);
+    }
+
+    function getLockType(ut) {
+        switch (ut) {
+            case "3":
+                return device_70_fingerprint;
+                break;
+            case "4":
+                return device_70_card;
+                break;
+
+        }
+
+    }
+
+    function setonClickListener(list) {
+        for (var i = 0; i < list.length; i++) {
+            $("#" + list[i].uid).attr("data-list", JSON.stringify(list[i]));
+            $("#" + list[i].uid).on("click", function () {
+                obj = JSON.parse($(this).attr("data-list"));
+                var name = $(this).siblings(".userName").html();
+                if (name == "") {
+                    $("#renameInput").attr('placeholder', obj.uid);
+                    // $("#renameInput").val(obj.uid);
+                } else {
+                    $("#renameInput").val("");
+                    $("#renameInput").attr('placeholder', name);
+                    // $("#renameInput").val(obj.name);
+                }
+                $(".changeNamePopup").show();
+            })
+        }
+    }
+
+    $(".cancel").on("click", function () {
+        $(".changeNamePopup").hide();
+    });
+
+    $(".sure").on("click", function () {
+        $(".changeNamePopup").hide();
+        var value = document.getElementById("renameInput").value;
+        changeName(value);
+    })
+
+    function changeName(value) {
+        var data = {
+            "tk": obj.tk,
+            "ut": obj.ut,
+            "uid": obj.uid,
+            "st": obj.st,
+            "et": obj.et,
+            "sceneId": obj.sceneId,
+            "pwd": obj.pwd,
+            "name": value
+        }
+        send520Cmd(4, data);
+    }
+
+    function sureDelete() {
+        $("#deletePopup").hide();
+        var listStr = JSON.parse($("#deletePopup").attr("listStr"));
+        var id = $("#deletePopup").attr("data-id");
+        var data = {
+            "tk": listStr.tk,
+            "ut": listStr.ut,
+            "uid": listStr.uid
+        }
+        send520Cmd(3, data);
+        $("#"+id).remove()
+    }
+
+
+    function hideDeletePopup() {
+        $("#deletePopup").hide();
+    }
+
+</script>
+</html>

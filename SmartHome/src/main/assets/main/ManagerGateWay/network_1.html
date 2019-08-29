@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WLAN口设置</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/wlanNetwork.css" />
+    <link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+    <script type="text/javascript" charset="UTF-8" src="../source/js/jquery-3.1.1.min.js"></script>
+    <script src="../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="autoSwitchLanguager" href="javascript:;" langKey='device_Ol_set'>设置</a>
+        </div>
+    </header>
+    <div class="gatewayImg"><img src="img/img_01.png" alt=""></div>
+    <p class="middleTips autoSwitchLanguager" langKey="Gateway_center_WAN_first">请将手机连接到网关wifi</p>
+    <section class="addSensorBtn">
+        <a href="network_2.html" class="autoSwitchLanguager" langKey="nextStep">下一步</a>
+    </section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    plus.plusReady(function(){
+        $("#back").unbind("click").bind("click",function(){
+            plus.tools.back(function(){});
+        })
+    });
+</script>
+</html>

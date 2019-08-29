@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智敬一路窗帘</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/device.css" />
+		<script src="../../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../../skinSource/css/skin.css" />
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" href="javascript:;" id="device_Ca_name">智敬联排一路窗帘</a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="main" style="display:block;">
+			<div class="curtainImg">
+				<img src="../../../source/deviceImg/curtain_close_1.png" alt="">
+			</div>
+			<div class="curtainBtn">
+				<span class="curtainControl">
+					<img src="../fonts/open_nor.png" alt="">
+				</span>
+				<span class="curtainControl">
+					<img src="../fonts/stop_nor.png" alt="">
+				</span>
+				<span class="curtainControl">
+					<img src="../fonts/close_nor.png" alt="">
+				</span>
+			</div>
+		</section>
+		<section class="main" style="display:none;">
+			<div class="switchImg">
+				<img src="../fonts/icon_switch.png" alt="">
+			</div>
+			<div class="switchOther">
+				<p class="switchDescribe autoSwitchLanguager" key="device_Ca_switch_hint">设备当前为触发开关模式，您可将其添加至管家中做触发条件，从而执行相应任务；也可以点击右上角图标进入模式切换，在窗帘模式下控制窗帘。</p>
+				<div class="switchBtn">
+					<img id="jumpTriggerView" src="../fonts/icon_trigger.png" alt="">
+				</div>
+			</div>
+		</section>
+		<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" id="offLine">设备已离线</span></section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/more.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+        initlan();
+        var info = window.sysfun;
+        info.init("V6Housekeeper");
+        var DevID,GwID,AppID;
+        var iconId = "1";
+        var socketState = "";
+        var relationFlag = "";
+        plus.plusReady(function(){
+            plus.gatewayCmd.getDeviceIconByType(function (result) {
+                iconId = result;
+            });
+            plus.gatewayCmd.getDeviceInfo(function(data){
+                DevID = data.devID;
+                GwID = data.gwID;
+                AppID = data.appID;
+                var name = data.name.indexOf("#$default$#") != -1 ? device_Ca_name + data.name.split("#")[2] : data.name;
+                $(".deviceName").html(name);
+                modeState(data.mode);
+			});
+            plus.tools.getGatewayIsShared(null,function (data) {
+                relationFlag = data;
+            });
+            plus.gatewayCmd.newDataRefresh(function(data){
+                if(data.cmd === "500" && DevID === data.devID){
+                    var name = data.name.indexOf("#$default$#") != -1 ? device_Ca_name + data.name.split("#")[2] : data.name;
+                    $(".deviceName").html(name);
+                    reloadUi(data);
+                }else if(data.cmd === "502" && DevID === data.devID){
+                    plus.gatewayCmd.getDeviceIconByType(function(result){
+                        if(result){
+                            iconId = result;
+                            if(socketState === "open"){
+                                $(".curtainImg").find("img").attr("src","../../../source/deviceImg/curtain_open_"+iconId+".png");
+                            }else if(socketState === "close"){
+                                $(".curtainImg").find("img").attr("src","../../../source/deviceImg/curtain_close_"+iconId+".png");
+                            }else if(socketState === "stop"){
+                                $(".curtainImg").find("img").attr("src","../../../source/deviceImg/curtain_stop_"+iconId+".png");
+                            }
+                        }
+                    });
+                    if (!isNull(data.name)) {
+                        $(".deviceName").html(data.name)
+                    }
+                }
+            });
+            $(".more").unbind("click").bind("click",function(){
+                var moreConfig = getMoreConfig(DevID);
+                plus.tools.more(moreConfig,function(){})
+			});
+            $("#back").unbind("click").bind("click", function() {
+                plus.tools.back(function() {});
+            });
+            $("#jumpTriggerView").unbind("click").bind("click",function(){
+                if(relationFlag != "YES"){
+                    info.setItem("deviceName", $(".deviceName").html());
+                    info.setItem("deviceID", DevID);
+                    info.setItem("num", 1);
+                    info.setItem("type", "Ca");
+                    info.setItem("deviceIcon", "url(../../../source/deviceIcon/device_icon_Ca.png)");
+                    info.setItem("editUrl", "action_Ca_triggerTask.html");
+                    plus.gatewayCmd.jumpToHouseKeeper("Ca",function(data){
+                        if(data === "NO"){
+                            window.location = "../../../houseKeeper1/html/action_Ca_triggerTask.html"
+                        }
+                    });
+				}else{
+                    window.showDialog.show(Smart_no_set,3000);
+				}
+			})
+		});
+        $(".curtainControl").unbind("touchstart").bind("touchstart",function(){
+            var index = $(this).index();
+            if(index === 0){
+                $(this).find("img").attr("src","../fonts/open_pre.png");
+            }else if(index === 1){
+                $(this).find("img").attr("src","../fonts/stop_pre.png");
+            }else if(index === 2){
+                $(this).find("img").attr("src","../fonts/close_pre.png");
+            }
+        }).unbind("touchend").bind("touchend",function(){
+            var index = $(this).index();
+            if(index === 0){
+                send_501(DevID,GwID,AppID,0x01,1,["2"]);
+                $(this).find("img").attr("src","../fonts/open_nor.png");
+            }else if(index === 1){
+                send_501(DevID,GwID,AppID,0x01,1,["1"]);
+                $(this).find("img").attr("src","../fonts/stop_nor.png");
+            }else if(index === 2){
+                send_501(DevID,GwID,AppID,0x01,1,["3"]);
+                $(this).find("img").attr("src","../fonts/close_nor.png");
+            }
+        });
+        function reloadUi(data){
+			if(data.endpoints){
+			    if(data.endpoints[0].clusters){
+			        if(data.endpoints[0].clusters[0].attributes) {
+                        var attributes = data.endpoints[0].clusters[0].attributes;
+                        for(var i in attributes){
+                            switch (attributes[i].attributeId) {
+                                case 0x8001:
+                                    //窗帘模式下窗帘状态
+                                    if (attributes[i].attributeValue === "1") {
+                                        $(".curtainImg").find("img").attr("src", "../../../source/deviceImg/curtain_stop_" + iconId + ".png");
+                                        socketState = "stop";
+                                    } else if (attributes[i].attributeValue === "2") {
+                                        $(".curtainImg").find("img").attr("src", "../../../source/deviceImg/curtain_open_" + iconId + ".png");
+                                        socketState = "open";
+                                    } else if (attributes[i].attributeValue === "3") {
+                                        $(".curtainImg").find("img").attr("src", "../../../source/deviceImg/curtain_close_" + iconId + ".png");
+                                        socketState = "close";
+                                    }
+                                    break;
+                                case 0x8002:
+                                    //该设备为窗帘模式还是触发开关模式
+                                    if (attributes[i].attributeValue === "0") {
+                                        $(".main").eq(1).show().siblings(".main").hide();
+                                    } else {
+                                        $(".main").eq(0).show().siblings(".main").hide();
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+				}
+			}
+		}
+        function modeState(mode){
+            switch (mode){
+                case 0:
+                case 1:
+                case 4:
+                    $(".mask_layer").hide();
+                    send_501(DevID,GwID,AppID,0x02,1,"");
+                    break;
+                case 2:
+                    //设备离线
+                    $(".mask_layer").show();
+                    break;
+                case 3:
+                    //设备主动退网
+                    $(".mask_layer").show();
+                    break;
+                default:
+                    break;
+            }
+        }
+        function send_501(devID,gwID,appID,commandId,num,parameter){
+            var jsonData = {};
+            jsonData.cmd = "501";
+            jsonData.gwID = gwID;
+            jsonData.devID = devID;
+            jsonData.appID = appID;
+            jsonData.endpointNumber = num;
+            jsonData.clusterId = 0x0102;
+            jsonData.commandType = 1;
+            jsonData.commandId = commandId;
+            if(parameter){
+                jsonData.parameter = parameter
+            }
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+        }
+        function isNull(arg) {
+            var isnull = arg == null || arg == undefined || arg == "undefined" || arg == "";
+            return isnull;
+        }
+	</script>
+</html>

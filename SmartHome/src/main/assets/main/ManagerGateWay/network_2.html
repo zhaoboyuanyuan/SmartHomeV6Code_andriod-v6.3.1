@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WLAN口设置</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/wlanNetwork.css" />
+    <link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+    <script type="text/javascript" charset="UTF-8" src="../source/js/jquery-3.1.1.min.js"></script>
+    <script src="../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header_top">
+            <a class="back" href="javascript:window.history.back(-1);"></a>
+            <a class="autoSwitchLanguager" href="javascript:;" langKey='device_Ol_set'>设置</a>
+        </div>
+    </header>
+    <section class="mainView">
+        <p class="red autoSwitchLanguager" langKey="Gateway_center_WAN_hint_01">点击下一步，将跳转至手机浏览器，请按照以下步骤操作：</p>
+        <div class="imgAndText">
+            <p class="autoSwitchLanguager" langKey="Gateway_center_WAN_01">1.输入路由器密码</p>
+            <img class="imgWlan" src="img/wlan_01_zh-cn.png" alt="">
+            <p class="autoSwitchLanguager" langKey="Gateway_center_WAN_02">2.系统设置--网络设置--WAN口设置</p>
+            <img class="imgWlan" src="img/wlan_02_zh-cn.png" alt="">
+            <p class="autoSwitchLanguager" langKey="Gateway_center_WAN_03">3.点击模式选择</p>
+            <img class="imgWlan" src="img/wlan_03_zh-cn.png" alt="">
+            <p class="autoSwitchLanguager" langKey="Gateway_center_WAN_04">4.选择无线中继</p>
+            <img class="imgWlan" src="img/wlan_04_zh-cn.png" alt="">
+        </div>
+        <div class="addSensorBtn">
+            <a style="position:static;margin-top:5rem;" id="nextBtn" href="javascript:;" class="autoSwitchLanguager" langKey="nextStep">下一步</a>
+        </div>
+        <p class="bottomTips autoSwitchLanguager" langKey="Gateway_center_WAN_hint_02">点击下一步，将直接跳转至手机浏览器</p>
+    </section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    plus.plusReady(function(){
+        var lang = window.sysfun.getLang();
+        var imgList = $(".imgWlan");
+        if(lang === "zh-cn"){
+            $(imgList).eq(0).attr("src","img/wlan_01_zh-cn.png");
+            $(imgList).eq(1).attr("src","img/wlan_02_zh-cn.png");
+            $(imgList).eq(2).attr("src","img/wlan_03_zh-cn.png");
+            $(imgList).eq(3).attr("src","img/wlan_04_zh-cn.png");
+        }else{
+            $(imgList).eq(0).attr("src","img/wlan_01_en.png");
+            $(imgList).eq(1).attr("src","img/wlan_02_en.png");
+            $(imgList).eq(2).attr("src","img/wlan_03_en.png");
+            $(imgList).eq(3).attr("src","img/wlan_04_en.png");
+        }
+        $("#nextBtn").unbind("click").bind("click",function(){
+            plus.gatewayCmd.goToWlan(function(){});
+        })
+    });
+</script>
+</html>

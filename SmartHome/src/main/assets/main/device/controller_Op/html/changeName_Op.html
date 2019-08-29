@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../../../source/js/rem.js"></script>
+    <script type="text/javascript" src="../../../source/js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/list.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/changeName.css"/>
+</head>
+<body style="width:100%;">
+<header class="header" style="position:fixed;left:0;top:0;z-index:10000;padding-top: 0.1rem">
+    <div class="header_top">
+        <a id="back" href="javascript:;window.history.back(-1)"></a>
+        <a class="deviceName autoSwitchLanguager" key="Device_OZ_Details_Name" href="javascript:;">中央空调</a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<section id="content">
+    <div class="titleName">
+        <em class="autoSwitchLanguager" key="Device_Bx_Details_High_Protect_Value">重命名</em>
+        <span class="titleName_detail" onclick="changeName()">空调</span>
+        <i class="iconRight"></i>
+    </div>
+</section>
+
+<section class="saveToast" style="display:none;">
+    <div>
+        <i><em class="rotate"></em></i>
+        <p key="Device_OZ_Details_Loading2" class="autoSwitchLanguager">正在加载...</p>
+    </div>
+</section>
+<div class="device_rename" id="rename">
+    <h5 key="Device_OZ_Details_Name1" class="autoSwitchLanguager name">重命名</h5>
+    <input id="input_rename" type="text" maxlength="20" key="Device_OZ_Details_Name2" class="autoSwitchLanguager" placeholder="请输入空调名称">
+    <div class="device_btn">
+        <span id="rename_cancel" key="Device_OZ_Details_Cancel" class="autoSwitchLanguager" onclick="cancel()">取消</span>
+        <span id="rename_ok" key="Device_OZ_Details_Confirm" class="autoSwitchLanguager" onclick="ok()">确认</span>
+    </div>
+</div>
+
+</body>
+<link rel="stylesheet" type="text/css" href="../../../skinSource/css/skin.css"/>
+<script type="text/javascript" src="../js/plus.js"></script>
+<script type="text/javascript" src="../js/gatewayCmd.js"></script>
+<script type="text/javascript" src="../js/tools.js"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="../js/more.js"></script>
+<script type="text/javascript" src="../../../source/mui/js/mui.min.js"></script>
+<script type="text/javascript">
+    initlan();
+    var info = window.sysfun;
+    info.init("device_Op");
+    var num = decodeURI(getUrlParam("endpointNumber"));
+
+    // $(".mask_loading").show();
+
+    var devID;
+    var gwID;
+    var appID;
+    plus.plusReady(function(){
+
+        plus.gatewayCmd.getCurrentAppID(function(result){
+            appID = result;
+        });
+        plus.gatewayCmd.getDeviceInfo("", function(data){
+            if(data.mode == 2){
+                $(".mask_loading").hide();
+                $(".mask_layer").show();
+            }else{
+                $(".mask_layer").hide();
+            }
+            getEndpointName(data)
+            console.log(data);
+            devID = data.devID;
+            gwID = data.gwID;
+        });
+        plus.gatewayCmdRush.newDataRefresh(function(data){
+
+            if(data.cmd == "500" && devID == data.devID){
+
+                $(".saveToast").hide();
+                if(data.mode == 2){
+                    $(".mask_layer").show();
+                }else{
+                    $(".mask_layer").hide();
+                }
+                getEndpointName(data)
+            }else if(data.cmd == "502" && devID == data.devID) {
+                $(".saveToast").hide();
+                if(data.endpointName && data.endpointNumber == num) {
+                    var endpointName = data.endpointName;
+                    var endpointNumber = data.endpointNumber;
+                    if(endpointName == undefined || endpointName == "") {
+                        if(endpointNumber > 0 && endpointNumber <= 320) {
+                            endpointName = "空调" + endpointNumber;
+                        } else if(endpointNumber > 320 && endpointNumber <= 384) {
+                            endpointName = "新风" +  parseInt(endpointNumber) - 320;
+                        } else if(endpointNumber > 384 && endpointNumber <= 448) {
+                            endpointName = "地暖" +  parseInt(endpointNumber) - 384;
+                        }
+                    }
+                    $(".deviceName").html(endpointName)
+                    $(".titleName_detail").html(endpointName)
+                }
+            }
+        });
+
+        // document.getElementsByClassName("titleName_detail")
+        // $(".titleName_detail").on("click", function () {
+        //     $("#rename").show();
+        // });
+
+
+
+        //重命名确认及取消click事件
+        $("#rename_cancel").on("click", function(e){
+            e.stopPropagation();
+            $("#rename").hide();
+            $("#input_rename").val("");
+            $("#input_rename").blur();
+        })
+        mui("#rename_ok").on("click", function(e){
+            e.stopPropagation();
+            if($("#input_rename").val().trim() !== ''){
+                var value = $("#input_rename").val().replace(/(^\s*)|(\s*$)/g,'');
+                sendCmd_502(value);
+                $(".saveToast").show();
+                $("#input_rename").val("");
+                $("#rename").hide();
+                $("#input_rename").blur();
+            }
+        })
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header")[0].style.paddingTop = "2.4rem";
+            $("#content")[0].style.paddingTop = "8.6rem";
+        }
+
+    });
+
+    function changeName() {
+        $("#rename").show();
+    }
+
+    function cancel() {
+        $("#rename").hide();
+        $("#input_rename").val("");
+        $("#input_rename").blur();
+    }
+
+    function ok() {
+        if($("#input_rename").val().trim() !== ''){
+            var value = $("#input_rename").val().replace(/(^\s*)|(\s*$)/g,'');
+            sendCmd_502(value);
+            $(".saveToast").show();
+            $("#input_rename").val("");
+            $("#rename").hide();
+            $("#input_rename").blur();
+        }
+    }
+
+    //修改子设备名称命令
+    function sendCmd_502(name){
+        var param = {}
+        param.cmd = "502";
+        param.gwID = gwID;
+        param.appID = appID;
+        param.devID = devID;
+        param.mode = 2;
+        param.endpointNumber = parseInt(num);
+        param.endpointName = name;
+        console.log(param);
+        plus.gatewayCmd.controlDevice(param,function(){})
+    }
+
+    function getEndpointName(data) {
+       for (var ii = 0 ; ii < data.endpoints.length; ii++) {
+
+           var endpoint= data.endpoints[ii];
+           if(endpoint.endpointNumber == num && endpoint.endpointName) {
+               var endpointName = endpoint.endpointName;
+               var endpointNumber = endpoint.endpointNumber;
+               if(endpointName == undefined || endpointName == "") {
+                   if(endpointNumber > 0 && endpointNumber <= 320) {
+                       endpointName = "空调" + endpointNumber;
+                   } else if(endpointNumber > 320 && endpointNumber <= 384) {
+                       endpointName = "新风" +  parseInt(endpointNumber) - 320;
+                   } else if(endpointNumber > 384 && endpointNumber <= 448) {
+                       endpointName = "地暖" +  parseInt(endpointNumber) - 384;
+                   }
+               }
+               $(".deviceName").html(endpointName)
+               $(".titleName_detail").html(endpointName)
+           }
+       }
+    }
+</script>
+</html>

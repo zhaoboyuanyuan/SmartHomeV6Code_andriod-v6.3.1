@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>系统选择</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/system.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+
+<body>
+    <header class="header">
+        <a class="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="Device_Bx_Details_System" href="javascript:;">系统选择</a>
+    </header>
+    <section>
+        <div class="mainTop" onclick="chooseMe('.iconTop', Device_Bx_Details_System3)">
+            <em class="autoSwitchLanguager" key="Device_Bx_Details_System1">电地暖</em>
+            <i class="iconRight iconTop"></i>
+        </div>
+    </section>
+    <section>
+        <div class="mainBottom" onclick="chooseMe('.iconBottom', Device_Bx_Details_System4)">
+            <em class="autoSwitchLanguager" key="Device_Bx_Details_System2">水地暖</em>
+            <i class="iconRight iconBottom"></i>
+        </div>
+    </section>
+    <section class="alert" style="display:none;">
+        <div class="nameToast">
+            <span class="tip autoSwitchLanguager" key="Device_Bx_Details_Prompt">提示</span>
+            <div class="msg"></div>
+            <div class="choose_1">
+                <a class="autoSwitchLanguager" key="Device_Bx_Details_Cancel" href="javascript:;" onclick="cancel()">取消</a>
+                <a class="autoSwitchLanguager sure_click" key="Device_Bx_Details_Confirm" href="javascript:;" onclick="sure()">确定</a>
+            </div>
+        </div>
+    </section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    initlan();
+    var devID, gwID;
+    // 点击的
+    var clickEle;
+    // 选中的
+    var chooseEle;
+    $(".back").on("click", function () {
+        plus.tools.back(function () {});
+    });
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(function (data) {
+            gwID = data.gwID;
+            devID = data.devID;
+            handleEp(data.endpoints);
+            sendCmd(0x8010, []);
+        });
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            handleEp(data.endpoints);
+        })
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header")[0].style.paddingTop = "4.8rem";
+        }
+
+
+    });
+
+    // 处理 endpoints
+    // 遍历解析
+    function handleEp(endpoints) {
+        endpoints.forEach(function (endpoint) {
+            var clusters = endpoint.clusters;
+            clusters.forEach(function (cluster) {
+                var attributes = cluster.attributes;
+                attributes.forEach(function (attribute) {
+                    var attributeId = attribute.attributeId;
+                    var attributeValue = attribute.attributeValue;
+                    handleAttribute(attributeId, attributeValue)
+                })
+            })
+        });
+    }
+
+    // 处理 attribute
+    function handleAttribute(attributeId, attributeValue) {
+        console.log("attributeId:\t\t" + attributeId.toString(16));
+        console.log("attributeValue:\t\t" + attributeValue);
+
+        switch (attributeId) {
+
+            case 0x8006:
+                {
+                    //系统选择
+                    showSys(attributeValue)
+                }
+                break;
+            default:
+                {
+
+                }
+                break;
+        }
+    }
+
+    function handleAttribute8001(value) {
+        var zz = parseInt(value.substr(10, 2), 16);
+
+        showSys(zz);
+    }
+
+    // 更新选择的系统
+    function updateSys() {
+        $(".iconRight").hide();
+        $(chooseEle).show();
+        if (chooseEle == ".iconTop") {
+            sendCmd(0x8015, ['01']);
+        } else {
+            sendCmd(0x8015, ['00']);
+        }
+    }
+
+    // show选择的系统
+    function showSys(t) {
+        if (t == 1) {
+            chooseEle = ".iconTop"
+        } else {
+            chooseEle = ".iconBottom"
+        }
+        $(".iconRight").hide();
+        $(chooseEle).show();
+    }
+
+    // 选择系统
+    function chooseMe(ele, text) {
+        if (ele === clickEle) {
+            return;
+        }
+        clickEle = ele;
+        showAlert(text)
+    }
+
+    // 弹框取消按钮
+    function cancel() {
+        clickEle = chooseEle;
+        hideAlert();
+    }
+
+    // 弹框确定按钮
+    function sure() {
+        chooseEle = clickEle;
+        updateSys();
+        hideAlert();
+        // 退出页面
+    }
+
+    // 隐藏弹框
+    function hideAlert() {
+        $(".alert").hide()
+    }
+
+    // 显示弹框
+    function showAlert(text) {
+        $('.msg').html(text);
+        $(".alert").show()
+    }
+
+    function sendCmd(commandId, parameter) {
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.endpointNumber = 1;
+        jsonData.commandType = 1;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandId = commandId;
+        if (parameter) {
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData, function () {})
+    }
+</script>
+
+</html>

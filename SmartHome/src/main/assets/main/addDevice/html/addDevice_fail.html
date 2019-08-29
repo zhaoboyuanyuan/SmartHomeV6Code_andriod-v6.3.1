@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/fail.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="addDeviceNew.html"></a>
+				<a href="javascript:;" class="addDoorC"></a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="add_fail">
+			<img src="../fonts/icon_failure.png" alt="" />
+			<span class="autoSwitchLanguager" id="addDevice_fail_fail">添加设备失败</span>
+		</section>
+		<section class="add_advise" style="overflow-y: auto;height: 25rem;margin-top: 1rem;">
+			<ul>
+				<li class="autoSwitchLanguager" id="addDevice_fail_idea">建议</li>
+				<li class="autoSwitchLanguager" id="addDevice_fail_no1">1.检查网关是否正常工作</li>
+				<li class="autoSwitchLanguager" id="addDevice_fail_no2">2.检查添加的设备是否处于通电状态</li>
+				<li class="autoSwitchLanguager" id="addDevice_fail_no3">3.使添加的设备处于网关的有效通信距离内</li>
+				<li class="autoSwitchLanguager" id="addDevice_fail_no4">4.检查设备是否添加到本网关或其他网关内，或长按SET键10s直到指示灯闪烁4次熄灭，将设备退出zigbee网络后重试</li>
+				<li class="autoSwitchLanguager" id="addDevice_fail_no5"></li>
+			</ul>
+		</section>
+		<section class="addSensorBtn">
+			<a class="autoSwitchLanguager" id="addDevice_fail_begin" href="javascript:;" style="opacity:1">重试</a>
+		</section>
+	</body>
+	<script src="../js/getUrl.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan()
+		var type;
+		var name
+		plus.plusReady(function() {
+			var info = window.sysfun;
+			info.init("V6addDevice");
+			type = info.getItem("type");
+			name = info.getItem("name");
+            var deviceType = info.getItem("deviceType");
+            if(deviceType == "04") {
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_fail_04_no4")
+            } else if(deviceType == "OW") {
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_OW_zj_fail_no4")
+            } else if (deviceType == "OF") {
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_OF_fail_no4")
+			} else if (deviceType == "90") {
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_90_fail_no4")
+                document.getElementById("addDevice_fail_no5").innerHTML = languageUtil.getResource("addDevice_90_fail_no5");
+            } else if (deviceType == "Oj") {
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_Oj_step_4")
+            }else if (deviceType == "28") {
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("device_28_Join_network_03")
+            }else if (deviceType == "69") {
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_69_fail_no4")
+            }else if (deviceType == "Ol") {
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_fail_no4")
+            }else if(deviceType == "Ok"){
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_fail_04_no4_01")
+			} else if (deviceType == "Bc") {
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_fail_Bc_no4")
+            }else if (deviceType == "Bp") {
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("Bp_Prompt1")
+            }else if(deviceType == "Bu" || deviceType == "Cl" || deviceType == "Cm" || deviceType == "Cn" || deviceType == "Bu_01" || deviceType == "Bv" || deviceType == "Bv_01"){
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_Bu_failure_5")
+			}else if(deviceType == "Bw" || deviceType == "Bw_01"){
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_Bu_failure_5")
+            }else if(deviceType == "By"){
+				document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_Bu_failure_50")
+			}else if(deviceType == "91"){
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_91_fail_step_3")
+                document.getElementById("addDevice_fail_no5").innerHTML = languageUtil.getResource("addDevice_91_fail_step_4")
+            }else if(deviceType == "38"){
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_38_step_2")
+			}else if(deviceType == "Ca" || deviceType == "Cb" || deviceType == "Cc"){
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_Ca_step_3")
+			}else if(deviceType == "Op"){
+				document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_Op_Exit_net_03")
+			}else if(deviceType == "Ck"){
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_Ck_Join_network_failure_04")
+            }else if(deviceType == "Cp"){
+                document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_Ca_step_3")
+            }
+			try {
+				$(".addDoorC").html(addDevice_add + name)
+			} catch(e) {
+				//TODO handle the exception
+			}
+			$(".addSensorBtn a").click(function() {
+//				if(type == "61" || type == "62" || type == "63") {
+//					window.location = "addDevice_" + "61_62_63" + "_01.html?type=" + type;
+//				} else {
+//					window.location = "addDevice_" + type + "_01.html"
+//				}
+				if(type == "OP"){
+				    window.location = "addDevice_lock.html"
+				}
+                 history.go(-2);
+			});
+		})
+	</script>
+
+</html>

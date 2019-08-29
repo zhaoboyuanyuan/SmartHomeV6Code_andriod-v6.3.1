@@ -1,0 +1,133 @@
+.createIcon{
+    background:url(../fonts/icon_add.png) no-repeat center center;
+    background-size:2.1rem auto;
+}
+
+.content_Cg {
+    width: 100%;
+}
+
+.userContent {
+    width: calc(100% - 2rem);
+    padding: 0 1rem 0 1rem;
+    margin-top: 2rem;
+    background-color: #F1F4F8;
+}
+.userContent .userHead {
+    width: 100%;
+}
+.userContent ul {
+    width: 100%;
+    padding: 1rem 0 0 0;
+}
+
+.userContent ul li {
+    width: calc(100vw / 4 - 1.54rem);
+    height: calc(100vw / 4 - 1.54rem );
+    display: inline-block;
+    margin-right: 1rem;
+    margin-top: 0.5rem;
+    text-align: center;
+    border: 1px solid red;
+    box-sizing: border-box;
+    font-size: 0;
+}
+.userContent ul li:nth-child(4n+4){
+    margin-right: 0;
+}
+.userContent ul li i:first-child{
+    background: url(../fonts/icon_comm.png) no-repeat center center;
+    display: inline-block;
+    width: 3rem;
+    height: 3rem;
+    margin-top: 0.5rem;
+}
+.userContent ul li:first-child i:first-child {
+    background: url(../fonts/icon_add.png) no-repeat center center;
+}
+.userContent ul li p{
+    margin-top: 0.5rem;
+    font-size: 16px;
+}
+.userBottom {
+    padding: 0.5rem 0;
+    height: 2.6rem;
+    line-height: 2.6rem;
+    text-align: center;
+}
+.userBottom i{
+    background: url(../fonts/icon_dropDown.png) right center no-repeat;
+    display: inline-block;
+    padding-right: 1.3rem;
+    background-size: 1.3rem auto;
+}
+.lockWayContent {
+    margin-top: 1rem;
+    width: 100%;
+}
+.lockHead{
+    width: calc(100% - 1rem);
+    padding-left: 1rem;
+}
+.lockHead p{
+
+    margin-top: 0.56rem;
+}
+.lockList{
+    width: 100%;
+    position: fixed;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.lockWayContent ul li {
+    width: 115%;
+    height: 5rem;
+    border: 1px solid red;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    font-size: 0;
+}
+.lockWayContent ul li i:first-child{
+    background: url("../fonts/icon_comm.png") center center / 3.9rem 4rem no-repeat;
+    display: block;
+    width: 3rem;
+    height: 3rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    float: left;
+    margin-left: 1rem;
+}
+.lockWayContent ul li .lockDesc{
+    width: 70%;
+    overflow: hidden;
+    float: left;
+}
+.lockDesc p{
+    color: #000;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: 16px;
+}
+.lockDesc p:first-child{
+    margin-top: 1rem;
+}
+.lockDesc b{
+    background: url("../fonts/reorder_icon.png") no-repeat center center;
+    background-size: 2.3rem auto;
+    height: 3rem;
+    width: 3rem;
+    float: right;
+    margin-top: -4rem;
+}
+.lockWayContent ul li .delete{
+    float:right;
+    width:15%;
+    height:5rem;
+    line-height:5rem;
+    text-align: center;
+    background:#f64a4a;
+    font-size: 1.3rem;
+    color:#fff;
+}
+

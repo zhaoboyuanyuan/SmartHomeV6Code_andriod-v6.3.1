@@ -1,0 +1,81 @@
+.currentTemp {
+    display: inline-block;
+    position: absolute;
+    color: #999999;
+    right: 4.5rem;
+    top: 2.5rem;
+}
+.iconRight {
+    position: absolute;
+    top: 1.75rem;
+    right: 2rem;
+    font-size: 2.5rem;
+    color: #909192;
+    /*width: 2rem;*/
+    /*height: 1.5rem;*/
+    /*background:url(../img/device_icon_boult_down.png) no-repeat center center;*/
+    /*background-size: 100% auto;*/
+}
+.middleBtn_section{
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left:2rem;
+    right: 2rem;
+    height:4.5rem;
+    text-align: center;
+}
+.middleBtn{
+    width: 100% !important;
+    height: 4rem !important;
+    font-size: 1.5rem !important;
+    background: #8DD652 !important;
+    border-color: #8DD652 !important;
+    color: white !important;
+}
+.mui-btn{
+    font-size:1.5rem !important;
+    border:0px;
+    color:#8DD652;
+    background-color:rgba(255,255,255,0);
+}
+.mui-btn-blue{
+    /*background-color:#8DD652 !important;*/
+    /*border:1px solid #8DD652 !important;*/
+}
+.mui-poppicker-body{
+    position: relative;
+    width: 100%;
+    height: 20rem;
+    border-top: solid 1px white;
+}
+.mui-pciker-list li{
+    font-size:1.5rem !important;
+}
+.mui-poppicker{
+    -webkit-transform:translateY(25rem);
+}
+.mui-picker{
+    background-color:white;
+}
+.mui-poppicker-header{
+    padding:1rem;
+}
+.mui-pciker-rule
+{
+    height:3rem;
+    line-height:3rem;
+    margin-top:-1.5rem;
+}
+.mui-pciker-list{
+    height:3rem;
+    line-height:3rem;
+    margin-top:-1.5rem;
+}
+/*.visible{*/
+    /*transform-origin:center center -20rem !important;*/
+    /*transform:translateZ(20rem) rotateX(-9deg) !important;*/
+/*}*/
+/*.highlight{*/
+    /*transform:translateZ(20rem) rotateX(0deg) !important;*/
+/*}*/

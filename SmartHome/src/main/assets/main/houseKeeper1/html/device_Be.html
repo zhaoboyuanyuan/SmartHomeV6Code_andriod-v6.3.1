@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>设置设备状态</title>
+	<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="header">
+	<div class="header_top">
+		<a href="javascript:;" onClick="javascript:back();"></a>
+		<a href="javascript:;" class="autoSwitchLanguager" id='setDeviceState_tittle'>设置设备状态</a>
+	</div>
+</div>
+<section>
+	<ul class="set_list state" style="margin-top: 0">
+		<li><i></i></li>
+		<li><i></i></li>
+		<li><i></i></li>
+	</ul>
+</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var taskType = info.getItem("taskType");
+    initlan()
+	function back() {
+		window.history.back(-1);
+    }
+
+    plus.plusReady(function(){
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        $(".state li").eq(0).html((switch_on)+"<i></i>")
+        $(".state li").eq(1).html((switch_off)+"<i></i>")
+        $(".state li").eq(2).html((lang_switch_cut)+"<i></i>")
+        info.setItem("num",1)
+        $(".state li").on("click",function(){
+            $(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+            var deviceState = $(this).text();
+            var index = $(this).index();
+            if(index == 0){
+                window.location = "set_light_Be.html"
+            }else if(index == 1){
+                info.setItem("deviceState", deviceState)
+                if (taskType == 'timeTask') {
+                    info.setItem("epData","40");
+                    window.location = "setDelay_timeTask.html";
+                } else {
+                    info.setItem("epData","40");
+                    window.location = "setDelay_sceneTask.html";
+                }
+            }else if(index == 2){
+                info.setItem("deviceState", deviceState)
+                if (taskType == 'timeTask') {
+                    info.setItem("epData","43");
+                    window.location = "setDelay_timeTask.html";
+                } else {
+                    info.setItem("epData","43");
+                    window.location = "setDelay_sceneTask.html";
+                }
+            }
+        })
+    })
+</script>
+</html>

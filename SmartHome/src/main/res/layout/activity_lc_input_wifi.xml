@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_wifi_name"
+        style="@style/config_wifi_text"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/config_device_btn_height"
+        android:layout_marginTop="23dp"
+        android:background="@color/white"
+        android:drawablePadding="@dimen/default_padding_normal"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/default_padding_small" />
+
+    <TextView
+        android:id="@+id/tv_wifi_change"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_padding_small"
+        android:gravity="bottom"
+        android:paddingLeft="10dp"
+        android:text="@string/Cateye_Connect_Tip2"
+        android:textColor="@color/v6_config_wifi_tips"
+        android:textSize="14sp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_wifi_pwd_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_padding_small">
+
+        <LinearLayout
+            android:id="@+id/ll_wifi_pwd_show"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/config_device_btn_height"
+            android:layout_alignParentRight="true"
+            android:background="@color/white">
+
+            <CheckBox
+                android:id="@+id/cb_wifi_pwd_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:button="@drawable/selector_checkbox_wifi_pwd"
+                android:paddingRight="@dimen/default_padding_small" />
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/et_wifi_pwd"
+            style="@style/config_wifi_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/config_device_btn_height"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_toLeftOf="@id/ll_wifi_pwd_show"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:hint="@string/Input_Wifi_Password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:paddingLeft="@dimen/default_padding_small"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/default_editText_size" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp">
+
+        <CheckBox
+            android:id="@+id/no_wifi_pwd_checkbox"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/selector_read_agreement_icon"
+            android:button="@null" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="@string/No_WiFi_Password"
+            android:textColor="@color/device_config_wifi_tips_color"
+            android:textSize="@dimen/default_text_size" />
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom">
+
+        <Button
+            android:id="@+id/btn_next_step"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/config_device_btn_height"
+            android:layout_gravity="bottom"
+            android:layout_marginEnd="@dimen/config_default_padding"
+            android:layout_marginStart="@dimen/config_default_padding"
+            android:background="@drawable/shape_config_btn_bg"
+            android:gravity="center"
+            android:text="@string/Config_Next_Step"
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_text_size" />
+
+        <Button
+            android:id="@+id/btn_wire_connect"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/config_device_btn_height"
+            android:layout_below="@+id/btn_next_step"
+            android:layout_margin="@dimen/config_default_padding"
+            android:background="@drawable/shape_config_btn_retry_bg"
+            android:gravity="center"
+            android:text="@string/Wired_Connection"
+            android:textColor="@color/v6_green"
+            android:textSize="@dimen/default_text_size" />
+    </RelativeLayout>
+
+</LinearLayout>

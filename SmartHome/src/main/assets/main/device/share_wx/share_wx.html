@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<script type="text/javascript" src="js/rem.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/share_wx.css" />
+		<title>Wulian智能家居</title>
+	</head>
+
+	<body>
+		<div id="d_img">
+			<img id="alarmImg" />
+		</div>
+		<div id="d_video">
+			<video id="video" controls="" width="100%" height="400 rem"></video>
+		</div>
+		<p>
+			<button id="btnDownload" onclick="goDwonload()">
+				下载 智能家居 App
+			</button>
+		</p>
+		<p>
+			<div class="text">
+				<p class="title">智能家居介绍</p>
+				<span>
+					&nbsp;&nbsp; &nbsp;&nbsp; 物联智能家居，源于南京物联传感技术有限公司，其是领先的物联网设备和解决方案提供商，在物联网传感器、控制器、移动物联网、云计算和大数据等几大领域都进行了长期探索和不懈积累。安全专业的智能家庭应用，您不仅可以远程管理和控制各种智能设备，支持的产品覆盖智能控制、智能传感、智能照明、智能安保、智能园艺、智能健康等方向百余种，之间亦能智能感知彼此联动，满足各种各样的生活场景，为您打造安全无忧的智能家庭生活。
+				</span>
+			</div>
+
+		</p>
+
+		<p>
+			<img id="img_big" />
+		</p>
+		<p style="text-align: center;">
+			<a href="https://mp.weixin.qq.com/mp/homepage?__biz=MzA5Njc5NDUyMw==&hid=2" style="color: red;">点击了解更多产品</a>
+		</p>
+		<br />
+	</body>
+
+	<script type="text/javascript">
+		var deviceType = GetQueryString('deviceType');
+		if(deviceType == 'Bc') {
+			//可视锁
+			document.getElementById('img_big').src = "img/cmic10.png";
+		}else if(deviceType == 'CMICA3' || deviceType == 'CMICA6') {
+			//企鹅机
+			document.getElementById('img_big').src = "img/cmic20.png";
+		}else if (deviceType == 'CMICA2') {
+			//随便看
+			document.getElementById('img_big').src = "img/cmic07.jpg";
+		}else if (deviceType == 'CMICA4') {
+			//小物
+			document.getElementById('img_big').src = "img/cmic06.png";
+		}else if (deviceType == 'CMICA1') {
+			//猫眼
+			document.getElementById('img_big').src = "img/cmic08.jpg";
+		}else if (deviceType == 'Bn') {
+            //皇冠可视锁
+            document.getElementById('img_big').src = "img/lockImg_Bn.png";
+        }else {
+			document.getElementById('img_big').src = "img/lockImage.jpg";
+		}
+		
+		var imgUrl = GetQueryString('imgUrl');
+		var videoUrl = GetQueryString('videoUrl');
+		
+		var b = new Base64();
+		if(imgUrl != null && imgUrl.length > 1) {
+			if(videoUrl == null) {
+				//隐藏video,显示图片
+				document.getElementById("d_video").hidden = true;
+				document.getElementById("alarmImg").src = b.decode(imgUrl);
+			} else {
+				//隐藏pic,播放视频
+				document.getElementById("d_img").hidden = true;
+				var myVideo = document.getElementById("video");
+				myVideo.poster = imgUrl;
+				myVideo.src = b.decode(videoUrl);
+				myVideo.load();
+			}
+
+		}
+
+		function GetQueryString(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = window.location.search.substr(1).match(reg);
+			if(r != null) return unescape(r[2]);
+			return null;
+		}
+		
+		function goDwonload() {
+			window.location.href = "https://download.wuliangroup.cn/SmartHomeV6/SmartHomeV6.html";
+		}
+
+		function Base64() {
+
+			// private property
+			_keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+			// public method for encoding
+			this.encode = function(input) {
+				var output = "";
+				var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+				var i = 0;
+				input = _utf8_encode(input);
+				while(i < input.length) {
+					chr1 = input.charCodeAt(i++);
+					chr2 = input.charCodeAt(i++);
+					chr3 = input.charCodeAt(i++);
+					enc1 = chr1 >> 2;
+					enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+					enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+					enc4 = chr3 & 63;
+					if(isNaN(chr2)) {
+						enc3 = enc4 = 64;
+					} else if(isNaN(chr3)) {
+						enc4 = 64;
+					}
+					output = output +
+						_keyStr.charAt(enc1) + _keyStr.charAt(enc2) +
+						_keyStr.charAt(enc3) + _keyStr.charAt(enc4);
+				}
+				return output;
+			}
+
+			// public method for decoding
+			this.decode = function(input) {
+				var output = "";
+				var chr1, chr2, chr3;
+				var enc1, enc2, enc3, enc4;
+				var i = 0;
+				input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+				while(i < input.length) {
+					enc1 = _keyStr.indexOf(input.charAt(i++));
+					enc2 = _keyStr.indexOf(input.charAt(i++));
+					enc3 = _keyStr.indexOf(input.charAt(i++));
+					enc4 = _keyStr.indexOf(input.charAt(i++));
+					chr1 = (enc1 << 2) | (enc2 >> 4);
+					chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+					chr3 = ((enc3 & 3) << 6) | enc4;
+					output = output + String.fromCharCode(chr1);
+					if(enc3 != 64) {
+						output = output + String.fromCharCode(chr2);
+					}
+					if(enc4 != 64) {
+						output = output + String.fromCharCode(chr3);
+					}
+				}
+				output = _utf8_decode(output);
+				return output;
+			}
+
+			// private method for UTF-8 encoding
+			_utf8_encode = function(string) {
+				string = string.replace(/\r\n/g, "\n");
+				var utftext = "";
+				for(var n = 0; n < string.length; n++) {
+					var c = string.charCodeAt(n);
+					if(c < 128) {
+						utftext += String.fromCharCode(c);
+					} else if((c > 127) && (c < 2048)) {
+						utftext += String.fromCharCode((c >> 6) | 192);
+						utftext += String.fromCharCode((c & 63) | 128);
+					} else {
+						utftext += String.fromCharCode((c >> 12) | 224);
+						utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+						utftext += String.fromCharCode((c & 63) | 128);
+					}
+
+				}
+				return utftext;
+			}
+
+			// private method for UTF-8 decoding
+			_utf8_decode = function(utftext) {
+				var string = "";
+				var i = 0;
+				var c = c1 = c2 = 0;
+				while(i < utftext.length) {
+					c = utftext.charCodeAt(i);
+					if(c < 128) {
+						string += String.fromCharCode(c);
+						i++;
+					} else if((c > 191) && (c < 224)) {
+						c2 = utftext.charCodeAt(i + 1);
+						string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+						i += 2;
+					} else {
+						c2 = utftext.charCodeAt(i + 1);
+						c3 = utftext.charCodeAt(i + 2);
+						string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+						i += 3;
+					}
+				}
+				return string;
+			}
+		}
+	</script>
+
+</html>

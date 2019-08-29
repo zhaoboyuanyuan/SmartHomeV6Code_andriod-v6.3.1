@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html >
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+        <title>设置设备状态</title>
+        <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+        <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+        <script type="text/javascript" src="../../source/mui/js/mui.min.js"></script>
+        <script type="text/javascript" src="../../source/mui/js/mui.picker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+        <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+        <style type="text/css">
+            body,html {
+                width: 100%;
+                background-color: #f1f4f8;
+            }
+            .secList {
+                margin-top: 6.4rem;
+            }
+            .header {
+                box-sizing: content-box;
+            }
+            .list {
+                margin-top: 1.6rem;
+            }
+            .list li {
+                box-sizing:border-box;
+                width:100%;
+                height:4rem;
+                line-height:4rem;
+                padding:0 1.6rem;
+                border-bottom:1px solid #f1f4f8;
+                background-color: white;
+                font-size:1.6rem;
+                color:#000;
+            }
+            .list li div{
+                position:relative;
+                float:right;
+                width:4.5rem;
+                height:2rem;
+                margin-top:1rem;
+                border-radius:2.2rem;
+            }
+            .list li div span{
+                display:block;
+                position:absolute;
+                left:2.9rem;
+                top:0.4rem;
+                width:1.2rem;
+                height:1.2rem;
+                background:#fff;
+                border-radius:50%;
+            }
+            @keyframes slideOn {
+                from{left:0.3rem;}
+                to{left:2.9rem;}
+            }
+            @-webkit-keyframes slideOn {
+                from{left:0.3rem;}
+                to{left:2.9rem;}
+            }
+
+            @keyframes slideOff {
+                from{left:2.9rem;}
+                to{left:0.3rem;}
+            }
+            @-webkit-keyframes slideOff {
+                from{left:2.9rem;}
+                to{left:0.3rem;}
+            }
+            .list li div[switch="on"]{
+                background:#8ff652;
+            }
+            .list li div[switch="on"] span{
+                animation: slideOn 0.5s linear 1 both;
+                -webkit-animation: slideOn 0.5s linear 1 both;
+            }
+            .list li div[switch="off"]{
+                background:#aeb8bb;
+            }
+            .list li div[switch="off"] span{
+                animation: slideOff 0.5s linear 1 both;
+                -webkit-animation: slideOff 0.5s linear 1 both;
+            }
+            /**********************************************************************
+             *                              重写 picker样式
+             **********************************************************************/
+            .mui-poppicker-body{
+                height:120px;
+            }
+
+            .mui-backdrop{
+                background-color:transparent;
+            }
+            /* 选择器头部颜色 */
+            .mui-poppicker-header{
+                background-color: #f7f7f7;
+            }
+            .mui-btn {
+                background: transparent;
+                border: none;
+                color: #8dd652;
+            }
+            .mui-picker{
+                background:#fff;
+            }
+        </style>
+    </head>
+    <body>
+        <header  class="header">
+            <a href="javascript:window.history.back(-1);"></a>
+            <a class="deviceName autoSwitchLanguager" key="setDeviceStatus" href="javascript:;">设置设备状态</a>
+            <a key="editScene_Bm_Confirm" class="complete autoSwitchLanguager" onclick="save()" href="javascript:;">确定</a>
+        </header>
+        <section class="secList">
+            <ul class="list">
+                <li>
+                    <em class="autoSwitchLanguager" key="clothes_hanger_switch">开关</em>
+                    <div switch="off"><span></span></div>
+                </li>
+            </ul>
+        </section>
+    </body>
+    <script>
+        /**********************************************************************
+         *                              初始化
+         **********************************************************************/
+        initlan();
+        var info = window.sysfun;
+        info.init("V6Housekeeper");
+        var taskType = info.getItem("taskType");
+        var funType = info.getItem('funType');
+
+        var picker;
+
+        mui.init();
+
+        plus.plusReady(function () {
+            plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+            });
+        });
+
+        function getArr(start, end) {
+            var arr = [];
+            for (var i = start; i <= end; i++) {
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                arr.push(i)
+            }
+            return arr;
+        }
+
+        function cratePicker() {
+            if (!picker) {
+                if (funType == 'g') {
+                    picker = new mui.PopPicker({});
+                    picker.setData(getArr(1, 30));
+                } else {
+                    picker = new mui.PopPicker({
+                        layer: 2
+                    });
+                    picker.body.setAttribute('id', 'picker');
+
+                    picker.setData([{
+                        value: "00",
+                        text: "00",
+                        children: getArr(1, 59)
+                    }, {
+                        value: "01",
+                        text: "01",
+                        children: getArr(0, 59)
+                    }, {
+                        value: "02",
+                        text: "02",
+                        children: getArr(0, 59)
+                    }]);
+                }
+            }
+        }
+
+        // 风干烘干
+        function pickerClick() {
+            $(".mui-backdrop").css("opacity", "0");
+            $(".mui-poppicker-btn-cancel").html(languageUtil.getResource("clothes_hanger_cancel"));//device_cancel
+            $(".mui-poppicker-btn-ok").html(languageUtil.getResource("clothes_hanger_ok"));//device_sure
+            var left = $(".mui-poppicker-body .mui-picker").eq(0).find(".mui-pciker-rule-ft");
+            var right = $(".mui-poppicker-body .mui-picker").eq(1).find(".mui-pciker-rule-ft");
+            $(left).html(languageUtil.getResource("clothes_hanger_hour"));
+            $(right).html(languageUtil.getResource("clothes_hanger_mine"));
+            var width = $(".mui-pciker-rule-ft").width();
+            $(left).css({
+                "text-indent": width / 2 + 20 + "px"
+            });
+            $(right).css({
+                "text-indent": width / 2 + 20 + "px"
+            });
+            picker.show(function (item) {
+                var hour = parseInt(item[0].value);
+                var min = parseInt(item[1]);
+                var allMin = hour * 60 + min;
+                var timeText = '' + allMin;
+                if (allMin < 10) {
+                    timeText = '00' + allMin
+                } else if (allMin < 100) {
+                    timeText = '0' + allMin
+                }
+                console.log(timeText);
+
+                if (funType == 'f') {
+                    info.setItem('epData', ',,,,,1' + timeText + ',');
+                    info.setItem('epData', ',,,,,1' + timeText + ',');
+                    info.setItem("deviceState", languageUtil.getResource("clothes_hanger_drying")
+                        + ': '
+                        + languageUtil.getResource("clothes_hanger_open"));
+                } else {
+                    info.setItem('epData', ',,,,1' + timeText + ',,');
+                    info.setItem('epData', ',,,,1' + timeText + ',,');
+                    info.setItem("deviceState", languageUtil.getResource("clothes_hanger_Air_dry")
+                        + ': '
+                        + languageUtil.getResource("clothes_hanger_open"));
+                }
+                if (taskType == 'timeTask') {
+                    window.location = "setDelay_timeTask.html";
+                } else {
+                    window.location = "setDelay_sceneTask.html";
+                }
+            })
+        }
+
+        // 杀菌消毒
+        function pickerClick1() {
+            $(".mui-backdrop").css("opacity", "0");
+            $(".mui-poppicker-btn-cancel").html(languageUtil.getResource("clothes_hanger_cancel"));//device_cancel
+            $(".mui-poppicker-btn-ok").html(languageUtil.getResource("clothes_hanger_ok"));//device_sure
+            $(".mui-poppicker-body .mui-pciker-rule-ft").html(languageUtil.getResource("clothes_hanger_mine"));
+            var width = $(document).width();
+            $(".mui-pciker-rule-ft").css({
+                "text-indent": width / 2 + 20 + "px"
+            });
+            picker.show(function (item) {
+                var min = parseInt(item[0]);
+                var timeText = min;
+                if (min < 10) {
+                    timeText = '0' + min;
+                }
+                console.log(timeText);
+                info.setItem('epData', ',,,,,,1' + timeText);
+                info.setItem('epData', ',,,,,,1' + timeText);
+                info.setItem("deviceState", languageUtil.getResource("clothes_hanger_Disinfection")
+                    + ': '
+                    + min
+                    + languageUtil.getResource("clothes_hanger_mine"));
+                if (taskType == 'timeTask') {
+                    window.location = "setDelay_timeTask.html";
+                } else {
+                    window.location = "setDelay_sceneTask.html";
+                }
+            })
+        }
+        $("body").on("click",function(e){
+            e.stopPropagation();
+            var switchSate = $('.list li').find("div").attr("switch");
+            if(switchSate === "on"){
+                $('.list li').find("div").attr("switch","off");
+            }
+        });
+        // 时间选择
+        $('.list li').on("click", function (e) {
+            e.stopPropagation();
+            var switchSate = $(this).find("div").attr("switch");
+            if(switchSate === "on"){
+                $(this).find("div").attr("switch","off");
+            }else{
+                $(this).find("div").attr("switch","on");
+            }
+            cratePicker();
+            if (funType == 'g') {
+                pickerClick1()
+            } else {
+                pickerClick();
+            }
+        });
+
+        function save() {
+            console.log('关');
+            if (funType == 'g') {
+                info.setItem('epData', ',,,,,,000');
+                info.setItem('epData', ',,,,,,000');
+                info.setItem("deviceState", languageUtil.getResource("clothes_hanger_Disinfection")
+                    + ': '
+                    + languageUtil.getResource("clothes_hanger_close"));
+            } else if (funType == 'f') {
+                info.setItem('epData', ',,,,,0000,');
+                info.setItem('epData', ',,,,,0000,');
+                info.setItem("deviceState", languageUtil.getResource("clothes_hanger_drying")
+                    + ': '
+                    + languageUtil.getResource("clothes_hanger_close"));
+            } else {
+                info.setItem('epData', ',,,,0000,,');
+                info.setItem('epData', ',,,,0000,,');
+                info.setItem("deviceState", languageUtil.getResource("clothes_hanger_Air_dry")
+                    + ': '
+                    + languageUtil.getResource("clothes_hanger_close"));
+            }
+            if (taskType == 'timeTask') {
+                window.location = "setDelay_timeTask.html";
+            } else {
+                window.location = "setDelay_sceneTask.html";
+            }
+        }
+        var iphoneX = {sysFunc: "getItem:", room: "iphoneX", id: "iphoneX", data: ""};
+        var iStr ='';
+        if(!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if(iStr == "iphoneX"){
+            if(iStr == "iphoneX"){
+                $(".secList")[0].style.marginTop = "8.4rem";
+            }
+
+        }
+    </script>
+</html>

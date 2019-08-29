@@ -1,0 +1,31 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Device_Oi_Details_Name = "空调控制器(VRV)";
+$lang.Device_Oi_Details_Open = "开机";
+$lang.Device_Oi_Details_Close = "关机";
+$lang.Device_Oi_Details_Temperature = "室温";
+$lang.Device_Oi_Details_Type = "模式";
+$lang.Device_Oi_Details_Type1 = "制冷";
+$lang.Device_Oi_Details_Type2 = "制热";
+$lang.Device_Oi_Details_Type3 = "送风";
+$lang.Device_Oi_Details_Type4 = "除湿";
+$lang.Device_Oi_Details_Type5 = "预热";
+$lang.Device_Oi_Details_Type6 = "自动";
+$lang.Device_Oi_Details_Type7 = "干燥";
+$lang.Device_Oi_Details_Type8 = "清爽";
+$lang.Device_Oi_Details_Type9 = "睡眠";
+$lang.Device_Oi_Details_Type10 = "杀菌";
+$lang.Device_Oi_Details_Type11 = "干爽除湿";
+$lang.Device_Oi_Details_Type12 = "强力除湿";
+$lang.Device_Oi_Details_Speed = "风速";
+$lang.Device_Oi_Details_Speed1 = "高";
+$lang.Device_Oi_Details_Speed2 = "中";
+$lang.Device_Oi_Details_Speed3 = "低";
+$lang.Device_Oi_Details_Speed4 = "自动";
+$lang.Device_Oi_Details_Direction = "风向";
+$lang.Device_Oi_Details_Offline = "设备已离线";
+$lang.moreSettingLog          = "日志";
+$lang.moreSettingAlarm        = "报警消息";

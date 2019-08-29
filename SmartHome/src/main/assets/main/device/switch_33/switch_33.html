@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>三位场景开关</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/device.css">
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="Device_33_details_name"
+           href="javascript:;">三位场景开关</a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<section class="content">
+    <div>
+        <div class="theOne theScene">
+            <div id="keyImg1">
+                <i id="scene1"></i>
+            </div>
+            <span id="key1"></span>
+        </div>
+        <div class="theTwo theScene">
+            <div id="keyImg2">
+                <i id="scene2"></i>
+            </div>
+            <span id="key2"></span>
+        </div>
+        <div class="theThree theScene">
+            <div id="keyImg3">
+                <i id="scene3"></i>
+            </div>
+            <span id="key3"></span>
+        </div>
+    </div>
+</section>
+<section class="mask_layer " style="display:none; ">
+    <i></i>
+    <span id="offline " class="autoSwitchLanguager" key='offLine'></span>
+</section>
+</body>
+<script type="text/javascript" src="../../source/js/rem.js"></script>
+<script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="lang/lang.js"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var num = 2; //动画数组长度
+		var timer; //定时器动画
+		var GWID;
+		var DEVID;
+		var ENDPOINTNUMBER;
+		var DEVICEINFO;
+		var APPID;
+		var MVC = {};
+		var SceneList = [];
+		//初始化绑定关系
+		var bindMap = {
+			"1": "-1",
+			"2": "-1",
+			"3": "-1"
+		};
+
+		var key1 = document.getElementById("key1");
+		var key2 = document.getElementById("key2");
+		var key3 = document.getElementById("key3");
+
+		var keyImg1 = document.getElementById("keyImg1");
+		var keyImg2 = document.getElementById("keyImg2");
+		var keyImg3 = document.getElementById("keyImg3");
+
+		var shadow = document.getElementsByClassName("mask_layer")[0];
+		var deviceName = document.getElementsByClassName("deviceName")[0];
+
+		/*
+		 * 页面启动完成入口
+		 */
+		plus.plusReady(function() {
+			initlan();
+			MVC.C.initInfo();
+		});
+		//view    页面渲染
+		MVC.V = {
+			bindClick: function() {
+				document.getElementById("back").addEventListener("click", function() {
+					MVC.C.back();
+				});
+				document.getElementsByClassName("more")[0].addEventListener("click", function() {
+					MVC.C.more();
+				});
+				keyImg1.addEventListener("click", function() {
+					window.location = 'KeyBindingScene.html?endPointNum=1&&bindSceneID=' + bindMap["1"];
+				});
+				keyImg2.addEventListener("click", function() {
+					window.location = 'KeyBindingScene.html?endPointNum=2&&bindSceneID=' + bindMap["2"];
+				});
+				keyImg3.addEventListener("click", function() {
+					window.location = 'KeyBindingScene.html?endPointNum=3&&bindSceneID=' + bindMap["3"];
+				});
+			},
+		};
+
+</script>
+<script src="js/index.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/model.js" type="text/javascript" charset="utf-8"></script>
+</html>

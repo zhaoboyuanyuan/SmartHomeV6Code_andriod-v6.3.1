@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/iv_device_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/default_padding_large"
+        android:src="@drawable/bg_add_cg27" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/iv_device_img"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_padding_normal"
+                android:background="@drawable/selector_checkbox_scene_group"
+                android:button="@null"
+                android:checked="true"
+                android:clickable="false" />
+
+            <TextView
+                android:id="@+id/tv_step1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/default_padding_normal"
+                android:text="@string/addDevice_CG26_step_1"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_next_step"
+        style="@style/config_next_button"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/default_padding_large"
+        android:gravity="center"
+        android:text="@string/Config_Next_Step" />
+
+</RelativeLayout>

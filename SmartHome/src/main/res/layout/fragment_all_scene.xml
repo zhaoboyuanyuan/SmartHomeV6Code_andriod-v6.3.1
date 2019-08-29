@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/v6_bg">
+
+    <RelativeLayout
+        android:id="@+id/layout_search_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/scene_accent_text_color"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/all_scene_text_cancel_in"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/Cancel"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/all_scene_text_cancel"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="@string/Cancel"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
+
+        <LinearLayout
+            android:id="@+id/all_scene_linear_search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/scene_search_view_Height"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/shape_edit_title_bg"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toEndOf="@+id/all_scene_text_cancel_in"
+            android:layout_toStartOf="@+id/all_scene_text_cancel">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_search"/>
+            <TextView
+                android:id="@+id/tv_search_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/AddDevice_Search"
+                android:gravity="center"
+                android:textColor="@color/device_search_text_color"
+                android:textSize="@dimen/search_text_size"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/all_scene_edit_search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/scene_search_view_Height"
+            android:paddingStart="@dimen/scene_search_view_edit_padding_lr"
+            android:paddingEnd="@dimen/scene_search_view_edit_padding_lr"
+            android:imeOptions="actionSearch"
+            android:background="@drawable/shape_edit_title_bg"
+            android:hint="@string/AddDevice_Search"
+            android:textCursorDrawable="@null"
+            android:drawableStart="@drawable/icon_search"
+            android:drawableEnd="@drawable/icon_delete"
+            android:lines="1"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:visibility="invisible"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toEndOf="@+id/all_scene_text_cancel_in"
+            android:layout_toStartOf="@+id/all_scene_text_cancel"/>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/all_scene_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/all_scene_text_noResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/message_center_detail_no_result_MarginTop"
+            android:gravity="center_horizontal"
+            android:text="@string/Tip_Search_No_Result"
+            android:textColor="@color/message_center_no_result_text_color"
+            android:textSize="16sp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/all_scene_text_noData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/message_center_detail_no_result_MarginTop"
+            android:gravity="center_horizontal"
+            android:text="@string/Home_Scene_NoScene"
+            android:textColor="@color/message_center_no_result_text_color"
+            android:textSize="16sp"
+            android:visibility="invisible" />
+    </FrameLayout>
+</LinearLayout>

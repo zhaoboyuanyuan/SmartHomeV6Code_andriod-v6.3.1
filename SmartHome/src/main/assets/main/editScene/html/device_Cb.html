@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a href="javascript:;" onClick="javascript:history.back(-1);"></a>
+        <a href="javascript:;" key="setDeviceStatus" class="autoSwitchLanguager" id='setDeviceStatus'>设置设备状态</a>
+        <a id="confirm" class="save autoSwitchLanguager" href="javascript:;">确定</a>
+    </div>
+</header>
+<section>
+    <ul class="switch_list">
+        <!--<li>-->
+            <!--<p>开关1</p>-->
+            <!--<p class="switchSelect">-->
+                <!--<span class="" data-id="1">开</span>-->
+                <!--<span data-id="0">关</span>-->
+                <!--<span data-id="3">切换</span>-->
+            <!--</p>-->
+        <!--</li>-->
+    </ul>
+</section>
+</body>
+<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Scene");
+    var deviceID = info.getItem("deviceID");
+
+    var endpointDic ={
+        "EP1CurtainMode" : "1",
+        "EP2CurtainMode" : "1"
+    }
+    initlan()
+
+    plus.plusReady(function(){
+        $(".switch_list").html("");
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+
+        plus.gatewayCmd.getDeviceInfo(deviceID, function (data) {
+            DevID = data.devID;
+            GwID = data.gwID;
+            AppID = data.appID;
+            //查询设备信息
+            send_501(DevID,GwID,AppID,0x02,0,"");
+        });
+
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            if (data.cmd === "500" && DevID === data.devID) {
+                setEndPoints(data);
+            }
+        });
+
+        function setEndPoints(result) {
+            var endPoints = result.endpoints;
+            for(var i = 0; i < endPoints.length; i++) {
+                var endPoint = endPoints[i];
+                var endPointNum = endPoint.endpointNumber;
+                var clusters = endPoint.clusters;
+                for(var j = 0; j < clusters.length; j++) {
+                    var cluster = clusters[j];
+                    var clusterId = cluster.clusterId;
+                    var attributes = cluster.attributes;
+                    for(var k = 0; k < attributes.length; k++) {
+                        var attribute = attributes[k];
+                        var attributeid = attribute.attributeId;
+                        var attributeValue = attribute.attributeValue;
+                        if(clusterId == 0x0102 && attributeid == 0x8002) {
+                            if(endPointNum == 1) {
+                                endpointDic['EP1CurtainMode'] = attributeValue;
+                            } else if(endPointNum == 2) {
+                                endpointDic['EP2CurtainMode'] = attributeValue;
+                            }
+                        }
+                    }
+                }
+            }
+            reloadUi();
+        }
+
+        function reloadUi() {
+
+            $(".switch_list").html("")
+            var curtainState = '<p class="switchSelect"> ' +
+                '<span data-id="2">'+lang_openSingle+'</span> ' +
+                '<span data-id="3">'+lang_closeSingle+'</span> ' +
+                '<span data-id="1">'+lang_stopSingle+'</span> ' +
+                '</p>'
+
+
+            var switchModel = '<p>' + device_Ca_mode_fail_01 + '</p>'
+
+            for(var i=1;i<3;i++){
+                var listName = i + device_A1_way;
+                if(endpointDic["EP"+ i +"CurtainMode"] == 1) {
+                    $(".switch_list").append("<li><p>"+listName+"</p>"+curtainState+"</li>");
+                } else {
+                    $(".switch_list").append("<li><p>"+listName+"</p>"+switchModel+"</li>");
+                }
+            }
+            $(".switchSelect span").on("click",function(){
+                if($(this).attr("class") == "select"){
+                    $(this).removeClass("select")
+                }else{
+                    $(this).addClass("select").siblings("span").removeClass("select")
+                }
+            });
+
+        }
+
+        $(".save").on("click",function(e){
+            var switchLen = $(".switch_list li").length;
+            var epData = "";
+            var deviceState = "";
+            for(var i=0;i<switchLen;i++){
+                if($(".switch_list li").eq(i).find(".select").length != 0){
+                    var id = $(".switch_list li").eq(i).find(".select").attr("data-id");
+                    var value = $(".switch_list li").eq(i).find(".select").html();
+                    epData += id;
+                    deviceState += (i+1)+device_A1_way+":"+value+" ";
+                }else{
+                    epData += "4";
+                }
+            }
+            if(epData == "44"){
+                showToast();
+            }else{
+
+                info.setItem("epData",epData);
+                info.setItem("deviceState",deviceState);
+                window.location = "addDelay.html";
+            }
+        })
+    })
+    function showToast(){
+        window.showDialog.show(languageUtil.getResource("toast_switch_mode"),3000);
+    }
+
+    function send_501(devID,gwID,appID,commandId,num,parameter){
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        jsonData.endpointNumber = num;
+        jsonData.clusterId = 0x0102;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = [parameter]
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+
+</script>
+</html>

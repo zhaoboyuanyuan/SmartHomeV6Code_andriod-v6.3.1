@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加设备</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/setState.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:history.back(-1)"></a>
+				<a href="javascript:;" class="addDoorC autoSwitchLanguager" id="addDevice_Bc">添加网络智能锁</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section style="width: 100%;">
+			<section style="width: 100%;text-align: center;">
+				<img style="width: 50%;" src="../../source/addDeviceLock/Bc_2.png" />
+			</section>
+			<div class="add_06_step" style="width: 100%;overflow:hidden;text-align:center;margin-top: 3rem;font-size:1.5rem;">
+				<span class="autoSwitchLanguager" id="addDoorBc_step_05">双击“*”号键，输入管理员指纹或密码，进入管理员模式</span>
+				<span class="autoSwitchLanguager" id="addDoorBc_step_02">按3，选择“系统设置”</span>
+				<span class="autoSwitchLanguager" id="addDoorBc_step_03">按2，选择“智能家居”</span>
+				<span class="autoSwitchLanguager" id="addDoorBc_step_04">按1，选择“加入物联网”</span>
+				
+				 
+			</div>
+		</section>
+		<section class="iphoneX9_4" style="position: absolute; top: 7rem;right: 10px">
+			<canvas id="canvas" style=";width:8rem;height:8rem;right: 0px;">
+		    </canvas>
+		</section>
+		<!--<section class="addSensorBtn">
+			<a href="javascript:;" class="autoSwitchLanguager" id="searchScene_cancal" >取消</a>
+		</section>-->
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/timer_canvas.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+        initlan()
+		var time_canvas = 99;
+		picture(99);
+		var info = window.sysfun;
+		info.init("V6addDevice");
+		info.clear();
+        info.setItem("type", "Bc");
+        info.setItem("name", "Bc");
+		var timer = setInterval(function() {
+			if(time_canvas <= 0) {
+				window.clearInterval(timer);
+				window.location = "addDevice_fail.html?type=Bc";
+			}			
+			picture(99);
+			time_canvas = time_canvas - 1;
+			
+		}, 1000);
+		plus.plusReady(function() {
+	        info.setItem("name",languageUtil.getResource("Device_List_Networklock"));
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				if(result.cmd == "500") {
+					if(result.mode == 4 && result.type == "Bc") {
+				       var data = {
+				       	 "view":"BcbindWifiView",
+				       	 "data": result
+				       }
+				       plus.gatewayCmd.toNativeController(data,function(res){})
+					}
+				}
+			});
+			$(".addSensorBtn").on("click", function() {
+				window.location = "addDeviceNew.html";
+			})
+		})
+		
+	</script>
+</html>

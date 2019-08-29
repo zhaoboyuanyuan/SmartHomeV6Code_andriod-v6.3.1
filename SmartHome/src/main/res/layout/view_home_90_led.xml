@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/widget_padding_vertical"
+    android:paddingTop="@dimen/widget_padding_vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/widget_padding_horizontal"
+        android:paddingStart="@dimen/widget_padding_horizontal">
+
+        <include layout="@layout/view_widget_title" />
+    </FrameLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/widget_padding_vertical"
+        android:layout_marginRight="@dimen/widget_padding_vertical"
+        android:layout_marginTop="@dimen/widget_padding_vertical"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="75dp"
+                android:layout_height="75dp">
+
+                <ImageView
+                    android:id="@+id/off_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/led_90_off_btn" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="75dp"
+                android:layout_height="75dp">
+
+                <ImageView
+                    android:id="@+id/colorful_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/led_90_mode_btn" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/LEDlight_90_Colorful"
+                    android:textColor="#666666"
+                    android:textSize="12dp" />
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:layout_width="75dp"
+                android:layout_height="75dp">
+
+                <ImageView
+                    android:id="@+id/sunlight_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/led_90_mode_btn" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/LEDlight_90_sunlight"
+                    android:textColor="#666666"
+                    android:textSize="12dp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="75dp"
+                android:layout_height="75dp">
+
+                <ImageView
+                    android:id="@+id/blue_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/led_90_blue_btn" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="75dp"
+                android:layout_height="75dp">
+
+                <ImageView
+                    android:id="@+id/green_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/led_90_green_btn" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="75dp"
+                android:layout_height="75dp">
+
+                <ImageView
+                    android:id="@+id/red_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/led_90_red_btn" />
+            </FrameLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+</LinearLayout>

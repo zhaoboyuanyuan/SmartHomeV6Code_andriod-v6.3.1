@@ -1,0 +1,52 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Backup_and_recovery = "גיבוי ושחזור";
+$lang.Backup_and_recovery_hint = "המערכת תגבה באופן אוטומטי (או ידני) לענן מידע והגדרות של ההתקנים， התרחישים והפעלות של הנתב. במידה ויהיה צורך בהחלפת הנתב， ניתן יהיה להשתמש בפונקציית הגיבוי ולשחזר במהירות את ההגדרות וההפעלות.";
+$lang.Backup_recovery = "שחזור עבור נתב זה";
+$lang.Backup_Manual = "גיבוי ידני";
+$lang.Backup_recording = "רשימת גיבויים";
+$lang.Backup_no_recording = "לא אותרו גיבויים לנתב";
+$lang.Backup_add = "הוסף גיבוי חדש";
+$lang.Backup_automatic = "גיבוי אוטומטי";
+$lang.Backup_Manual_3 = "המערכת תשמור את שלושת הגיבויים הידניים האחרונים. גיבויים ישנים ימחקו.";
+$lang.Backup_Backuping = "מתבצע גיבוי...";
+$lang.Backup_Backup_device = "גיבוי של ההתקן..";
+$lang.Backup_Backup_editScene = "גיבוי ההתקנים וההפעלות..";
+$lang.Backup_time = "התהליך צפוי להמשך כ-1-2 דקות";
+$lang.Backup_Manual_hint = "אין לכבות את הנתב או לנתק את קישור האינטרנט שלו במהלך הגיבוי";
+$lang.Backup_success = "גיבוי ידני הסתיים בהצלחה";
+$lang.Backup_failure = "גיבוי ידני נכשל";
+$lang.Backup_failure_hint = "יש לוודא כי חיבור הרשת תקין";
+$lang.Recovery_Account_password = "בכדי לשחזר גיבוי של הנתב， יש למלא שם חשבון (בדר”כ כתובת מייל) והסיסמא של הנתב.";
+$lang.Recovery_account = "חשבון";
+$lang.Recovery_enter_account = "אנא הזן חשבון (בדר”כ כתובת מייל)";
+$lang.Recovery_password = "סיסמא";
+$lang.Recovery_enter_password = "הזן סיסמת הנתב";
+$lang.Recovery_password_error = "חשבון או סיסמא שגויים， אנא נסו שנית";
+$lang.Recovery_Different_models = "הנתב שהוזן אליו אמור להתבצע השחזור， שונה מדגם הנתב ממנו נשמר הגיבוי. לא ניתן לבצע שחזור.";
+$lang.Recovery_choose_data = "יש לבחור את המידע לשחזור בהתאם למועד הרצוי של השחזור.";
+$lang.Recovery_no_data_reason = "סיבות אפשריות להעדר גיבוי לנתב:";
+$lang.Recovery_no_data_reason_1 = "1. נתב חדש， עדיין לא בוצעו גיבויים.";
+$lang.Recovery_no_data_reason_2 = "2. נתב זה אינו תומך באופציית גיבוי.";
+$lang.Recovery_no_data_reason_3 = "3. אנא ודאו אם הגיבוי של נתב זה אוחזר לנתב אחר.";
+$lang.Recovery_Start = "התחל שחזור";
+$lang.Recovery_Start_hint = "שים לב!! אישור להמשך יוביל לכך שהגיבוי שנבחר ישוחזר ויכתב לנתב זה， והמידע הקודם שהיה עליו ימחק.";
+$lang.Recovery_recoverying = "מבוצע שחזור...";
+$lang.Recovery_recovery_device = "משחזר התקנים...";
+$lang.Recovery_recovery_editScene = "משחזר תרחישים..";
+$lang.Recovery_recoverying_hint = "שים לב! אין לנתב את הנתב מהחשמל או מרשת האינטרנט במהלך השחזור. הפסקת השחזור באמצע התהליך יכול להוביל לפגיעה בלתי הפיכה בנתב.";
+$lang.Recovery_success = "שחזור הנתב הסתיים בהצלחה";
+$lang.Recovery_failure = "שחזור הנתב נכשל";
+$lang.Recovery_Tips = "טיפ:";
+$lang.Recovery_success_hint = "אם עדיין מבוצע שימוש בנתב המקורי (כלומר， לא הוחלף נתב)， יש לבצע לפני השחזור אתחול להגדרות יצרן， אחרת השחזור יכול להכשל ופעולת הנתב תפגע.";
+$lang.device_Backup_Cancel = "בטל";
+$lang.device_Backup_ok = "אשר";
+$lang.Complete = "הושלם";
+$lang.Music_Scan_Retry = "נבה שוב";
+$lang.addGateway3_toast_00 = "חשבון או סיסמא חסרים";
+$lang.addDevice_sure = "אשר";
+$lang.Backup_note_this = "אין להכניס את מספר הנתב אליו אתם מחוברים כעת!";
+$lang.Backup_is_online = "הנתב שהזנת זמין באופן רגיל ברשת. אם ברצונך להמשיך בפעולה， יש לנתקו מהחשמל או לבצע שחזור הגדרות יצרן לנתב";

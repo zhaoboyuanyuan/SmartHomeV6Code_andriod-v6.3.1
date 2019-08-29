@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 标题 -->
+    <dimen name="toolBar_button_text_size">16sp</dimen>
+    <dimen name="toolBar_text_size">16sp</dimen>
+    <dimen name="toolBar_title_size">19sp</dimen>
+
+    <!-- 场景 -->
+    <dimen name="scene_all_item_text_size">18sp</dimen>
+
+    <!-- 消息中心 -->
+    <dimen name="message_center_item_text_size">14sp</dimen>
+    <dimen name="message_center_detail_dateBar_text_function_size">16sp</dimen>
+    <dimen name="message_center_detail_dateBar_Padding">15dp</dimen>
+    <dimen name="message_center_detail_dateBar_text_date_size">14sp</dimen>
+
+    <!-- 首页 Widget -->
+    <dimen name="widget_primary_text_size_big">20sp</dimen>             <!--主要文字大-->
+    <dimen name="widget_primary_text_size">16sp</dimen>             <!--主要文字-->
+    <dimen name="widget_secondary_text_size">14sp</dimen>           <!--次要文字-->
+    <dimen name="widget_caption_text_size">12sp</dimen>             <!--说明性文字-->
+    <dimen name="widget_padding_vertical">16dp</dimen>              <!--纵向内边距-->
+    <dimen name="widget_padding_horizontal">16dp</dimen>            <!--横向内边距-->
+    <dimen name="widget_margin_component">8dp</dimen>               <!--组件之间的间距-->
+
+    <dimen name="air_conditioning_image_size">48dp</dimen>
+</resources>

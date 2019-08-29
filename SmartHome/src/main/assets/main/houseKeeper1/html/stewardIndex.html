@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>管家首页</title>
+	<link rel="stylesheet" type="text/css" href="../css/base.css" />
+	<link rel="stylesheet" href="../css/index.css" />
+	<link rel="stylesheet" type="text/css" href="../css/dropload.css" />
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body style="background: none;">
+	<header class="fixTop header">
+		<a href="javascript:;" id="myBack"></a>
+		<a href="javascript:;" id="stewardIndex_tittle" class="autoSwitchLanguager">我的管家</a>
+		<a class="addTask" href="javascript:;"></a>
+	</header>
+	<!--管家中无任务-->
+	<section id="stewardIndex_notask" class="noMission autoSwitchLanguager" style="display:none;">还没有创建管家任务，点击右上角“+”创建</section>
+	<!--点击添加创建管家任务-->
+	<section class="createMission" style="display:none;position: fixed;">
+		<div class="icon_del iphoneX44"><i></i></div>
+		<div class="create">
+			<span id="stewardIndex_create" class="autoSwitchLanguager">创建管家任务</span>
+			<a href="timeTask1.html"><i></i><em id="stewardIndex_time" class="autoSwitchLanguager">定时任务</em></a>
+			<a href="circumstances.html"><i></i><em id="stewardIndex_thing" class="autoSwitchLanguager">情景任务</em></a>
+		</div>
+	</section>
+	<!--管家任务-->
+	<section class="getMission content iphoneX" style="display:none;">
+		<div class="lists">
+		</div>
+	</section>
+</body>
+<script src="../js/dropload.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/leftDelete1.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../model/housekeeper.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var gwID;
+	var appID;
+	var currentPage = 1;
+	var nextpage = 1;
+	var allPage;
+	var beginAchieve = "false";
+	var closeAchieve = "false";
+	var info = window.sysfun;
+	info.init("V6Housekeeper");
+	info.clear()
+	var MM;
+	var num = 0;
+	initlan();
+	plus.plusReady(function () {
+		var param;
+		var stewList = [];
+		plus.gatewayCmd.getCurrentGatewayID(function (data) {
+			gwID = data;
+			plus.gatewayCmd.getCurrentAppID(function (result) {
+				appID = result;
+				//nextPage();
+				//分页及上拉加载
+				plus.gatewayCmd.DataRefresh_508(function (list) {
+
+					if (list.p.t == 0) {
+						$(".dropload-down").hide();
+						$(".noMission").show();
+					}
+					if (appID == list.appID && list.p.i == nextpage) {
+						console.log(list)
+						currentPage = list.p.i;
+						allPage = list.p.t;
+						nextpage = currentPage + 1;
+						if (list.ruleArray[0] == null || !list.ruleArray || list.ruleArray.length == 0) {
+							if ($(".lists dl").length == 0 || $(".lists dl") == null || $(".lists dl") == undefined) {
+								$(".dropload-down").hide();
+								$(".noMission").show();
+							} else {
+								/*隐藏没有更多数据*/
+								/*var str = languageUtil.getResource("stewardindex_nodate")
+								$(".dropload-down").html('<div class="dropload-noData">' + str + '</div>')*/
+								$(".dropload-down").html("");
+							}
+							return;
+						}
+						list.ruleArray.map(function (item) {
+							if (item.programType == "2") {
+								num++;
+								stewList.push(item);
+							}
+						})
+						edit(stewList);
+						if (MM) {
+							MM.resetload();
+						}
+					}
+				})
+				$(".getMission").dropload({
+					scrollArea: window,
+					loadDownFn: function (me) {
+						MM = me;
+						if (currentPage == allPage) {
+							/*var str = languageUtil.getResource("stewardindex_nodate")
+							$(".dropload-down").html('<div class="dropload-noData">' + str + '</div>')*/
+							$(".dropload-down").html("");
+							return;
+						}
+						nextPage()
+					},
+					error: function (xhr, type) {
+						alert('Ajax error!');
+						// 即使加载出错，也得重置
+						me.resetload();
+					}
+				})
+
+			})
+		})
+	})
+
+	function nextPage() {
+		var param = {
+			"cmd": "508",
+			"gwID": gwID,
+			"appID": appID,
+			"i": nextpage
+		}
+		plus.gatewayCmd.houserkeep_508(param, function () {})
+	}
+
+	$("#myBack").on("click", function () {
+		plus.tools.back(function () {})
+	})
+
+	function edit(list) {
+		if (list == null) {
+			$(".noMission").show()
+		} else {
+			$(".noMission").hide()
+			$(".getMission").show();
+			$(".getMission .lists").html("")
+			list.map(function (item, i) {
+				var weekList = ''
+				if (item.triggerArray != null) {
+					if (item.triggerArray[0].type == "1") {
+						var min = item.triggerArray[0].exp.substring(0, item.triggerArray[0].exp.indexOf(" "))
+						var hour = item.triggerArray[0].exp.substring(2, item.triggerArray[0].exp.indexOf("?") - 1)
+						week = item.triggerArray[0].exp.substring(item.triggerArray[0].exp.indexOf("*") + 2, item.triggerArray[0].exp.length)
+							.split(",")
+						console.log(week)
+						for (var i = 0; i < week.length; i++) {
+							if (i === 0) {
+								if (week[0] == '7') {
+									var sunday = week.shift()
+									week.push(sunday)
+								}
+								weekList = getWeek(week[0])
+							} else {
+								weekList = weekList + "," + getWeek(week[i])
+							}
+						}
+						weekList.substring(0, 1)
+						console.log(weekList)
+						var status = item.status == "0" ? "" : "on";
+						var str = '<dl class="task_list" data-click="timeTask" data-type="' + item.triggerArray[0].type + '" data-id="' + item.programID +
+							'"><dt><a href="javascript:;"><span id="click">' + item.programName +
+							'</span><em>' + hour + ':' + min + '</em><em>' + weekList + '</em></a></dt><dd><i class="' + status +
+							'"><em></em></i></dd><dd><b class="edit">' + circumstances_edit + '</b><b class="delete">' +
+							circumstances_txt26 + '</b></dd></dl>'
+					} else {
+						var status = item.status == "0" ? "" : "on"
+						var str = '<dl class="task_list" data-click="sceneTask" data-type="' + item.triggerArray[0].type + '" data-id="' + item.programID +
+							'"><dt><a class="one_txt" href="javascript:;"><span id="click">' + item
+							.programName + '</span></a></dt><dd><i class="' + status + '"><em></em></i></dd><dd><b class="edit">' +
+							circumstances_edit + '</b><b class="delete">' + circumstances_txt26 + '</b></dd></dl>'
+					}
+				}
+				$(".getMission .lists").append(str)
+			})
+			$(".getMission dl").leftDelete({
+				marginLeft: "-33%",
+				mm: MM,
+			});
+            $(".task_list").on("click",function(e){
+                e.stopPropagation();
+                var status = "0";
+                if($(this).find("i").attr("class").indexOf("on") !== -1){
+                    status = "1";
+				}
+                info.setItem("status",status);
+                var id = $(this).attr("data-id");
+                if($(this).attr("data-click") === "timeTask"){
+                    window.location = 'timeTask1.html?programID=' + id;
+				}else if($(this).attr("data-click") === "sceneTask"){
+                    window.location = 'circumstances.html?programID=' + id;
+				}
+			});
+			$(".getMission dl").find("i").on("click", function (e) {
+			    e.stopPropagation();
+				var self = $(this)
+				var status = ''
+				if ($(this).attr("class") == "on") {
+					status = "0"
+				} else {
+					status = "1"
+				}
+				var param = {
+					"cmd": "507",
+					"gwID": gwID,
+					"operType": "S",
+					"programID": $(this).parents("dl").attr("data-id"),
+					"status": status
+				}
+				plus.gatewayCmd.houserkeep_507(param, function (data) {
+					if (data.status == "0") {
+						self.removeClass("on")
+					} else {
+						self.addClass("on")
+					}
+				})
+			})
+		}
+	}
+
+	function deletehosekeep(programID) {
+		var param = {
+			"cmd": "507",
+			"gwID": gwID,
+			"operType": "D",
+			"programID": programID
+		}
+		plus.gatewayCmd.houserkeep_507(param, function (data) {})
+	}
+
+	function getWeek(day) {
+		switch (day) {
+			case "2":
+				return "Mon";
+			case "3":
+				return "Tue";
+			case "4":
+				return "Wed";
+			case "5":
+				return "Thu";
+			case "6":
+				return "Fri";
+			case "7":
+				return "Sat";
+			case "1":
+				return "Sun";
+		}
+	}
+	$(".addTask").on("click", function () {
+		$(this).hide()
+		$(".noMission").hide();
+		$(".createMission").show()
+	})
+	$(".icon_del").on("click", function () {
+		$(this).parent().hide();
+		$(".noMission").hide();
+		$(".addTask").show();
+	})
+	$(".createMission").on("click", function (e) {
+		e.stopPropagation()
+		$(this).hide()
+		$(".noMission").hide();
+		$(".addTask").show();
+	})
+</script>
+
+</html>

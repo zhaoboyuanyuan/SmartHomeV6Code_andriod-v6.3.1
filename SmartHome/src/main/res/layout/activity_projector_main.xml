@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6">
+
+        <RelativeLayout
+            android:id="@+id/layout_main_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/tv_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="45dp"
+                android:layout_alignTop="@id/tv_home"
+                android:background="@drawable/selector_tv_remote_c_33"
+                android:tag="33" />
+
+            <ImageView
+                android:id="@+id/tv_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/tv_menu"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/selector_tv_remote_c_1"
+                android:tag="1" />
+
+            <ImageView
+                android:id="@+id/tv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@id/tv_menu"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/selector_tv_remote_c_37"
+                android:clickable="true"
+                android:tag="37" />
+
+            <cc.wulian.smarthomev6.support.customview.TvCenterControlView
+                android:id="@+id/center_control"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_below="@id/tv_menu"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="70dp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/center_control"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp">
+
+                <ImageView
+                    android:id="@+id/tv_vol_enlarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_alignParentStart="true"
+                    android:clickable="true"
+                    android:src="@drawable/selector_tv_remote_c_enlarge"
+                    android:tag="207" />
+
+                <ImageView
+                    android:id="@+id/tv_vol_lessen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_toRightOf="@+id/tv_vol_enlarge"
+                    android:layout_centerHorizontal="true"
+                    android:clickable="true"
+                    android:src="@drawable/selector_tv_remote_c_lessen"
+                    android:tag="208" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="@string/Infrared_Projector_zoom"
+                    android:textColor="#393C59"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_more"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/more_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:visibility="gone">
+
+        <CheckBox
+            android:id="@+id/btn_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/selector_tv_remote_custom"
+            android:button="@null"
+            android:checked="false" />
+    </RelativeLayout>
+</LinearLayout>

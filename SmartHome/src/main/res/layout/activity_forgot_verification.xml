@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView_finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/icon_del" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/imageView_finish"
+            android:layout_below="@id/imageView_finish"
+            android:layout_marginTop="@dimen/register_margin_1"
+            android:text="输入验证码"
+            android:textColor="@color/black"
+            android:textSize="@dimen/register_tittle"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="@dimen/register_margin_2"
+        android:clickable="false"
+        android:focusable="false">
+
+        <LinearLayout
+            android:id="@+id/password_show_linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_verification_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:tag="tv_verification_1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/register_pwd" />
+
+                <ImageView
+                    android:id="@+id/iv_verification_1"
+                    android:layout_width="42dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_password_shadow"
+                    android:tag="iv_verification_1" />
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_verification_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:tag="tv_verification_2"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/register_pwd" />
+
+                <ImageView
+                    android:id="@+id/iv_verification_2"
+                    android:layout_width="42dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_password_shadow"
+                    android:tag="iv_verification_2" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_verification_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:tag="tv_verification_3"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/register_pwd" />
+
+                <ImageView
+                    android:id="@+id/iv_verification_3"
+                    android:layout_width="42dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_password_shadow"
+                    android:tag="iv_verification_3" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_verification_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:tag="tv_verification_4"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/register_pwd" />
+
+                <ImageView
+                    android:id="@+id/iv_verification_4"
+                    android:layout_width="42dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_password_shadow"
+                    android:tag="iv_verification_4" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_verification_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:tag="tv_verification_5"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/register_pwd" />
+
+                <ImageView
+                    android:id="@+id/iv_verification_5"
+                    android:layout_width="42dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_password_shadow"
+                    android:tag="iv_verification_5" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_verification_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:tag="tv_verification_6"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/register_pwd" />
+
+                <ImageView
+                    android:id="@+id/iv_verification_6"
+                    android:layout_width="42dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_password_shadow"
+                    android:tag="iv_verification_6" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/et_verication"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/shape_home_widget_lock_cheat"
+            android:clickable="true"
+            android:cursorVisible="false"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="6"
+            android:textColor="@color/transparent" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_send_again"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:gravity="center"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="5dp"
+        android:textSize="16sp" />
+
+</LinearLayout>

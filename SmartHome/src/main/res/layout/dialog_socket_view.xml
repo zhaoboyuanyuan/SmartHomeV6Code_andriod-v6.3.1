@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/view_socket"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/default_padding_normal"
+        android:layout_marginRight="@dimen/default_padding_normal"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="@dimen/default_padding_normal"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_padding_normal">
+
+            <ImageView
+                android:id="@+id/icon_1"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/selector_socket_view_1"
+                android:tag="1" />
+
+            <ImageView
+                android:id="@+id/icon_2"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/icon_socket_view_2"
+                android:tag="2" />
+
+            <ImageView
+                android:id="@+id/icon_3"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/icon_socket_view_3"
+                android:tag="3" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_padding_normal">
+
+            <ImageView
+                android:id="@+id/icon_4"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/icon_socket_view_4"
+                android:tag="4" />
+
+            <ImageView
+                android:id="@+id/icon_5"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/icon_socket_view_5"
+                android:tag="5" />
+
+            <ImageView
+                android:id="@+id/icon_6"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/icon_socket_view_6"
+                android:tag="6" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/icon_7"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/icon_socket_view_7"
+                android:tag="7" />
+
+            <ImageView
+                android:id="@+id/icon_8"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/icon_socket_view_8"
+                android:tag="8" />
+
+            <ImageView
+                android:id="@+id/icon_9"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/icon_socket_view_9"
+                android:tag="9" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

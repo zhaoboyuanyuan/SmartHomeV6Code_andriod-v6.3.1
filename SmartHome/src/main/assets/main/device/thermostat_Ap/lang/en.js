@@ -1,0 +1,53 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Device_Ap_Details_Name = "Heating Controller";
+$lang.Device_Ap_Details_Temperature1 = "Room";
+$lang.Device_Ap_Details_Temperature2 = "Suface";
+$lang.Device_Ap_Details_Time = "Timing";
+$lang.Device_Ap_Details_Open = "Power";
+$lang.Device_Ap_Details_Save = "Economic";
+$lang.Device_Ap_Details_Save1 = "Economic";
+$lang.Device_Ap_Details_Time1 = "On";
+$lang.Device_Ap_Details_Time2 = "Off";
+$lang.Device_Ap_Details_Time3 = "Set";
+$lang.Device_Ap_Details_Time4 = "Start";
+$lang.Device_Ap_Details_Time5 = "Close";
+$lang.Device_Ap_Details_Time6 = "The countdown time cannot be 0";
+$lang.Device_Ap_Details_Time7 = "hour";
+$lang.Device_Ap_Details_Time8 = "min";
+$lang.Device_Ap_Details_Abnormal1 = "Equipment internal sensor anomalies， please contact the personnel ， 4009-289-288.";
+$lang.Device_Ap_Details_Abnormal2 = "Equipment external sensor anomaly， three methods to solve:";
+$lang.Device_Ap_Details_Abnormal2_tips1 = "1. If you don't need external sensors， please turn off temperature protection;";
+$lang.Device_Ap_Details_Abnormal2_tips2 = "2. Check the external sensors connected;";
+$lang.Device_Ap_Details_Abnormal2_tips3 = "3. If the external sensors connected well， also appeared the situation， please contact the personnel ， 4009-289-288.";
+$lang.Device_Ap_Details_Abnormal3 = "Equipment sensor anomalies， please contact the personnel ， 4009-289-288.";
+$lang.Device_Ap_Details_Prompt = "Prompt";
+$lang.Device_Ap_Details_Confirm = "Confirm";
+$lang.Device_Ap_Details_Offline = "Device Offline";
+$lang.Device_Ap_Details_System = "System";
+$lang.Device_Ap_Details_System1 = "Electricity";
+$lang.Device_Ap_Details_System2 = "Water";
+$lang.Device_Ap_Details_System3 = "Change to electricity";
+$lang.Device_Ap_Details_System4 = "Change to water";
+$lang.Device_Ap_Details_Return = "Differential Setting";
+$lang.Device_Ap_Details_Cancel = "Cancel";
+$lang.Device_Ap_Details_Scale = "Temperature Format";
+$lang.Device_Ap_Details_Scale1 = "Celsius";
+$lang.Device_Ap_Details_Scale2 = "Fahrenheit";
+$lang.Device_Ap_Details_Sound = "Click Sound";
+$lang.Device_Ap_Details_Shock = "Vibrate";
+$lang.Device_Ap_Details_Save = "Economic Mode";
+$lang.Device_Ap_Details_High_Protect = "Over Temp Protect";
+$lang.Device_Ap_Details_High_Protect_tips1 = "Shut down after temp protection， overheating risks， determine closed?";
+$lang.Device_Ap_Details_High_Protect_Value = "Temperature";
+$lang.Device_Ap_Details_Low_Protect = "Frost protect";
+$lang.Device_Ap_Details_Restore = "Factory Reset";
+$lang.Device_Ap_Details_Restore_tips = "All set back to factory Settings， sure?";
+$lang.moreSettingLog          = "Log";
+$lang.moreSettingAlarm        = "Alarm Message";
+$lang.Device_Ap_Details_Time_TIPS1 = "Cannot edit in open state";
+$lang.Device_Ap_Details_Jiaozhun1 = "Indoor temperature calibration";
+$lang.Device_Ap_Details_Jiaozhun2 = "Surface temperature calibration";

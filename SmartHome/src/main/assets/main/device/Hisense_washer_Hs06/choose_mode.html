@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>洗衣机</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/mode.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="hs_washer_name" href="javascript:;">海信洗衣机</a>
+        </div>
+    </header>
+    <section class="content">
+        <ol class="mode_list" id="list">
+            <li>大件<i></i></li>
+            <li>内衣<i></i></li>
+            <li>混合<i></i></li>
+            <li>羽绒<i></i></li>
+            <li>羊毛<i></i></li>
+            <li>婴幼护洗<i></i></li>
+            <li>牛仔<i></i></li>
+            <li>棉麻<i></i></li>
+            <li>衬衣<i></i></li>
+            <li>运动<i></i></li>
+            <li>丝绸<i></i></li>
+        </ol>
+    </section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+
+    var info = window.sysfun;
+    info.init("Hs06");
+    var current_mode = getEncodeURIParam("current_mode");
+    var mode_name = getEncodeURIParam("mode_name");
+    var modeList = document.getElementById('list').getElementsByTagName('li');
+
+    plus.plusReady(function () {
+        initlan();
+        initListener();
+        refereshMode(current_mode)
+    });
+
+    function initListener() {
+        for (var i = 0; i< modeList.length; i++){
+            modeList[i].index = i;
+            var li = modeList[i];
+            li.addEventListener('click', function () {
+                current_mode = this.index;
+                mode_name = this.innerHTML.substring(0, this.innerHTML.length - 7);
+                refereshMode(this.index);
+            })
+        }
+    }
+    
+    function refereshMode(id) {
+         for (var i = 0; i< modeList.length; i++){
+             var li = modeList[i];
+             if (id == i){
+                 li.setAttribute('bind', "on")
+             }else {
+                 li.setAttribute('bind', "off")
+             }
+         }
+    }
+
+    $("#back").on("click",function(){
+        var url = 'hsWasher.html?current_mode='+ current_mode + "&mode_name="+ mode_name
+        window.location.assign(encodeURI(url));
+    });
+</script>
+</html>

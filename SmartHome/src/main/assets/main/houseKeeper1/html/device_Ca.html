@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/curtain.css" />
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <header class="header" style="position: static;height:auto;padding-top:0;">
+        <div class="header_top">
+            <a href="javascript:window.history.back(-1);"></a>
+            <a href="javascript:;" key="setDeviceState_tittle" class="autoSwitchLanguager">设置设备状态</a>
+            <a id="finishScene" class="complete autoSwitchLanguager" key="finishDelay" href="javascript:;">完成</a>
+        </div>
+    </header>
+    <section class="main" style="display:block;background:#fff;">
+        <ul class="deviceChildList">
+            <li class="on" id="2"><span class="autoSwitchLanguager" key="openSingle">开</span></li>
+            <li id="3"><span class="autoSwitchLanguager" key="closeSingle">关</span></li>
+            <li id="1"><span class="autoSwitchLanguager" key="stopSingle">停</span></li>
+        </ul>
+    </section>
+    <section class="main" style="display:none;background:#fff;">
+        <p key="device_Ca_mode_fail" class="autoSwitchLanguager">请先将设备设为窗帘模式</p>
+    </section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    initlan();
+    var deviceId = info.getItem("deviceID");
+    var DevID,GwID,AppID;
+    plus.plusReady(function() {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        $(".deviceChildList li").unbind("click").bind("click",function(){
+            $(this).addClass("on").siblings("li").removeClass("on")
+        });
+        $("#finishScene").unbind("click").bind("click",function(){
+            var epData = $(".deviceChildList .on").attr("id");
+            var deviceState = $(".deviceChildList .on").find("span").html();
+            info.setItem("epData",epData);
+            info.setItem("deviceState",deviceState);
+            console.log(epData);
+            if(info.getItem("taskType") === "timeTask"){
+                window.location = "setDelay_timeTask.html";
+            }else{
+                window.location = "setDelay_sceneTask.html";
+            }
+        });
+        plus.gatewayCmd.getDeviceInfo(deviceId,function (data) {
+            DevID = data.devID;
+            GwID = data.gwID;
+            AppID = data.appID;
+            //查询设备信息
+            send_501(DevID,GwID,AppID,0x02,1,"");
+        });
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            if (data.cmd === "500" && DevID === data.devID) {
+                drawUi(data);
+            }
+        });
+    });
+    // var jsonData = {
+    //     endpoints: [{
+    //         clusters:[{
+    //             attributes:[{
+    //                 attributeId:0x8001,
+    //                 attributeValue:"2"
+    //             },{
+    //                 attributeId:0x8002,
+    //                 attributeValue:"1"
+    //             }]
+    //         }]
+    //     }]
+    // };
+    // drawUi(jsonData);
+    function drawUi(data){
+        if(data.endpoints){
+            if(data.endpoints[0].clusters){
+                if(data.endpoints[0].clusters[0].attributes){
+                    var attributes = data.endpoints[0].clusters[0].attributes;
+                    for(var i in attributes){
+                        switch(attributes[i].attributeId){
+                            case 0x8002:
+                                //该设备为窗帘模式还是触发开关模式
+                                if(attributes[i].attributeValue === "0"){
+                                    //触发开关模式
+                                    $(".main").eq(1).show().siblings(".main").hide();
+                                    $("#finishScene").hide();
+                                }else{
+                                    //窗帘模式
+                                    $(".main").eq(0).show().siblings(".main").hide();
+                                    $("#finishScene").show();
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    function send_501(devID,gwID,appID,commandId,num,parameter){
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        jsonData.endpointNumber = num;
+        jsonData.clusterId = 0x0102;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = [parameter]
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+</script>
+</html>

@@ -1,0 +1,49 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_B9_name = "입출력 변환기";
+$lang.device_B9_way_in = "입력 방향";
+$lang.device_B9_way_out = "출력 방향";
+$lang.device_B9_Rename_hint = "참고 : 이름을 바꾸려면 길게 누릅니다.";
+$lang.device_B9_Alarm = "알람메세지";
+$lang.device_B9_more = "기타";
+$lang.device_B9_out_of_time = "연결 시간초과";
+$lang.device_B9_know = "알았음";
+$lang.device_B9_Rename = "이름 바꾸기";
+$lang.device_B9_cancel = "취소";
+$lang.device_B9_ok = "확인";
+$lang.device_B9_fortify = "경계 시작 ";
+$lang.device_B9_disarming = "경계 해제 ";
+$lang.device_B9_fortifying = "경계 중";
+$lang.device_B9_disarmed = "경계 해제 됨";
+$lang.device_B9_normal = "정상";
+$lang.device_B9_abnormal = "알람";
+$lang.device_B9_add_button = "제어 버튼 추가";
+$lang.device_B9_button_name_status = "버튼 이름 및 상태";
+$lang.device_B9_name_1 = "이름";
+$lang.device_B9_enter_name = "이름을 입력하십시오";
+$lang.device_B9_status = "상태";
+$lang.device_B9_action = "동작";
+$lang.device_B9_action_close = "닫기";
+$lang.device_B9_action_open = "끊기";
+$lang.device_B9_action_close_open = "닫은 후 끊기";
+$lang.device_B9_action_open_close = "끊은 후 닫기";
+$lang.device_B9_close_time = "닫기 시간";
+$lang.device_B9_open_time = "끊기 시간";
+$lang.device_B9_s = "초";
+$lang.device_B9_save = "저장";
+$lang.device_B9_re_edit = "재 편집";
+$lang.device_B9_delete = "삭제";
+$lang.device_B9_delete_sure = "정말로 삭제 하시겠습니까?";
+$lang.device_B9_sent = "명령이 전송되었습니다.";
+$lang.device_B9_Offline = "장비 오프라인";
+$lang.device_B9_set = "설정";
+$lang.device_B9_normal_set_hint = "참고 : 이 상태에서는 경보가 발생하지 않습니다";
+$lang.Device_B9_Details_Loading2 = "로딩 중…";
+$lang.device_B9_normal_set = "입력 정상 상태 설정";
+$lang.device_B9_initial_action = "출력 정상 상태 설정";
+$lang.device_B9_initial_action_hint = "참고 : 버튼의 동작 설정이 장비의 반응 동작과 모순되면 사용자는 초기 동작을 조정하여 일관성을 유지할 수 있습니다";
+$lang.device_B9_noData = "데이터 없음";
+$lang.device_B9_1_way = "1구";

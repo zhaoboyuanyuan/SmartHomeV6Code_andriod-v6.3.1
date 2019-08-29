@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <link rel="stylesheet" type="text/css" href="css/base.css"/>
+          <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    </head>
+    <body>
+        <header class="header">
+            <a class="back" href="javascript:;"></a>
+            <a id="SwitchAnTitle" class="deviceName autoSwitchLanguager" href="javascript:;">金属单路开关</a>
+            <a href="javascript:;" onclick="morejump()"></a>
+        </header>
+
+        <section class="switchOneTop">
+            <div class="divOneTop" >
+                <div class="imageOneTop">
+                    <div class="imageOneContainer">
+                        <div id="switch1" class="switchOneImage switchClose"></div>
+                    </div>
+                </div>
+                <div class="funOneTop">
+                    <div class="mOneTop">
+                        <span class="nameOneTop" id="switchName1">开关1</span>
+                        <span class="modeOneTop" id="mode1"><i class="modeLayoutTop"><i id="modeName1" class="modeTextTop autoSwitchLanguager" key="modeSwitch">开关模式</i></i></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pupWindow">
+            <div class="pupContainer">
+                <div id="pupBind" class="pupItem"><i id="reBind" class="autoSwitchLanguager" key="reBind">重新绑定</i><hr color="#e2e2e2" size="1px"><i id="unBind" class="autoSwitchLanguager" key="unBind">解除绑定</i></div>
+                <div id="pupScene" class="pupItem"><i id="editScene" class="autoSwitchLanguager" key="edit">编辑</i><hr color="#e2e2e2" size="1px"><i id="deleteScene" class="autoSwitchLanguager" key="deleteScene">删除场景</i></div>
+                <div id="pupSwitch" class="pupItem"><i id="pupReName" class="autoSwitchLanguager" key="reName">修改开关名称</i></div>
+                <div class="pupCancel autoSwitchLanguager" key="cancel">取消</div>
+            </div>
+        </section>
+
+        <section class="changeName" style="display:none;" id="dialogRename">
+            <div class="nameToast">
+                <span class="autoSwitchLanguager" key="reName">修改开关名称</span>
+                <div class="name"><input id="renameInput" class="autoSwitchLanguager" key="reNameHint" maxlength="20" type="text" placeholder="请重新命名" /><i class="remove"></i></div>
+                <div class="choose_1">
+                    <a class="autoSwitchLanguager" key="cancel" href="javascript:;" onclick="cancel()">取消</a>
+                    <a class="autoSwitchLanguager" key="sure" href="javascript:;" onclick="surename()" class="sure_click">确定</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="changeName" style="display:none;" id="dialogDeleteScene">
+            <div class="nameToast">
+                <span class="autoSwitchLanguager" key="circumstances_un_bind">确定要删除该场景吗？</span>
+                <div class="choose_1">
+                    <a class="autoSwitchLanguager" key="cancel" href="javascript:;" onclick="cancelDeleteScene()">取消</a>
+                    <a class="autoSwitchLanguager" key="sure" href="javascript:;" onclick="sureDeleteScene()" class="sure_click">确定</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="changeName" style="display:none;" id="dialogUnBind">
+            <div class="nameToast">
+                <span class="autoSwitchLanguager" key="unBindTips">确定解绑该设备？</span>
+                <div class="choose_1">
+                    <a class="autoSwitchLanguager" key="cancel" href="javascript:;" onclick="cancelUnBind()">取消</a>
+                    <a class="autoSwitchLanguager" key="sure" href="javascript:;" onclick="sureUnBind()" class="sure_click">确定</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="mask_layer" style="display:none;"><i></i><span id="offLine" class="autoSwitchLanguager"></span></section>
+    </body>
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/base64.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/control.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/handle.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    	function morejump(){
+    		plus.tools.more(moreConfig, function () {
+        })
+    	}
+    </script>
+</html>

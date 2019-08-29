@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body style="background-color: white;">
+<!--<header class="header">-->
+    <!--<div class="header_top">-->
+        <!--<a href="javascript:window.history.back(-1);"></a>-->
+        <!--<a href="javascript:;" key="setDeviceStatus" class="autoSwitchLanguager">设置设备状态</a>-->
+        <!--<a id="finishScene"  href="javascript:;"></a>-->
+    <!--</div>-->
+<!--</header>-->
+
+<header class="header">
+    <a href="javascript:window.history.back(-1);"></a>
+    <a href="javascript:;" key="setDeviceState_tittle" class="autoSwitchLanguager"></a>
+    <!--<a id="finishScene"  href="javascript:;"></a>-->
+</header>
+
+<section style="margin-top: 6.4rem;overflow: hidden;">
+    <ul class="set_list">
+        <li id="open_btn"><b class="autoSwitchLanguager" key="switch_Aohk_01"></b> </li>
+        <li id="close_btn"><b class="autoSwitchLanguager" key="switch_Aohk_02"></b> </li>
+    </ul>
+</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    initlan()
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        $("#open_btn").unbind("click").click(function () {
+
+            window.location = "device_91_2.html"
+        });
+
+        $("#close_btn").unbind("click").click(function () {
+
+            info.setItem("deviceState", $(this).find("b").text())
+            info.setItem("epData", "2000")
+            info.setItem("description", $(this).find("b").text())
+
+            var taskType = info.getItem('taskType')
+            if (taskType === 'sceneTask') {
+                window.location = "setDelay_sceneTask.html"
+            } else {
+                window.location = "setDelay_timeTask.html"
+            }
+        })
+    })
+</script>
+</html>

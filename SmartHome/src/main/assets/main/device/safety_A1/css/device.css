@@ -1,0 +1,185 @@
+@charset "utf-8";
+
+.content {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    /*overflow:hidden;*/
+}
+
+.top {
+    position: relative;
+    width: 100%;
+    height: 2.8rem;
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.middle {
+    position: relative;
+    width: 100%;
+    height: 62%;
+    padding-top: 3rem;
+    text-align: center;
+}
+
+.bottom {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+
+.top div[t-state = on] {
+    position: absolute;
+    right: 4%;
+    top: 0;
+    padding-left: 3rem;
+    height: 2.8rem;
+    line-height: 2.7rem;
+    font-size: 1.6rem;
+    color: #000;
+    background: url(../fonts/top_fortify.png) no-repeat left center;
+    background-size: 2.3rem auto;
+}
+
+.top div[t-state = off] {
+    position: absolute;
+    right: 4%;
+    top: 0;
+    padding-left: 3rem;
+    height: 2.8rem;
+    line-height: 2.7rem;
+    font-size: 1.6rem;
+    color: #000;
+    background: url(../fonts/top_disarm.png) no-repeat left center;
+    background-size: 2.3rem auto;
+}
+
+.middle .icon[m-state = disarm]{
+    display: inline-block;
+    width:20.5rem;
+    height:20.5rem;
+    text-align:center;
+    line-height:20rem;
+    background:url(../fonts/icon_disarm.png) no-repeat center center;
+    background-size:20.5rem auto;
+}
+
+.middle .icon[m-state = fortify]{
+    display: inline-block;
+    width:20.5rem;
+    height:20.5rem;
+    text-align:center;
+    line-height:20rem;
+    background:url(../fonts/icon_fortify.png) no-repeat center center;
+    background-size:20.5rem auto;
+}
+
+.middle .icon[m-state = alarm]{
+    display: inline-block;
+    width:20.5rem;
+    height:20.5rem;
+    text-align:center;
+    line-height:20rem;
+    background:url(../fonts/icon_fortify_alarm.png) no-repeat center center;
+    background-size:20.5rem auto;
+    -webkit-animation:rotate 2s linear 0s infinite;
+    animation:rotate 2s linear 0s infinite;
+}
+
+.middle .icon_tip{
+    position: absolute;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    width: 8rem;
+    top: 13.2rem;
+    left: 50%;
+    color: #727272;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+}
+
+.middle .middle_people_right{
+    display: none;
+    position: absolute;
+    width: 3rem;
+    height: 3.5rem;
+    top: 11.2rem;
+    left: 65%;
+    z-index: 100;
+    transform: translate(-50%);
+    -webkit-transform: translate(-50%);
+}
+
+.middle .middle_people_left{
+    display: none;
+    position: absolute;
+    width: 3rem;
+    height: 3.5rem;
+    top: 11.2rem;
+    left: 35%;
+    z-index: 100;
+    transform: translate(-50%);
+    -webkit-transform: translate(-50%);
+}
+
+.middle .middle_info{
+    display: block;
+    width:100%;
+    margin-top: 2rem;
+    line-height: 3rem;
+    text-align: center;
+    font-size: 1.8rem;
+    color: #727272;
+}
+
+.bottom .bottom_state[b-state = on] {
+    display: block;
+    box-sizing: border-box;
+    width: 92%;
+    height: 5rem;
+    margin: 0 4%;
+    text-align: center;
+    line-height: 5rem;
+    border: 0;
+    border-radius: 5px;
+    font-size: 1.7rem;
+    color: #fff;
+    background: #cbd1d9;
+}
+
+.bottom .bottom_state[b-state = off] {
+    display: block;
+    box-sizing: border-box;
+    width: 92%;
+    height: 5rem;
+    margin: 0 4%;
+    text-align: center;
+    line-height: 5rem;
+    border-radius: 5px;
+    border: 0;
+    font-size: 1.7rem;
+    color: #fff;
+    background: #8DD652;
+}
+
+@-webkit-keyframes rotate{
+    from{
+        -webkit-transform: rotateZ(360deg);
+        transform: rotateZ(360deg);
+    }
+    to{
+        -webkit-transform: rotateZ(0);
+        transform: rotateZ(0);
+    }
+}
+@keyframes rotate{
+    from{
+        -webkit-transform: rotateZ(360deg);
+        transform: rotateZ(360deg);
+    }
+    to{
+        -webkit-transform: rotateZ(0);
+        transform: rotateZ(0);
+    }
+}

@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <title class="autoSwitchLanguager" key="device_XW01_name">向往背景音乐</title>
+    <link rel="stylesheet" type="text/css" href="../../source/mui/css/mui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/timer.css" />
+    <link rel="stylesheet" type="text/css" href="css/spectrum.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../../source/mui/js/mui.min.js"></script>
+    <script src="js/base64.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+
+<body>
+    <div>
+        <!--主页面-->
+        <div id="main" class="stage mainStage">
+            <header class="header">
+                <div class="header_top">
+                    <a id="back" class="back" href="javascript:;"></a>
+                    <a class="deviceName autoSwitchLanguager" key="device_XW01_name" href="javascript:;">向往背景音乐</a>
+                    <a id="more" class="more" href="javascript:;"></a>
+                </div>
+            </header>
+
+            <section class="secPlayRandom iponeXclass">
+                <i class="iconPlayRandom"></i>
+                <div>
+                    <span class="textPlayRandom autoSwitchLanguager" key="Music_Shuffle_Playback">随机播放</span>
+                    <span class="textPlaySongs">(</span>
+                    <span class="textPlayCount">0</span>
+                    <span class="textPlaySongs autoSwitchLanguager" key="Music_songs">首</span>
+                    <span class="textPlaySongs">)</span>
+                </div>
+
+            </section>
+            <!--歌曲列表-->
+            <section class="secSongList iponeXclass" style="display: block">
+                <!--下拉刷新容器-->
+                <div id="refreshContainer" class="mui-content mui-scroll-wrapper iponeXclass">
+                    <div class="mui-scroll">
+                        <!--数据列表-->
+                        <ul class="mui-table-view mui-table-view-chevron" id="songList">
+                            <!--这里是歌曲列表-->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section class="secSongEmpty">
+                <div class="emptyTitle autoSwitchLanguager" key="Music_No_songs">
+                    暂无歌曲
+                </div>
+                <div class="emptyDesc autoSwitchLanguager" key="Music_No_songs_hint">
+                    暂无歌曲，请至设备端添加
+                </div>
+            </section>
+            <!--播放页底部控制-->
+            <section class="secPlayCtrl" onclick="showPlayStage()">
+                <div class="contentPlayCtrl">
+                    <img class="songsCover" src="fonts/icon_play_disc_default.png">
+                    <div class="songsDetail">
+                        <div class="songsName songsNameText"></div>
+                        <div class="songsSinger songsSingerText"></div>
+                    </div>
+                    <i class="playCtrlNext btnNext"></i>
+                    <i class="playCtrlPlay btnPlay playStateListener" play-state="pause"></i>
+                    <i class="playCtrlLast btnLast"></i>
+                </div>
+            </section>
+        </div>
+        <!--播放页-->
+        <div id="player" class="stage playerStage">
+            <section class="playerHeader">
+                <i class="backToMain" onclick="showMainStage()"></i>
+                <div class="playSongsDetail">
+                    <div class="playSongsName songsNameText"></div>
+                    <!--<div class="playSongsSinger songsSingerText"></div>-->
+                </div>
+            </section>
+            <!--唱针-->
+            <section class="secSingingNeedle">
+                <img src="fonts/icon_singing_needle_full.png" class="singingNeedle playStateListener" play-state="pause">
+            </section>
+            <!--唱盘-->
+            <section class="secSingingDisc">
+                <img src="fonts/icon_play_disc_default.png" class="singingDisc">
+                <img id="songsCoverPic" play-state="pause" src="fonts/icon_play_disc_default.png" class="songsAlbum singingCover singingCoverPlaying playStateListener">
+            </section>
+            <span class="songsDelayTimeText" style="color: white;display: inline-block;position: relative;width: 100%;height: auto;top: 13rem;text-align: center"></span>
+            <!--控制面板-->
+            <section class="secPlayPanel">
+                <div class="playMusicBtn">
+                    <i class="playMusicMode" onclick="changePlayMode()"></i>
+                    <i class="playMusicVoice" play-mode="0" onclick="showVoiceWindow()"></i>
+                    <i class="playMusicEffect" onclick="showEffectWindow()"></i>
+                    <!-- <i class="playMusicTimer" onclick="showTimerStage()"></i> -->
+                </div>
+                <div style="margin-bottom: 2.4rem;height: 2.4rem; width: 100%;border-bottom: 1px solid rgba(183, 183, 183, 0.5);text-align: center">
+                </div>
+                <div class="playMusicCtrl">
+                    <i class="playMusicLast btnLast"></i>
+                    <i class="playMusicPlay btnPlay playStateListener" play-state="pause"></i>
+                    <i class="playMusicNext btnNext"></i>
+                </div>
+            </section>
+            <section class="secPlayEffect">
+                <div class="divEffectTitle">
+                    <i class="textEffectTitle autoSwitchLanguager" id="Music_set_Sound_effect">音效选择</i>
+                    <i class="iconEffectClose" onclick="hideEffectWindow()"></i>
+                </div>
+                <ul class="listEffect">
+                    <li class="itemEffect"><i class="textEffect autoSwitchLanguager" effect-checked="false" key="Music_set_Sound_effect_6">古典</i></li>
+                    <li class="itemEffect"><i class="textEffect autoSwitchLanguager" effect-checked="false" key="Music_set_Sound_effect_5">现代</i></li>
+                    <li class="itemEffect"><i class="textEffect autoSwitchLanguager" effect-checked="false" key="Music_set_Sound_effect_2">摇滚</i></li>
+                    <li class="itemEffect"><i class="textEffect autoSwitchLanguager" effect-checked="true" key="Music_set_Sound_effect_3">流行</i></li>
+                    <li class="itemEffect"><i class="textEffect autoSwitchLanguager" effect-checked="false" key="Music_set_Sound_effect_4">舞曲</i></li>
+                    <li class="itemEffect"><i class="textEffect autoSwitchLanguager" effect-checked="false" key="Music_set_Sound_effect_1">原声</i></li>
+                </ul>
+            </section>
+            <section class="secPlayVoice">
+                <div class="divVoiceTitle">
+                    <i class="textVoiceTitle autoSwitchLanguager" key="Music_set_volume">音量调节</i>
+                    <i class="iconVoiceClose" onclick="hideVoiceWindow()"></i>
+                </div>
+                <div class="slideBarContainer sectionHide1">
+                    <div class="slideBarContainerHeHe">
+                        <i class="iconVoice"></i>
+                        <span class="spanVoicePer songsTimeText">0</span>
+                        <div id="slideBarVoice" class="slideBar" m-section="2">
+                            <ul class="voiceList">
+                                <li><i class="voiceIndex00" m-choose="yes press"></i></li>
+                                <li><i class="voiceIndex01" m-choose="false"></i></li>
+                                <li><i class="voiceIndex02" m-choose="false"></i></li>
+                                <li><i class="voiceIndex03" m-choose="false"></i></li>
+                                <li><i class="voiceIndex04" m-choose="false"></i></li>
+                                <li><i class="voiceIndex05" m-choose="false"></i></li>
+                                <li><i class="voiceIndex06" m-choose="false"></i></li>
+                                <li><i class="voiceIndex07" m-choose="false"></i></li>
+                                <li><i class="voiceIndex08" m-choose="false"></i></li>
+                                <li><i class="voiceIndex09" m-choose="false"></i></li>
+                                <li><i class="voiceIndex10" m-choose="false"></i></li>
+                                <li><i class="voiceIndex11" m-choose="false"></i></li>
+                                <li><i class="voiceIndex12" m-choose="false"></i></li>
+                                <li><i class="voiceIndex13" m-choose="false"></i></li>
+                                <li><i class="voiceIndex14" m-choose="false"></i></li>
+                                <li><i class="voiceIndex15" m-choose="false"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+        <!--倒计时页面-->
+        <div id="timer" class="stage timerStage">
+            <section class="timerHeader header">
+                <i class="backFromTimer" onclick="hideTimerStage()"></i>
+                <i class="timerTitle autoSwitchLanguager" key="device_XW01_Countdown">倒计时</i>
+            </section>
+            <section class="timerTips autoSwitchLanguager" key="Radio_Countdown_close">
+                未启动倒计时
+            </section>
+            <section class="timerSelector">
+                <div class="timerSelectorContainer">
+                    <i class="timerSelectorText autoSwitchLanguager" key="Radio_Countdown_no">不开启</i>
+                    <i class="timerSelectorChecked"></i>
+                </div>
+                <div class="timerSelectorContainer">
+                    <i class="timerSelectorText autoSwitchLanguager" key="Radio_30_min">30分钟</i>
+                    <i class="timerSelectorChecked"></i>
+                </div>
+                <div class="timerSelectorContainer">
+                    <i class="timerSelectorText autoSwitchLanguager" key="Radio_60_min">60分钟</i>
+                    <i class="timerSelectorChecked"></i>
+                </div>
+                <div class="timerSelectorContainer">
+                    <i class="timerSelectorText autoSwitchLanguager" key="Radio_120_min">120分钟</i>
+                    <i class="timerSelectorChecked"></i>
+                </div>
+                <div class="timerSelectorContainer">
+                    <i class="timerSelectorText autoSwitchLanguager" key="Radio_customize">自定义</i>
+                    <i class="timerSelectorCustom"></i>
+                    <i class="timerSelectorChecked"></i>
+                </div>
+            </section>
+        </div>
+    </div>
+    <section class="mask_layer" style="display:none;"><i></i><span id="offLine" class="autoSwitchLanguager"></span></section>
+</body>
+<style>
+    .mui-table-view-cell
+    {
+        padding: 0;
+    }
+    .mui-table-view-chevron .mui-table-view-cell
+    {
+        padding-right: 0;
+    }
+    .deleteBtn{
+        z-index:999;
+    }
+    .mui-popup-button{
+        color: #8dd652;
+    }
+</style>
+<script src="js/handel.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    /**********************************************************************
+     *                              变量区域
+     **********************************************************************/
+    /**
+     *  播放状态
+     *  0 播放 1 暂停
+     */
+    var mPlayState = 1;
+    /**
+     * 播放模式
+     * 1:随机播放，2:循环播放，3:单曲循环， 4:顺序播放
+     */
+    var mPlayMode = 1;
+    /**
+     * 音效
+     * 0:古典，1:现代 2:摇滚，3:流行，4:舞曲，5:原声
+     */
+    var mPlayEffect = 0;
+    /*
+     * 音源
+     * 1:本地，2:外接，3:蓝牙
+     */
+    var mMusicSource = 1;
+
+    // 音量
+    var mVoice = 10;
+
+    var musicListCount = 0;
+
+    var mMusicInfo = {};
+    mMusicInfo.id = 'id';
+    mMusicInfo.name = ''; // 歌名
+    mMusicInfo.singer = ''; // 歌手
+    mMusicInfo.length = 333; // 总时长
+    mMusicInfo.progress = 200; // 播放时长
+    mMusicInfo.album = 'fonts/icon_play_disc_default.png';
+
+    /**********************************************************************
+     *                              初始化
+     **********************************************************************/
+    reloadUI();
+    //下拉刷新
+    mui.init({
+        pullRefresh: {
+            container: '#refreshContainer',
+            down: {
+                contentrefresh: languageUtil.getResource("addDevice_DD_Refreshing"),
+                callback: onRefresh
+            },
+            up: {
+                auto: false,
+                contentrefresh: languageUtil.getResource("Music_Loading"),
+                callback: onLoadMore
+            }
+        },
+        gestureConfig: {
+
+        }
+    });
+
+    /**********************************************************************
+     *                              页面跳转
+     **********************************************************************/
+    function showMainStage() {
+        $('#player').fadeOut();
+    }
+
+    function showPlayStage() {
+        $('#player').fadeIn()
+    }
+
+    function showTimerStage() {
+        $('.timerStage').fadeIn();
+    }
+
+    function hideTimerStage() {
+        $('.timerStage').fadeOut();
+    }
+
+    /**********************************************************************
+     *                              播放控制
+     **********************************************************************/
+    // 播放
+    function actionPlay() {
+        mPlayState = 0;
+
+        updatePlayState();
+        updateMusicPlayState(0);
+    }
+    // 暂停
+    function actionPause() {
+        mPlayState = 1;
+        updatePlayState();
+        updateMusicPlayState(1);
+    }
+    // 跳转进度 （不支持）
+    function actionJump(s) {
+
+    }
+    // 获取进度 （不支持）
+    function getPlayState() {
+        return mPlayState;
+    }
+
+    // 设置倒计时 （不支持）
+    function changeTimer(t) {
+        updateTimer(t);
+    }
+
+    function onRefresh() {
+        requestMusicLists(1);
+        setTimeout(function () {
+            //
+            mui('#refreshContainer').pullRefresh().endPulldownToRefresh(); //refresh completed
+        }, 1500);
+    }
+
+    function onLoadMore() {
+        requestMusicLists(currentPage + 1);
+        setTimeout(function () {
+            mui('#refreshContainer').pullRefresh().endPullupToRefresh(); // 加载数据最没有更多内容
+        }, 1500);
+    }
+    /**********************************************************************
+     *                              界面更新
+     **********************************************************************/
+    // 重载全部UI
+    function reloadUI() {
+        updateSongList();
+        updateSongs();
+        updateEffectMode();
+    }
+    // 切歌
+    function updateSongs() {
+        // 歌曲名称
+        $('.songsName').html(substrWithLength(mMusicInfo.name, 10));
+        $('.playSongsName').html(substrWithLength(mMusicInfo.name, 20));
+        // 歌手
+        $('.songsSingerText').html(substrWithLength(mMusicInfo.singer, 20));
+        // 底部专辑图
+        $('.songsCover').attr('src', mMusicInfo.album);
+        // 转盘专辑图
+        $('.songsAlbum').attr('src', mMusicInfo.album);
+        // 时间
+        $('.songsTimeTotal').html(second2str(mMusicInfo.length));
+
+        // 更新状态
+        updatePlayState();
+    }
+
+    // 更新当前播放的歌曲
+    function updateCurrentSong() {
+        $('.songStateListener').attr('song-state', 'normal');
+        if (mMusicInfo.id) {
+            //0 播放 1 暂停
+            if (mPlayState == 0) {
+                $('.song_' + mMusicInfo.id).parent('.mui-slider-handle').parent(".songItem").find('.songStateListener')
+                    .attr('song-state', 'playing');
+            } else {
+                $('.song_' + mMusicInfo.id).parent('.mui-slider-handle').parent(".songItem").find('.songStateListener')
+                    .attr('song-state', 'normal');
+            }
+        }
+    }
+
+    function updateVoiceSource() {
+        if (mMusicSource == '1') {
+            if (musicListCount == 0) {
+                return;
+            } else {
+                hideEmpty()
+            }
+        } else if (mMusicSource == '3') {
+            showEmpty(3);
+        } else if (mMusicSource == '2') {
+            showEmpty(2);
+        }
+    }
+
+    // 更新 播放 状态
+    function updatePlayState() {
+        // 转盘动画
+        // 唱针
+        // 进度
+        updateProgress();
+        // 播放按钮
+        if (mPlayState == 1) {
+            $('.playStateListener').attr('play-state', 'pause');
+        } else {
+            $('.playStateListener').attr('play-state', 'play');
+        }
+        if (mPlayState == 0) {
+            $('.song_' + mMusicInfo.id).parent('.mui-slider-handle').parent(".songItem").find('.songStateListener').attr(
+                'song-state', 'playing');
+        } else {
+            $('.song_' + mMusicInfo.id).parent('.mui-slider-handle').parent(".songItem").find('.songStateListener').attr(
+                'song-state', 'normal');
+        }
+    }
+
+    function updateProgress() {
+        var progress = mMusicInfo.progress / mMusicInfo.length;
+        var per = (progress * 100) + '%';
+        // $(':root').style('--progress', per);
+    }
+    // 更新 音量
+    function updateVoice() {
+        $('.slideBarContainer').show();
+        var voice = mVoice;
+        console.log("Voice" + voice);
+
+        $('#slideBarVoice').find('i').attr('m-choose', 'false');
+        $('#slideBarVoice').find('i:eq(' + voice + ')').attr('m-choose', 'yes press');
+        $('#slideBarVoice').find('i:lt(' + voice + ')').attr('m-choose', 'yes');
+        $('#slideBarVoice').siblings('.spanVoicePer').html(voice);
+    }
+
+
+    // 重置歌曲列表
+    function resetSongList() {
+        $('#songList').empty();
+        updateSongList();
+    }
+
+    // 刷新歌曲列表
+    function updateSongList() {
+        if (songsList.length > 0) {
+            $('.secSongList').show();
+            $('.secSongEmpty').hide();
+            for (var i = 0; i < songsList.length; i++) {
+                var li = createSongsItem(i);
+                // $('.songList').append(li);
+                document.getElementById('songList').appendChild(li);
+            }
+            // 总数
+            $('.textPlayCount').html(musicListCount);
+        } else {
+            $('.secSongList').hide();
+            $('.secSongEmpty').show();
+        }
+
+        $('.songItem').on("tap", function (event) {
+            //删除
+            var elem = this;
+            var li = elem;
+            var deleteMusicId = li.getElementsByClassName("songItemNum")[0].getAttribute("songId");
+            var deleteSongId = deleteMusicId;
+            if (deleteSongId.length > 0) {
+                deleteRadioMusicRequest(deleteSongId);
+            }
+            event.stopPropagation();
+        });
+
+        $('.mui-slider-handle').on('tap', function () {
+            //播放
+            $('.songStateListener').attr('song-state', 'normal');
+            $(this).find('.songStateListener').attr('song-state', 'playing');
+            var cellItem = $(this).find(".songItemName").text();
+            var playSongId = $(this).find(".songItemNum")[0].getAttribute("songId")
+            var musicModel = searchSelectedMusicModel(playSongId);
+            if (musicModel.songId) {
+                mMusicInfo.name = musicModel.trackTitle;
+                mMusicInfo.singer = musicModel.nickname;
+                mMusicInfo.album = musicModel.avatarUrl;
+                mMusicInfo.id = musicModel.songId;
+                mPlayState = 0;
+                updateSongs();
+            }
+
+            actionMusicPlayWithModel(musicModel);
+            event.stopPropagation();
+        });
+    }
+
+    function updateEffectMode() {
+        $('.itemEffect').find('i').attr('effect-checked', 'false');
+        $('.itemEffect:nth-child(' + (mPlayEffect + 1) + ')').find('i').attr('effect-checked', 'true');
+    }
+
+    // 显示倒计时item
+    function updateTimer(t) {
+        $('.timerSelectorChecked').hide();
+        var thisNode = $('.timerSelectorContainer:nth-child(' + (t + 1) + ')');
+        thisNode.find('.timerSelectorChecked').show();
+        if (t == 0) {
+            $('.timerTips').html(Music_Countdown_close);
+        } else if (t == 4) {
+            $('.timerSelectorCustom').show()
+        } else {
+            $('.timerSelectorCustom').hide();
+            $('.timerTips').html(thisNode.find('.timerSelectorText').text())
+        }
+    }
+
+    function hideAllWindow() {
+        hideEffectWindow();
+        hideVoiceWindow();
+    }
+
+    // 打开特效面板
+    function showEffectWindow() {
+        $('.secPlayEffect').show();
+    }
+
+    // 隐藏特效面板
+    function hideEffectWindow() {
+        $('.secPlayEffect').hide();
+    }
+
+    // 打开音量面板
+    function showVoiceWindow() {
+        hideAllWindow();
+        updateVoice();
+        resetVoiceHeight();
+        $('.secPlayVoice').show();
+    }
+
+    // 设置 音量条 高度
+    function resetVoiceHeight() {
+        $('.slideBar').each(function (i0, e) {
+            $(e).find('i').each(function (i, ei) {
+                $(ei).css('background-size', '0.2rem ' + (0.5 + i / 10) + 'rem');
+            })
+        })
+    }
+
+    // 隐藏音量面板
+    function hideVoiceWindow() {
+        $('.secPlayVoice').hide();
+    }
+
+    // 切换模式
+    function changePlayMode() {
+        var sendMode = mPlayMode;
+        sendMode++;
+        if (sendMode > 4) {
+            sendMode = 1;
+        }
+        //
+        changeMusicPlayMode(sendMode);
+        mPlayMode = sendMode;
+        updatePlayMode();
+    }
+
+    function updatePlayMode() {
+        if (mPlayMode) {
+
+        } else {
+            mPlayMode = 1;
+        }
+        $('.playMusicMode').attr('play-mode', mPlayMode)
+    }
+
+    /**
+     * 显示 暂无歌曲 外部音源等
+     * 1 暂无歌曲
+     * 2 外部音源
+     * 3 蓝牙音源
+     */
+    function showEmpty(s) {
+        switch (s) {
+            case 1:
+                $('.emptyTitle').html(languageUtil.getResource('Music_No_songs'));
+                $('.emptyDesc').html(languageUtil.getResource('Music_No_songs_hint'));
+                $('.secPlayCtrl').show();
+                break;
+            case 2:
+                $('.emptyTitle').html(languageUtil.getResource('Music_source_out'));
+                $('.emptyDesc').html(languageUtil.getResource('Music_source_out_hint'));
+                $('.secPlayCtrl').hide();
+                break;
+            case 3:
+                $('.emptyTitle').html(languageUtil.getResource('Music_source_Bluetooth'));
+                $('.emptyDesc').html(languageUtil.getResource('Music_source_Bluetooth_hint'));
+                $('.secPlayCtrl').hide();
+                break;
+        }
+        $('.secSongList').hide();
+        $('.secSongEmpty').show();
+    }
+
+    // 隐藏 暂无歌曲 外部音源等
+    function hideEmpty() {
+        // 歌曲列表为空
+        // if (musicListCount == 0) {
+        //     return;
+        // }
+        // // 非内部音源
+        // if (mMusicSource < '0' &&  mMusicSource > '3') {
+        //     return;
+        // }
+        $('.secSongList').show();
+        $('.secSongEmpty').hide();
+        $('.secPlayCtrl').show();
+    }
+
+    /**********************************************************************
+     *                              绑定事件
+     **********************************************************************/
+    $(".songsCover").on("click", function () {
+        $('#progressBar').removeClass('fullwidth').delay(0).queue(function (next) {
+            $(this).addClass('fullwidth');
+            next();
+        });
+    });
+
+    // 随机播放
+    $('.iconPlayRandom').click(function () {
+        var idList = [];
+        for (var index in songsList) {
+            idList.push(songsList[index]);
+        }
+        actionMusicPlayWithModel(idList[Math.ceil(Math.random() * idList.length)]);
+    });
+
+    // 上一曲
+    $('.btnLast').on("click", function () {
+        requestRadioLast();
+        event.stopPropagation();
+    });
+    // 下一曲
+    $('.btnNext').on("click", function () {
+        requestRadioNext();
+        event.stopPropagation();
+    });
+
+    // 点击播放按钮
+    $('.btnPlay').on("click", function (event) {
+        if (mPlayState == 1) {
+            actionPlay();
+        } else {
+            actionPause();
+        }
+
+        event.stopPropagation();
+    });
+
+    // 点击音效 item
+    $('.itemEffect').click(function () {
+        updateEffectMode($(this).index())
+        updateMusicEffectState($(this).index())
+    });
+
+    $('.timerSelectorContainer').click(function () {
+        updateTimer($(this).index())
+        var indexNum = $(this).index();
+        switch (indexNum) {
+            case 0:
+                {
+                    //关闭
+                    setMusicDelayStop(0);
+                }
+                break;
+            case 1:
+                {
+                    //30min
+                    setMusicDelayStop(30 * 60);
+                }
+                break;
+            case 2:
+                {
+                    //60min
+                    setMusicDelayStop(60 * 60);
+                }
+                break;
+            case 3:
+                {
+                    //120min
+                    setMusicDelayStop(120 * 60);
+                }
+                break;
+            case 4:
+                {
+                    //弹框
+                    var btnArray = [languageUtil.getResource("device_XW02_ok")];
+                    mui.prompt('', languageUtil.getResource("device_XW01_Minute"), languageUtil.getResource(
+                        "Radio_customize_time"), btnArray, function (e) {
+                        if (e.index == 0) {
+                            var inoutTextNum = e.value;
+                            if (inoutTextNum > 0) {
+                                setMusicDelayStop(inoutTextNum * 60);
+                                $('.timerSelectorCustom').text(inoutTextNum + languageUtil.getResource(
+                                    "device_XW01_Minute"));
+                            }
+                        }
+                    })
+                }
+                break;
+        }
+    });
+    //调节音量
+    $('.voiceList li').on('click', function () {
+        var parent = $(this).parents('.slideBar');
+        parent.find('i').attr('m-choose', 'yes');
+        var index = $(this).index();
+        parent.find('i').each(function (i, e) {
+            $(e).css('background-size', '0.2rem ' + (0.5 + i / 10) + 'rem');
+            if (i < index) {
+                $(e).attr('m-choose', 'yes');
+            } else if (i == index) {
+                $(e).attr('m-choose', 'yes press');
+            } else {
+                $(e).attr('m-choose', 'false');
+            }
+        });
+        var section = parent.attr('m-section');
+        console.log(section + ': ' + index);
+        parent.siblings('.spanVoicePer').html(index);
+
+        updateMusicVoiceState(index)
+    });
+
+    /**********************************************************************
+     *                              公共方法
+     **********************************************************************/
+    // 秒转分秒
+    function second2str(s) {
+        var m = ~~(s / 60);
+        if (m < 10) {
+            m = '0' + m;
+        }
+        var second = s % 60;
+        if (second < 10) {
+            second = '0' + second;
+        }
+        return m + ':' + second;
+    }
+
+    // 创建音谱
+    function creatSpectrum() {
+        var li = '';
+        for (var i = 1; i <= 6; i++) {
+            li = li + '<li class="li' + i +
+                ' lii"><span class="ani-li"></span></li>'
+        }
+
+        var div = '<div class="musicSpectrum songStateListener">' +
+            '<div class="music">' +
+            '<ul class="waves">' +
+            li +
+            '</ul>' +
+            '</div></div>';
+
+        return div;
+    }
+
+    function createSongsItem(i) {
+        var li = document.createElement('li');
+        li.className = 'songItem mui-table-view-cell'
+        li.innerHTML =
+            /*'<div class="mui-slider-right mui-disabled deleteBtn">'
+                       + '<a class="mui-btn mui-btn-red">'+languageUtil.getResource("Radio_delete")+'</a>'
+                       + '</div>'
+                       +*/
+            '<div class="mui-slider-handle">' +
+            '<i class="songItemNum songStateListener song_' + songsList[i].songId + '"' + 'songId="' + songsList[i].songId +
+            '"' + '>' + (i + 1) + '</i>' +
+            '<div class="songItemLineContainer">' +
+            '<div class="songItemContainer">' +
+            '<span class="songItemName songStateListener">' + substrWithLength(songsList[i].trackTitle, 20) + '</span>' +
+            '<span class="songItemSinger">' + songsList[i].nickname + '</span>' +
+            '</div>' +
+            creatSpectrum() +
+            '</div>' +
+            '</div>';
+        // var li = '<li class="songItem mui-table-view-cell">'
+        //     + '<div class="mui-slider-right mui-disabled deleteBtn">'
+        //     + '<a class="mui-btn mui-btn-red">'+languageUtil.getResource("Radio_delete")+'</a>'
+        //     + '</div>'
+        //     + '<div class="mui-slider-handle">'
+        //     + '<i class="songItemNum songStateListener song_' + songsList[i].songId + '"'+'songId="'+ songsList[i].songId +'"'+ '>' + (i+1) + '</i>'
+        //     + '<div class="songItemLineContainer">'
+        //     + '<div class="songItemContainer">'
+        //     + '<span class="songItemName songStateListener">'+substrWithLength(songsList[i].trackTitle,20)+'</span>'
+        //     + '<span class="songItemSinger">'+songsList[i].nickname+'</span>'
+        //     + '</div>'
+        //     + creatSpectrum()
+        //     + '</div>'
+        //     + '</div>'
+        //     + '</li>';
+        return li;
+    }
+
+    var iphoneX = {
+        sysFunc: "getItem:",
+        room: "iphoneX",
+        id: "iphoneX",
+        data: ""
+    };
+    var iStr = '';
+    if (!window.v6sysfunc) {
+        iStr = prompt(JSON.stringify(iphoneX))
+    }
+    if (iStr == "iphoneX") {
+        mui(".iponeXclass").each(function () {
+            var item = this;
+            var oldItemTop = item.style.marginTop;
+            item.style.marginTop = oldItemTop + "2.4rem";
+        })
+        $(".playerHeader")[0].style.paddingTop = "4.4rem";
+        $(".timerHeader")[0].style.paddingTop = "4.4rem";
+        $(".timerTips")[0].style.paddingTop = "2.4rem";
+        $(".timerSelector")[0].style.paddingTop = "2.4rem";
+        $(".secSingingNeedle")[0].style.top = "8.8rem";
+    }
+</script>
+
+</html>

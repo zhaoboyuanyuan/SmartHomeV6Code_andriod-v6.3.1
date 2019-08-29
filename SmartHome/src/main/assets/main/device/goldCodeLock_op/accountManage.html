@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>金指码门锁</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="js/mui.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/set.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" href="javascript:;" key="lang_account">账号管理</a>
+				<a class="createIcon" href="javascript:;"></a>
+			</div>
+			<ul class="createList">
+				<li>
+					<a href="javascript:;" class="autoSwitchLanguager" key="device_op_txt_08">普通用户</a>
+				</li>
+				<li>
+					<a href="javascript:;" class="autoSwitchLanguager" key="device_op_txt_09">临时用户</a>
+				</li>
+				<li>
+					<a href="javascript:;" class="autoSwitchLanguager" key="device_op_txt_10">单次密码</a>
+				</li>
+			</ul>
+		</header>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="margin-top: 6.4rem;">
+			<div class="mui-scroll">
+				<ul class="mui-table-view mui-table-view-chevron account_set">
+					<li class="li_title" id="acc_num"><strong class="autoSwitchLanguager" key="device_op_num_01">管理员账号只可在锁体上设置，最多可设5人</strong><span><em>0</em>/5</span></li>
+					<li class="mui-li-view">
+						<h4 class="autoSwitchLanguager" key="device_op_txt_07">管理员用户</h4>
+						<ul class="list" id="acc_list">
+							<!--<li class="mui-table-view-cell">-->
+							<!--<div class="mui-slider-right mui-disabled">-->
+							<!--<a class="mui-btn mui-btn-red">删除</a>-->
+							<!--</div>-->
+							<!--<div class="mui-slider-handle">-->
+							<!--管理员01管理员01管理员01管理员01管理员01管理员01管理员01-->
+							<!--</div>-->
+							<!--</li>-->
+						</ul>
+					</li>
+					<li class="li_title" id="comm_num"><strong class="autoSwitchLanguager" key="device_op_num_02">普通用户+临时用户一共可添加20人</strong><span><em>0</em>/20</span></li>
+					<li class="mui-li-view" style="margin-bottom:2rem;">
+						<h4><span class="autoSwitchLanguager" key="device_op_txt_08">普通用户</span><em class="edit autoSwitchLanguager" key="device_op_txt_22">编辑</em></h4>
+						<ul class="list" id="comm_list">
+							<li class="no_user autoSwitchLanguager" key="device_optxt_04">暂无普通用户，请添加</li>
+							<!--<li id="13" class="mui-table-view-cell">-->
+							<!--<div class="mui-slider-right mui-disabled">-->
+							<!--<a class="mui-btn mui-btn-red">删除</a>-->
+							<!--</div>-->
+							<!--<span class="delete"></span>-->
+							<!--<div class="mui-slider-handle mui-navigate-right">-->
+							<!--<h5>普通用户小明01普通用户小明01普通用户小明01普通用户小明01</h5><em>长期有效</em><i></i>-->
+							<!--</div>-->
+							<!--</li>-->
+						</ul>
+					</li>
+					<li class="mui-li-view">
+						<h4><span class="autoSwitchLanguager" key="device_op_txt_09">临时用户</span><em class="edit autoSwitchLanguager" key="device_op_txt_22">编辑</em></h4>
+						<ul class="list" id="stime_list">
+							<li class="no_user autoSwitchLanguager" key="device_optxt_05">暂无临时用户，请添加</li>
+							<!--<li id="1" class="mui-table-view-cell">-->
+							<!--<div class="mui-slider-right mui-disabled">-->
+							<!--<a id="1_del" class="mui-btn mui-btn-red">删除</a>-->
+							<!--</div>-->
+							<!--<span class="delete"></span>-->
+							<!--<div class="mui-slider-handle mui-navigate-right">-->
+							<!--<h5>普通用户小明01普通用户小明01普通用户小明01普通用户小明01</h5><em>有效</em><i></i>-->
+							<!--</div>-->
+							<!--</li>-->
+						</ul>
+					</li>
+					<li class="li_title autoSwitchLanguager" key="device_op_title_03">单次密码每次仅1条有效</li>
+					<li class="mui-li-view">
+						<h4 class="autoSwitchLanguager" key="device_op_txt_10">单次密码</h4>
+						<ul class="list" id="one_list">
+							<li class="no_user autoSwitchLanguager" key="device_optxt_06">暂无单次密码，请添加</li>
+							<!--<li class="last_list">-->
+							<!--仅保存最近5条已使用的单次密码记录-->
+							<!--</li>-->
+							<!--<li id="51" class="mui-table-view-cell">-->
+							<!--<span class="delete"></span>-->
+							<!--<div class="mui-slider-handle"><h5>单次密码</h5><i></i></div>-->
+							<!--</li>-->
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<section class="clearfix mask_layer_1 iphoneX88"></section>
+		<!--<section id="fail" class="toast" style="display:none;">-->
+			<!--<p class="autoSwitchLanguager" id="toastText" style="color:#fff;"></p>-->
+		<!--</section>-->
+	</body>
+	<script type="text/javascript" src="js/plus.js"></script>
+	<script type="text/javascript" src="js/gatewayCmd.js"></script>
+	<script type="text/javascript" src="js/tools.js"></script>
+	<script type="text/javascript" src="js/alert.js"></script>
+	<script type="text/javascript" src="lang/lang.js"></script>
+	<script type="text/javascript">
+		initlan()
+		var acc_user = 0;
+		var normal_user = 0;
+		var tem_user = 0
+		var once_user = 0;
+		var DEVICEID;
+		var GWID;
+		var APPID;
+		var DELETEDATA;
+		var token;
+		var info = window.sysfun;
+		info.init("Token_OP");
+		token = info.getItem("Token_OP")
+		//点击出现添加按钮
+		$(".createIcon").click(function(e) {
+			e.stopPropagation();
+			$(".createList li").css("background", "#fff")
+			$(".createList li").find("a").css("color", "#3e3e3e")
+			if($(".createList").css("display") == 'none') {
+				$(".mask_layer_1").show()
+				$(".createList").fadeIn()
+			} else {
+				$(".mask_layer_1").hide()
+				$(".createList").fadeOut()
+			}
+		});
+		$(document).on('tap', function() {
+			$(".mask_layer_1").hide()
+			$(".createList").fadeOut();
+		});
+		$(".createList").click(function(e) {
+			e.stopPropagation();
+		});
+		plus.plusReady(function() {
+			$(".edit").on("tap", function() {
+				if($(this).html() == account_txt_22) {
+					$(this).parent().siblings("ul").find(".delete").show()
+					$(this).html(account_txt_21)
+				} else {
+					$(this).parent().siblings("ul").find(".delete").hide()
+					$(this).html(account_txt_22)
+				}
+			})
+			//下拉刷新
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						contentrefresh: account_txt_03,
+						callback: pulldownRefresh
+					}
+				}
+			});
+			$("#back").on("click", function() {
+				plus.tools.back(function() {})
+			})
+			plus.gatewayCmd.getCurrentAppID(function(list) {
+				APPID = list;
+				plus.gatewayCmd.getDeviceInfo(function(result) {
+					DEVICEID = result.devID;
+					GWID = result.gwID;
+					rush_cmd(result.devID);
+					var data = {};
+					data.tk = token;
+					data.f = "2";
+					send520Cmd(1, data); //查询所有列表
+					createUaer(DEVICEID)
+				})
+			})
+		})
+
+		function createUaer(deviceID) {
+			$(".createList li").on("click", function() {
+				$(this).css("background", "#f2faed").siblings().css("background", "#fff")
+				$(this).find("a").css("color", "#54bf00").parent().siblings().find("a").css("color", "#3e3e3e")
+				var urlInfo = {
+					"deviceID": deviceID
+				}
+				if($(this).index() == 0 || $(this).index() == 1) {
+					if(parseInt($("#comm_num").find("em").html()) >= 20) {
+                        window.showDialog.show(account_txt_01,2000);
+                        $(this).parent().hide();
+					} else {
+						if($(this).index() == 0) {
+							//                        urlInfo.url = "createNormalUser.html"
+							//                        plus.tools.newPage(urlInfo,function(){})
+							window.location = "createNormalUser.html"
+						} else if($(this).index() == 1) {
+							//                        urlInfo.url = "createTemporaryUser.html"
+							//                        plus.tools.newPage(urlInfo,function(){})
+							window.location = "createTemporaryUser.html"
+						}
+					}
+				} else if($(this).index() == 2) {
+					if(once_user == 1) {
+                        window.showDialog.show(account_txt_02,2000);
+                        $(this).parent().hide()
+					} else if(once_user == 0) {
+						//                    urlInfo.url = "createOnceUser.html"
+						//                    plus.tools.newPage(urlInfo,function(){})
+						window.location = "createOnceUser.html"
+					}
+				}
+				$(".mask_layer_1").hide()
+				$(".createList").fadeOut();
+			})
+		}
+		var time;
+		/*
+		 * 实现下拉刷新业务
+		 */
+		function pulldownRefresh() {
+			var time1 = new Date().getTime()
+			console.log(time1)
+			setTimeout(function() {
+				if(time) {
+					if(time1 - time > 300000 + 1500) {
+						getMgEAStatus()
+					}
+				} else {
+					getMgEAStatus()
+				}
+				mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+			}, 1500);
+		}
+
+		function getMgEAStatus() {
+			time = new Date().getTime()
+			//		console.log(time)
+			console.log("我刷新了")
+			var data1 = {};
+			data1.tk = token;
+			data1.f = "1";
+			send520Cmd(1, data1);
+		}
+
+		function bindTap(liData, name) {
+			$("#" + liData.uid).find(".mui-slider-handle").on("tap", function() {
+                info.setItem("liData",JSON.stringify(liData));
+				jumpToSet(liData.uid, liData.pwd, ' ', ' ', name, liData.ut);
+			})
+		}
+
+		function bindAcountTap(liData, name) {
+			$("#" + liData.uid).find(".mui-slider-handle").on("tap", function() {
+                info.setItem("liData",JSON.stringify(liData));
+				jumpToSet(liData.uid, liData.pwd, ' ', ' ', name, liData.ut);
+			})
+		}
+
+		function bindTap_det(liData, name) {
+			$("#" + liData.uid).find(".mui-slider-handle").on("tap", function() {
+				jumpToSet(liData.uid, liData.pwd, liData.st, liData.et, name, liData.ut)
+			})
+		}
+		//    bindTap_del({"uid":"1"},"1")
+		function bindTap_del(liData, ut) {
+			document.getElementById(liData.uid + "_del").addEventListener("tap", function(event) {
+				event.stopPropagation();
+				deleteAccount(liData.uid, ut)
+			})
+		}
+		//    bindTap_edit("1")
+		function bindTap_edit(uid) {
+			$("#" + uid).find(".delete").on("tap", function() {
+				event.stopPropagation();
+				var ut;
+				if($("#" + uid).parent().attr("id") == "comm_list") {
+					ut = "1"
+				} else if($("#" + uid).parent().attr("id") == "stime_list") {
+					ut = "2"
+				} else if($("#" + uid).parent().attr("id") == "one_list") {
+					ut = "1"
+				}
+				deleteAccount(uid, ut)
+			})
+		}
+		var pwdArr = [];
+		var nameArr = [];
+		//    window.onload = function(){
+		//        create([{"ut":"1","name":"123按时发撒的发个大厦的风格哈佛的俺的沙发上","uid":"12","pwd":"123456"}])
+		//    }
+		function create(liData) {
+			$("#acc_list").html("")
+			$("#comm_list").html('<li class="no_user">' + account_txt_04 + '</li>')
+			$("#stime_list").html('<li class="no_user">' + account_txt_05 + '</li>')
+			$("#one_list").html('<li class="no_user">' + account_txt_06 + '</li>')
+			acc_user = 0;
+			normal_user = 0;
+			tem_user = 0;
+			once_user = 0;
+			for(var i in liData) {
+				var li = '';
+				if(liData[i].ut == "0") {
+					pwdArr.push(liData[i].pwd)
+					if(liData[i].name == '') {
+						liData[i].name = account_txt_07 + liData[i].uid;
+					}
+					nameArr.push(liData[i].name)
+					acc_user++;
+					li = '<li id="' + liData[i].uid + '" class="mui-table-view-cell">' +
+						'<div class="mui-slider-right mui-disabled">' +
+						'</div>' +
+						'<div class="mui-slider-handle">' + liData[i].name + '</div>' +
+						'</li>';
+					$("#acc_list").append(li)
+					$("#acc_num").find("em").html(acc_user)
+					bindAcountTap(liData[i], liData[i].name)
+				} else if(liData[i].ut == "1") {
+					pwdArr.push(liData[i].pwd)
+					if(liData[i].name == '') {
+						liData[i].name = account_txt_08 + liData[i].uid;
+					}
+					nameArr.push(liData[i].name)
+					normal_user++;
+					li = '<li id="' + liData[i].uid + '" class="mui-table-view-cell">' +
+						'<div class="mui-slider-right mui-disabled">' +
+						'<a id="' + liData[i].uid + '_del" class="mui-btn mui-btn-red">' + account_txt_23 + '</a>' +
+						'</div><span class="delete"></span>' +
+						'<div class="mui-slider-handle"><h5>' + liData[i].name + '</h5><em>' + account_txt_24 + '</em><i></i></div>' +
+						'</li>'
+					$("#comm_list").append(li)
+					bindTap(liData[i], liData[i].name);
+					bindTap_del(liData[i], "1")
+					bindTap_edit(liData[i].uid)
+				} else if(liData[i].ut == "2") {
+					pwdArr.push(liData[i].pwd)
+					if(liData[i].name == '') {
+						liData[i].name = account_txt_09 + liData[i].uid;
+					}
+					tem_user++;
+					var es = new Date(timeSub(liData[i].et)).getTime()
+					var now = new Date().getTime()
+					var txt = '';
+					//overdue
+					if(es > now) {
+						txt = account_txt_11
+					} else {
+						txt = account_txt_12
+					}
+					li = '<li id="' + liData[i].uid + '" class="mui-table-view-cell">' +
+						'<div class="mui-slider-right mui-disabled">' +
+						'<a id="' + liData[i].uid + '_del" class="mui-btn mui-btn-red" >' + account_txt_23 + '</a>' +
+						'</div><span class="delete"></span>' +
+						'<div class="mui-slider-handle"><h5>' + liData[i].name + '</h5><em>' + txt + '</em><i></i></div>' +
+						'</li>'
+					$("#stime_list").append(li);
+					if($("#" + liData[i].uid).find("em").html() == "过期") {
+						$("#" + liData[i].uid).find("em").addClass("overdue")
+					} else {
+						$("#" + liData[i].uid).find("em").removeClass("overdue")
+					}
+					bindTap_del(liData[i], "2");
+					bindTap_det(liData[i], liData[i].name)
+					bindTap_edit(liData[i].uid)
+				} else if(liData[i].ut == "3") {
+					pwdArr.push(liData[i].pwd)
+					if(liData[i].name == '') {
+						liData[i].name = account_txt_10 + liData[i].uid;
+					}
+					once_user++;
+					li = '<li id="' + liData[i].uid + '" class="mui-table-view-cell">' +
+						'<span class="delete"></span>' +
+						'<div class="mui-slider-handle"><h5>' + liData[i].name + '</h5><i></i></div>' +
+						'</li>'
+					$("#one_list").append(li);
+					bindTap(liData[i], liData[i].name);
+				}
+			}
+			$("#comm_num").find("em").html((normal_user + tem_user))
+			if(normal_user == 0) {
+				$("#comm_list").find(".no_user").show()
+			}
+			if(tem_user == 0) {
+				$("#stime_list").find(".no_user").show()
+			}
+			if(once_user == 0) {
+				$("#one_list").find(".no_user").show()
+			}
+			info.setItem("pwdArr", JSON.stringify(pwdArr))
+		}
+
+		function timeSub(t) {
+			return t.substring(0, 4) + "/" + t.substring(4, 6) + "/" + t.substring(6, 8) + " " + t.substring(8, 10) + ":" + t.substring(10, 12)
+		}
+
+		/*
+		 * operType:1:表示获取用户列表  2：新增用户 3: 删除用户 4：修改用户信息 5：一键清除 6：设置防胁迫信息
+		 */
+		function send520Cmd(operType, data) {
+			var jsonData = {};
+			jsonData.cmd = "520";
+			jsonData.gwID = GWID;
+			jsonData.appID = APPID;
+			jsonData.devID = DEVICEID;
+			jsonData.operType = operType;
+			jsonData.data = data;
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+
+			})
+		}
+		/*
+		 * 获取到520cmd 刷新列表
+		 */
+		function get_520cmd(result) {
+			if(result.data.code != 0) {
+				errorCode(parseInt(result.data.code))
+				return;
+			}
+			if(result.operType == 1) { //查询所有
+				if(result.data.list) {
+					create(result.data.list)
+				} else {
+					var data = {};
+					data.tk = token;
+					data.f = "1";
+					send520Cmd(1, data);
+				}
+			} else if(result.operType == 2) { //新增
+				//				create(result.list)
+			} else if(result.operType == 3) { //删除
+				var deID = result.data.uid;
+				$("#comm_num").find("em").html(parseInt($("#comm_num").find("em").html()) - 1)
+				$('#' + deID).remove();
+			}
+		}
+		/*
+		 * 删除单条
+		 */
+		function deleteAccount(uid, ut) {
+			var data = {};
+			data.tk = token;
+			data.uid = uid;
+			data.ut = ut;
+			DELETEDATA = data;
+			//确认删除用户及密码？
+			//        editPopup({"num":0,titTxt:"确认删除用户及密码？","isClick":2,"aTxt1":"取消","aTxt2":"确认"})
+			editPopup({ "num": 2, txt: account_txt_13, "isClick": 2, "aTxt1": account_txt_14, "aTxt2": account_txt_15 })
+			$(".btn a").on("click", function() {
+				if($(this).index() == 0) {
+					$(this).parents("section").hide()
+					cancel();
+				} else {
+					sureDelete()
+				}
+			})
+		}
+
+		function sureDelete() {
+			send520Cmd(3, DELETEDATA); //删除
+			cancel();
+		}
+
+		function cancel() {
+			$(".popup").parent("section").remove()
+		}
+		/*
+		 * 临时用户跳转jumpToSet(00,999999,,,,0)
+		 */
+		function jumpToSet(uid, pwd, st, et, name, ut) {
+			info.setItem("name", name)
+			info.setItem("pwd", pwd)
+			info.setItem("st", st)
+			info.setItem("et", et)
+			info.setItem("ut", ut)
+			info.setItem("uid", uid)
+			var urlInfo = {
+				"deviceID": DEVICEID
+			}
+			if(ut == "2") {
+				//            urlInfo.url = "temporaryUser.html"
+				//            plus.tools.newPage(urlInfo,function(){})
+				window.location = "temporaryUser.html"
+			} else if(ut == "1") {
+				//            urlInfo.url = "normalUser.html"
+				//            plus.tools.newPage(urlInfo,function(){})
+				window.location = "normalUser.html"
+			} else if(ut == "3") {
+				//            urlInfo.url = "onceUser.html"
+				//            plus.tools.newPage(urlInfo,function(){})
+				window.location = "onceUser.html"
+			} else if(ut == 0) {
+				window.location = "accountUser.html"
+			}
+		}
+		/*
+		 * 数据回调
+		 */
+		function rush_cmd() {
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				if(result.cmd == "520" && result.devID == DEVICEID && result.appID == APPID) {
+					get_520cmd(result);
+				}
+			})
+		}
+	</script>
+
+</html>

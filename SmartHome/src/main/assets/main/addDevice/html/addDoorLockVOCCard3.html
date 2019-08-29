@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!--<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />-->
+		<title>添加密码卡锁</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/setState.css"/>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:window.history.back(-1);"></a>
+				<a href="javascript:;" class="autoSwitchLanguager" id="addDoorLock_title">添加密码卡锁</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="step_img step_switch">
+			<img src="../../skinSource/img/img_step3_03.png" alt="" />
+		</section>
+		<section class="step_main main_switch_voc_finger">
+			<!--<p class="autoSwitchLanguager" id="addDoorLock_step_03">听到“加网成功”提示音后，点击【完成】</p>-->
+			<img style="width: 50%;" class="step_voc_lock" src="../../source/addDeviceLock/70_card_2.png" alt="" />
+			<!--<i class="step_voc_wifi"  />-->
+		</section>
+		<section class="step_main explain2">
+			<p class="explain2 autoSwitchLanguager" id="addDoorLock_step_03">听到“加网成功”提示音后，点击【完成】</p>
+		</section>
+		<section class="step_btn step_btn2">
+			<a style="bottom: 3rem" class="switch_done autoSwitchLanguager" id="finishDelay" href="javascript:;">完成</a>
+			<a style="opacity: 0; display:none;" href="javascript:;"></a>
+		</section>
+	</body>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../build/bridge.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/returnAddScene.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+        initlan()
+        plus.plusReady(function(){
+            $(".switch_done").on("click", function() {
+                plus.tools.back(function () {
+
+                });
+            })
+		})
+	</script>
+</html>

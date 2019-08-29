@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+	<meta name="format-detection" content="telephone=no">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="css/base.css" />
+
+	<link rel="stylesheet" href="../../source/mui/css/mui.min.css" />
+	<link rel="stylesheet" type="text/css" href="../../source/mui/css/app.css"/>
+
+	<script src="../../source/mui/js/mui.min.js"></script>
+	<script src="../../source/mui/js/mui.picker.js"></script>
+	<script src="../../source/mui/js/mui.poppicker.js"></script>
+	<link href="../../source/mui/css/mui.picker.css" rel="stylesheet" />
+	<link href="../../source/mui/css/mui.poppicker.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="css/deviceSet.css" />
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+	<div class="header_top">
+		<a class="back" href="javascript:;"></a>
+		<a href="javascript:;" class="autoSwitchLanguager" key="Device_82_Details_Return">回差设置</a>
+		<a></a>
+	</div>
+</header>
+<section>
+	<ul class="mui-table-view">
+		<li class="mui-table-view-cell" id="firstRow">
+			<a style="font-size: 1.5rem;line-height: 4.5rem" class="autoSwitchLanguager" key="Device_82_Details_Return1">
+				一阶设置
+			</a>
+			<span class="currentTemp firstRowCurrentTemp"></span>
+			<span class="mui-icon mui-icon-arrowdown iconRight"></span>
+		</li>
+		<li class="mui-table-view-cell" id="secondRow">
+			<a style="font-size: 1.5rem;line-height: 4.5rem" class="autoSwitchLanguager" key="Device_82_Details_Return2">
+				二阶设置
+			</a>
+			<span class="currentTemp secondRowCurrentTemp"></span>
+			<span class="mui-icon mui-icon-arrowdown iconRight"></span>
+		</li>
+		<li class="mui-table-view-cell" id="thirdRow">
+			<a style="font-size: 1.5rem;line-height: 4.5rem" class="autoSwitchLanguager" key="Device_82_Details_Return3">
+				三阶设置
+			</a>
+			<span class="currentTemp thirdRowCurrentTemp"></span>
+			<span class="mui-icon mui-icon-arrowdown iconRight"></span>
+		</li>
+	</ul>
+</section>
+<section class="middleBtn_section">
+	<button type="button" class="mui-btn mui-btn-success middleBtn autoSwitchLanguager" key="Device_82_Details_Settings_Finish">发送设置</button>
+</section>
+<div id='userResult' class="ui-alert"></div>
+<!---->
+
+</body>
+<script src="js/device82Model.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/sendCMD.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    //国际化初始化函数
+    initlan()
+	var isF = false;
+    var isSendCmd = false;
+    var firstRowNum;
+    var secondRowNum;
+    var thirdRowNum;
+    var firstStageArry  = [{value: '1',text: '0.2'},{value: '2',text: '0.5'},{value: '3',text: '0.8'},{value: '4',text: '1'},{value: '5',text: '1.2'},{value: '6',text: '1.5'},{value: '7',text: '1.8'},{value: '8',text: '2'}];
+    var firstStageArryF  = [{value: '1',text: '0.5'},{value: '2',text: '1'},{value: '3',text: '1.5'},{value: '4',text: '2'},{value: '5',text: '2.5'},{value: '6',text: '3'},{value: '7',text: '3.5'},{value: '8',text: '4'}];
+    var secondStageArry = [{value: '1',text: '1'},{value: '2',text: '1.5'},{value: '3',text: '2'},{value: '4',text: '2.5'},{value: '5',text: '3'}];
+    var secondStageArryF = [{value: '1',text: '2'},{value: '2',text: '3'},{value: '3',text: '4'},{value: '4',text: '5'},{value: '5',text: '6'}];
+    var thirdStageArry  = [{value: '1',text: '2.5'},{value: '2',text: '3'},{value: '3',text: '3.5'},{value: '4',text: '4'},{value: '5',text: '4.5'},{value: '6',text: '5'}];
+    var thirdStageArryF  = [{value: '1',text: '5'},{value: '2',text: '6'},{value: '3',text: '7'},{value: '4',text: '8'},{value: '5',text: '9'},{value: '6',text: '10'}];
+    mui.init();
+    var userPicker = new mui.PopPicker({});
+    var userResult = document.getElementById('userResult');
+    //		$(".img_state")
+    $("#firstRow").on('tap',function(){
+        userPicker.setData(isF?firstStageArryF:firstStageArry);
+        userPicker.show(function(items) {
+            firstRowNum = items[0].value
+            $(".firstRowCurrentTemp").html(items[0].text);
+        });
+    })
+    $("#secondRow").on('tap',function(){
+        userPicker.setData(isF?secondStageArryF:secondStageArry);
+        userPicker.show(function(items) {
+            secondRowNum = items[0].value
+            $(".secondRowCurrentTemp").html(items[0].text);
+        });
+    })
+    $("#thirdRow").on('tap',function(){
+        userPicker.setData(isF?thirdStageArryF:thirdStageArry);
+        userPicker.show(function(items) {
+            thirdRowNum = items[0].value
+            $(".thirdRowCurrentTemp").html(items[0].text);
+        })
+    })
+    plus.plusReady(function(){
+        $(".middleBtn_section").find("button").html(lang_Device_82_Details_Settings_Finish);
+        $(".mui-poppicker-btn-cancel").html(lang_Device_82_Details_Cancel);
+        $(".mui-poppicker-btn-ok").html(lang_Device_82_Details_Confirm);
+        //返回到设备详情页
+        $(".back").on("click",function(){
+            plus.tools.back(function() {})
+        })
+
+        $(".middleBtn_section").on("click",function () {
+            setThermostatDifference();
+        })
+        ////////////////////////////回调---start////////////////////////////
+        plus.gatewayCmd.getDeviceInfo(null, function(data){
+            devID = data.devID;
+            gwID = data.gwID;
+            ep = ~~(data.endpoints[0].endpointNumber);
+            handleData(data);
+        })
+
+        plus.gatewayCmdRush.newDataRefresh(function(data){
+            if(data.cmd == "500" && devID == data.devID){
+                for (var i = 0; i < data.endpoints.length; i++) {
+                    var endpoint = data.endpoints[i];
+                    var endpointNumber = endpoint.endpointNumber;
+                    var endpointName = endpoint.endpointName;
+                    var endpointType = endpoint.endpointType;
+                    var clusters = endpoint.clusters;
+                    var attributes = clusters[0].attributes;
+                    for (var j = 0;j < attributes.length;j++){
+                        var attributeId = attributes[j].attributeId;
+                        var attributeValue = attributes[j].attributeValue;
+                        if(attributeId == 0x8002){
+                            if (isSendCmd){
+                                isSendCmd = false;
+                                plus.tools.back(function() {})
+                            }
+                        }
+                    }
+
+                }
+            }
+        })
+        ////////////////////////////回调---end////////////////////////////
+
+        function handleData(data){
+            for (var i = 0; i < data.endpoints.length; i++) {
+                var endpoint = data.endpoints[i];
+                var endpointNumber = endpoint.endpointNumber;
+                var endpointName = endpoint.endpointName;
+                var endpointType = endpoint.endpointType;
+                var clusters = endpoint.clusters;
+                var attributes = clusters[0].attributes;
+                for (var j = 0;j < attributes.length;j++){
+                    var attributeId = attributes[j].attributeId;
+                    var attributeValue = attributes[j].attributeValue;
+                        updataModelWith(attributeValue);
+                        if (s_82_temperatureUnit == "01"){
+                            isF = true;
+                        }else if (s_82_temperatureUnit == "00"){
+                            isF = false;
+						}
+						if (s_82_svingData){
+                            var svingData = (isF?firstStageArryF:firstStageArry);
+                            for (var i=0;i<svingData.length;i++){
+                                var svingDataSection = svingData[i];
+                                if (parseInt(s_82_svingData) == parseInt(svingDataSection["value"])){
+                                    firstRowNum = svingDataSection["value"];
+                                    $(".firstRowCurrentTemp").html(svingDataSection.text);
+								}
+							}
+						}
+                        if (s_82_diffData){
+                            var diffData = (isF?secondStageArryF:secondStageArry);
+                            for (var i=0;i<diffData.length;i++){
+                                var diffDataSection = diffData[i];
+                                if (parseInt(s_82_diffData) == parseInt(diffDataSection["value"])){
+                                    secondRowNum = diffDataSection["value"];
+                                    $(".secondRowCurrentTemp").html(diffDataSection.text);
+                                }
+                            }
+                        }
+                        if (s_82_thirdData){
+                            var thirdData = (isF?thirdStageArryF:thirdStageArry);
+                            for (var i=0;i<thirdData.length;i++){
+                                var thirdDataSection = thirdData[i];
+                                if (parseInt(s_82_thirdData) == parseInt(thirdDataSection["value"])){
+                                    thirdRowNum = thirdDataSection["value"];
+                                    $(".thirdRowCurrentTemp").html(thirdDataSection.text);
+                                }
+                            }
+                        }
+                }
+
+            }
+        }
+		////////////////////////////////
+        function setThermostatDifference(){
+            var setThermostatSendStr1;
+            var setThermostatSendStr2;
+            var setThermostatSendStr3;
+
+            setThermostatSendStr1 = "2"+ firstRowNum;
+            setThermostatSendStr2 = "3"+ secondRowNum;
+            setThermostatSendStr3 = "4"+ thirdRowNum;
+			if (!(firstRowNum && secondRowNum && thirdRowNum)){
+			    return;
+			}
+            if (setThermostatSendStr1){
+                isSendCmd = true;
+                sendCmd(gwID,devID,ep,0x8017,[setThermostatSendStr1]);
+            }
+
+            if (setThermostatSendStr2){
+                isSendCmd = true;
+                sendCmd(gwID,devID,ep,0x8017,[setThermostatSendStr2]);
+            }
+
+            if (setThermostatSendStr3){
+                isSendCmd = true;
+                sendCmd(gwID,devID,ep,0x8017,[setThermostatSendStr3]);
+            }
+		}
+		////////////////////////////////
+    })
+
+</script>
+</html>

@@ -1,0 +1,29 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_A1_name = "四路輸入型轉換器";
+$lang.device_A1_way = "路";
+$lang.device_A1_Rename_hint = "註：長按可重新命名";
+$lang.device_A1_Alarm = "警報訊息";
+$lang.device_A1_more = "更多";
+$lang.device_A1_out_of_time = "連接逾時";
+$lang.device_A1_know = "我知道了";
+$lang.device_A1_Rename = "重新命名";
+$lang.device_A1_cancel = "取消";
+$lang.device_A1_ok = "確定";
+$lang.device_A1_fortify = "防護";
+$lang.device_A1_disarming = "撤防";
+$lang.device_A1_fortifying = "防護中";
+$lang.device_A1_disarmed = "已撤防";
+$lang.device_A1_normal = "正常";
+$lang.device_A1_abnormal = "有警報";
+$lang.device_A1_Offline = "設備已離線";
+$lang.device_A1_set = "設定";
+$lang.device_A1_action_close = "關閉";
+$lang.device_A1_action_open = "斷開";
+$lang.device_A1_normal_set = "正常狀態設定";
+$lang.device_A1_normal_set_hint = "註：此狀態下不會有警報";
+$lang.Device_A1_Details_Loading2 = "下載中";
+$lang.device_A1_noData = "暫無數據";

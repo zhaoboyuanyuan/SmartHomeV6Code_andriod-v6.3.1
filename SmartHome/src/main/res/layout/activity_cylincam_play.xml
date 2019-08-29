@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/main_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/layout_portrait_Top"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/black">
+                <!-- 视屏直播承载View -->
+                <cc.wulian.smarthomev6.support.customview.PinchLayout
+                    android:id="@+id/rl_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true" />
+
+                <!-- 视频角度仪 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <cc.wulian.smarthomev6.support.customview.AngleMeter
+                        android:id="@+id/anglemeter"
+                        android:layout_width="128dp"
+                        android:layout_height="26dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+                        android:visibility="gone" />
+
+                    <cc.wulian.smarthomev6.support.customview.MarqueeText
+                        android:id="@+id/tv_environment"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_alignParentTop="true"
+                        android:background="#66000000"
+                        android:ellipsize="marquee"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center_vertical"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_definition"
+                        android:layout_width="40dp"
+                        android:layout_height="28dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/definition_bg"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:text="@string/Super_Definition"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_fullscreen"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginRight="15dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/selector_camera_fullscreen" />
+
+                </RelativeLayout>
+
+                <!-- 视频正在连接进行布局 -->
+                <LinearLayout
+                    android:id="@+id/ll_linking_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#40000000"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/CateEye_Detail_Video_Loading"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <!-- 视频断开刷新布局 -->
+                <LinearLayout
+                    android:id="@+id/ll_linking_video_refresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#80000000"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_refresh" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/CateEye_Detail_Video_Reload"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <!-- 设备不在线布局 -->
+                <LinearLayout
+                    android:id="@+id/layout_video_offline"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#80000000"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/Camera_Offline"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <!-- 横屏布局 -->
+                <FrameLayout
+                    android:id="@+id/layout_landscape"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+                    <FrameLayout
+                        android:visibility="visible"
+                        android:id="@+id/layout_brightness_tips"
+                        android:layout_width="match_parent"
+                        android:background="#75000000"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/iv_brightness_tip"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/icon_brightness_tip_cn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                        <Button
+                            android:layout_marginBottom="70dp"
+                            android:id="@+id/btn_i_known"
+                            android:background="@drawable/icon_i_know_cn"
+                            android:layout_gravity="bottom|center_horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </FrameLayout>
+                    <TextView
+                        android:id="@+id/tv_definition_landscape"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="bottom|left"
+                        android:layout_marginBottom="25dp"
+                        android:layout_marginLeft="35dp"
+                        android:background="@drawable/bg_button_fullscreen"
+                        android:gravity="center"
+                        android:text="@string/High_Definition"
+                        android:textColor="@color/v6_text_gray"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_sound_landscape"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="bottom|left"
+                        android:layout_marginBottom="25dp"
+                        android:layout_marginLeft="95dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/btn_sound_fullscreen_off" />
+
+                    <ImageView
+                        android:id="@+id/iv_snapshot_landscape"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="bottom|right"
+                        android:layout_marginBottom="25dp"
+                        android:layout_marginRight="95dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/btn_snapshot_fullscreen" />
+
+                    <ImageView
+                        android:id="@+id/iv_hold_speek_landscape"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="bottom|right"
+                        android:layout_marginBottom="25dp"
+                        android:layout_marginRight="35dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/btn_hold_fullscreen" />
+
+                    <ImageView
+                        android:id="@+id/iv_fullscreen_landscape"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="top|right"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="15dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/selector_camera_fullscreen_exit" />
+
+                    <TextView
+                        android:id="@+id/tv_network_speed_landscape"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|left"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/shape_speed_bg_landscape"
+                        android:gravity="center"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:text="0 Kb/s"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+
+                    <cc.wulian.smarthomev6.support.customview.CylincamYuntaiButtonLandscape
+                        android:id="@+id/yt_cylincam_landscape"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_gravity="right|bottom"
+                        android:layout_marginBottom="100dp"
+                        android:layout_marginRight="35dp" />
+
+                </FrameLayout>
+            </FrameLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_portrait_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/black">
+
+                <LinearLayout
+                    android:id="@+id/layout_buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#66000000"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_sound"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/icon_cateye_sound_off" />
+
+                    <ImageView
+                        android:id="@+id/iv_replay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/icon_cateye_replay" />
+
+                    <ImageView
+                        android:id="@+id/iv_alarmlist"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/icon_cateye_alarm" />
+
+                    <ImageView
+                        android:id="@+id/iv_collect"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/icon_button_collect" />
+
+                    <ImageView
+                        android:id="@+id/btn_lock"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/icon_lookever_lock" />
+
+                    <ImageView
+                        android:id="@+id/btn_scene"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/icon_lookever_scene" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/iv_album"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="30dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_image_gallery" />
+
+                <ImageView
+                    android:id="@+id/iv_snapshot"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginRight="30dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_cateye_snapshot" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="40dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/iv_arrows"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_horizontal"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/arrow_down_white" />
+
+                    <cc.wulian.smarthomev6.support.customview.CylincamYuntaiButton
+                        android:id="@+id/yt_cylincam"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/iv_hold_speek"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/icon_hold_speek" />
+
+                    <TextView
+                        android:id="@+id/tv_hold_speek"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/Click_Call"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+            </RelativeLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

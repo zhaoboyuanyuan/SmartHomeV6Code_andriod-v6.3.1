@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/widget_padding_vertical"
+    android:paddingLeft="@dimen/widget_padding_horizontal"
+    android:paddingRight="@dimen/widget_padding_horizontal"
+    android:paddingTop="@dimen/widget_padding_vertical">
+
+    <cc.wulian.smarthomev6.support.customview.RatioImageView
+        android:id="@+id/home_view_cateye_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/home_widget_cg24_bg" />
+
+    <ImageView
+        android:id="@+id/home_view_cateye_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/home_view_cateye_play_online" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="14dp"
+        android:gravity="bottom">
+
+        <TextView
+            android:id="@+id/home_view_cateye_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:shadowColor="#80ffffff"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="10"
+            android:text="@string/Device_Default_Name_CMICA1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/widget_primary_text_size" />
+
+        <TextView
+            android:id="@+id/home_view_cateye_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="8dp"
+            android:layout_toRightOf="@+id/home_view_cateye_name"
+            android:background="@drawable/home_view_cateye_state_bg"
+            android:paddingBottom="2dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingTop="2dp"
+            android:shadowColor="#80ffffff"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="10"
+            android:text="@string/Home_Widget_OffLine"
+            android:textColor="@color/white"
+            android:textSize="@dimen/widget_caption_text_size" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

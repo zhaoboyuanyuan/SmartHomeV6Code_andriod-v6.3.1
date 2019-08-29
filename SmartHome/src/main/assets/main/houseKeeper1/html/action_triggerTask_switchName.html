@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <a href="javascript:;" onclick="window.history.back(-1);"></a>
+    <a href="javascript:;" class="autoSwitchLanguager" id='setDeviceState_tittle'>设置设备状态</a>
+    <!--<a id="customScene_sure" class="saveSure autoSwitchLanguager" href="javascript:;">确定</a>-->
+</header>
+<section style="padding-top:6.4rem;">
+    <ul class="set_list">
+        <!--<li><b class="autoSwitchLanguager">设防下被打开</b><i></i></li>-->
+        <!--<li><b class="autoSwitchLanguager">设防下被关闭</b><i></i></li>-->
+        <!--<li><b class="autoSwitchLanguager">撤防下被打开</b><i></i></li>-->
+        <!--<li><b class="autoSwitchLanguager">撤防下被关闭</b><i></i></li>-->
+    </ul>
+</section>
+<!--<section class="switchToast autoSwitchLanguager" id="toast_switch_mode">请设置设备状态</section>-->
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var arr = [];
+    initlan();
+    plus.plusReady(function(){
+        $(".set_list").html("");
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        if( info.getItem("type") == "At"){
+            var list = JSON.parse(info.getItem("epNameList"+info.getItem("deviceID")));
+            if(list){
+                for(var i=0;i<list.length;i++){
+                    $(".set_list").append('<li><b>'+list[i]+'</b><i></i></li>');
+                }
+            }
+        }
+        $(".set_list li").unbind("click").on("click",function(){
+            $(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon");
+            var num = $(this).index() + 1;
+            info.setItem("num",num);
+            info.setItem("sceneSwitchName",$(this).find("b").eq(0).html());
+            window.location = "setSecurityDevice.html"
+        });
+    });
+
+</script>
+</html>

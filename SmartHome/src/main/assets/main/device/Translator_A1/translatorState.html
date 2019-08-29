@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>翻译器</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header" style="position:fixed;left:0;top:0;z-index:10000;">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="device_A1_set" href="javascript:;">设置</a>
+    </div>
+</header>
+<section class="childDevice">
+    <ul class="childList">
+        <!--<li>-->
+        <!--<div class="child">1路</div>-->
+        <!--<div class="child">-->
+        <!--<span>闭合</span>-->
+        <!--<span>-->
+        <!--<i data-switch="on"><em></em></i>-->
+        <!--</span>-->
+        <!--</div>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<div class="child">2路</div>-->
+        <!--<div class="child">-->
+        <!--<span>断开</span>-->
+        <!--<span>-->
+        <!--<i data-switch="off"><em></em></i>-->
+        <!--</span>-->
+        <!--</div>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<div class="child">3路</div>-->
+        <!--<div class="child">-->
+        <!--<span>断开</span>-->
+        <!--<span>-->
+        <!--<i data-switch="off"><em></em></i>-->
+        <!--</span>-->
+        <!--</div>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<div class="child">4路</div>-->
+        <!--<div class="child">-->
+        <!--<span>闭合</span>-->
+        <!--<span>-->
+        <!--<i data-switch="on"><em></em></i>-->
+        <!--</span>-->
+        <!--</div>-->
+        <!--</li>-->
+    </ul>
+</section>
+<section class="saveToast" style="display:none;">
+    <div>
+        <i><em class="rotate"></em></i>
+        <p key="Device_A1_Details_Loading2" class="autoSwitchLanguager">正在加载...</p>
+    </div>
+</section>
+<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="device_A1_Offline">设备已离线</span></section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var info = window.sysfun;
+    info.init("device_A1");
+    $("#back").on("click",function () {
+        plus.tools.goBack(function(){})
+    });
+    var gwID, devID, appID;
+    plus.plusReady(function () {
+        plus.gatewayCmd.getCurrentAppID(function (result) {
+            appID = result;
+        });
+        plus.gatewayCmd.getDeviceInfo(null, function (data) {
+            if (data.mode == 2) {
+                $(".mask_loading").hide();
+                $(".mask_layer").show();
+            } else {
+                $(".mask_layer").hide();
+            }
+            console.log(data);
+            devID = data.devID;
+            gwID = data.gwID;
+            sendCmd_501(gwID, devID, appID, 0, 0x0102, "");
+            modeAnalysis500(data);
+        });
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            if (data.cmd == "500" && data.devID == devID) {
+                console.log(data)
+                modeAnalysis500(data);
+            } else if (data.cmd == "502" && data.devID == devID) {
+                if (data.mode == "2") {
+                    $(".deviceName").html(data.endpointName);
+                }
+            }
+        });
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header_top")[0].style.paddingTop = "4rem";
+        }
+    });
+    function modeAnalysis500(data) {
+        $(".saveToast").hide();
+        switch (data.mode) {
+            case 2:
+                $(".mask_layer").show();
+                break;
+            case 0:
+            case 1:
+            case 4:
+                reloadUI(data);
+                break;
+        }
+    }
+    function reloadUI(data) {
+        if (data) {
+            if (data.endpoints) {
+                if(data.endpoints.length === 1){
+                    if($(".childList").find("li").length === 0){
+                        drawLi(data.endpoints);
+                    }else{
+                        var attributes = data.endpoints[0].clusters[0].attributes;
+                        if (attributes) {
+                            var stateVal,stateText;
+                            for (var i in attributes) {
+                                var id = attributes[i].attributeId;
+                                var value = attributes[i].attributeValue;
+                                if (id === 0x8101) {
+                                    stateVal = value == "0" ? "on" : "off";
+                                    stateText = value == "0" ? lang_device_close : lang_device_open;
+                                }
+                            }
+                            var num = data.endpoints[0].endpointNumber;
+                            $("#"+num).find("div").eq(2).find("span").eq(1).html(stateText);
+                            $("#"+num).find("div").eq(2).find("span").eq(2).find("i").attr("data-switch",stateVal);
+                        }
+                    }
+                }else{
+                    var endpoints = data.endpoints;
+                    $(".childList").html(" ");
+                    drawLi(endpoints);
+                }
+            }
+        }
+    }
+    function drawLi(endpoints){
+        for (var j in endpoints) {
+            var stateVal;
+            var stateText;
+            var attributes = endpoints[j].clusters[0].attributes;
+            if (attributes) {
+                for (var i in attributes) {
+                    var id = attributes[i].attributeId;
+                    var value = attributes[i].attributeValue;
+                    if (id === 0x8101) {
+                        stateVal = value == "0" ? "on" : "off";
+                        stateText = value == "0" ? lang_device_close : lang_device_open;
+                    }
+                }
+            }
+            var num = endpoints[j].endpointNumber;
+            var name = endpoints[j].endpointName ? endpoints[j].endpointName : endpoints[j].endpointNumber+lang_device_way;
+            var str = '<li id="'+endpoints[j].endpointNumber+'">'
+                +  '<div class="child">'+name+'</div>'
+                +  '<div class="child">'
+                +  '<span>'
+                +  '<i class="switch" data-switch="'+stateVal+'" data-id="'+num+'"><em></em></i>'
+                +  '</span>'
+                +  '<span>'+stateText+'</span>'
+                +  '</div>'
+                +  '</li>';
+            $(".childList").append(str);
+        }
+        $(".switch").on("click",function(){
+            var num = parseInt($(this).attr("data-id"));
+            if($(this).attr("data-switch") === "on"){
+                $(".saveToast").show();
+                sendCmd_501(gwID, devID, appID, num, 0x0101, ["1"]);
+            }else if($(this).attr("data-switch") === "off"){
+                $(".saveToast").show();
+                sendCmd_501(gwID, devID, appID, num, 0x0101, ["0"]);
+            }
+        })
+    }
+    function sendCmd_501(gwID,devID,appID,endpointNumber,commandId,parameter){
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        jsonData.endpointNumber = endpointNumber;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = parameter;
+        }
+        console.log(jsonData);
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+</script>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/thermostat.css" />
+    <link rel="stylesheet" type="text/css" href="../../source/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/mui/js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body style="background:#fff;">
+    <header class="header" style="position: fixed;left:0;top:0;width:100%;">
+        <div class="header_top">
+            <a href="javascript:history.back(-1);"></a>
+            <a href="javascript:;" class="autoSwitchLanguager" key="device_Ol_name">风盘地暖温控器</a>
+            <a href="javascript:;" id="save" key="saveScene" class="autoSwitchLanguager">保存</a>
+        </div>
+    </header>
+    <section id="content">
+        <div class="switch">
+            <span key="editScene_OZ_Open" class="autoSwitchLanguager">开关</span>
+            <div>
+                <em id="switchClick" data-state="off"><i></i></em>
+            </div>
+        </div>
+        <ul class="switchOnView">
+            <li id="modeSet">
+                <span key="editScene_OZ_Type" class="autoSwitchLanguager">模式</span>
+                <span data-id="1" class="mode autoSwitchLanguager" key="editScene_OZ_Type1">制冷</span>
+            </li>
+            <li id="tempSet">
+                <span key="editScene_OZ_Temperature" class="autoSwitchLanguager">温度/℃</span>
+                <span data-id="26" class="temp">26℃</span>
+            </li>
+            <li id="windSet">
+                <span key="editScene_OZ_Speed" class="autoSwitchLanguager">风速</span>
+                <span data-id="2" class="wind autoSwitchLanguager" key="editScene_OZ_Speed3">低</span>
+            </li>
+        </ul>
+    </section>
+</body>
+<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Scene");
+    initlan();
+    /*============================ 选择器 ==============================*/
+    var picker1,picker2,picker3;
+    /*============================ endpointNumber ==============================*/
+    var numArr = getUrlParam("num").split("-");
+    var nameArr = info.getItem("description").split("-");
+    /*=====================模式：FF(空) 其他模式01-12 10进制==========================*/
+    var modeArr = [];
+    /*=====================温度：FF(空) 其他温度16-32 10进制==========================*/
+    var tempArr = [];
+    for(var i=16;i<=32;i+=0.5){
+        var param = {
+            "text":i+'',
+            "value":i+''
+        };
+        tempArr.push(param);
+    }
+    console.log(tempArr);
+    //mui init
+    mui.init();
+    /*==========================================*/
+    plus.plusReady(function(){
+        window.modeList = [
+            device_Ol_mode_cool,
+            device_Ol_mode_heat,
+            device_Ol_mode_fan,
+            device_Ol_mode_warm,
+            device_Ol_mode_warm_heat,
+        ];
+        for(var j =1;j<=5;j++){
+            var param1 = {
+                "text":modeList[j-1],
+                "value":j+'',
+            };
+            modeArr.push(param1);
+        }
+        $("#save").on("click",function(){
+            save()
+        });
+        $("#windSet").on("click",function(){
+            var _this = $(this);
+            if(!picker3){
+                picker3 = new mui.PopPicker({
+                    layer: 1
+                });
+                picker3.setData([{
+                    value: "0",
+                    text: lang_OZ_Speed1
+                },{
+                    value: "1",
+                    text: lang_OZ_Speed2
+                },{
+                    value: "2",
+                    text: lang_OZ_Speed3
+                },{
+                    value: "3",
+                    text: lang_OZ_Speed4
+                }]);
+            }
+            picker3.show(function(item) {
+                console.log(item);
+                var windStr = item[0].text;
+                var windSend = item[0].value;
+                $(_this).find("span").eq(1).html(windStr);
+                $(_this).find("span").eq(1).attr("data-id",windSend);
+            });
+        });
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $("#content")[0].style.paddingTop = "8.4rem";
+            $("#content")[0].style.height = "calc(100% - 8.4rem)";
+        }
+
+    });
+    /*=========================== 保存存储管家命令abbccddeeeeffgghh =================================*/
+    function save(){
+        var onOff = $("#switchClick").attr("data-state");
+        var epData;
+        //XXabcccdeeef
+        if(onOff === "off"){
+            var name1 = '';
+            for(var k=0;k<numArr.length;k++){
+                var num1 = numArr[k].length === 1 ? "0"+numArr[k] : numArr[k];
+                var str = num1 + "0FFFFFFFFF"
+                if(k === 0){
+                    epData =  str;
+                    name1 = nameArr[k] + ":" + lang_closeSingle;
+                }else{
+                    epData += "," + str;
+                    name1 += ","+ nameArr[k] + ":" + lang_closeSingle;
+                }
+            }
+            info.setItem("deviceState", name1);
+        }else if(onOff === "on"){
+            var b = $(".mode").attr("data-id");
+            var temp = $(".temp").attr("data-id")
+            var ccc = (parseFloat(temp)*10).toString();
+            var d = $(".wind").attr("data-id");
+            var name = '';
+            var bbText = " " + $(".mode").html();
+            var ccText = " " + $(".temp").html();
+            for(var m=0;m<numArr.length;m++){
+                var num2 = numArr[m].length === 1 ? "0"+numArr[m] : numArr[m];
+                var str1 = num2 + "1" + b + ccc + d + 'FFFF';
+                if(m === 0){
+                    epData =  str1;
+                    name = nameArr[m] + ":" + lang_openSingle + bbText + ccText;
+                }else{
+                    epData += "," + str1;
+                    name += "," + nameArr[m] + ":" + lang_openSingle + bbText + ccText;
+                }
+            }
+            console.log(name);
+            info.setItem("deviceState", name);
+        }
+        info.setItem("epData", epData);
+        console.log(epData);
+        window.location = "addDelay.html";
+    }
+
+    /*================================= 点击事件 ==================================*/
+    //开关按钮打开或关闭
+    $("#switchClick").on("click",function(){
+        if($(this).attr("data-state") === "off"){
+            $(this).attr("data-state","on");
+            $(".switchOnView").slideDown();
+        }else{
+            $(this).attr("data-state","off");
+            $(".switchOnView").slideUp();
+        }
+    });
+    $("#modeSet").on("click",function(){
+        var _this = $(this);
+        if(!picker1){
+            picker1 = new mui.PopPicker({
+                layer: 1
+            });
+            $(this).attr("data-click","show");
+            picker1.setData(modeArr);
+        }
+//        console.log(modeArr);
+        picker1.show(function(item) {
+            console.log(item);
+            var modeStr = item[0].text;
+            var modeSend = item[0].value;
+            $(_this).find("span").eq(1).html(modeStr);
+            $(_this).find("span").eq(1).attr("data-id",modeSend);
+        });
+    });
+    $("#tempSet").on("click",function(){
+        var _this = $(this);
+        if(!picker2){
+            picker2 = new mui.PopPicker({
+                layer: 1
+            });
+            picker2.setData(tempArr);
+        }
+//        console.log(tempArr)
+        picker2.show(function(item) {
+            console.log(item);
+            var tempStr = item[0].text;
+            var tempSend = item[0].value;
+            $(_this).find("span").eq(1).html(tempStr+"℃");
+            $(_this).find("span").eq(1).attr("data-id",tempSend);
+        });
+    })
+</script>
+
+</html>

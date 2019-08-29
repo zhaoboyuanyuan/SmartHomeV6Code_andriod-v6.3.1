@@ -1,0 +1,37 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_Ck_name = "智敬新風控制器";
+$lang.Device_Ck_temperature = "室溫";
+$lang.device_Ck_on = "已開機";
+$lang.device_Ck_off = "已關機，請開機";
+$lang.device_Ck_Wind_speed = "風速";
+$lang.device_Ck_Wind_speed_1 = "風速:";
+$lang.airsystem_Ck_Wind_speed_high = "高風";
+$lang.airsystem_Ck_Wind_speed_medium = "中風";
+$lang.airsystem_Ck_Wind_speed_low = "低風";
+$lang.Device_Ck_Details_Time = "定時";
+$lang.Device_Ck_Cancel = "取消";
+$lang.Device_Ck_OK = "確定";
+$lang.Device_Ck_Details_Time_TIPS3 = "開";
+$lang.Device_Ck_Details_Time7 = "時";
+$lang.Device_Ck_Details_Time8 = "分";
+$lang.device_Ck_open_after = "後開啟";
+$lang.Device_Ck_Details_Time_TIPS4 = "關";
+$lang.device_Ck_Countdown_closed = "後關閉";
+$lang.device_Ck_Sure_to_cancel = "確定取消倒計時？";
+$lang.device_Ck_Alarm_01 = "室內傳感器故障";
+$lang.offLine_1 = "離線";
+$lang.onLine = "在線";
+$lang.group_text = "未分區";
+$lang.offLine = "設備已離線";
+$lang.device_time_out = "連接逾時";
+$lang.device_ing = "正在加載";
+$lang.Device_Ck_Details_Jiaozhun = "室溫傳感器校準";
+$lang.Device_Ck_Details_Jiaozhun_hint = "當室溫數值與標準溫度測量設備數值相差較大時，可通過此方式調整室溫數值";
+$lang.Device_Ck_Details_Restore = "恢復出廠設置";
+$lang.Device_Ck_Details_Restore_tips = "所有設置恢覆成出廠設置，是否確定？";
+$lang.Device_Ck_Details_Restore_in = "設備已恢復出廠設置";
+$lang.Firmware_Version = "固件版本";

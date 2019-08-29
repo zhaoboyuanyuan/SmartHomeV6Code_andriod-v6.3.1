@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>SW16内嵌式开关</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/mui.picker.min.css">
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/device.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body style="width:100%;height:100%;">
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" key="device_Aj_name" href="javascript:;">内嵌式零火一路开关</a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="electric">
+			<ul>
+				<li><b class="autoSwitchLanguager" key="device_Aj_p">实时功率：</b><span>--W</span></li>
+				<li><b class="autoSwitchLanguager" key="device_Aj_energy">累计电量：</b><span>--kW.h</span></li>
+			</ul>
+		</section>
+		<section class="handle">
+			<div class="handle_icon">
+				<i data-state="on" class="open"></i>
+				<div class="loading"></div>
+				<div class="hide"></div>
+			</div>
+			<span class="open_txt autoSwitchLanguager" key="device_Aj_open">已开启</span>
+		</section>
+		<section class="theLast" style="display: none;"><span></span>
+            <i>&nbsp&nbsp&nbsp</i>
+            <i id="cancel" style="color: #8DD652;font-size:1.4rem " key="device_cancel"> 取消</i>
+		</section>
+		<section class="countDown">
+			<div class="left">
+				<button id="pickDateBtn" type="button" class="btn"></button>
+				<span class="autoSwitchLanguager" key="device_Aj_countDown">倒计时</span>
+			</div>
+			<div class="right" id="history">
+				<a href="javascript:;"></a>
+				<span class="autoSwitchLanguager" key="device_Aj_statistics">统计</span>
+			</div>
+		</section>
+
+        <section class="changeName" style="display:none;" id="cancelCountDown">
+            <div class="nameToast">
+                <span class="autoSwitchLanguager" key="device_Aj_Sure_to_cancel">确定取消倒计时？</span>
+                <div class="choose_1">
+                    <a class="autoSwitchLanguager" key="device_cancel" href="javascript:;" onclick="btn_cancel()">取消</a>
+                    <a class="autoSwitchLanguager sure_click" key="device_sure" href="javascript:;" onclick="cancelCountDown()" >确定</a>
+                </div>
+            </div>
+        </section>
+		<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="offLine">设备已离线</span></section>
+		<section class="gw_toast autoSwitchLanguager" key="device_toast">通过账号登录后才可查看</section>
+	</body>
+	<script src="js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="js/plus.js"></script>
+	<script type="text/javascript" src="js/gatewayCmd.js"></script>
+	<script type="text/javascript" src="js/tools.js"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/alert.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="js/more.js"></script>
+	<script type="text/javascript">
+		mui.init();
+		var state = 1;
+		var gwID, dID;
+		var timer;
+		initlan()
+		plus.plusReady(function() {
+			$("#back").click(function() {
+				plus.tools.back(function() {})
+			})
+			//判断网关登录还是云登录
+			$("#history").on("click", function() {
+				plus.tools.getLoginType(function(data) {
+					if(data == "100") {
+						window.location = "device_Aj_history.html"
+					} else {
+						$(".gw_toast").show()
+						setTimeout(function() {
+							$(".gw_toast").hide()
+						}, 3000)
+					}
+				})
+			})
+			plus.gatewayCmd.getDeviceInfo(function(data) {
+				//                modeState(data)
+				gwID = data.gwID;
+				dID = data.devID;
+				var name = data.name.indexOf("#$default$#") != -1 ? device_Aj_name + data.name.split("#")[2] : data.name
+				$(".deviceName").html(name)
+				if(data.mode === 2) {
+					$(".mask_layer").show()
+				} else if(data.mode === 3) {
+					//原生做的操作
+				} else {
+					$(".mask_layer").hide()
+				}
+				sendCmd(gwID, dID, 1, 6, 2, '')
+				control(gwID, dID)
+				$(".more").on("tap", function() {
+					var moreData = getMoreConfig(dID, gwID)
+					plus.tools.more(moreData, function() {})
+				})
+			})
+			plus.gatewayCmd.newDataRefresh(function(data) {
+				if(data.cmd == "500" && data.devID == dID) {
+					var name = data.name.indexOf("#$default$#") != -1 ? device_Aj_name + data.name.split("#")[2] : data.name
+					$(".deviceName").html(name)
+					modeState(data)
+					isSendCmd = false;
+				} else if(data.cmd == "502" && data.devID == dID) {
+					if(data.name != undefined || data.name != '') {
+						$(".deviceName").html(data.name)
+					}
+				}
+				gwID = data.gwID;
+				dID = data.devID;
+			})
+			document.getElementById("pickDateBtn").addEventListener("click", function() {
+				//初始化PopPicker组件
+				var picker = new mui.DtPicker({
+					type: "time",
+					labels: ['', '', '', device_hour, device_min],
+				})
+				if(state === 0) {
+					$(".header-title").html(device_countDown_open)
+					$(".theLast span").html( device_opened)
+				} else {
+					$(".header-title").html(device_countDown_close)
+					$(".theLast span ").html( device_closed)
+				}
+				$(".mui-dtpicker").find(".btn-cancel").html(device_cancel)
+				$(".mui-dtpicker").find(".btn-ok").html(device_sure)
+				//设置默认值
+				picker.setSelectedValue("2013-01-01 00:00")
+				picker.show(function(item) {
+					console.log(item)
+					if(item.h.text == "00" && item.i.text == "00") {
+						$(".theLast").hide()
+						//发送开启或关闭指令
+						if(state === 0) {
+							sendCmd(gwID, dID, 1, 6, 0, '')
+						} else {
+							sendCmd(gwID, dID, 1, 6, 1, '')
+						}
+					} else {
+						$(".theLast").show()
+//						$(".theLast span")html(item.h.text + ":" + item.i.text + ":00")
+						var sec = parseInt(item.h.text) * 3600 + parseInt(item.i.text) * 60
+//						countTime(sec)
+						//发送开启或关闭指令
+						if(state === 0) {
+							sendCmd(gwID, dID, 1, 6, 32791, sec + '')
+						} else {
+							sendCmd(gwID, dID, 1, 6, 32790, sec + '')
+						}
+					}
+				})
+			})
+		})
+		//        editPopup({"num":4,"titTxt":"提示","txt":"检测到用电器功率超出额定范围，已自动为您断电","isClick":1,"aTxt1":"确定"})
+		//        $(".alertBtn a").on("click",function(){
+		//            cancel()
+		//        })
+		//        control("123","123")
+		//        setTimeout(function(){
+		//            reloadUI(0,0)
+		//        },5000)
+		function control(gwID, dID) {
+			$(".handle_icon i").on("click", function() {
+				$(this).siblings(".loading").fadeIn();
+				$(this).siblings(".loading").addClass("rotate");
+				if($(this).attr("data-state") == "on") {
+					sendCmd(gwID, dID, 1, 6, 0, '')
+				} else {
+					sendCmd(gwID, dID, 1, 6, 1, '')
+				}
+			})
+		}
+
+		function sendCmd(gwID, dID, endpointNumber, clusterId, commandId, parameter) {
+			var jsonData = {}
+			jsonData.cmd = "501";
+			jsonData.gwID = gwID;
+			jsonData.devID = dID;
+			jsonData.endpointNumber = endpointNumber;
+			jsonData.clusterId = clusterId;
+			jsonData.commandType = 1;
+			jsonData.commandId = commandId;
+			if(parameter) {
+				jsonData.parameter = [parameter]
+			}
+			plus.gatewayCmd.controlDevice(jsonData, function() {})
+		}
+
+		function modeState(result) {
+			if(result.mode === 2) {
+				$(".mask_layer").show()
+			} else if(result.mode === 3) {
+				//原生做的操作
+			} else {
+				$(".mask_layer").hide()
+				for(var i = 0; i < result.endpoints[0].clusters.length; i++) {
+					var attributeId = result.endpoints[0].clusters[i].attributes[0].attributeId;
+					var attributeValue = result.endpoints[0].clusters[i].attributes[0].attributeValue
+					reloadUI(attributeId, attributeValue, JSON.parse(atob(result.extData))[0])
+					//                    reloadUI(attributeId,attributeValue,result.extData[0])
+				}
+			}
+		}
+
+		function countTime(sec) {
+			clearInterval(timer)
+			timer = setInterval(function() {
+				if(sec <= 0) {
+					$(".theLast").hide()
+					clearInterval(timer)
+				}
+				sec--;
+				var minute = parseInt(sec)
+				var hour = (parseInt(minute / 3600) + '').length == 1 ? ("0" + parseInt(minute / 3600)) : (parseInt(minute / 3600) + '')
+				var min = (parseInt((minute % 3600) / 60) + '').length == 1 ? ('0' + parseInt((minute % 3600) / 60)) : (parseInt((minute % 3600) / 60) + '')
+				var second = parseInt((minute % 60) + '').length == 1 ? ('0' + parseInt(minute % 60)) : (parseInt(minute % 60) + '')
+                if(state == 0){
+                    $(".theLast span").html(((hour + '').length == 1 ? "0" + hour : hour) + ":" + ((min + '').length == 1 ? "0" + min : min) + ":" + ((second + '').length == 1 ? "0" + second : second)+device_opened)
+                }else{
+                    $(".theLast span").html(((hour + '').length == 1 ? "0" + hour : hour) + ":" + ((min + '').length == 1 ? "0" + min : min) + ":" + ((second + '').length == 1 ? "0" + second : second)+device_closed)
+
+                }
+			}, 1000)
+		}
+		function reloadUI(id, value, list) {
+			switch(id) {
+				case 0:
+					{
+						clearInterval(timer)
+						$(".theLast").hide()
+						$(".handle_icon i").siblings(".loading").hide();
+						$(".handle_icon i").siblings(".loading").removeClass("rotate");
+						//value 0 表示开关关闭状态
+						//1 表示开关打开状态
+						//$(".handle_icon i")切换背景图
+						if(value == "0") {
+							state = 0;
+							//                        $(".handle_icon i").removeClass("open")
+							//                        $(".handle_icon i").addClass("close")
+							$(".handle_icon i").attr("class", "close")
+							$(".handle_icon i").attr("data-state", "off");
+							$(".handle span").html(device_Aj_close)
+							$(".handle span").attr("class", "close_txt")
+							$(".electric ul li").eq(0).find("span").html("--W")
+							setCountDown(device_opened, list)
+						} else if(value == "1") {
+							state = 1;
+							$(".handle_icon i").attr("class", "open")
+							$(".handle_icon i").attr("data-state", "on");
+							$(".handle span").html(device_Aj_open)
+							$(".handle span").attr("class", "open_txt")
+                            setCountDown(device_closed, list)
+						}
+					}
+					break;
+				case 32769:
+					{
+						/*aaaa:当前电压
+						 bbbb:当前电流
+						 yyyy:当前的功率
+						 zzzzzz:当前电量
+						 cc:设置的在复位后负载的状态
+						 00000000123412345600
+						 */
+						var yyyy = parseInt(value.substr(8, 4), 16)
+						var zzzzzz = parseInt(value.substr(12, 6), 16)
+						if(yyyy == 0) {
+							yyyy = yyyy + ".0"
+						}
+						if(zzzzzz > 1000) {
+							zzzzzz = (zzzzzz / 1000).toFixed(1) + "kw.h"
+						} else {
+							zzzzzz = zzzzzz.toFixed(1) + "w.h"
+						}
+						if(state == 0) {
+							$(".electric ul li").eq(0).find("span").html("--w")
+						} else {
+							$(".electric ul li").eq(0).find("span").html(yyyy + "w")
+						}
+						$(".electric ul li").eq(1).find("span").html(zzzzzz)
+					}
+					break;
+				case 32770:
+					{
+						/*00：表示消除报警
+						 01：功率过载
+						 10：电流过载*/
+						//只监听消除报警和功率过载
+						//功率过载时弹出alert
+						//消除过载消失alert
+						if(value == "00") {
+							cancel()
+						} else if(value == "01") {
+							editPopup({ "num": 4, "titTxt": device_title, "txt": device_titleTxt, "isClick": 1, "aTxt1": device_sure })
+							$(".alertBtn a").on("click", function() {
+								cancel()
+							})
+						}
+					}
+					break;
+				case 32771:
+					{
+						/*表示设置的最大保护功率值*/
+					}
+					break;
+				case 32772:
+					{
+						/*为设置的功率上报阀值*/
+					}
+					break;
+				default:
+					{
+
+					}
+					break;
+			}
+		}
+
+		function cancel() {
+			if($(".sect_content")) {
+				$(".sect_content").remove();
+			}
+		}
+		function setCountDown(str, list) {
+			if(list.delaySec != 0) {
+				var minute = parseInt(list.delaySec)
+				var hour = (parseInt(minute / 3600) + '').length == 1 ? ("0" + parseInt(minute / 3600)) : (parseInt(minute / 3600) + '')
+				var min = (parseInt((minute % 3600) / 60) + '').length == 1 ? ('0' + parseInt((minute % 3600) / 60)) : (parseInt((minute % 3600) / 60) + '')
+                var second = (parseInt(minute % 60)+'').length == 1 ? ('0' + parseInt(minute % 60)) : (parseInt(minute % 60) + '')
+				$(".theLast").show()
+				$(".theLast span").html(  hour + ":" + min + ":" + second + str)
+				countTime(minute)
+			} else {
+				$(".theLast").hide()
+			}
+		}
+
+		document.getElementById("cancel").addEventListener("click",function () {
+            $("#cancelCountDown").show()
+        })
+
+		function cancelCountDown() {
+            $("#cancelCountDown").hide()
+            $(".theLast").hide()
+            sendCmd(gwID, dID, 1, 6, 0x8019, '')
+        }
+
+        function btn_cancel() {
+            $("#cancelCountDown").hide()
+        }
+	</script>
+
+</html>

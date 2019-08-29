@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>设置设备状态</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:;" onClick="javascript:history.back(-1);"></a>
+				<a href="javascript:;" key="setDeviceStatus" class="autoSwitchLanguager" id='setDeviceStatus'>设置设备状态</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section>
+			<ul class="set_list">
+				<li><i></i></li>
+				<li><i></i></li>
+			</ul>
+		</section>
+	</body>
+	<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Scene");
+		initlan()
+		plus.plusReady(function(){
+		    plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+		    });
+            if(info.getItem("type") == "At"){
+                var list = JSON.parse(info.getItem("epNameList"+info.getItem("deviceID")));
+                if(list){
+                    for(var i=0;i<list.length;i++){
+                        $(".set_list li").eq(i).html(list[i]+"<i></i>")
+                        if(i >= 2){
+                            $(".set_list").append("<li>"+ list[i] +"<i></i></li>");
+                        }
+                    }
+                }
+			}else if(info.getItem("type") == "62"){
+                var list = JSON.parse(info.getItem("epNameList"+info.getItem("deviceID")));
+                if(list){
+                    for(var i=0;i<list.length;i++){
+                        $(".set_list li").eq(i).html(list[i]+"<i></i>")
+                        if(i >= 2){
+                            $(".set_list").append("<li>"+ list[i] +"<i></i></li>");
+                        }
+                    }
+				}
+			}else if(info.getItem("type") == "63"){
+                var list = JSON.parse(info.getItem("epNameList"+info.getItem("deviceID")));
+                if(list){
+                    for(var i=0;i<list.length;i++){
+                        $(".set_list li").eq(i).html(list[i]+"<i></i>")
+                        if(i >= 2){
+                            $(".set_list").append("<li>"+ list[i] +"<i></i></li>");
+                        }
+                    }
+                }
+           } else if(info.getItem("type") == "81" || info.getItem("type") == "Bh"){
+           		document.getElementById("setDeviceStatus").innerHTML = languageUtil.getResource("housekeeper_choose_curtain");
+                $(".set_list li").eq(0).html((device_curtain +'1')+"<i></i>")
+                $(".set_list li").eq(1).html((device_curtain +'2')+"<i></i>")
+            } else if(info.getItem("type") == "A1"){
+               var list = JSON.parse(info.getItem("epNameList"+info.getItem("deviceID")));
+               for(var i=0;i<list.length;i++){
+                   $(".set_list li").eq(i).html(list[i]+"<i></i>")
+				   if(i >= 2){
+                       $(".set_list").append("<li>"+ list[i] +"<i></i></li>");
+				   }
+			   }
+			}else if(info.getItem("type") == "B9"){
+                var list = JSON.parse(info.getItem("endpointNameList"+info.getItem("deviceID")));
+                var numberList = JSON.parse(info.getItem("translatorNumberList"+info.getItem("deviceID")));
+                for(var i=0;i<list.length;i++){
+                    if(numberList[i]==1){
+                        $(".set_list li").eq(i).html(list[i]+"<i></i>")
+					}else if(numberList[i]==2){
+                        $(".set_list li").eq(i).attr("id","two");
+                        $(".set_list li").eq(i).html(list[i]+"<i></i>")
+					}
+                }
+            }
+			$(".set_list li").on("click",function(e){
+			    var index = $(this).index()+1
+				$(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+				info.setItem("switchName",$(this).text())
+                info.setItem("num",index)
+                if (info.getItem("type") == "81") {
+                    info.setItem("switchName","");
+					window.location = "curtain_81.html";
+                }else if($(e.target).attr("id")=="two"){
+                    window.location ="device_A2.html";
+                }
+                else {
+                		window.location = "setDoorState.html";
+                }
+			})
+		})
+		
+	</script>
+</html>

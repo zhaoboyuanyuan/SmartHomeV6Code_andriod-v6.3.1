@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <include layout="@layout/view_widget_title" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="63dp"
+                    android:layout_height="63dp"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/one_switch_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:src="@drawable/icon_switch_mode_off" />
+
+                    <cc.wulian.smarthomev6.support.customview.ProgressRing
+                        android:id="@+id/one_switch_progress"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="invisible"
+                        app:ringEndColor="@color/colorPrimary"
+                        app:ringStartColor="#F7FAF5"
+                        app:ringWidth="1.5dp" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_one_switch_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="63dp"
+                    android:layout_height="63dp"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/two_switch_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:src="@drawable/icon_switch_mode_off" />
+
+                    <cc.wulian.smarthomev6.support.customview.ProgressRing
+                        android:id="@+id/two_switch_progress"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="invisible"
+                        app:ringEndColor="@color/colorPrimary"
+                        app:ringStartColor="#F7FAF5"
+                        app:ringWidth="1.5dp" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_two_switch_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="63dp"
+                    android:layout_height="63dp"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/three_switch_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:src="@drawable/icon_switch_mode_off" />
+
+                    <cc.wulian.smarthomev6.support.customview.ProgressRing
+                        android:id="@+id/three_switch_progress"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="invisible"
+                        app:ringEndColor="@color/colorPrimary"
+                        app:ringStartColor="#F7FAF5"
+                        app:ringWidth="1.5dp" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_three_switch_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_toast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_home_widget_toast"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/white"
+            android:visibility="invisible" />
+    </FrameLayout>
+</LinearLayout>

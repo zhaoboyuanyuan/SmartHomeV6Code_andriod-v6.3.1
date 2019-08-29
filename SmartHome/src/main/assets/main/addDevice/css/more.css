@@ -1,0 +1,311 @@
+@charset "utf-8";
+input[disabled]{background:#fff;opacity:1}
+.more_list{
+	width:100%;
+	margin-top:1.5rem;
+	overflow: hidden;
+	border-top:1px solid #d9d9d9;
+	background:#fff;
+}
+.more_list ul{
+	overflow:hidden;
+}
+.more_list ul li{
+	width:92%;
+	height:4.4rem;
+	padding:0 4%;
+	line-height:4.4rem;
+	font-size:1.6rem;
+	color:#000;
+	border-bottom:1px solid #d9d9d9;
+}
+.more_list ul li a{
+	display:block;
+	height: 4.4rem;
+}
+.more_list ul li i,.more_list ul li span{
+	display:inline-block;
+	float:right;
+}
+.more_list ul li i{
+	width:2.4rem;
+	height:4.4rem;
+	background:url(../fonts/icon_right.png) no-repeat right center;
+	background-size:0.9rem auto;
+}
+.more_list ul li span{
+	color:#676767;
+}
+.log_out{
+	margin-top:10rem;
+	overflow: hidden;
+}
+.log_out a{
+	display:block;
+	width:100%;
+	height:5rem;
+	text-align:center;
+	line-height:5rem;
+	color:#8cd451;
+	font-size:1.7rem;
+	border-radius:5px;
+	border:1px solid #d9d9d9;
+	border-right:0;
+	border-left:0;
+	background:#fff;
+}
+/*添加网关第一步*/
+.gate_img{
+	width:100%;
+	height:18rem;
+	text-align:center;
+	overflow: hidden;
+	background:#fff;
+}
+.gate_img img{
+	display:inline-block;
+	width:80%;
+	height:15rem;
+	margin-top:1.5rem;
+}
+.gate_text{
+	padding:0 5%;
+	margin-top:1.5rem;
+	overflow:hidden;
+}
+.mt_3{
+	margin-top:3rem;
+}
+.mt_2{
+	margin-top:2.5rem;
+}
+.gate_text p{
+	line-height:2.6rem;
+	font-size:1.4rem;
+	color:#535353;
+}
+.gate_text p em{
+	color:#6bc522;
+}
+.gate_text p i{
+	display:inline-block;
+	width:1.4rem;
+	height:1.4rem;
+	margin:0 0.5rem;
+	background:url(../fonts/icon_set.png) no-repeat center center;
+	background-size:1.4rem auto;
+}
+.step_btn{
+	overflow:hidden;
+}
+.step_btn a{
+	display:block;
+	position:absolute;
+	left:4%;
+	bottom:10%;
+	width:92%;
+	height:5rem;
+	line-height:5rem;
+	text-align: center;
+	background:#8dd652;
+	color:#fff;
+	font-size:1.7rem;
+	border-radius: 5px;
+}
+.step_btn a:nth-child(2){
+	box-sizing: border-box;
+	bottom:1%;
+	/*background:#fff;*/
+	/*border:1px solid #8dd652;*/
+	color:#8dd652;
+}
+/*第三步*/
+.add_gate{
+	margin-top:1.8rem;
+	border-top:1px solid #d9d9d9;
+	background:#fff;
+	overflow:hidden;
+}
+.add_gate ul{
+	overflow:hidden;
+}
+.add_gate li{
+	box-sizing: border-box;
+	width:100%;
+	height:4.2rem;
+	line-height:4.2rem;
+	padding-left:3%;
+	border-bottom:1px solid #d9d9d9;
+	font-size:1.6rem;
+	color:#000;
+}
+.add_gate li span{
+	display:block;
+	float:left;
+	width:30%;
+	height:4.2rem;
+	overflow:hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.add_gate li input{
+	display:block;
+	float:right;
+	margin-left:2.2%;
+	width:53.8%;
+	height:4rem;
+	border:0;
+	font-size:1.5rem;
+	color:#999999;
+}
+.add_gate li em{
+	display:block;
+	float:right;
+	width:14%;
+	height:4.2rem;
+}
+#getCode{
+	background:url(../fonts/richscan.png) no-repeat center center;
+	background-size:2.2rem auto;
+}
+#auto{
+	visibility: hidden;
+	float:right;
+	width:10%;
+	margin-right:2%;
+	margin-left:2%;
+	height:2.4rem;
+	line-height:2.4rem;
+	text-align:center;
+	margin-top:0.9rem;
+	background:#8dd652;
+	border-radius:12px;
+	font-size:1.2rem;
+	color:#fff;
+}
+/*4*/
+.add_scene{
+	bottom:7%!important;
+}
+.add_delay{
+	bottom:7%!important;
+	box-sizing: border-box;
+	color:#3d3d3d!important;
+	background:#fff!important;
+	border:1px solid #d9d9d9!important;
+}
+.add_succeed{
+	margin-top:9.5rem;
+	overflow:hidden;
+}
+.add_succeed p{
+	text-align:center;
+	overflow:hidden;
+	font-size:1.5rem;
+	color:#000000;
+}
+.add_succeed p i{
+	display:inline-block;
+	width:7.75rem;
+	height:7.75rem;
+	margin-bottom:2rem;
+	background:#8dd652 url(../fonts/icon_ok.png) no-repeat center center;
+	background-size:4.4rem auto;
+	border-radius: 50%;
+}
+/*操作失败提示toast*/
+.toast_state{
+	display:none;
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0,.1)
+}
+.toast_state span{
+	display:block;
+	position:fixed;
+	left:15%;
+	bottom:10%;
+	width:70%;
+	/*height:3rem;*/
+	line-height:3rem;
+	text-align:center;
+	background:rgba(0,0,0,.4);
+	font-size:1.4rem;
+	color:#fff;
+	border-radius:5px;
+}
+.toast_gw span{
+	bottom:15%;
+}
+
+/*wulian 02 网关*/
+.add_gate1{
+	margin-top:1.8rem;
+	border-top:1px solid #d9d9d9;
+	background:#fff;
+	overflow:hidden;
+}
+.add_gate1 ul{
+	overflow:hidden;
+}
+.add_gate1 li{
+	box-sizing: border-box;
+	width:100%;
+	height:4.4rem;
+	line-height:4.4rem;
+	padding-left:3%;
+	border-bottom:1px solid #d9d9d9;
+	font-size:1.6rem;
+	color:#000;
+}
+.add_gate1 li span{
+	display:block;
+	float:left;
+	width:30%;
+	height:4.4rem;
+	overflow:hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.add_gate1 li input{
+	display:block;
+	float:right;
+	margin-left:2.2%;
+	width:53.8%;
+	height:4rem;
+	margin-top:1px;
+	border:0;
+	font-size:1.5rem;
+	color:#999999;
+}
+.add_gate1 li a{
+	display:block;
+	float:right;
+	width:14%;
+	height:4.4rem;
+}
+.add_gate1 li:first-child a{
+	background:url(../fonts/richscan.png) no-repeat center center;
+	background-size:2.2rem auto;
+}
+#auto{
+	visibility: hidden;
+	float:right;
+	width:10%;
+	margin-right:2%;
+	margin-left:2%;
+	height:2.4rem;
+	line-height:2.4rem;
+	text-align:center;
+	margin-top:0.9rem;
+	background:#8dd652;
+	border-radius:12px;
+	font-size:1.2rem;
+	color:#fff;
+}
+
+
+

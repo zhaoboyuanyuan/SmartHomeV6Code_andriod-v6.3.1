@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>选择生效条件</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/condition.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	</head>
+
+	<body>
+		<header class="header">
+			<a href="circumstances.html"></a>
+			<a href="javascript:;" id="limitation_factor" class="autoSwitchLanguager">生效条件</a>
+		</header>
+		<ul class="conditionChoose" style="margin-top:6.4rem;">
+			<li id="time_factor" class="time autoSwitchLanguager">生效时间条件</li>
+			<li id="device_factor" class="device autoSwitchLanguager">生效设备条件</li>
+			<li id="Scenes_factor" class="scene autoSwitchLanguager">生效场景条件</li>
+		</ul>
+	</body>
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Housekeeper");
+		initlan();
+		$(".time").on("click",function(){
+		    info.setItem("index","addTime");
+			window.location = 'effectiveDate.html';
+		});
+        $(".device").on("click",function(){
+            info.setItem("index","add");
+            window.location = 'action_condition_deviceList.html';
+        });
+        $(".scene").on("click",function(){
+            info.setItem("taskType","conditionTask");
+            window.location = 'chooseScene1.html';
+        });
+		plus.plusReady(function() {
+            plus.gatewayCmd.androidBack(function () {
+                window.location = 'circumstances.html';
+            });
+		})
+	</script>
+
+</html>

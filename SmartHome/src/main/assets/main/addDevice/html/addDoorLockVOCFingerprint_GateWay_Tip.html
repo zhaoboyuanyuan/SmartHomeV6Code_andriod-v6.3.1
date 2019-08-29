@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!--<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />-->
+		<title>添加设备</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/setState.css"/>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:window.history.back(-1);"></a>
+				<a href="javascript:;" class="addDoorC autoSwitchLanguager" id="addDoorLockF_title">添加密码指纹锁</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="step_img">
+			<img src="../../skinSource/img/img_step5_01.png" alt="" />
+		</section>
+		<section class="step_main">
+			<!--<p class="autoSwitchLanguager" id="gatewayAddDevice_fail">加网模式开启失败，请手动开启</p>-->
+			<img style="width: 50%;" src="../../source/addDeviceLock/gateway.png" alt="" />
+			<!--<p class="explain autoSwitchLanguager" id="gatewayAddDevice_fail_01">加网模式开启失败，你可以手动打开加网模式，找到网关上 SET 键快速按4下。（如果您是首次启用添加新设备，可能设备正在建网，请三分钟后再试）</p>-->
+		</section>
+		<section class="step_main explain2">
+			<p class="explain3 autoSwitchLanguager" key="gatewayAddDevice_fail">加网模式开启失败，请手动开启</p>
+			<p style="margin-top: 1.6rem" class="explain openFail autoSwitchLanguager" key="gatewayAddDevice_fail_01">加网模式开启失败，你可以手动打开加网模式，找到网关上 SET 键快速按4下。（如果您是首次启用添加新设备，可能设备正在建网，请三分钟后再试）</p>
+		</section>
+		<section class="addSensorBtn">
+			<a href="javascript:;" class="autoSwitchLanguager" id="nextStep">下一步</a>
+			<a style="opacity: 0;display:none;" href="javascript:;"></a>
+		</section>
+	</body>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../build/navigator.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../build/bridge.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/returnAddScene.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+        initlan()
+//		var lang_name_70_01 = "添加密码卡锁"
+//		var lang_name_70_02 = "添加密码指纹锁"
+		plus.plusReady(function(){
+            plus.gatewayCmd.getCurrentGWInfo(function(data){
+                if(JSON.parse(data).gwType === "GW08"){
+                    $(".openFail").html(languageUtil.getResource("gatewayAddDevice_GW08fail_01"));
+                }else{
+                    $(".openFail").html(languageUtil.getResource("gatewayAddDevice_fail_01"));
+                }
+            });
+            $("#nextStep").click(function(){
+                if(decodeURI(getUrlParam("flag")) == "doorLockVOCCard"){
+                    $(".addDoorC").html(lang_name_70_01)
+                    $(".addDoorC").attr("id","addDoorLock_title")
+                    window.location = "addDoorLockVOCCard2.html"
+                }else if(decodeURI(getUrlParam("flag")) == "doorLockVOCFingrtprint"){
+                    $(".addDoorC").html(lang_name_70_02)
+                    $(".addDoorC").attr("id","addDoorLockF_title")
+                    window.location = "addDoorLockVOCFingerprint2.html"
+                }
+            })
+		})
+
+	</script>
+</html>

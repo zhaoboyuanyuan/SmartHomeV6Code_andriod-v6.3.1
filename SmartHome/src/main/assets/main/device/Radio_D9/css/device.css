@@ -1,0 +1,133 @@
+/*遮罩层*/
+.mask_layer{
+    display:none;
+    position:absolute;
+    z-index:3000;
+    left:0;
+    top:6.4rem;
+    width:100%;
+    height:calc(100% - 6.4rem);
+    text-align:center;
+    background:rgba(0,0,0,0.7)
+}
+.mask_layer i{
+    display:inline-block;
+    width:8rem;
+    height:8rem;
+    margin-top:15rem;
+    background:url(../img/icon_new.png) no-repeat center center;
+    background-size:8rem auto;
+}
+.mask_layer span{
+    display:block;
+    width:100%;
+    height:5rem;
+    line-height:5rem;
+    text-align:center;
+    font-size:1.6rem;
+    color:#fff;
+}
+
+/*顶部---start*/
+.topcontrl_show{
+    width: 100%;
+    height: 4rem;
+    /*overflow:hidden;*/
+    /*position:absolute;*/
+    margin-top: 0rem;
+}
+.playmode_show{
+    display:inline-block;
+    width: 20rem;
+    height: 4rem;
+    /*position:absolute;*/
+    left:1rem;
+}
+
+.playmode_show i{
+    display:inline-block;
+    /*position:absolute;*/
+    margin-left: 1rem;
+    margin-top: 0.8rem;
+    width:2.4rem;
+    height:2.4rem;
+    background:url(../img/radio_stop.png) no-repeat center center;
+    background-size: 100% auto;
+    float: left;
+}
+.playmode_show span{
+    display:inline-block;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    height: 2rem;
+    width:7rem;
+    font-size: 1.4rem;
+    line-height:2rem;
+    float: left;
+}
+.addListBtn_show{
+    display:inline-block;
+    width: 4rem;
+    height: 4rem;
+    position:absolute;
+    right:2rem;
+}
+.addListBtn_show i{
+    display:inline-block;
+    /*position:absolute;*/
+    margin-left: 1rem;
+    margin-top: 1rem;
+    width:2rem;
+    height:2rem;
+    background:url(../img/radio_stop.png) no-repeat center center;
+    background-size: 100% auto;
+    float: left;
+}
+/*顶部---end*/
+/*底部---start*/
+.play-center {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.play-center .cover {
+    float: left;
+    height: inherit;
+    width: 20%;
+}
+
+.play-center .play-name {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: inherit;
+    width: 20%;
+}
+
+.play-center .control-items {
+    height: inherit;
+    text-align: center;
+}
+
+.control-items .control-item {
+    display: inline;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    width: 33%;
+}
+
+.control-item input[type=button] {
+    height: 40px;
+    width: 40px;
+    background-size: 40px;
+    background-color: transparent;
+    border: none;
+    vertical-align: middle;
+    text-align: center;
+}
+/*底部---end*/
+

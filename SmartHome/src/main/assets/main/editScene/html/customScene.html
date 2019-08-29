@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<title>自定义场景1</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/scene.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			#header_customScene nav{
+				background: url(../../skinSource/img/headerBackground.png) no-repeat center center;
+				background-size: 100% 100%
+			}
+		</style>
+	</head>
+
+	<body>
+		<section id="header_customScene" style="position: fixed;top: 0;">
+			<nav class="header">
+				<li class="finish" id="scene_back">
+					<a id="editScene_cancel" key="cancel" class="autoSwitchLanguager" href="javascript:;">取消</a>
+				</li>
+				<li class="text text_one">
+					<a id="customScene_title" key="nameAndIcon" class="autoSwitchLanguager" href="javascript:;">场景名称与图标</a>
+				</li>
+				<li class="sure" id="sumitSure">
+					<a id="customScene_sure" key="confirm" class="autoSwitchLanguager" style="color:#E2E2E2;" href="javascript:;">确定</a>
+				</li>
+			</nav>
+
+			<section class="search" style="background-color: white;text-align: left;">
+				<span id="customScene_name" key="sceneName" class="autoSwitchLanguager" style="color: #454749;">场景名称</span>
+				<input id="customScene_input_name" key="inputName" class="autoSwitchLanguager scene_name" type="text" maxlength="20" placeholder="请输入场景名称" style="outline:none;" />
+				<i id="i_del" style="display:none;"></i>
+			</section>
+			<div id="customScene_icon" key="sceneIcon" class="autoSwitchLanguager scene_icon" style="color: #454749;background-color: white;text-align: left;">场景图标</div>
+		</section>
+
+		<section class="main_list pt_0" style="margin-top: 20.5rem;">
+			<a data-id="01" data-name="" key="Scene_icon_01" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="02" data-name="" key="Scene_icon_02" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="03" data-name="" key="Scene_icon_03" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="04" data-name="" key="Scene_icon_04" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="05" data-name="" key="Scene_icon_05" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="06" data-name="" key="Scene_icon_07" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="07" data-name="" key="Scene_icon_08" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="08" data-name="" key="Scene_icon_09" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="09" data-name="" key="Scene_icon_06" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="10" data-name="" key="Scene_icon_10" class="autoSwitchLanguager"><i></i></a>
+
+			<a data-id="11" data-name="" key="Scene_icon_11" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="12" data-name="" key="Scene_icon_12" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="13" data-name="" key="Scene_icon_13" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="14" data-name="" key="Scene_icon_14" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="15" data-name="" key="Scene_icon_15" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="16" data-name="" key="Scene_icon_16" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="17" data-name="" key="Scene_icon_17" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="18" data-name="" key="Scene_icon_18" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="19" data-name="" key="Scene_icon_19" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="20" data-name="" key="Scene_icon_20" class="autoSwitchLanguager"><i></i></a>
+
+			<a data-id="21" data-name="" key="Scene_icon_21" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="22" data-name="" key="Scene_icon_22" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="23" data-name="" key="Scene_icon_23" class="autoSwitchLanguager"><i></i></a>
+			<a data-id="24" data-name="" key="Scene_icon_24" class="autoSwitchLanguager"><i></i></a>
+			<!--<a data-id="25" href="javascript:;"><i></i></a>-->
+			<!--<a data-id="26" href="javascript:;"><i></i></a>-->
+			<!--<a data-id="27" href="javascript:;"><i></i></a>-->
+			<!--<a data-id="28" href="javascript:;"><i></i></a>-->
+			<!--<a data-id="29" href="javascript:;"><i></i></a>-->
+			<!--<a data-id="30" href="javascript:;"><i></i></a>-->
+		</section>
+		<!--<section id="customScene_null_name" key="existed_02" class="toast autoSwitchLanguager" style="position:fixed;">-->
+			<!--该场景名称已存在，请换一个-->
+		<!--</section>-->
+	</body>
+	<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../model/scene.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Scene");
+		initlan()
+		var nameValue='';
+		var ifFaultName;
+
+		plus.plusReady(function() {
+            var nameArr = [
+                Scene_icon_01, Scene_icon_02,
+				Scene_icon_03, Scene_icon_04,
+				Scene_icon_05, Scene_icon_06,
+				Scene_icon_07, Scene_icon_08,
+				Scene_icon_09, Scene_icon_10,
+				Scene_icon_11, Scene_icon_12,
+				Scene_icon_13, Scene_icon_14,
+				Scene_icon_15, Scene_icon_16,
+				Scene_icon_17, Scene_icon_18,
+				Scene_icon_19, Scene_icon_20,
+				Scene_icon_21, Scene_icon_22,
+				Scene_icon_23, Scene_icon_24];
+            //点击显示图标高亮
+            $(".main_list a").on("click", function() {
+                $(this).addClass("on").siblings().removeClass("on");
+                nameValue = $(this).data("name");
+                var id = $(this).data("id");
+                if(nameValue == ""){
+                    nameValue = nameArr[id];
+                }
+                setSureIsEnable(nameValue);
+            });
+            plus.gatewayCmd.androidBack(function () {
+                goBack();
+            });
+			//获取从编辑场景页面来的场景名称
+			$(".scene_name").attr("placeholder", "")
+			$(".scene_name").val(info.getItem("sceneName"))
+			//获取从编辑场景页面来的场景图标
+			$(".main_list a").each(function(){
+				if($(this).data("id")==info.getItem("imgSrc")){
+					$(this).addClass("on");
+				}
+			})
+			$("#customScene_input_name").on("input propertychange", function() {
+				$(".search").find("i").fadeIn();
+				setSureIsEnable("");
+			});
+			$(".search i").on("click", function() {
+				$(".scene_name").val('');
+				$(this).hide();
+				setSureIsEnable("");
+			});
+			//点击确认
+			$(".sure").on("click", function() {
+				var value = {};
+				value.name = $(".scene_name").val();
+				//获取场景id
+				if(info.getItem("sceneID")) {
+					value.sceneID = info.getItem("sceneID");
+				}
+				if(verInputValue(value.name)) {
+					var src = $(".on").attr("data-id");
+					//判断场景名称是否重复
+					plus.tools.isSceneExist(value, function(data) {
+						if(data == "YES" && src != undefined) {
+						    info.setItem("flag",1);
+                            changeScene(value, src)
+						} else {
+							//场景名称重复
+							window.showDialog.show(languageUtil.getResource("existed_02"),3000);
+						}
+					})
+				}
+
+			});
+			//返回上一页或返回原生
+			$("#scene_back").on("click", function() {
+				goBack();
+			});
+            function setSureIsEnable(name) {
+                var scene_name = $(".scene_name").val();
+                if(name == ""){
+                    $("#i_del").hide();
+                }else{
+                    if(!scene_name){
+                        $("#i_del").show();
+                        $(".scene_name").val(name);
+                        scene_name = name;
+                    }else{
+                        if($.inArray(scene_name,nameArr) != -1) {
+                            $("#i_del").show();
+                            $(".scene_name").val(name);
+                            scene_name = name;
+                        }
+                    }
+                }
+                if(verInputValue(scene_name)) {
+                    document.getElementById("sumitSure").disable = true;
+                    document.getElementById("customScene_sure").style.color = "#FFFFFF";
+                } else {
+                    document.getElementById("sumitSure").disable = false;
+                    document.getElementById("customScene_sure").style.color = "#E2E2E2";
+                }
+            }
+		});
+		function goBack() {
+            window.location = "editScene.html?reName=true"
+        }
+
+		function verInputValue(sceneName) {
+			var src = $(".on").attr("data-id");
+			var verWrong = sceneName == null || sceneName == undefined || sceneName == "" ||
+				src == null || src == undefined || src == "";
+			return(verWrong == false);
+		}
+
+		function changeScene(name, icon) {
+			var param = sceneModel.send_change_503;
+			param.name = name.name;
+			param.icon = icon;
+			param.sceneID = info.getItem("sceneID");
+			param.groupID = info.getItem("groupID");
+			plus.gatewayCmd.getCurrentGatewayID(function(result) {
+				param.gwID = result;
+				plus.gatewayCmd.scene_503(param, function(data) {
+					info.setItem("sceneName", $(".scene_name").val())
+					info.setItem("imgSrc", $(".on").attr("data-id"))
+					window.location = "editScene.html";
+				})
+			})
+
+		}
+		$("#customScene_input_name").on("blur",function(){
+		    var value = $(this).val();
+            var valueFace = noFace(value);
+            console.log(valueFace);
+            $(this).val(valueFace);
+		});
+
+		function noFace(param){
+            var regRule = /\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g;
+            param = param.replace(/(^\s*)|(\s*$)/g, "");
+            if(param.match(regRule)) {
+                param = param.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, "");
+                return param;
+            }else{
+                return param;
+			}
+        }
+	</script>
+
+</html>

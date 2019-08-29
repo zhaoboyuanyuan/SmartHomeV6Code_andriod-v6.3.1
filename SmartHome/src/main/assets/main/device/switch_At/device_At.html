@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>内嵌式零火二路开关</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="css/mui.min.css">
+    <link rel="stylesheet" href="css/mui.picker.min.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body style="width:100%;height:100%;">
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="" href="javascript:;">内嵌式零火二路开关</a>
+            <a class="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section class="switch" style="margin-top:2rem;height:41%;">
+        <div class="top">
+            <span>
+                <em id="name_1"></em>
+                <i id="1"></i>
+                <button id="pickDateBtn" type="button" class="btn"></button>
+            </span>
+        </div>
+        <div class="handle_icon">
+            <i id="one_switch" data-state="off"></i>
+            <div class="loading"></div>
+            <div class="hide"></div>
+        </div>
+        <span class="one_txt"></span>
+        <section class="theLast" id="one" style="visibility: hidden;">
+            <span id="oneText"></span>
+            <i>&nbsp&nbsp&nbsp</i>
+            <span id="oneCancel" style="color: #8DD652;font-size:1.4rem " key="device_cancel"> 取消</span>
+        </section>
+    </section>
+    <section class="switch">
+        <div class="top">
+            <span>
+                <em id="name_2"></em>
+                <i id="2"></i>
+                <button id="pickDateBtn1" type="button" class="btn"></button>
+            </span>
+        </div>
+        <div class="handle_icon">
+            <i id="two_switch" data-state="off"></i>
+            <div class="loading"></div>
+            <div class="hide"></div>
+        </div>
+        <span class="one_txt"></span>
+        <section class="theLast" id="two" style="visibility: hidden;">
+            <span id="twoText"></span>
+            <i>&nbsp&nbsp&nbsp</i>
+            <span id="twoCancel" style="color: #8DD652;font-size:1.4rem " key="device_cancel"> 取消</span>
+        </section>
+    </section>
+    <section class="changeName" style="display:none;" id="cancelDialog">
+        <div class="nameToast">
+            <span class="autoSwitchLanguager" key="device_At_Sure_to_cancel">确定取消倒计时？</span>
+            <div class="choose_1">
+                <a class="autoSwitchLanguager" key="cancel" href="javascript:;" onclick="cancelCountDown()">取消</a>
+                <a class="autoSwitchLanguager sure_click" key="device_sure" href="javascript:;" onclick="sureCountDown()" >确定</a>
+            </div>
+        </div>
+    </section>
+    <section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="offLine">设备已离线</span></section>
+</body>
+    <script src="js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/plus.js"></script>
+    <script type="text/javascript" src="js/gatewayCmd.js"></script>
+    <script type="text/javascript" src="js/tools.js"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/alert1.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/more.js"></script>
+    <script type="text/javascript">
+        initlan()
+        mui.init();
+        var state = 1;
+        var state1 = 1;
+        var gwID,dID,appID;
+        var cancelNum;
+//        window.onload = function(){
+//            document.getElementById("pickDateBtn").addEventListener("click", function() {
+//                //初始化PopPicker组件
+//                var picker = new mui.DtPicker({
+//                    type: "time",
+//                    labels: ['','','','xiaoshi', 'fenzhong'],
+//                })
+//                createPicker(state,picker,"#one")
+//            })
+//        }
+        plus.plusReady(function(){
+            $("#back").click(function(){
+                plus.tools.back(function(){})
+            })
+            plus.gatewayCmd.getCurrentAppID(function(result){
+                appID = result;
+                plus.gatewayCmd.getDeviceInfo(function(data){
+                    var name = data.name.indexOf("#$default$#") != -1 ? device_At_name + data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+                    if(data.mode === 2){
+                        $(".mask_layer").show()
+                    }else if(data.mode === 3){
+                        //原生做的操作
+                    }else{
+                        $(".mask_layer").hide()
+                    }
+                    //modeState(data)
+                    gwID = data.gwID;
+                    dID = data.devID;
+                    if(data.isShared == true){
+                        $(".top span i").hide();
+                    }else{
+                        $(".top span i").show();
+                    }
+                    sendCmd(gwID,dID,0,6,2,'')
+                    control(gwID,dID)
+                    $(".more").click(function(){
+                        var moreData = getMoreConfig(dID,gwID)
+                        plus.tools.more(moreData,function(){})
+                    })
+                })
+            })
+            plus.gatewayCmd.newDataRefresh(function(data){
+                if(data.cmd == "500" && data.devID == dID){
+                    var name = data.name.indexOf("#$default$#") != -1 ? device_At_name + data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+                    modeState(data)
+                    isSendCmd = false;
+                }else if(data.cmd == "502" && data.devID == dID){
+                    if(data.retCode === 0 || !data.retCode){
+                        if(data.name != undefined || data.name != ''){
+                            $(".deviceName").html(data.name)
+                        }
+                        var name = data.endpointName;
+                        if (name == '' || name == undefined || name == null) {
+                            name = device_switch + data.endpointNumber;
+                        }
+                        $("#name_"+data.endpointNumber).html(name);
+                    }else if(data.retCode === 1){
+                        if(data.endpointName){
+                            window.showDialog.show(languageUtil.getResource("Device_More_Rename_Error"),3000);
+                        }
+                    }
+                }
+            })
+            document.getElementById("pickDateBtn").addEventListener("click", function() {
+                //初始化PopPicker组件
+                var picker = new mui.DtPicker({
+                    type: "time",
+                    labels: ['','','',device_hour, device_min],
+                })
+                createPicker(state,picker,"#oneText","#one")
+            })
+            document.getElementById("pickDateBtn1").addEventListener("click", function() {
+                //初始化PopPicker组件
+                var picker1 = new mui.DtPicker({
+                    type: "time",
+                    labels: ['','','',device_hour, device_min],
+                })
+                createPicker(state1,picker1,"#twoText","#two")
+            })
+            $(".top span i").on("click",function(){
+                var $this = $(this)
+                editPopup({"num":5,"titTxt":device_rename,"placeTxt":device_input_name,"isClick":2,"aTxt1":device_cancal,"aTxt2":device_sure})
+                $(".inputDiv i").on("click",function(){
+                    $(this).siblings("input").val("")
+                    $(this).siblings("input").attr("placeholder",device_input_name)
+                })
+                $(".alertBtn a").on("click",function(){
+                    var index = $(this).index()
+                    if(index == 0){
+                        cancel()
+                    }else{
+                        if($(".popup input").val().trim() != ""){
+                            if($this.attr("id") == "1"){
+                                rename(1,$(".popup input").val())
+                                cancel()
+                            }else{
+                                rename(2,$(".popup input").val())
+                                cancel()
+                            }
+                        }
+                    }
+                })
+            })
+        })
+        function cancel(){
+            if($(".sect_content")){
+                $(".sect_content").remove();
+            }
+        }
+        function rename(endpointNumber,endpointName){
+            var jsonData = {
+                "cmd":"502",
+                "appID":appID,
+                "gwID":gwID,
+                "mode":2,
+                "devID":dID,
+                "endpointNumber":endpointNumber,
+                "endpointName":endpointName
+            }
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+        }
+        function modeState(result){
+            if(result.mode === 2){
+                $(".mask_layer").show()
+            }else if(result.mode === 3){
+                //原生做的操作
+            }else{
+                $(".mask_layer").hide()
+                for (var i = 0; i < result.endpoints.length; i++) {
+                    var attributeId = result.endpoints[i].clusters[0].attributes[0].attributeId;
+                    var attributeValue = result.endpoints[i].clusters[0].attributes[0].attributeValue
+                    var num = result.endpoints[i].endpointNumber
+                    if (num == 1) {
+                        reloadUI("#one_switch", attributeId, attributeValue, JSON.parse(atob(result.extData))[0])
+//                        reloadUI("#one_switch", attributeId, attributeValue, result.extData[0])
+                        var name = result.endpoints[i].endpointName
+                        if (name == '' || name == undefined || name == null) {
+                            $("#name_1").html(device_switch + "1")
+                        } else {
+                            $("#name_1").html(result.endpoints[i].endpointName)
+                        }
+                    } else if (num == 2) {
+                        if(result.endpoints.length == 1){
+                            reloadUI("#two_switch", attributeId, attributeValue, JSON.parse(atob(result.extData))[0])
+//                            reloadUI("#two_switch", attributeId, attributeValue, result.extData[0])
+                        }else if(result.endpoints.length == 2){
+                            reloadUI("#two_switch", attributeId, attributeValue, JSON.parse(atob(result.extData))[1])
+//                            reloadUI("#two_switch", attributeId, attributeValue, result.extData[0])
+                        }
+                        var name = result.endpoints[i].endpointName
+                        if (name == '' || name == undefined || name == null) {
+                            $("#name_2").html(device_switch + "2")
+                        } else {
+                            $("#name_2").html(result.endpoints[i].endpointName)
+                        }
+                    }
+                }
+//                countDown(result.extData)
+            }
+        }
+
+        function countDown(str,ele,list){
+            if(list.delaySec != 0){
+                var minute = parseInt(list.delaySec)
+                var hour = (parseInt(minute/3600) + '').length == 1 ? ("0"+parseInt(minute/3600)) : (parseInt(minute/3600)+'')
+                var min = (parseInt((minute % 3600)/60) + '').length == 1 ? ('0' + parseInt((minute % 3600)/60)) : (parseInt((minute % 3600)/60) + '')
+                var second = (parseInt(minute % 60)+'').length == 1 ? ('0' + parseInt(minute % 60)) : (parseInt(minute % 60) + '')
+                if(ele == "#oneText"){
+                    $("#one").css("visibility","visible")
+                }else{
+                    $("#two").css("visibility","visible")
+                }
+                $(ele).html(hour+":"+min+":"+second+str)
+                if(ele == "#oneText"){
+                    countTime(minute,ele)
+                }else{
+                    countTime1(minute,ele)
+                }
+            }else{
+                if(ele == "#oneText"){
+                    $("#one").css("visibility","hidden")
+                }else{
+                    $("#two").css("visibility","hidden")
+                }
+            }
+        }
+        function reloadUI(ele,id,value,list){
+            switch (id){
+                case 0 :{
+                    //value 0 表示开关关闭状态
+                    //1 表示开关打开状态
+                    //$(".handle_icon i")切换背景图
+                    if(value == "0"){
+                        var timerText;
+                        if(ele == "#one_switch"){
+                            timerText = "#oneText"
+                            state = 0;
+                        }else{
+                            timerText = "#twoText"
+                            state1 = 0;
+                        }
+                        $(ele).css({
+                            "background":"url(fonts/icon_close.png) no-repeat left top",
+                            "background-size":"11.4rem auto"
+                        })
+                        $(ele).attr("data-state","off");
+                        $(ele).parent().siblings("span").html(device_Aj_close)
+                        $(ele).parent().siblings("span").css("color","#535353")
+                        countDown(device_opened,timerText,list)
+                    }else if(value == "1"){
+                        var timerText;
+                        if(ele == "#one_switch"){
+                            timerText = "#oneText"
+                            state = 1;
+                        }else{
+                            timerText = "#twoText"
+                            state1 = 1;
+                        }
+                        $(ele).css({
+                            "background":"url(fonts/icon_open.png) no-repeat left top",
+                            "background-size":"11.4rem auto"
+                        })
+                        $(ele).attr("data-state","on")
+                        $(ele).parent().siblings("span").html(device_Aj_open)
+                        $(ele).parent().siblings("span").css("color","#8dd652")
+                        countDown(device_closed,timerText,list)
+                    }
+                    $(ele).siblings(".loading").fadeOut();
+                    $(ele).siblings(".loading").removeClass("rotate");
+                }
+                    break;
+                case 0x8006:{
+                    /*设置复位后负载状态
+                     0表示复位后负载的状态为 “关”
+                     1表示复位后负载的状态保持之前的状态*/
+                }
+                default:{
+
+                }
+                    break;
+            }
+        }
+        function control(gwID,dID){
+            $(".handle_icon i").on("click",function(){
+                $(this).siblings(".loading").fadeIn();
+                $(this).siblings(".loading").addClass("rotate");
+                if($(this).attr("id") == "one_switch"){
+                    if($(this).attr("data-state") == "on"){
+                        sendCmd(gwID,dID,1,6,0,'')
+                    }else{
+                        sendCmd(gwID,dID,1,6,1,'')
+                    }
+                }else{
+                    if($(this).attr("data-state") == "on"){
+                        sendCmd(gwID,dID,2,6,0,'')
+                    }else{
+                        sendCmd(gwID,dID,2,6,1,'')
+                    }
+                }
+            })
+        }
+        function sendCmd(gwID,dID,endpointNumber,clusterId,commandId,param){
+            var jsonData = {}
+            jsonData.cmd = "501";
+            jsonData.gwID = gwID;
+            jsonData.devID = dID;
+            jsonData.endpointNumber = endpointNumber;
+            jsonData.clusterId = clusterId;
+            jsonData.commandType = 1;
+            jsonData.commandId = commandId;
+            if(param){
+                jsonData.parameter = [param]
+            }
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+        }
+        function createPicker(state,picker,ele,ele2){
+            if(state === 0){
+                $(".header-title").html(device_countDown_open);//"打开"
+                $(ele).html(device_opened);//"打开"
+            }else{
+                $(".header-title").html(device_countDown_close);//'guanbi'
+                $(ele).html(device_closed);//"关闭"
+            }
+            $(".mui-dtpicker").find(".btn-cancel").html(device_cancal);//"取消"
+            $(".mui-dtpicker").find(".btn-ok").html(device_sure);//"确认"
+            //设置默认值
+            picker.setSelectedValue("2013-01-01 00:00")
+            picker.show(function(item) {
+                console.log(item)
+                if(item.h.text == "00" && item.i.text == "00"){
+                    $(ele2).css("visibility","hidden")
+                    //发送开启或关闭指令
+                    if(ele2 == "#one"){
+                        if(state === 0){
+                            sendCmd(gwID,dID,1,6,1,'')
+                        }else{
+                            sendCmd(gwID,dID,1,6,0,'')
+                        }
+                    }else{
+                        if(state === 0){
+                            sendCmd(gwID,dID,2,6,1,'')
+                        }else{
+                            sendCmd(gwID,dID,2,6,0,'')
+                        }
+                    }
+                }else{
+                    $(ele2).css("visibility","visible")
+//                    $(ele).find("span").html(item.h.text +":"+ item.i.text +":00")
+                    if(ele2 == "#one"){
+                        var sec = parseInt(item.h.text)*3600 + parseInt(item.i.text)*60
+//                        countTime(sec,ele)
+                        if(state === 0){
+                            sendCmd(gwID,dID,1,6,32791,sec+'')
+                        }else{
+                            sendCmd(gwID,dID,1,6,32790,sec+'')
+                        }
+                    }else{
+                        var sec = parseInt(item.h.text)*3600 + parseInt(item.i.text)*60
+//                        countTime1(sec,ele)
+                        if(state === 0){
+                            sendCmd(gwID,dID,2,6,32791,sec+'')
+                        }else{
+                            sendCmd(gwID,dID,2,6,32790,sec+'')
+                        }
+                    }
+                }
+            })
+        }
+        var timer;
+        function countTime(sec,ele){
+            clearInterval(timer)
+            timer = setInterval(function(){
+                if(sec <= 0){
+                    if(ele === "#oneText"){
+                        $("#one").css("visibility","hidden")
+                    }else{
+                        $("#two").css("visibility","hidden")
+                    }
+                    clearInterval(timer)
+                }
+                sec--;
+                var minute = parseInt(sec)
+                var hour = (parseInt(minute/3600) + '').length == 1 ? ("0"+parseInt(minute/3600)) : (parseInt(minute/3600)+'')
+                var min = (parseInt((minute % 3600)/60) + '').length == 1 ? ('0' + parseInt((minute % 3600)/60)) : (parseInt((minute % 3600)/60) + '')
+                var second = parseInt((minute % 60)+'').length == 1 ? ('0' + parseInt(minute % 60)) : (parseInt(minute % 60) + '')
+                setTimeout(function(){
+                    if(state == 0){
+                        $(ele).html(((hour+'').length == 1 ? "0"+hour:hour)+ ":" + ((min+'').length == 1 ? "0"+min:min) + ":" + ((second+'').length == 1 ? "0"+second:second)+device_opened)
+                    }else{
+                        $(ele).html(((hour+'').length == 1 ? "0"+hour:hour)+ ":" + ((min+'').length == 1 ? "0"+min:min) + ":" + ((second+'').length == 1 ? "0"+second:second)+device_closed)
+
+                    }
+                },500)
+            },1000)
+        }
+        var timer1;
+        function countTime1(sec,ele){
+            clearInterval(timer1)
+            timer1 = setInterval(function(){
+                if(sec <= 0){
+                    if(ele === "#oneText"){
+                        $("#one").css("visibility","hidden")
+                    }else{
+                        $("#two").css("visibility","hidden")
+                    }
+                    clearInterval(timer1)
+                }
+                sec--;
+                var minute = parseInt(sec)
+                var hour = (parseInt(minute/3600) + '').length == 1 ? ("0"+parseInt(minute/3600)) : (parseInt(minute/3600)+'')
+                var min = (parseInt((minute % 3600)/60) + '').length == 1 ? ('0' + parseInt((minute % 3600)/60)) : (parseInt((minute % 3600)/60) + '')
+                var second = parseInt((minute % 60)+'').length == 1 ? ('0' + parseInt(minute % 60)) : (parseInt(minute % 60) + '')
+                setTimeout(function(){
+                    if(state1 == 0){
+                        $(ele).html(((hour+'').length == 1 ? "0"+hour:hour)+ ":" + ((min+'').length == 1 ? "0"+min:min) + ":" + ((second+'').length == 1 ? "0"+second:second)+device_opened)
+                    }else{
+                        $(ele).html(((hour+'').length == 1 ? "0"+hour:hour)+ ":" + ((min+'').length == 1 ? "0"+min:min) + ":" + ((second+'').length == 1 ? "0"+second:second)+device_closed)
+                    }
+                },500)
+            },1000)
+        }
+
+        $("#oneCancel").click(function () {
+            cancelNum  = 1;
+            $("#cancelDialog").show()
+        })
+        $("#twoCancel").click(function () {
+            cancelNum  = 2;
+            $("#cancelDialog").show()
+        })
+
+
+        // document.getElementById("oneCancel").addEventListener("click",function () {
+        //     cancelNum  = 1;
+        //     $("#cancelDialog").show()
+        // })
+        // document.getElementById("twoCancel").addEventListener("click",function () {
+        //     cancelNum  = 2;
+        //     $("#cancelDialog").show()
+        // })
+        function sureCountDown() {
+            $("#cancelDialog").hide()
+            if(cancelNum == 1){
+                sendCmd(gwID, dID, 1, 6, 0x8019, '');
+                $("#one").css("visibility","hidden");
+            }else{
+                sendCmd(gwID, dID, 2, 6, 0x8019, '');
+                $("#two").css("visibility","hidden");
+            }
+
+        }
+
+        function cancelCountDown() {
+            $("#cancelDialog").hide()
+        }
+    </script>
+</html>

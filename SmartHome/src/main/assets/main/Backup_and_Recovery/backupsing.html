@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css?v=1" />
+    <link rel="stylesheet" type="text/css" href="../source/mui/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+    <link rel="stylesheet" type="text/css" href="css/backupsRecovery.css?v=1.1" />
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:window.history.back(-1);"></a>
+        <a href="javascript:;" class="title autoSwitchLanguager" key="Backup_Manual">手动备份</a>
+        <!--<a class="more" href="javascript:;"></a>-->
+    </div>
+</header>
+<!--外层容器-->
+<div id="wrapper">
+    <!--进度条容器-->
+    <h5><img src="img/loading.gif" /><span id="loading">备份中...</span></h5>
+    <div id="progressbar">
+        <!--用来模仿进度条推进效果的进度条元素-->
+        <div id="fill"></div>
+        <!--<p class="autoSwitchLanguager" key="Backup_time">预计需要1-2分钟</p>-->
+    </div>
+    <p class="aleTitle autoSwitchLanguager" key="Backup_Manual_hint">备份过程中请勿关闭设备或断开网络</p>
+</div>
+</body>
+<script src="../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var choose = getUrlParam("choose");
+    plus.plusReady(function(){
+        var timer1,timer2,timer3;
+        if(choose === "backups"){
+            $(".title").html(lang_Backup_Manual);
+            $(".aleTitle").html(lang_Backup_Manual_hint);
+            $("#loading").html(lang_Backup_Backuping);
+            timer1 = setTimeout(function(){
+                $("#loading").html(lang_Backup_device);
+            },25000);
+            timer2 = setTimeout(function(){
+                $("#loading").html(lang_Backup_editScene);
+            },45000);
+            timer3 = setTimeout(function(){
+                window.location = "backups_result.html?choose=backups&result=0";
+            },600000);
+        }else if(choose === "recover"){
+            $(".title").html(lang_Backup_recovery);
+            $(".aleTitle").html(lang_Recovery_hint);
+            $("#loading").html(lang_Recovery_recoverying);
+            timer1 = setTimeout(function(){
+                $("#loading").html(lang_Recovery_device);
+            },25000);
+            timer2 = setTimeout(function(){
+                $("#loading").html(lang_Recovery_editScene);
+            },45000);
+            timer3 = setTimeout(function(){
+                window.location = "backups_result.html?choose=recover&result=0";
+            },600000);
+        }
+        plus.gatewayCmd.newDataRefresh(function(data){
+            clearTimeout(timer3);
+            clearTimeout(timer1);
+            clearTimeout(timer2);
+            if(data.cmd == "525"){
+                if(data.mode == 0){
+                    window.location = "backups_result.html?choose=backups&result="+data.result;
+                }else if(data.mode == 1){
+                    window.location = "backups_result.html?choose=recover&result="+data.result;
+                }
+            }
+        })
+    })
+</script>
+</html>

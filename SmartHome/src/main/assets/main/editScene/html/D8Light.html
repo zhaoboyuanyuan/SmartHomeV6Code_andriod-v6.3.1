@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设置设备状态</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/editok.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.set_list li div {
+				overflow: hidden;
+				border-radius: 1rem;
+				width: 3.4rem;
+				height: 3.4rem;
+				margin-top: 0.3rem;
+				float: left;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:window.history.back(-1);"></a>
+				<a href="javascript:;" class="autoSwitchLanguager" key="minigateway_Lantern"></a>
+				<a href="javascript:;" onclick="save()" key="confirm" class="autoSwitchLanguager"></a>
+			</div>
+		</header>
+		<section>
+			<ul class="set_list mode">
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+		</section>
+
+		<section>
+			<ul class="set_list color">
+				<li id="01">
+					<div style="background-color: #E6606A;"></div>
+				</li>
+				<li id="05">
+					<div style="background-color: #FB7CFD;"></div>
+				</li>
+				<li id="06">
+					<div style="background-color: #2CFFFF;"></div>
+				</li>
+				<li id="03">
+					<div style="background-color: #FD9836;"></div>
+				</li>
+				<li id="02">
+					<div style="background-color: #2EFF67;"></div>
+				</li>
+				<li id="07">
+					<div style="background-color: white;border: 1px solid whitesmoke;"></div>
+				</li>
+			</ul>
+		</section>
+	</body>
+	<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Scene");
+		initlan()
+		var deviceState;
+		var mode;
+		var color;
+		plus.plusReady(function() {
+		    plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+		    });
+			mode = lang_D8_mode1;
+			color = lang_D8_color1;
+			if(info.getItem("type") == "D8") {
+				$(".mode li").eq(0).html(lang_D8_mode1 + "<i class='icon'></i>")
+				$(".mode li").eq(1).html(lang_D8_mode2 + "<i></i>")
+				$(".mode li").eq(2).html(lang_D8_mode3 + "<i></i>")
+				$(".mode li").eq(3).html(lang_D8_mode4 + "<i></i>")
+				$(".mode li").eq(4).html(lang_D8_mode5 + "<i></i>")
+				$(".color li").eq(0).html('<div style="background-color: #E6606A;"></div><i class="icon"></i>')
+				$(".color li").eq(1).html('<div style="background-color: #FB7CFD;"></div><i></i>')
+				$(".color li").eq(2).html('<div style="background-color: #2CFFFF;"></div><i></i>')
+				$(".color li").eq(3).html('<div style="background-color: #FD9836;"></div><i></i>')
+				$(".color li").eq(4).html('<div style="background-color: #2EFF67;"></div><i></i>')
+				$(".color li").eq(5).html('<div style="background-color: white;border: 1px solid whitesmoke;"></div><i></i>')
+			}
+			$(".mode li").on("click", function() {
+				$(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+				mode = $(this).text();
+			})
+			$(".color li").on("click", function() {
+				$(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+				if($(this).attr("id") == "01") {
+					color = lang_D8_color1;
+				} else if($(this).attr("id") == "05") {
+					color = lang_D8_color2;
+				} else if($(this).attr("id") == "06") {
+					color = lang_D8_color3;
+				} else if($(this).attr("id") == "03") {
+					color = lang_D8_color4;
+				} else if($(this).attr("id") == "02") {
+					color = lang_D8_color5;
+				} else if($(this).attr("id") == "07") {
+					color = lang_D8_color6;
+				}
+			})
+		})
+
+		function save() {
+			info.setItem("deviceState", mode + "_" + color);
+			window.location = "addDelay.html"
+		}
+	</script>
+
+</html>

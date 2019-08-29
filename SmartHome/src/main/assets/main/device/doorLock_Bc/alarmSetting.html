@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--更多>报警设置-->
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>报警设置</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/alarmsetting.css" />
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" key="settingAlarm" href="javascript:;">报警设置</a>
+			</div>
+		</header>
+		<ul class="alarmList">
+			<li id="li_alarm_set"><em class="autoSwitchLanguager" key="pushSetting">推送设置</em><img src="fonts/icon_right.png"/></li>
+	       <li id="li_alarm_detect"><em class="autoSwitchLanguager" key="pirSetting">人体侦测设置</em><img src="fonts/icon_right.png" /></li>
+		</ul>
+	</body>
+	<script type="text/javascript">
+		initlan()
+		var gwID;
+		var devID;
+		plus.plusReady(function() {
+			plus.tools.getLoginType(function(data) {
+				if(data == "100") {
+					document.getElementById("li_alarm_set").style.display = "block";
+				}else if(data=="101"){
+					document.getElementById("li_alarm_set").style.display = "none";
+				}
+			});
+			/*back按钮*/
+			document.getElementById("back").addEventListener("click", function() {
+				plus.tools.back(function() {});
+			});
+			/*人体侦测设置*/
+			document.getElementById("li_alarm_detect").addEventListener("click", function() {
+				window.location = "alarmSettingDetect.html";
+			});
+
+			document.getElementById("li_alarm_set").addEventListener("click", function() {
+				window.location = "alarmSet.html";
+			});
+		})
+	</script>
+
+</html>

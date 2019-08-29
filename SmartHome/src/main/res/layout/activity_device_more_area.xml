@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg">
+
+    <ListView
+        android:id="@+id/device_detail_more_area_list"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:dividerHeight="0.1dp"
+        android:divider="@color/v6_line"
+        android:layout_width="match_parent"
+        android:scrollbars="none"
+        android:layout_height="wrap_content"></ListView>
+</LinearLayout>

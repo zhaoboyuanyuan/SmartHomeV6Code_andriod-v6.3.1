@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="../../source/js/rem.js"></script>
+    <script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+</head>
+<body style="width:100%;height:100%;">
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="Sphygmomanometer_name_04" href="javascript:;">智能血压计</a>
+            <a class="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section class="main_con">
+        <i id="statistics_btn"></i>
+        <div class="device_bg">
+            <div id="userId_value" style="color: #ffffff;font-size: 1.6rem; margin-top: 0;">--</div>
+            <div>
+                <span style="font-weight: bold;font-size: 1.9rem;" class="autoSwitchLanguager" key="Sphygmomanometer_text_1">高压</span>
+                <hr class="line"/>
+                <span id="high_pressure_value" style="color: #ffffff;font-size: 2.6rem;">--</span>
+                <span id="high_pressure_state" class="state_normal">--</span>
+            </div>
+            <div>
+                <span style="font-weight: bold;font-size: 1.9rem;" class="autoSwitchLanguager" key="Sphygmomanometer_text_2">低压</span>
+                <hr class="line"/>
+                <span id="low_pressure_value" style="color: #ffffff;font-size: 2.6rem;">--</span>
+                <span id="low_pressure_state" class="state_normal">--</span>
+            </div>
+            <div>
+                <span style="font-weight: bold;font-size: 1.9rem;" class="autoSwitchLanguager" key="Sphygmomanometer_text_3">平均</span>
+                <hr class="line"/>
+                <span id="average_pressure_value" style="color: #ffffff;font-size: 2.6rem;">--</span>
+            </div>
+            <div>
+                <span style="font-weight: bold;font-size: 1.9rem;" class="autoSwitchLanguager" key="Sphygmomanometer_text_4">脉率</span>
+                <hr class="line"/>
+                <span id="pulse_rate_value" style="color: #ffffff;font-size: 2.6rem;">--</span>
+                <span id="pulse_rate_state" class="state_normal">--</span>
+            </div>
+            <div>
+                <span style="font-weight: bold;font-size: 1.9rem;" class="autoSwitchLanguager" key="Sphygmomanometer_text_5">血氧</span>
+                <hr class="line2"/>
+                <span id="blood_oxygen_value" style="color: #ffffff;font-size: 2.6rem;">--</span>
+                <span id="blood_oxygen_state" class="state_normal">--</span>
+            </div>
+        </div>
+        <div class="illustration">
+            <hr style="width: 2.3rem;display: inline-block;border: none;border-top: 1px solid #BCBCBD; margin-right: 1rem;"/>
+            <span class="illustration_title autoSwitchLanguager" key="Sphygmomanometer_text_01">各指标正常范围</span>
+            <hr style="width: 2.3rem;display: inline-block;border: none;border-top: 1px solid #BCBCBD; margin-left: 1rem;"/>
+            <div style="margin-top: 1rem" class="illustration_line">
+                <span style="float: left;" class="autoSwitchLanguager" key="Sphygmomanometer_Range_1"></span>
+                <span style="float: right;" class="autoSwitchLanguager" key="Sphygmomanometer_Range_4"></span>
+            </div>
+            <div class="illustration_line">
+                <span style="float: left;" class="autoSwitchLanguager" key="Sphygmomanometer_Range_2"></span>
+                <span style="float: right; margin-right: 9%" class="autoSwitchLanguager" key="Sphygmomanometer_Range_3"></span>
+            </div>
+        </div>
+    </section>
+    <section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="Device_OffLine">设备已离线</span></section>
+    <section class="gw_toast autoSwitchLanguager" id="Sphygmomanometer_text_02">通过账号登录后才可查看</section>
+</body>
+    <script type="text/javascript" src="js/plus.js"></script>
+    <script type="text/javascript" src="js/gatewayCmd.js"></script>
+    <script type="text/javascript" src="js/tools.js"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/more.js"></script>
+    <script type="text/javascript">
+        var gwID,dID;
+        var userId = 1;
+        var languageCode = window.sysfun.getLang();
+        var maxLength = 2;
+        if(languageCode == "ja"){
+            maxLength = 1;
+        }else if(languageCode == "en"){
+            maxLength = 3;
+        }
+        initlan()
+        plus.plusReady(function(){
+            $(".device_bg span").each(function(){
+                if($(this).html().length > maxLength){
+                    $(this).html($(this).html().substring(0,maxLength) + "...");
+                }
+            });
+            $(".illustration_line span").each(function(){
+                var flag;
+                if($(this).html().indexOf(":") != -1){
+                    flag = ":";
+                }else if($(this).html().indexOf("：") != -1){
+                    flag = "：";
+                }
+                var str = $(this).html().split(flag);
+                if(str[0].length > maxLength){
+                    $(this).html(str[0].substring(0,maxLength) + "..." + flag + str[1]);
+                }
+            });
+            $("#back").click(function(){
+                plus.tools.back(function(){})
+            })
+            plus.gatewayCmd.getDeviceInfo(function(data){
+                gwID = data.gwID;
+                dID = data.devID;
+                var name = data.name.indexOf("#$default$#") != -1 ? Sphygmomanometer_name + data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+                if(data.mode === 2){
+                    $(".mask_layer").show()
+                }else if(data.mode === 3){
+                    //原生做的操作
+                }else{
+                    $(".mask_layer").hide()
+                }
+                modeState(data)
+                initBtn(gwID,dID)
+            })
+
+            plus.gatewayCmd.newDataRefresh(function(data){
+                if(data.cmd == "500" && data.devID == dID){
+                    var name = data.name.indexOf("#$default$#") != -1 ? Sphygmomanometer_name + data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+                    modeState(data)
+                }else if(data.cmd == "502" && data.devID == dID){
+                    if(data.name != undefined || data.name != ''){
+                        $(".deviceName").html(data.name)
+                    }
+                }
+                gwID = data.gwID;
+                dID = data.devID;
+            })
+        })
+
+        function initBtn(gwID,dID){
+            $("#statistics_btn").on("click",function(){
+                plus.tools.getLoginType(function(data) {
+                    if(data == "100") {
+                        window.location.href = "history.html?userId=" + userId;
+                    } else {
+                        $(".gw_toast").show()
+                        setTimeout(function() {
+                            $(".gw_toast").hide()
+                        }, 3000)
+                    }
+                })
+            })
+            $(".more").on("click",function(){
+                var moreData = getMoreConfig(dID,gwID)
+                plus.tools.more(moreData,function(){})
+            })
+        }
+
+        function modeState(result){
+            if(result.mode === 2){
+                $(".mask_layer").show()
+            }else if(result.mode === 3){
+                //原生做的操作
+            }else{
+                $(".mask_layer").hide()
+
+                var high_pressure = -1;
+                var average_pressure = -1;
+                var low_pressure = -1;
+                var pulse_rate = -1;
+                var blood_oxygen = -1;
+                var cluster;
+                for(var i=0; i<result.endpoints[0].clusters.length; i++){
+                    if(result.endpoints[0].clusters[i].clusterId == 32774){
+                        cluster = result.endpoints[0].clusters[i];
+                    }
+                }
+                if(cluster != undefined && cluster.attributes != undefined){
+                    for(var i = 0;i<cluster.attributes.length;i++){
+                        var attributeId = cluster.attributes[i].attributeId;
+                        switch (attributeId){
+                            case 3:
+                                userId = parseInt(cluster.attributes[i].attributeValue);
+                                break;
+                            case 4:
+                                high_pressure = parseInt(cluster.attributes[i].attributeValue);
+                                break;
+                            case 5:
+                                low_pressure = parseInt(cluster.attributes[i].attributeValue);
+                                break;
+                            case 6:
+                                pulse_rate = parseInt(cluster.attributes[i].attributeValue);
+                                break;
+                            case 7:
+                                average_pressure = parseInt(cluster.attributes[i].attributeValue);
+                                break;
+                            case 8:
+                                blood_oxygen = parseInt(cluster.attributes[i].attributeValue);
+                                break;
+                        }
+                        reloadUI(userId,high_pressure,average_pressure,low_pressure,pulse_rate,blood_oxygen)
+                    }
+                }
+            }
+        }
+        function reloadUI(userId,high_pressure,average_pressure,low_pressure,pulse_rate,blood_oxygen){
+            switch (userId){
+                case 1:
+                    $("#userId_value").html(Sphygmomanometer_Name_1);
+                    break;
+                case 2:
+                    $("#userId_value").html(Sphygmomanometer_Name_2);
+                    break;
+                case 3:
+                    $("#userId_value").html(Sphygmomanometer_Name_3);
+                    break;
+            }
+            $("#high_pressure_value").html(high_pressure == -1 ? "--" : high_pressure);
+            $("#average_pressure_value").html(average_pressure == -1 ? "--" : average_pressure);
+            $("#low_pressure_value").html(low_pressure == -1 ? "--" : low_pressure);
+            $("#pulse_rate_value").html(pulse_rate == -1 ? "--" : pulse_rate);
+            $("#blood_oxygen_value").html(blood_oxygen == -1 ? "--" : (blood_oxygen  + "%"));
+            Sphygmomanometer_low = Sphygmomanometer_low.length > maxLength ? Sphygmomanometer_low.substring(0,maxLength) + "..." : Sphygmomanometer_low;
+            Sphygmomanometer_high = Sphygmomanometer_high.length > maxLength ? Sphygmomanometer_high.substring(0,maxLength) + "..." : Sphygmomanometer_high;
+            Sphygmomanometer_normal = Sphygmomanometer_normal.length > maxLength ? Sphygmomanometer_normal.substring(0,maxLength) + "..." : Sphygmomanometer_normal;
+            if(high_pressure == -1){
+                $("#high_pressure_state").hide()
+            }else{
+                $("#high_pressure_state").show()
+                if(high_pressure < 90){
+                    $("#high_pressure_state").html(Sphygmomanometer_low);
+                    $("#high_pressure_state").attr("class", "state_abnormal")
+                }else if(high_pressure > 140){
+                    $("#high_pressure_state").html(Sphygmomanometer_high);
+                    $("#high_pressure_state").attr("class", "state_abnormal")
+                }else{
+                    $("#high_pressure_state").html(Sphygmomanometer_normal);
+                    $("#high_pressure_state").attr("class", "state_normal")
+                }
+            }
+            if(low_pressure == -1){
+                $("#low_pressure_state").hide()
+            }else{
+                $("#low_pressure_state").show()
+                if(low_pressure < 60){
+                    $("#low_pressure_state").html(Sphygmomanometer_low);
+                    $("#low_pressure_state").attr("class", "state_abnormal")
+                }else if(low_pressure > 90){
+                    $("#low_pressure_state").html(Sphygmomanometer_high);
+                    $("#low_pressure_state").attr("class", "state_abnormal")
+                }else{
+                    $("#low_pressure_state").html(Sphygmomanometer_normal);
+                    $("#low_pressure_state").attr("class", "state_normal")
+                }
+            }
+            if(pulse_rate == -1){
+                $("#pulse_rate_state").hide()
+            }else{
+                $("#pulse_rate_state").show()
+                if(pulse_rate < 60){
+                    $("#pulse_rate_state").html(Sphygmomanometer_low);
+                    $("#pulse_rate_state").attr("class", "state_abnormal")
+                }else if(pulse_rate > 100){
+                    $("#pulse_rate_state").html(Sphygmomanometer_high);
+                    $("#pulse_rate_state").attr("class", "state_abnormal")
+                }else{
+                    $("#pulse_rate_state").html(Sphygmomanometer_normal);
+                    $("#pulse_rate_state").attr("class", "state_normal")
+                }
+            }
+            if(blood_oxygen == -1){
+                $("#blood_oxygen_state").hide()
+            }else{
+                $("#blood_oxygen_state").show()
+                if(blood_oxygen <= 90){
+                    $("#blood_oxygen_state").html(Sphygmomanometer_low);
+                    $("#blood_oxygen_state").attr("class", "state_abnormal")
+                }else{
+                    $("#blood_oxygen_state").html(Sphygmomanometer_normal);
+                    $("#blood_oxygen_state").attr("class", "state_normal")
+                }
+            }
+        }
+    </script>
+</html>

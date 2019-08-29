@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>设备操作</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+</head>
+<link rel="stylesheet" type="text/css" href="css/base.css" />
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="css/index.css" />
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+<script type="text/javascript" charset="UTF-8" src="../source/js/jquery-3.1.1.min.js"></script>
+<script src="../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/index.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/leftDelete.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/managerDeal.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/model.js" type="text/javascript" charset="UTF-8"></script>
+<script src="js/waiting.js" type="text/javascript" charset="UTF-8"></script>
+<link rel="stylesheet" type="text/css" href="css/waiting.css" />
+<style type="text/css">
+	* {
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
+	input {
+		-webkit-user-select: auto;
+		-moz-user-select: auto;
+		-ms-user-select: auto;
+		user-select: auto;
+	}
+</style>
+
+<body>
+	<header class="header">
+		<div class="header_top">
+			<a class="back" href="javascript:;"></a>
+			<a class="deviceName autoSwitchLanguager" href="javascript:;" langKey='GatewayCenter_Fog_calculation'></a>
+			<a class="GWManager_help autoSwitchLanguager" href="javascript:;" langKey='Fog_calculation_help' class="autoSwitchLanguager" onclick='showHelp()'>帮助</a>
+		</div>
+	</header>
+
+
+
+	<section class="sub_engine_nobind" style="display: none;">
+		<div id="StatusOfEngine1" class="StatusOfEnginePage StatusOfEngine">
+			<a class="sub_engine_img" /></a>
+			<p langKey='Fog_calculation_Sub_machine_mode' class="autoSwitchLanguager">当前角色为：雾计算子机</p>
+		</div>
+		<div>
+			<a onclick="bindMainGW()" class="main_engine_add" /></a>
+		</div>
+		<p class="autoSwitchLanguager" langKey='Fog_calculation_New_01'>您还没有绑定主机，点击绑定！</p>
+
+		<p onclick="switchToMainGW()" class="autoSwitchLanguager" langKey='Fog_calculation_Switch_Host'>切换为雾计算主机</p>
+	</section>
+
+
+
+	<section class="sub_engine_bind" style="display:none;">
+		<div id="StatusOfEngine2" class="StatusOfEngineNOPage StatusOfEngine" style="">
+			<a class="sub_engine_img" /></a>
+			<p class="autoSwitchLanguager" langKey='Fog_calculation_Sub_machine_mode'>当前角色为:雾计算子机</p>
+		</div>
+		<div>
+			<div class="autoSwitchLanguager" langKey='Fog_calculation_New_09'>已绑定的主机</div>
+		</div>
+
+		<section class="getMission" style="display:block;">
+			<!--列表元素格式-->
+			<div class="lists">
+
+			</div>
+		</section>
+		<p langKey='Fog_calculation_New_07' class="autoSwitchLanguager">注：若要切换雾计算主机角色为主机，请先左滑解绑
+			<p>
+	</section>
+
+
+
+	<section class="main_engine_nobind" style="display:none;">
+		<div id="StatusOfEngine3" class="StatusOfEnginePage StatusOfEngine">
+			<a class="main_engine_img" /></a>
+			<p class="autoSwitchLanguager" langKey='Fog_calculation_Host_mode'>当前角色为:雾计算主机</p>
+		</div>
+		<div>
+			<a onclick="goLanGW()" class="main_engine_add" /></a>
+		</div>
+		<p class="autoSwitchLanguager" langKey='Fog_calculation_Not_bound'>您还没有绑定子机，点击绑定！</p>
+		<!--<div class="addSensorBtn" id="TobindSub">
+				<a onclick="goLanGW()" class="autoSwitchLanguager" langKey='Fog_calculation_Bounding' style="bottom: 5.2rem;">绑定</a>
+			</div>-->
+		<p onclick="switchToSubGW()" class="autoSwitchLanguager" langKey='Fog_calculation_Switch_Sub_machine'>切换为雾计算子机</p>
+	</section>
+
+
+
+	<section class="main_engine_bind" style="display:none;">
+		<div id="StatusOfEngine4" class="StatusOfEngineNOPage StatusOfEngine" style="">
+			<a class="main_engine_img" /></a>
+			<p class="autoSwitchLanguager" langKey='Fog_calculation_Host_mode'>当前角色为:雾计算主机</p>
+		</div>
+		<div>
+			<div class="autoSwitchLanguager" langKey='Fog_calculation_Bound_Sub_machine_list'>已绑定的子机</div>
+			<div>
+				<a onclick="goLanGW()" /></a>
+			</div>
+		</div>
+
+		<section class="getMission" style="display:block;">
+			<!--列表元素格式-->
+			<div class="lists">
+			</div>
+		</section>
+		<p langKey='Fog_calculation_Unbundled_Left_slide' class="autoSwitchLanguager">注：若要切换雾计算主机角色，请先左滑解绑子机
+			<p>
+	</section>
+
+
+
+	<section class="help_section" style="display: none;">
+		<div>
+			<p langKey='Fog_calculation_Introduction_title' class="autoSwitchLanguager">关于雾计算主机</p>
+			<img src="fonts/tipImg.png" />
+			<p langKey='Fog_calculation_Introduction' class="autoSwitchLanguager">雾计算主机，借鉴企业级路由部署方案，实现了不同子机中设备的统一管理，场景、管家等可跨子机设置，特别适合大网络、多子机、多楼层的部署，免去同一区域内多个网关切换的问题。</p>
+			<p langKey='Fog_calculation_Tips' class="autoSwitchLanguager">温馨提示</p>
+			<p langKey='Fog_calculation_Tips_1' class="autoSwitchLanguager">1.竖形网关等默认角色为子机，也可切换为雾计算主机，使用时请先设置好角色</p>
+			<p langKey='Fog_calculation_Tips_2' class="autoSwitchLanguager">2.请将雾计算主机与子机连接在同一级路由器下</p>
+			<p langKey='Fog_calculation_Tips_3' class="autoSwitchLanguager">3.可以在“网关-设备信息”查看网关IP地址，也可以通过路由器后台查看网关IP地址</p>
+			<div langKey='Fog_calculation_i_konw' class="autoSwitchLanguager" onclick="hideHelp()">确定</div>
+		</div>
+	</section>
+
+
+
+	<section class="bindMainGW" style="display: none;">
+		<div>
+			<p langKey="Fog_calculation_New_02" class="autoSwitchLanguager">主机网关号</p>
+			<input type="text" placeholder="" id="bindMainGW_gwID" />
+			<p langKey="Fog_calculation_New_03" class="autoSwitchLanguager">主机IP</p>
+			<input type="url" placeholder="" id="bindMainGW_gwIP" />
+			<p langKey="Fog_calculation_New_04" class="autoSwitchLanguager">网关IP可在“网关-设备信息”或路由器后台中查看</p>
+			<span>
+				<button id="bindMainGW_cancel" langKey="Fog_calculation_cancel" class="autoSwitchLanguager">取消</button>
+				<em></em>
+				<button id="bindMainGW_confirm" langKey="Fog_calculation_New_05" class="autoSwitchLanguager">确定</button>
+			</span>
+		</div>
+	</section>
+
+
+
+	<section class="waiting" style="display: none">
+		<i></i>
+		<span class="autoSwitchLanguager" langKey="Fog_calculation_Bind_ing">处理中...</span>
+	</section>
+</body>
+
+<script>
+	var h = window.screen.availHeight + "px"
+	console.log(h)
+	$("body").css("min-height", h)
+</script>
+
+<script>
+	var gwId;
+	var appId;
+	var isMainEngine = false;
+	var showStatus = 1; // 1 子机未绑定  2 主机未绑定 3 主机绑定 4 子机已绑定
+	var info = window.sysfun;
+	var gwType;
+	var masterGw;
+	var needShow = true;
+	info.init("ManagerGW");
+	initlan();
+	$(".back").on("click", function () {
+		info.setItem('BindGWList', "");
+		plus.tools.back(function () {})
+	})
+	plus.plusReady(function () {
+
+		plus.tools.getProject(function(result) {
+			if(result == "Legrand_app") {
+				needShow = false;
+				$(".GWManager_help").hide();
+			} else {
+				$(".GWManager_help").show();
+			}
+		});
+
+		var refrash = getUrlParam("refrash");
+		if (refrash == '1') {
+			showWaiting();
+			setTimeout('refrashFun()', 3000);
+		} else {
+			getInfo();
+		}
+	});
+
+	function refrashFun() {
+		hideWaiting();
+		info.setItem('BindGWList', "");
+		getInfo();
+	}
+
+	// 键盘收起事件
+	document.body.addEventListener('focusout', function () {
+		console.log($("body").scrollTop) // 0
+		var u = navigator.userAgent,
+			app = navigator.appVersion;
+		var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+		if (isiOS) {
+			window.scrollTo(0, 0);
+		}
+	})
+</script>
+
+</html>

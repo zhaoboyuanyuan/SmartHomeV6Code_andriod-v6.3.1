@@ -1,0 +1,37 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_Ck_name = "Salute空調機";
+$lang.Device_Ck_temperature = "室温";
+$lang.device_Ck_on = "オン";
+$lang.device_Ck_off = "オフ";
+$lang.device_Ck_Wind_speed = "風速";
+$lang.device_Ck_Wind_speed_1 = "風速：";
+$lang.airsystem_Ck_Wind_speed_high = "高速";
+$lang.airsystem_Ck_Wind_speed_medium = "中速";
+$lang.airsystem_Ck_Wind_speed_low = "低速";
+$lang.Device_Ck_Details_Time = "定期";
+$lang.Device_Ck_Cancel = "取消";
+$lang.Device_Ck_OK = "確認";
+$lang.Device_Ck_Details_Time_TIPS3 = "オープン";
+$lang.Device_Ck_Details_Time7 = "時";
+$lang.Device_Ck_Details_Time8 = "分";
+$lang.device_Ck_open_after = "オープン後";
+$lang.Device_Ck_Details_Time_TIPS4 = "クローズ";
+$lang.device_Ck_Countdown_closed = "オフ後";
+$lang.device_Ck_Sure_to_cancel = "取消してもいいですか？";
+$lang.device_Ck_Alarm_01 = "室温センサ故障";
+$lang.offLine_1 = "オフライン";
+$lang.onLine = "オンライン";
+$lang.group_text = "未分類";
+$lang.offLine = "デバイスがオフラインです";
+$lang.device_time_out = "接続がタイムアウト";
+$lang.device_ing = "読込中";
+$lang.Device_Ck_Details_Jiaozhun = "室内温度は精度が";
+$lang.Device_Ck_Details_Jiaozhun_hint = "室温が標準の温度と大きく異なる場合は、このコントラーラで室温を調整します";
+$lang.Device_Ck_Details_Restore = "ファクトリー・リセット";
+$lang.Device_Ck_Details_Restore_tips = "すべての設定が工場出荷時の設定に戻っていますか？";
+$lang.Device_Ck_Details_Restore_in = "デバイスは工場出荷時の設定に復元されました";
+$lang.Firmware_Version = "ファームウェアバージョン";

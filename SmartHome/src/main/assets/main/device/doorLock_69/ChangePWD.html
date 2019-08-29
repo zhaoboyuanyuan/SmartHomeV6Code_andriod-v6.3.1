@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>手机开门密码修改</title>
+		<link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/device.css" />
+		<link rel="stylesheet" type="text/css" href="css/set.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" key="device_69_change_password" href="javascript:;">手机开门密码修改</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="content mui-content">
+			<div class="createInput" style="margin-top:2rem">
+				<span style="width:27%" class="autoSwitchLanguager" key="device_69_old_password">原密码</span><input id="oldpwd" style="opacity: 1" maxlength="6" type="text" onkeyup="value=value.replace(/[^\d]/g,'')"/>
+			</div>
+			<div class="createInput">
+				<span style="width:27%" class="autoSwitchLanguager" key="device_69_new_password">新密码</span><input id="pwd" style="opacity: 1" maxlength="6" type="password" onkeyup="value=value.replace(/[^\d]/g,'')" /><i class="look"></i>
+			</div>
+			<div class="addSensorBtn">
+				<a class="disableBtn autoSwitchLanguager" id="submmit" key="device_69_buttun_01" style="color: white;bottom:55%;height: 4rem;line-height: 4rem;">确定</a>
+			</div>
+		</section>
+		<section class="saveToast" style="display:none;z-index:999">
+			<div><i><em class="rotate"></em></i></div>
+		</section>
+	</body>
+	<link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+	<script src="../../source/mui/js/mui.min.js"></script>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.md5.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan()
+        mui.init({});
+        var endpointNumber;
+        var fakeLoadertime;
+
+        $('#pwd').bind('input propertychange', function() {
+            var btn = document.getElementsByClassName("addSensorBtn")[0].getElementsByTagName("a")[0];
+			if($(this).val().length == 6 && $("#oldpwd").val().length == 6){
+                    btn.style.backgroundImage = "url(../../skinSource/img/bigBtnEnable.png)";
+			}else {
+                btn.style.backgroundImage = "url(../../skinSource/img/bigBtnDisable.png)";
+			}
+        });
+
+        $('#oldpwd').bind('input propertychange', function() {
+            var btn = document.getElementsByClassName("addSensorBtn")[0].getElementsByTagName("a")[0];
+            if($(this).val().length == 6 && $("#oldpwd").val().length == 6){
+                btn.style.backgroundImage = "url(../../skinSource/img/bigBtnEnable.png)";
+            }else {
+                btn.style.backgroundImage = "url(../../skinSource/img/bigBtnDisable.png)";
+            }
+        });
+
+        $("#pwd").on("input propertychange", function() {
+			if($(this).val().length >= 6) {
+				$(this).val($(this).val().substr(0, 6))
+				//console.log($(this).val())
+			}
+		})
+		var isClick = true;
+		$(".look").on("click", function() {
+			if(isClick == true) {
+				$(this).css({ "background": "url(fonts/icon_look.png) no-repeat center center", "background-size": "2rem auto" })
+				$(this).siblings("input").attr("type", "text")
+				isClick = false
+			} else {
+				$(this).css({ "background": "url(fonts/icon_close.png) no-repeat center center", "background-size": "2rem auto" })
+				$(this).siblings("input").attr("type", "password")
+				isClick = true
+			}
+		})
+		var OldPWD,PWD, devID, gwID;
+		plus.plusReady(function() {
+            document.getElementById("oldpwd").placeholder = languageUtil.getResource("device_69_txt_03");
+            document.getElementById("pwd").placeholder = languageUtil.getResource("device_69_txt_03");
+            OldPWD = $("#oldpwd").val();
+            PWD = $("#pwd").val();
+            plus.gatewayCmd.getDeviceInfo(function(result){
+                endpointNumber = result.endpoints[0].endpointNumber;
+                devID = result.devID;
+                gwID = result.gwID;
+                document.getElementById("submmit").addEventListener("click", function() {
+                    OldPWD = $("#oldpwd").val();
+                    PWD = $("#pwd").val();
+                    if(OldPWD && PWD && PWD.length == 6 && OldPWD.length == 6){
+                        showLoading();
+                        updateLockPWD(OldPWD,PWD);
+					}
+
+                });
+			})
+
+            plus.gatewayCmd.newDataRefresh(function(result) {
+                if (result.cmd == "501" && deviceInfo.devID == result.devID){
+                    switch (parseInt(result.retCode)){
+                        case 2:
+                        {
+                            //控制数据格式不正确
+                        }
+                            break;
+                        case 3:
+                        {
+                            //设备不存在或设备已离线
+                        }
+                            break;
+                        case 6:
+                        {
+                            //玻璃门锁开锁失败，密码错误
+                        }
+                            break;
+                    }
+				}
+
+                if(devID == result.devID && gwID == result.gwID && result.cmd == "500"){
+                    switch(parseInt(result.mode)){
+                        case 0:
+                        {
+                            //设备状态变化
+                            var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+                            var attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+                            reloadUI(parseInt(attributeId), parseInt(attributeValue));
+                        }
+                            break;
+                        case 1:
+                        {
+                            //设备上线
+                            var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+                            var attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+                            reloadUI(parseInt(attributeId), parseInt(attributeValue));
+                        }
+                            break;
+					}
+				}
+			})
+
+            function reloadUI(attributeId, attributeValue){
+                switch(attributeId){
+                    case 0x8002:
+                    {
+
+                    }
+                        break;
+                    case 0x8005:
+					{
+                        //0:玻璃门锁设置开锁密码成功
+                        //1:玻璃门锁设置开锁密码失败，原始密码不正确
+                        hideLoading();
+                        if (attributeValue == 0){
+                            plus.tools.goBack(function(){})
+                        }else if (attributeValue == 1){
+                            mui.toast(device_69_old_password_error);
+                        }
+
+					}
+					break;
+				}
+			}
+
+            $("#back").on("click",function(){
+                plus.tools.goBack(function(){})
+            })
+
+            function showLoading(){
+                $(".saveToast").show();
+                fakeLoadertime = setTimeout(function () {
+                    hideLoading();
+                    //超时弹框
+					mui.toast(device_69_txt_01)
+                },7000)
+			}
+
+            function hideLoading(){
+                window.clearInterval(fakeLoadertime);
+                $(".saveToast").hide();
+            }
+            /*
+		 	* 修改开锁密码
+		 	*/
+            function updateLockPWD(oldPWD,newPWD) {
+                var oldMD5PWD = $.md5(oldPWD);
+                var newMD5PWD = $.md5(newPWD);
+                var jsonData = {
+                    "cmd": "501",
+                    "gwID": gwID,
+                    "devID": devID,
+                    "endpointNumber": endpointNumber,
+                    "clusterId": 0x0101,
+                    "commandType": 01,
+                    "commandId": 0x8003,
+                    "parameter": [oldMD5PWD,newMD5PWD],
+                };
+                plus.gatewayCmd.controlDevice(jsonData, function(result) {
+                    console.log("result" + result);
+                })
+            }
+		})
+	</script>
+
+</html>

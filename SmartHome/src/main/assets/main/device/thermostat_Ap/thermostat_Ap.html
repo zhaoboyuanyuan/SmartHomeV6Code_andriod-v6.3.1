@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>地暖</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+    <header  class="header">
+        <a id="back" class="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="Device_Ap_Details_Name" href="javascript:;">地暖控制器</a>
+        <a id="more" href="javascript:;"></a>
+    </header>
+    <scetion class="topView">
+        <div class="topLeft">
+            <i class="errorLeft" onclick="clickTopLeft()"></i>
+            <p class="tempLeft normalLeft">25</p><i class="tempScale normalLeft">℃</i>
+            <span class="autoSwitchLanguager" key="Device_Ap_Details_Temperature1">当前室内温度</span>
+        </div>
+        <div class="topRight">
+            <i class="errorRight" onclick="clickTopRight()"></i>
+            <p class="tempRight floorText normalRight">27</p><i class="tempScale floorText normalRight">℃</i>
+            <span class="autoSwitchLanguager" key="Device_Ap_Details_Temperature2">当前地表温度</span>
+        </div>
+    </scetion>
+    <section class="num_scroll_show">
+        <div class="panel1" style="top: 10rem;opacity: 0"><p>-2</p></div>
+        <div class="panel2" style="top: 17rem;"><p>-1</p></div>
+        <div class="panel3" style="top: 24rem;"><p>29</p></div>
+        <div class="panel4" style="top: 31rem;"><p>1</p></div>
+        <div class="panel5" style="top: 38rem;opacity: 0"><p>2</p></div>
+    </section>
+    <section class="num_scroll_Unit">
+        <i class="tempScale">℃</i>
+    </section>
+    <!--<section class="mainView">-->
+        <!--<div>-->
+            <!--<p>29.0</p><i class="tempScale">℃</i>-->
+        <!--</div>-->
+    <!--</section>-->
+    <section class="greenView">
+        <div>
+            <i class="greenText autoSwitchLanguager" key="Device_Ap_Details_Save1">节能模式</i>
+        </div>
+    </section>
+    <section class="countDownView">
+        <div>
+            <i class="countDownText">01时30分后关机</i>
+        </div>
+    </section>
+    <section class="bottomView">
+        <div id="countDown" class="brnLeft">
+            <i></i>
+            <span class="autoSwitchLanguager" key="Device_Ap_Details_Time">定时</span> 
+        </div>
+        <div id="switch" class="btnCenter">
+            <i></i>
+            <span class="autoSwitchLanguager" key="Device_Ap_Details_Open">开关</span>
+        </div>
+        <div id="energy" class="btnRight">
+            <i></i>
+            <span class="autoSwitchLanguager" key="Device_Ap_Details_Save">节能</span>
+        </div>
+    </section>
+    <section class="alert" style="display:none;">
+        <div class="nameToast">
+            <span class="tip autoSwitchLanguager" key="Device_Ap_Details_Prompt">提示</span>
+            <div class="msg"></div>
+            <div class="choose_1">
+                <a class="autoSwitchLanguager sure_click" key="Device_Ap_Details_Confirm" href="javascript:;" onclick="sure()" >确定</a>
+            </div>
+        </div>
+    </section>
+    <section class="mask_layer" style="display:none;"><i></i><span id="offLine" class="autoSwitchLanguager" key="Device_Ap_Details_Offline"></span></section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/scrollPanel.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    initlan();
+    var devID, gwID;
+    // 节能模式 开关 温度 状态是否变化
+    var greenState = 0, greenTemp = 18, greenChanged = false;
+    // 电源状态
+    var powerState = '00';
+    // 定时器状态, 剩余 时分秒, 倒计时, 定时器显示的字
+    var timerState, timerH, timerM, timerS, timerInterval = [], timerText;
+    // 温标 默认摄氏度 ℃
+    var tempScale = 0;
+    var info = window.sysfun;
+    info.init("deviceAp");
+
+    // 室温, 地表温度, 制热温度
+    var tempRoom;
+    var tempFloor;
+    var tempMain;
+    // 内部传感器 外部传感器 是否异常
+    // 0 正常; 1 异常; 2 已经查看
+    var isInnerOnWork = 0;
+    var isOuterOnWork = 0;
+
+    // 摄氏度数组    10 - 32     步进 0.5   默认 26℃
+    var mainTempArrC = [];
+    var mainTempValC = 26;
+    // 华氏度数组    50 - 90     步进 1     默认 90℉
+    var mainTempArrF = [];
+    var mainTempValF = 79;
+    for (var i = 0; i <= 44; i++) {
+        var t = 10 + i / 2;
+        mainTempArrC.push(t)
+    }
+    for (var i = 0; i <= 40; i++) {
+        var t = (50 + i);
+        mainTempArrF.push(t);
+    }
+
+    var mainTempArrS = mainTempArrC;
+    // 制热温度 默认 26
+    var mainTempValS = -1;
+
+    scrollPanelInit(getTempArr(), getTempValue(), setMainTemp);
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(function (data) {
+            gwID = data.gwID;
+            devID = data.devID;
+            getMoreConfig(devID, gwID);
+            query();
+            reloadUI(data);
+        });
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            reloadUI(data);
+        });
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header")[0].style.paddingTop = "4.4rem";
+        }
+
+
+    });
+
+    $("#back").on("click", function() {
+        // 返回
+        plus.tools.back(function() {});
+    });
+    $("#more").on("click", function() {
+        // 更多
+        query(2);
+        plus.tools.more(moreConfig, function () {})
+    });
+    $("#countDown").on("click", function() {
+        // 定时
+        window.location = "countDown.html"
+    });
+    $("#switch").on("click", function() {
+        // 开关
+        setPower();
+    });
+    $(".btnRight").on("click", function() {
+        // 节能
+        setGreen();
+    });
+
+    // 重载 UI
+    function reloadUI(data) {
+        if (data.cmd == '500') {
+            if (data.mode == 2) {
+                $(".mask_layer").show();
+            } else {
+                $(".mask_layer").hide();
+                editHtml(data);
+            }
+        }
+
+        var name = data.name.indexOf("#$default$#") != -1 ? Device_Bm_Details_Name + data.name.split("#")[2] : data.name;
+        showDeviceName(name);
+    }
+
+    // 查询
+    function query(q) {
+        q = q || 1;
+        sendCmd(0x8010, ["" + q])
+    }
+
+    /**********************************************************************
+     *                              显示弹框
+     **********************************************************************/
+    function showAlert(msg) {
+        $('.msg').html(msg);
+        $('.alert').show()
+    }
+    /**********************************************************************
+     *                              弹框确认按钮                          *
+     **********************************************************************/
+    function sure() {
+        $('.alert').hide()
+    }
+    /**********************************************************************
+     *                              点击内部传感器                        *
+     **********************************************************************/
+    function clickTopLeft() {
+        // 如果外部传感器也坏了
+        if (isOuterOnWork == 1) {
+            $('.msg').css('height', '5rem');
+            $('.choose_1').css('margin-top', '5rem');
+            showAlert(outerErrorMsg5);
+        } else {
+            $('.msg').css('height', '5rem');
+            $('.choose_1').css('margin-top', '5rem');
+            showAlert(innerErrorMsg);
+        }
+    }
+    /**********************************************************************
+     *                              点击外部传感器                        *
+     **********************************************************************/
+    function clickTopRight() {
+        // 如果内部传感器也坏了
+        if (isInnerOnWork == 1) {
+            $('.msg').css('height', '5rem');
+            $('.choose_1').css('margin-top', '5rem');
+            showAlert(outerErrorMsg5);
+        } else {
+            $('.msg').css('height', '16rem');
+            $('.choose_1').css('margin-top', '16rem');
+            showAlert(outerErrorMsg1 + '<br>'
+                + outerErrorMsg2 + '<br>'
+                + outerErrorMsg3 + '<br>'
+                + outerErrorMsg4);
+        }
+    }
+
+    function editHtml(data) {
+        var endpoints = data.endpoints;
+        handleEp(endpoints);
+    }
+
+    // 设备名
+    function showDeviceName(name) {
+        $(".deviceName").html(name)
+    }
+
+    // 处理 endpoints
+    // 遍历解析
+    function handleEp(endpoints) {
+        endpoints.forEach(function (endpoint) {
+            var endpointNumber = endpoint.endpointNumber;
+            var endpointName = endpoint.endpointName;
+            var endpointType = endpoint.endpointType;
+            var clusters = endpoint.clusters;
+            clusters.forEach(function (cluster) {
+                var clusterId = cluster.clusterId;
+                var attributes = cluster.attributes;
+                attributes.forEach(function (attribute) {
+                    var attributeId = attribute.attributeId;
+                    var attributeValue = attribute.attributeValue;
+                    handleAttribute(attributeId, attributeValue)
+                })
+            })
+        });
+    }
+
+    // 处理 attribute
+    function handleAttribute(attributeId, attributeValue) {
+        console.log("attributeId:\t\t" + attributeId.toString(16));
+        console.log("attributeValue:\t\t" + attributeValue);
+
+        if (attributeId == 0x8001) {
+            handleAttribute8001(attributeValue)
+        } else if (attributeId == 0x8008) {
+            handleAttribute8008(attributeValue)
+        } else if (attributeId == 0x8002) {
+            handleAttribute8002(attributeValue)
+        } else if (attributeId == 0x8006) {
+            handleAttribute8006(attributeValue)
+        } else if (attributeId == 0x8007) {
+            handleAttribute8007(attributeValue)
+        } else if (attributeId == 0x800F) {
+            handleAttribute800F(attributeValue)
+        } else if (attributeId == 0x8030) {
+            handleAttribute8030(attributeValue)
+        }
+    }
+
+    /********************************************************
+     * 解析 8001
+     *
+     * @param value
+     *                  xx yy cccc ee dddd zz bbbb qqqq ii dd HH mm ss ll rrrr qqqq
+     *                  基本数据，格式均为16进制如下：
+     *
+     *                   xx:        设备开关状态（开机、关机）
+     *                   yy:        过温保护开关
+     *                   cccc:      过温保护温度
+     *                   ee:        防冻保护开关
+     *                   dddd:      防冻保护温度
+     *                   zz:        温度标志位
+     *                   bbbb:      制热温度
+     *                   qqqq:      当前环境温度数值
+     *                   ii:        当前环境湿度
+     *                   dd:        定时器状态
+     *                   HHmmss:    定时器倒计时时间
+     *                   ll:        一键节能开关
+     *                   rrrr:      一键节能温度
+     *                   qqqq:      地表温度
+     ******************************************************/
+    function handleAttribute8001(value) {
+        console.log("Value-> " + value);
+        var xx = value.substr(0, 2);                      // xx:          设备开关状态  (00:关机 01开机)
+        var yy = parseInt(value.substr(2, 2), 16);        // yy:          过温保护开关
+        var cc = parseInt(value.substr(4, 4), 16);        // cccc:        过温保护温度
+        var ee = parseInt(value.substr(8, 2), 16);        // ee:          防冻保护开关
+        var d1 = parseInt(value.substr(10, 4), 16);       // dddd:        防冻保护温度
+        var zz = parseInt(value.substr(14, 2), 16);       // zz:          温度标志位
+        var bb = parseInt(value.substr(16, 4), 16);       // bbbb:        制热温度
+        var q1 = parseInt(value.substr(20, 4), 16);       // qqqq:        当前环境温度数值
+        var ii = parseInt(value.substr(24, 2), 16);       // ii:          当前环境湿度
+        var d2 = parseInt(value.substr(26, 2), 16);       // dd:          定时器状态
+        var HH = parseInt(value.substr(28, 2), 16);       // HH:          定时器倒计时时间
+        var mm = parseInt(value.substr(30, 2), 16);       // mm:          定时器倒计时时间
+        var SS = parseInt(value.substr(32, 2), 16);       // ss:          定时器倒计时时间
+        var ll = parseInt(value.substr(34, 2), 16);       // ll:          一键节能开关
+        var rr = parseInt(value.substr(36, 4), 16);       // rrrr:        一键节能温度
+        var q2 = parseInt(value.substr(40, 4), 16);       // qqqq:        地表温度
+
+        console.log("---------- 8001 ----------");
+        console.log("xx: " + xx + ", \t\t设备开关状态  (00:关机 01开机)");
+        console.log("yy: " + yy + ", \t\t过温保护开关");
+        console.log("cc: " + cc + ", \t\t过温保护温度");
+        console.log("ee: " + ee + ", \t\t防冻保护开关");
+        console.log("d1: " + d1 + ", \t\t防冻保护温度");
+        console.log("zz: " + zz + ", \t\t温度标志位");
+        console.log("bb: " + bb + ", \t\t制热温度");
+        console.log("q1: " + q1 + ", \t\t当前环境温度数值");
+        console.log("ii: " + ii + ", \t\t当前环境湿度");
+        console.log("d2: " + d2 + ", \t\t定时器状态");
+        console.log("HH: " + HH + ", \t\t定时器倒计时时间");
+        console.log("mm: " + mm + ", \t\t定时器倒计时时间");
+        console.log("SS: " + SS + ", \t\t定时器倒计时时间");
+        console.log("ll: " + ll + ", \t\t一键节能开关");
+        console.log("rr: " + rr + ", \t\t一键节能温度");
+        console.log("q2: " + q2 + ", \t\t地表温度");
+        console.log("---------- 8001 ----------");
+
+        showTempScale(zz);
+        showPower(xx);
+        showRoomTemp(q1 / 10);
+        showFloorTemp(q2 / 10);
+        showGreenView(ll, rr / 100);
+        showTimerView(d2, HH, mm, SS);
+        showMainTemp(bb / 100);
+    }
+
+    /**
+     * mmYYMMDDHHmmSSeebbccooppqq
+     */
+    function handleAttribute8002(value) {
+        var m1 = parseInt(value.substr(0, 2), 16);    // 声效数据
+        var YY = parseInt(value.substr(2, 2), 16);
+        var MM = parseInt(value.substr(4, 2), 16);
+        var DD = parseInt(value.substr(6, 2), 16);
+        var HH = parseInt(value.substr(8, 2), 16);
+        var m2 = parseInt(value.substr(10, 2), 16);
+        var SS = parseInt(value.substr(12, 2), 16);
+        var ee = parseInt(value.substr(14, 2), 16);   // 震动数据
+        var bb = parseInt(value.substr(16, 2), 16);   // 回差温度
+        var cc = parseInt(value.substr(18, 2), 16);   // 编程模式开关（00：关闭，01：打开
+        var oo = parseInt(value.substr(20, 4), 16);   // DO联动
+//        var pp = value.substr(22, 2);
+        var qq = value.substr(24, 2);   // 系统选择
+
+        console.log("---------- 8002 ----------");
+        console.log("声效数据: " + m1);
+        console.log("震动数据: " + ee);
+        console.log("回差温度: " + bb);
+        console.log("编程模式: " + cc);
+        console.log("D O 联动: " + oo);
+        console.log("系统选择: " + qq);
+        console.log("---------- 8002 ----------");
+    }
+
+    /**
+     * 处理8006 温标设置
+     *
+     * @param value  zz
+     *                  00:℃
+     *                  01: F
+     */
+    function handleAttribute8006(value) {
+        var zz = parseInt(value.substr(0, 2), 16);
+        console.log("8006-> " + parseInt(zz, 16));
+
+        showTempScale(zz);
+        reloadAllTemp();
+    }
+
+    /**
+     * 处理8007
+     * @param value  bbbb
+     */
+    function handleAttribute8007(value) {
+        var bb = parseInt(value.substr(0, 4), 16);
+        showMainTemp(bb / 100);
+
+        console.log("---------- 8007 ----------");
+        console.log("8007-> " + bb);
+        console.log("---------- 8007 ----------");
+    }
+
+    /**
+     * 处理8008
+     * @param value  YYMMDDHHmmSS
+     */
+    function handleAttribute8008(value) {
+        var YY = value.substr(0, 2);
+        var MM = value.substr(2, 2);
+        var DD = value.substr(4, 2);
+        var HH = value.substr(6, 2);
+        var mm = value.substr(8, 2);
+        var ss = value.substr(10, 2);
+        console.log("8008-> " + parseInt(MM, 16));
+    }
+
+    /**
+     * 处理800F     一键节能
+     * @param value
+     */
+    function handleAttribute800F(value) {
+        var ll = parseInt(value.substr(0, 2), 16);       // ll:          一键节能开关
+        var rr = parseInt(value.substr(2, 4), 16);       // rrrr:        一键节能温度
+
+        showGreenView(ll, rr / 100);
+        showMainTemp(tempMain);
+    }
+
+    /**
+     * 处理8030  异常
+     * @param value  YYMMDDHHmmSS
+     */
+    function handleAttribute8030(value) {
+        var ll = parseInt(value.substr(0, 2), 16);
+
+        if (ll == 0xA0) {
+            // 内部传感器异常
+            isInnerOnWork = 1;
+            showRoomTemp(tempRoom);
+        } else if (ll == 0xB0) {
+            // 外部传感器异常
+            isOuterOnWork = 1;
+            showFloorTemp(tempFloor);
+        }
+    }
+
+    /**
+     * 显示开关状态 00 关 01 开
+     */
+    function showPower(x) {
+        powerState = x;
+        if (x == '00') {
+            $('.btnCenter').find('i').css('background-image', 'url(fonts/icon_power.png)');
+            setScrollPanelEnable(false);
+        } else {
+            $('.btnCenter').find('i').css('background-image', 'url(fonts/icon_power_2.png)');
+            setScrollPanelEnable(true);
+        }
+    }
+
+    /**
+     * 显示定时器
+     */
+    function showTimerView(d, h, m, s) {
+        timerState = d;
+        timerH = h;
+        timerM = m;
+        timerS = s;
+
+        for (var i in timerInterval) {
+            clearInterval(timerInterval[i])
+        }
+
+        if (powerState == '00' && d == '01') {
+            // 关机状态下 定时开
+            $('.brnLeft').find('i').css('background-image', 'url(fonts/icon_time_act.png)');
+            timerText = Device_Af_Details_Time1;
+//            $('.countDownText').html(h + ":" + m + " " + timerText);
+            showTimeText();
+            $('.countDownView').show();
+            timerInterval.push(setInterval("autoCountDown()", 1000 * 60))
+        } else if (powerState == '01' && d == '02') {
+            // 开机状态下 定时关
+            $('.brnLeft').find('i').css('background-image', 'url(fonts/icon_time_act.png)');
+            timerText = Device_Af_Details_Time2;
+//            $('.countDownText').html(h + ":" + m + " " + timerText);
+            showTimeText();
+            $('.countDownView').show();
+            timerInterval.push(setInterval("autoCountDown()", 1000 * 60))
+        } else {
+            // 定时取消
+            $('.brnLeft').find('i').css('background-image', 'url(fonts/icon_time.png)');
+            $('.countDownView').hide();
+        }
+    }
+
+    // 自动倒计时
+    function autoCountDown() {
+        if (timerM == 0) {
+            if (timerH == 0) {
+                // 倒计时结束
+                $('.brnLeft').find('i').css('background-image', 'url(fonts/icon_time.png)');
+                $('.countDownView').hide();
+            } else {
+                timerH --;
+                timerM = 59;
+            }
+        } else {
+            timerM --;
+        }
+        showTimeText();
+    }
+
+    function showTimeText() {
+        var hh = timerH;
+        var mm = timerM;
+        if (hh < 10) {
+            hh = '0' + hh;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        $('.countDownText').html(hh + ":" + mm + " " + timerText);
+    }
+
+    // 显示 室内温度
+    function showRoomTemp(t) {
+        // 负数 要减去65536
+        if (t > 3276.7) {
+            t = t - 6553.6;
+        }
+        tempRoom = t;
+        if (tempRoom == 100) {
+            isInnerOnWork = 1;
+        } else {
+            isInnerOnWork = 0;
+        }
+        if (isInnerOnWork == 0) {
+            $('.errorLeft').css('display', 'none');
+            $('.normalLeft').show();
+            $(".tempLeft").html(getShownTemp(tempRoom));
+        } else if (isInnerOnWork == 1) {
+            $('.errorLeft').css('display', 'inline-block');
+            $('.normalLeft').hide();
+        }
+    }
+
+    // 显示地表温度
+    function showFloorTemp(t) {
+        // 负数 要减去65536
+        if (t > 3276.7) {
+            t = t - 6553.6;
+        }
+        tempFloor = t;
+        if (tempFloor == 100) {
+            isOuterOnWork = 1;
+        } else {
+            isOuterOnWork = 0;
+        }
+        if (isOuterOnWork == 0) {
+            $('.normalRight').show();
+            $('.errorRight').css('display', 'none');
+            $(".tempRight").html(getShownTemp(tempFloor));
+        } else if (isOuterOnWork == 1) {
+            $('.normalRight').hide();
+            $('.errorRight').css('display', 'inline-block');
+        }
+    }
+
+    // 显示主温度
+    function showMainTemp(t) {
+        if (tempFloor > t) {
+            $('.floorText').css('color', '#F00');
+        } else {
+            $('.floorText').css('color', '#000')
+        }
+
+        // 节能模式  显示节能温度
+        if (greenState == 1) {
+            scrollPanelInit([getShownTemp(greenTemp)], 0, function () {
+
+            });
+            setScrollPanelEnable(false);
+            return
+        }
+
+        // 如果节能状态发生变化, 需要重载
+        if (greenChanged) {
+            greenChanged = false;
+            // 如果节能状态没变
+            // 如果温度也没变, 直接返回
+            // 否则, 重载
+        } else if (tempMain == t) {
+            return;
+        }
+
+        tempMain = t;
+        var s = getShownTemp(tempMain);
+        var i = getTempArr().indexOf(s);
+
+        scrollPanelInit(getTempArr(), i, setMainTemp);
+        if (powerState == '00') {
+            setScrollPanelEnable(false);
+        } else {
+            setScrollPanelEnable(true);
+        }
+    }
+
+    // 重新展示温度
+    // 温标改变时
+    function reloadAllTemp() {
+        $(".tempLeft").html(getShownTemp(tempRoom));
+        $(".tempRight").html(getShownTemp(tempFloor));
+
+        var s = getShownTemp(tempMain);
+        var i = getTempArr().indexOf(s);
+
+        setShowNum(i);
+    }
+
+    // 显示温标
+    function showTempScale(t) {
+        if (tempScale == t) {
+            return
+        }
+        tempScale = t;
+        $(".tempScale").html(tempScale == 0 ? '℃' : '℉');
+        scrollPanelInit(getTempArr(), 32, setMainTemp)
+    }
+
+    // 显示节能模式 tip
+    function showGreenView(t, y) {
+        // 节能模式改变
+        if (greenState != t) {
+            greenChanged = true;
+        }
+        greenState = t;
+        greenTemp = y;
+
+        if (t == 0) {
+            $('.greenView').hide();
+            $('.btnRight').find('i').css('background-image', 'url(fonts/icon_energy.png)');
+        } else {
+            $('.greenView').show();
+            $('.btnRight').find('i').css('background-image', 'url(fonts/icon_energy_act.png)');
+        }
+    }
+
+    /**
+     * 设置电源状态
+     */
+    function setPower() {
+        if (powerState == '00') {
+            // 关机状态
+            sendCmd(1, [])
+        } else {
+            // 开机状态
+            sendCmd(0, [])
+        }
+    }
+
+    /**
+     * 设置一键节能
+     */
+    function setGreen() {
+        // 如果没有数据  不控制
+        if (greenState == undefined || greenTemp == undefined) {
+            return
+        }
+        var s = greenState == 0 ? '1' : '0';
+        var t = (greenTemp * 100).toString();
+        sendCmd(0x8017, [s + "" + t])
+    }
+
+    // 设置主温度
+    function setMainTemp(t) {
+        var i = getTempArr()[t];
+        var temp = getDeviceTemp(i);
+        tempMain = temp;
+        var s = (temp * 100).toString();
+        sendCmd(0x8013, ['' + s]);
+        console.log('设置主温度: ' + ('' + s))
+    }
+
+    // 华氏度 转 摄氏度
+    function F2C(f) {
+        var c = (f - 32) / 1.8;
+        var cFloor = Math.floor(c);
+        if (c - cFloor >= 0.75) {
+            return cFloor + 1;
+        } else if (c - cFloor >= 0.25) {
+            return cFloor + 0.5;
+        } else {
+            return cFloor;
+        }
+    }
+    // 摄氏度  转  华氏度
+    function C2F(c) {
+        return Math.round(c * 1.8 + 32);
+    }
+
+    // 获取正常显示的温度    将摄氏度转为 摄氏度或者华氏度
+    function getShownTemp(t) {
+        if (tempScale == 0) {
+            return t;
+        } else {
+            return C2F(t);
+        }
+    }
+
+    // 获取机器温度       将摄氏度或者华氏度 转为 摄氏度
+    function getDeviceTemp(t) {
+        if (tempScale == 0) {
+            return t;
+        } else {
+            return F2C(t);
+        }
+    }
+
+    // 获取温度数组
+    function getTempArr() {
+        mainTempArrS = tempScale == 0 ? mainTempArrC : mainTempArrF;
+        return mainTempArrS;
+    }
+
+    function getTempValue() {
+        if (mainTempValS < 10) {
+            mainTempValS = tempScale == 0 ? mainTempValC : mainTempValF;
+        }
+        return getShownTemp(mainTempValS);
+    }
+
+    function sendCmd(commandId,parameter){
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.endpointNumber = 1;
+        jsonData.commandType = 1;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+</script>
+
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>智敬联排三路开关</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/device.css"/>
+    <script src="../../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../../skinSource/css/skin.css"/>
+</head>
+
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript: history.go(-1);"></a>
+        <a class="deviceName autoSwitchLanguager" href="javascript:;" id="device_Bw_choose_button"></a>
+        <a href="javascript:;"></a>
+    </div>
+</header>
+<section class="chooseSwitch iphoneX">
+    <ul class="switchList">
+        <!--<li class="switchListOne">开关一<i>解绑</i></li>-->
+        <!--<li>开关二</li>-->
+        <!--<li>开关三</li>-->
+    </ul>
+</section>
+<section class="overTime autoSwitchLanguager" id="showOverTime" key="device_Bw_time_out">请求超时，请重试</section>
+<section class="overTime autoSwitchLanguager" id="showBind" key="device_Bw_Binding_success">绑定成功</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/base.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/base64.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/toast.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("device_Bw");
+    initlan();
+    var devID = info.getItem("devID_Bw");
+    var otherDevID = info.getItem("other_devID");
+    var deviceType = info.getItem("deviceType");
+    var gwID = info.getItem("gwID_Bw");
+    var EpNum = info.getItem("num_Bw");
+
+
+    plus.plusReady(function () {
+
+        if (deviceType == "Bu" ||
+            deviceType == "Bv" ||
+            deviceType == "Bw" ||
+            deviceType == "Am" ||
+            deviceType == "An" ||
+            deviceType == "Ao" ||
+            deviceType == "Cl" ||
+            deviceType == "Cm" ||
+            deviceType == "Cn") {
+            plus.gatewayCmd.getDeviceInfo(otherDevID, function (data) {
+                if (data) {
+                    var endpoints = data.endpoints;
+                    var nameListStr = info.getItem("nameList" + otherDevID);
+                    var list = JSON.parse(nameListStr);
+                    if (endpoints) {
+                        var str = "";
+                        for(var i in endpoints){
+                            var name = list[i]>10 ? list[i].substr(0, 10)+'..' : list[i]
+                            if (endpoints[i].endpointType != 0x0002) { //非开关模式
+                                str += '<li class="isBinded" data-indexnum="'+i+'" >' + name + '<em>'+not_switch+'</em></li>';
+                            } else {
+                                str += '<li class="noBind" data-indexnum="'+i+ '"  onclick="deviceBinding(this)">' + name + '<i></i></li>';
+                            }
+
+                        }
+
+                        $(".switchList").html(str);
+                    }
+                }
+            });
+        } else {
+            var nameListStr = info.getItem("nameList" + otherDevID);
+            if (nameListStr){
+                var list = JSON.parse(nameListStr);
+                if (list) {
+                    for (var j in list) {
+                        var name = list[j]>10 ? list[j].substr(0, 10)+'..' : list[j]
+                        $(".switchList").append("<li class='noBind'  data-indexnum='" + j + "'  onclick='deviceBinding(this)'>" + name + "<i></i></li>");
+                    }
+                }
+            }
+        }
+        plus.gatewayCmd.newDataRefresh(function(data){
+            if (data.cmd == "500" && devID == data.devID) {
+                var extData= null;
+                var strJson="";
+                if(data.extData!=null&&data.extData!=undefined&&data.extData!=""){
+                    var base = new Base64();
+                    strJson=base.decode(data.extData);
+                }
+                if(strJson!=""&&strJson.indexOf("[")>=0&&strJson.indexOf("]")>=0){
+                    extData= JSON.parse(strJson);
+                }
+                //判断绑定结果
+                extData.forEach(function (el) {
+                    if (el.endpointNumber == EpNum){
+                        if (el.bindDevID == otherDevID) {
+                            closeToast()
+                            //success
+                            showDialog.show(lang_Binding_success, 1000,function() {
+                                history.go(-2);
+                            });
+                        } else {
+                            //fail
+                            closeToast()
+                            showDialog.show(device_Bw_Binding_failure, 2000);
+                        }
+                    }
+                })
+
+            }
+        });
+
+    });
+    function deviceBinding(el){
+
+        var chooseEp = $(el).data("indexnum");
+
+        send_501(devID,	0x8011, parseInt(EpNum), chooseEp+1);
+    }
+    function send_501(devID,state,number, chooseEp){
+        var param = {
+            "cmd": "501",
+            "gwID": gwID,
+            "devID": devID,
+            "endpointNumber": number,
+            "clusterId": 7,
+            "commandType": 1,
+            "commandId": state,
+            "parameter": [{
+                "ep": "" + number,
+                "bindDevId": "" + otherDevID,
+                "bindEp": "" + chooseEp
+            }]
+        };
+        plus.gatewayCmd.controlDevice(param, function(data) {})
+        createToast(device_Bw_Binding); //"正在绑定"
+        showTimeOut(lang_time_out);//连接超时
+    }
+</script>
+</html>

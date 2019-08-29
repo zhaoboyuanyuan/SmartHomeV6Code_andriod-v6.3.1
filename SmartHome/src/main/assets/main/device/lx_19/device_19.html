@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="../../source/js/rem.js"></script>
+    <script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+</head>
+<body style="width:100%;height:100%;">
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_19_Details_Name" href="javascript:;"></a>
+            <a class="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section class="main_con">
+        <i id="statistics_btn" style="background:url(fonts/icon_statistics.png) no-repeat center center;background-size:2.5rem"></i>
+        <div class="middle middle_suitable">
+            <span class="state state_suitable autoSwitchLanguager" key="device_19_Details_suitable"></span>
+        </div>
+        <span class="state_tip autoSwitchLanguager" key="device_19_Details_suitable2"></span>
+        <div class="bottom bottom_suitable">
+        </div>
+        <div class="current_value_div">
+            <span id="current_value">0</span>
+            <span id="unit">LX</span>
+        </div>
+        <span id="describe"></span>
+    </section>
+    <section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="device_19_Details_Offline">设备已离线</span></section>
+    <section class="gw_toast autoSwitchLanguager" id="device_19_Gateway_Login">通过账号登录后才可查看</section>
+</body>
+    <script type="text/javascript" src="js/plus.js"></script>
+    <script type="text/javascript" src="js/gatewayCmd.js"></script>
+    <script type="text/javascript" src="js/tools.js"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/more.js"></script>
+    <script type="text/javascript">
+        var gwID,dID;
+        initlan()
+        plus.plusReady(function(){
+            $("#back").click(function(){
+                plus.tools.back(function(){})
+            })
+            plus.gatewayCmd.getDeviceInfo(function(data){
+                gwID = data.gwID;
+                dID = data.devID;
+                var name = data.name.indexOf("#$default$#") != -1 ? device_19_name + data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+                if(data.mode === 2){
+                    $(".mask_layer").show()
+                }else if(data.mode === 3){
+                    //原生做的操作
+                }else{
+                    $(".mask_layer").hide()
+                }
+                modeState(data)
+                initBtn()
+            })
+
+            plus.gatewayCmd.newDataRefresh(function(data){
+                if(data.cmd == "500" && data.devID == dID){
+                    var name = data.name.indexOf("#$default$#") != -1 ? device_19_name + data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+                    modeState(data)
+                }else if(data.cmd == "502" && data.devID == dID){
+                    if(data.name != undefined || data.name != ''){
+                        $(".deviceName").html(data.name)
+                    }
+                }
+                gwID = data.gwID;
+                dID = data.devID;
+            })
+        })
+
+        function initBtn(gwID,dID){
+            $("#statistics_btn").on("click",function(){
+                plus.tools.getLoginType(function(data) {
+                    if(data == "100") {
+                        window.location.href = "history.html";
+                    } else {
+                        $(".gw_toast").show()
+                        setTimeout(function() {
+                            $(".gw_toast").hide()
+                        }, 3000)
+                    }
+                })
+            })
+            $(".more").on("click",function(){
+                var moreData = getMoreConfig(dID,gwID)
+                plus.tools.more(moreData,function(){})
+            })
+        }
+
+//        function sendCmd(gwID,dID,endpointNumber,clusterId,commandId){
+//            var jsonData = {}
+//            jsonData.cmd = "501";
+//            jsonData.gwID = gwID;
+//            jsonData.devID = dID;
+//            jsonData.endpointNumber = endpointNumber;
+//            jsonData.clusterId = clusterId;
+//            jsonData.commandType = 1;
+//            jsonData.commandId = commandId;
+//            plus.gatewayCmd.controlDevice(jsonData,function(){})
+//        }
+
+        function modeState(result){
+            if(result.mode === 2){
+                $(".mask_layer").show()
+            }else if(result.mode === 3){
+                //原生做的操作
+            }else{
+                $(".mask_layer").hide()
+                for(var i = 0;i<result.endpoints[0].clusters.length;i++){
+                    var attributeId = result.endpoints[0].clusters[i].attributes[0].attributeId;
+                    var attributeValue = result.endpoints[0].clusters[i].attributes[0].attributeValue
+                    reloadUI(attributeId,attributeValue)
+//                  reloadUI(attributeId,attributeValue,result.extData[0])
+                }
+            }
+        }
+//        window.onload = function(){
+//            setTimeout(function(){
+//                reloadUI(0,1)
+//            },5000)
+//        };
+        function reloadUI(id,value){
+            switch (id){
+                case 32773:{
+                    if(value > 1000){
+                        $(".middle").addClass("middle_strong");
+                        $(".middle").removeClass("middle_suitable");
+                        $(".middle").removeClass("middle_weak");
+                        $(".state").addClass("state_strong");
+                        $(".state").removeClass("state_weak");
+                        $(".state").removeClass("state_suitable");
+                        $(".bottom").addClass("bottom_strong");
+                        $(".bottom").removeClass("bottom_weak");
+                        $(".bottom").removeClass("bottom_suitable");
+//                        setTimeout(function () {
+                            $(".state").html(lang_strong);
+                            $(".state_tip").html(lang_strong2);
+//                        },300);
+                    }else if(value >=500 && value <= 1000){
+                        $(".middle").addClass("middle_suitable");
+                        $(".middle").removeClass("middle_strong");
+                        $(".middle").removeClass("middle_weak");
+                        $(".state").addClass("state_suitable");
+                        $(".state").removeClass("state_weak");
+                        $(".state").removeClass("state_strong");
+                        $(".bottom").addClass("bottom_suitable");
+                        $(".bottom").removeClass("bottom_weak");
+                        $(".bottom").removeClass("bottom_strong");
+//                        setTimeout(function () {
+                            $(".state").html(lang_suitable);
+                            $(".state_tip").html(lang_suitable2);
+//                        },300);
+                    }else if(value < 500){
+                        $(".middle").addClass("middle_weak");
+                        $(".middle").removeClass("middle_strong");
+                        $(".middle").removeClass("middle_suitable");
+                        $(".state").addClass("state_weak");
+                        $(".state").removeClass("state_strong");
+                        $(".state").removeClass("state_suitable");
+                        $(".bottom").addClass("bottom_weak");
+                        $(".bottom").removeClass("bottom_strong");
+                        $(".bottom").removeClass("bottom_suitable");
+//                        setTimeout(function () {
+                            $(".state").html(lang_weak);
+                            $(".state_tip").html(lang_weak2);
+//                        },300);
+                    }
+//                    setTimeout(function () {
+                        $("#current_value").html(value)
+                        $("#describe").html(lang_lx);
+//                    },300);
+
+                }
+                    break;
+            }
+        }
+    </script>
+</html>

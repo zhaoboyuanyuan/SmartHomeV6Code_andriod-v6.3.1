@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>管家首页</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/sceneRelate.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body style="background: none;">
+		<header class="header">
+			<a href="javascript:window.history.back(-1)"></a>
+			<a id="chooseScene_tittle" class="autoSwitchLanguager" href="javascript:;">选择场景</a>
+			<a class="complete autoSwitchLanguager" id="finishDelay" href="javascript:;">完成</a>
+		</header>
+		<section class="binding" style="margin-top:6.4rem;">
+			<nav>
+			</nav>
+			<div id="chooseScene_no_list" class="no_list autoSwitchLanguager">没有可选择的场景</div>
+		</section>
+		<!--<section id="chooseScene_hint" class="toast autoSwitchLanguager">-->
+			<!--请选择一个场景-->
+		<!--</section>-->
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Housekeeper");
+		initlan();
+		plus.plusReady(function() {
+            plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+            });
+			//获取场景列表
+			plus.gatewayCmd.getSceneList(function(data) {
+				if(data.length > 0) {
+					edit(data)
+					//勾选场景
+					$(".binding li").on("click", function() {
+						$(this).find("i").addClass("on")
+						$(this).siblings().find("i").removeClass("on")
+					})
+				} else {
+					$(".no_list").show()
+				}
+			})
+		})
+		//点击完成
+		$(".complete").on("click", function() {
+			if($(".binding li").find(".on").length == 0) {
+                window.showDialog.show(languageUtil.getResource("chooseScene_hint"),3000)
+			} else {
+				//存入sceneID,name,icon
+				info.setItem("SceneID", $(".binding li").find(".on").parent().attr("data-id"))
+				info.setItem("SceneName", $(".binding li").find(".on").parent().text())
+				var icon = $(".binding li").find(".on").parent().find("em").css("background-image")
+				info.setItem("icon", icon.substr(icon.lastIndexOf(".") - 2, 2))
+				window.location = "setDelay_timeTask.html";
+			}
+		})
+
+		function edit(data) {
+			//编辑场景列表
+			$(".binding nav").html("")
+			data.map(function(list) {
+				var str = "<li data-id='" + list.sceneID + "'><em style='background:url(../../source/sceneIcon/scene_normal_" + list.sceneIcon + ".png) no-repeat left center;background-size:2.2rem auto;'></em>" + list.sceneName + "<i></i></li>";
+				$(".binding nav").append(str)
+			})
+		}
+	</script>
+
+</html>

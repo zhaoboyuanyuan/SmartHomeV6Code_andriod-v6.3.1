@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设备列表</title>
+		<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/scene.css" />
+		<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header" style="padding-bottom: 3.4rem">
+			<a href="circumstances.html"></a>
+			<a href="javascript:;" id="sceneList_select_device" class="autoSwitchLanguager">选择传感器</a>
+		</header>
+		<section class="get_list" style="margin-top:6.4rem;">
+			<div class="zone">
+				<div class="zoneMain">
+					<div class="room"><i class="zoneIcon autoSwitchLanguager" id="device_list_allAreas">全部分区</i></div>
+					<div class="className"><i class="zoneIcon autoSwitchLanguager" id="device_list_Categories">全部类别</i></div>
+				</div>
+				<div class="zoneList">
+					<nav class="zoneHide zoneOne">
+						<!--<li>全部分区</li>-->
+						<!--<li>测试区域2</li>-->
+						<!--<li>ces</li>-->
+						<!--<li>办公区</li>-->
+						<!--<li>测试123</li>-->
+						<!--<li>会议室1</li>-->
+						<!--<li>大礼堂</li>-->
+						<!--<li>大展架</li>-->
+					</nav>
+					<nav class="zoneHide zoneTwo">
+						<!--<li data-id="0">全部类别</li>-->
+						<!--<li data-id="1">智能门锁</li>-->
+						<!--<li data-id="2">摄像机</li>-->
+						<!--<li data-id="3">开关照明</li>-->
+						<!--<li data-id="4">插座</li>-->
+						<!--<li data-id="5">安防设备</li>-->
+						<!--<li data-id="6">环境监测</li>-->
+						<!--<li data-id="7">窗帘</li>-->
+						<!--<li data-id="8">智能遥控</li>-->
+						<!--<li data-id="9">中继器</li>-->
+						<!--<li data-id="10">控制器</li>-->
+						<!--<li data-id="11">背景音乐</li>-->
+						<!--<li data-id="12">健康管理</li>-->
+						<!--<li data-id="13">家用电器</li>-->
+					</nav>
+				</div>
+			</div>
+			<ul class="device-list">
+			</ul>
+			<div id="chooseSensor_no_list" class="no_list autoSwitchLanguager">没有可选择的传感器</div>
+		</section>
+	</body>
+	<script src="../js/deviceList.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/getCategoryList.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Housekeeper");
+        var reFlag;
+		initlan();
+		plus.plusReady(function() {
+            plus.gatewayCmd.androidBack(function () {
+                window.location = "circumstances.html";
+            });
+            if(reFlag)return;
+            reFlag = true;
+            window.categoryList = getCategoryList();
+            for(var j in categoryList){
+                var categoryStr = '<li data-id="'+categoryList[j].type+'">'+categoryList[j].name+'</li>';
+                $(".zoneTwo").append(categoryStr);
+            }
+            plus.gatewayCmd.getGroupList(function (result) {
+//                console.log(result);
+                $(".zoneOne").html("<li id=''>"+lang_allAreas+"</li><li id='0'>" + lang_group + "</li>");
+                for(var i in result){
+                    var str = '<li id="'+result[i].roomID+'">'+result[i].name+'</li>';
+                    $(".zoneOne").append(str);
+                }
+                $(".zoneMain div").on("click", function (e) {
+                    e.stopPropagation();
+                    var index = $(this).index();
+                    if ($(".zoneList nav").eq(index).css("display") == "block") {
+                        $(".zoneList").hide();
+                        $(".zoneList nav").eq(index).hide();
+                        $(this).find(".zoneIcon").css({
+                            "background": "url(../fonts/icon_down.png) no-repeat right center",
+                            "background-size": "1.4rem auto"
+                        })
+                    } else {
+                        $(".zoneList").show();
+                        $(".zoneList nav").eq(index).show().siblings().hide();
+                        $(this).find(".zoneIcon").css({
+                            "background": "url(../fonts/icon_up.png) no-repeat right center",
+                            "background-size": "1.4rem auto"
+                        }).parent().siblings().find(".zoneIcon").css({
+                            "background": "url(../fonts/icon_down.png) no-repeat right center",
+                            "background-size": "1.4rem auto"
+                        })
+                    }
+                });
+                $(document).on("click", function () {
+                    $(".zoneList").hide();
+                    $(".zoneList nav").hide();
+                    $(".zoneMain div").find("i").css({
+                        "background": "url(../fonts/icon_down.png) no-repeat right center",
+                        "background-size": "1.4rem auto"
+                    })
+                });
+            });
+			plus.gatewayCmd.getDeviceList(function(data) {
+				if(data.length > 0) {
+					$(".get_list ul").html('');
+                    var nameList = [];
+                    var name = '';
+                    var icon = '';
+                    var stateUrl = '';
+					for(var i = 0; i < data.length; i++) {
+                        if (window.deviceList[data[i].type]) {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? window.deviceList[data[i].type].name + data[i].name.split("#")[2] : data[i].name;
+                            icon = window.deviceList[data[i].type].icon;
+                            if(window.deviceList[data[i].type].triggerUrl){
+                                stateUrl = window.deviceList[data[i].type].triggerUrl;
+                                info.setItem('taskType', 'triggerTask');
+                                modeTest(i, data[i], name, icon, stateUrl);
+                            }
+                            if(data[i].type === 'A1' || data[i].type === 'Bv' || data[i].type === 'Bw' || data[i].type === 'At' || data[i].type === 'Cm'|| data[i].type === 'Cn'){
+                                nameList = [];
+                                if(data[i].endpoints){
+									var endpoints = data[i].endpoints;
+									for(var j in endpoints){
+										var endpointName = endpoints[j].endpointName ? endpoints[j].endpointName : endpoints[j].endpointNumber + lang_A1_way
+										nameList.push(endpointName);
+									}
+								}
+                                info.setItem("epNameList"+data[i].devID, JSON.stringify(nameList));
+							}
+						}
+                    }
+				} else {
+					$(".no_list").show()
+				}
+				$(".get_list ul li").on("click", function() {
+                    var deviceId = $(this).attr("data-id");
+                    var _this = $(this);
+                    plus.gatewayCmd.isDeviceDisalbe(deviceId,function(data){
+                        if(data === "YES"){
+                            alert(languageUtil.getResource("device_device_Disable"));//"您的设备已被禁止使用，请与售卖经销商联系"
+                        }else{
+                            var value = $(_this).find("p").html();
+                            var bgSrc = $(_this).find("i").css("background-image");
+                            info.setItem("deviceName", value);
+                            info.setItem("deviceID", $(_this).attr("data-id"));
+                            info.setItem("num", $(_this).attr("data-num"));
+                            info.setItem("type", $(_this).attr("data-type"));
+                            info.setItem("deviceIcon", bgSrc);
+                            info.setItem("editUrl", $(_this).attr("data-src"));
+                            //保存分区及类别
+                            info.setItem("triggerRoomID",zoneText);
+                            info.setItem("triggerCategoryID",category);
+                            info.setItem("triggerZoneName",zoneName);
+                            info.setItem("triggerCategoryName",categoryText);
+                            var aSrc = $(_this).attr("data-src");
+                            window.location = aSrc;
+						}
+                    });
+				})
+                var zoneText = (info.getItem("triggerRoomID") == "undefined" || info.getItem("triggerRoomID") == null) ? ""  : info.getItem("triggerRoomID");
+                var category = (info.getItem("triggerCategoryID") == "undefined" || info.getItem("triggerCategoryID") == null) ? "0"  : info.getItem("triggerCategoryID");
+                var zoneName = (info.getItem("triggerZoneName") == null) ? lang_allAreas : info.getItem("triggerZoneName");
+                var categoryText = (info.getItem("triggerCategoryName") == null) ? lang_categories : info.getItem("triggerCategoryName");
+                $(".device-list li").hide();
+                filterRoom(zoneText,category);
+                $(".room").find("i").text(zoneName);
+                $(".className").find("i").text(categoryText);
+                $(".zoneOne li").on("click", function () {
+                    $(".room").find("i").text($(this).text());
+                    zoneText = $(this).attr("id");
+                    zoneName = $(this).text()
+                    $(".device-list li").hide();
+                    filterRoom(zoneText,category);
+                });
+                $(".zoneTwo li").on("click", function () {
+                    $(".className").find("i").text($(this).text());
+                    category = $(this).attr("data-id");
+                    categoryText = $(this).text();
+                    $(".device-list li").hide();
+                    filterCategory(zoneText,category);
+                });
+			})
+		})
+		
+		function modeTest(i, data, name, icon, stateUrl) {
+			var modeState = ''
+			if(data.mode == "3") {
+				modeState = ""
+			} else {
+				if(data.mode == "2") {
+					modeState = lang_offLine
+				} else if(data.mode == "1" || data.mode == "4" || data.mode == "0") {
+					modeState = lang_onLine
+				}
+				var group = data.roomName == undefined ? lang_group : data.roomName
+                var roomID = (data.roomID == undefined || data.roomID == '') ? "0" : data.roomID
+                if(data.type == "Ad" || data.type == "C0"){
+                    for(var j=0; j<data.endpoints.length; j++){
+                        if(data.endpoints[j].clusters[0].clusterId == 1280){
+                            createList(name, icon, modeState, group, stateUrl, data.endpoints[j].endpointNumber, data.devID, data.type,data.cat,roomID)
+                        }
+                    }
+                }else{
+                    createList(name, icon, modeState, group, stateUrl, data.endpoints[0].endpointNumber, data.devID, data.type,data.cat,roomID)
+                }
+			}
+		}
+
+		function createList(name, src, mode, area, aSrc, endpNum, devID, type,category,roomID) {
+			var str = `<li data-num=${endpNum} data-id=${devID} data-type=${type} data-category=${category} data-src=${aSrc}>
+				<a href="javascript:;">
+				<i class="left" style="background:url(${src}) no-repeat center center;background-size:4.75rem auto;"></i>
+				<p style="line-height:2.8rem;">${name}</p>
+				<span class="roomName" data-room=${roomID}>[${area}]</span>
+				<br /><em>${mode}</em>
+				</a></li>`;
+			$(".get_list ul").append(str)
+		}
+	</script>
+
+</html>

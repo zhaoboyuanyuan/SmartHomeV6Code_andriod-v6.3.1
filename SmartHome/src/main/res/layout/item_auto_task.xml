@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_auto_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/default_padding_normal" />
+
+        <LinearLayout
+            android:id="@+id/item_auto_task"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/default_padding_normal"
+            android:layout_weight="1"
+            android:weightSum="2"
+            android:orientation="vertical"
+            android:tag="item_auto_task">
+
+            <TextView
+                android:id="@+id/tv_auto_task_name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                tools:text="定时任务"
+                android:lines="1"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                tools:text="09:00"
+                android:id="@+id/tv_auto_task_info"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:lines="1"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <ToggleButton
+            android:id="@+id/tb_auto_task"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/default_padding_small"
+            android:background="@drawable/selector_togglebutton"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:tag="reverse"
+            android:textOff=""
+            android:textOn="" />
+    </LinearLayout>
+
+</LinearLayout>

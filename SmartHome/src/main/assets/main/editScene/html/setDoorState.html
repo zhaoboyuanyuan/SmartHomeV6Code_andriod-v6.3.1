@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设置设备状态</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/editok.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<!--<section id="header_one">
+			<nav>
+				<li class="back">
+					<a href="javascript:;" onClick="javascript:history.back(-1);"></a>
+				</li>
+				<li class="text">
+					<a href="javascript:;" class="autoSwitchLanguager" key="setDeviceStatus" id="setDeviceState_tittle">设置设备状态</a>
+				</li>
+				<li class="finish" id="finishState">
+					<a href="javascript:;"></a>
+				</li>
+			</nav>
+		</section>-->
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:window.history.back(-1);"></a>
+				<a href="javascript:;" key="setDeviceStatus" class="autoSwitchLanguager">设置设备状态</a>
+				<a id="finishScene"  href="javascript:;"></a>
+			</div>
+		</header>
+		<section>
+			<ul class="set_list">
+				<li><b class="autoSwitchLanguager" key="fortify" id="fortify">设防</b><i></i></li>
+				<li><b class="autoSwitchLanguager" key="disarming" id="disarming">撤防</b><i></i></li>
+			</ul>
+		</section>
+	</body>
+	<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Scene");
+		initlan()
+		plus.plusReady(function() {
+		    plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+		    });
+			if(info.getItem("type") == "03" || info.getItem("type") == "A1" || info.getItem("type") == "a1" || info.getItem("type") == "B9") {
+				$(".set_list li").eq(0).html(lang_fortify + "<i></i>")
+				$(".set_list li").eq(1).html(lang_disarming + "<i></i>")
+			}else if(info.getItem("type") == "50" || info.getItem("type") == "Bt") {
+				$(".set_list li").eq(0).html(lang_openSingle + "<i></i>")
+				$(".set_list li").eq(1).html(lang_closeSingle + "<i></i>")
+			} else if(info.getItem("type") == "Ar" || info.getItem("type") == "65" || info.getItem("type") == "Bh" || info.getItem("type") == "Au") {
+				$(".set_list li").eq(0).html(lang_openSingle + "<i></i>")
+				$(".set_list li").eq(1).html(lang_closeSingle + "<i></i>")
+				var listcount = $(".set_list li").length;
+				if(listcount <= 2) {
+					$(".set_list").append("<li>" + lang_stopSingle + "<i></i></li>")
+				}
+			} else if(info.getItem("type") == "25") {
+                $(".set_list li").eq(0).html(lang_openSingle + "<i></i>")
+                $(".set_list li").eq(1).html(lang_closeSingle + "<i></i>")
+            } else if(info.getItem("type") == "Aj") {
+				$(".set_list li").eq(0).html(lang_switch_on + "<i></i>")
+				$(".set_list li").eq(1).html(lang_switch_off + "<i></i>")
+                var listcount = $(".set_list li").length;
+                if(listcount <= 2) {
+                    $(".set_list").append("<li>" + lang_switch_cut + "<i></i></li>")
+                }
+			} else if(info.getItem("type") == "At") {
+				$(".set_list li").eq(0).html(lang_switch_on + "<i></i>")
+				$(".set_list li").eq(1).html(lang_switch_off + "<i></i>")
+                var listcount = $(".set_list li").length;
+                if(listcount <= 2) {
+                    $(".set_list").append("<li>" + lang_switch_cut + "<i></i></li>")
+                }
+			} else if(info.getItem("type") == "Am") {
+				$(".set_list li").eq(0).html(lang_switch_on+ "<i></i>")
+				$(".set_list li").eq(1).html(lang_switch_off + "<i></i>")
+                var listcount = $(".set_list li").length;
+                if(listcount <= 2) {
+                    $(".set_list").append("<li>" + lang_switch_cut + "<i></i></li>")
+                }
+			} else if(info.getItem("type") == "An") {
+				$(".set_list li").eq(0).html(lang_switch_on + "<i></i>")
+				$(".set_list li").eq(1).html(lang_switch_off + "<i></i>")
+                var listcount = $(".set_list li").length;
+                if(listcount <= 2) {
+                    $(".set_list").append("<li>" + lang_switch_cut + "<i></i></li>")
+                }
+			} else if(info.getItem("type") == "Ao") {
+				$(".set_list li").eq(0).html(lang_switch_on + "<i></i>")
+				$(".set_list li").eq(1).html(lang_switch_off + "<i></i>")
+                var listcount = $(".set_list li").length;
+                if(listcount <= 2) {
+                    $(".set_list").append("<li>" + lang_switch_cut + "<i></i></li>")
+                }
+			} else if(info.getItem("type") == "61") {
+				$(".set_list li").eq(0).html(lang_switch_on + "<i></i>")
+				$(".set_list li").eq(1).html(lang_switch_off + "<i></i>")
+                var listcount = $(".set_list li").length;
+                if(listcount <= 2) {
+                    $(".set_list").append("<li>" + lang_switch_cut + "<i></i></li>")
+                }
+			} else if(info.getItem("type") == "62") {
+				$(".set_list li").eq(0).html(lang_switch_on + "<i></i>")
+				$(".set_list li").eq(1).html(lang_switch_off + "<i></i>")
+                var listcount = $(".set_list li").length;
+                if(listcount <= 2) {
+                    $(".set_list").append("<li>" + lang_switch_cut + "<i></i></li>")
+                }
+			} else if(info.getItem("type") == "63") {
+				$(".set_list li").eq(0).html(lang_switch_on + "<i></i>")
+				$(".set_list li").eq(1).html(lang_switch_off + "<i></i>")
+                var listcount = $(".set_list li").length;
+                if(listcount <= 2) {
+                    $(".set_list").append("<li>" + lang_switch_cut + "<i></i></li>")
+                }
+			}else if(info.getItem("type") == "77" || info.getItem("type") == "16"){
+                $(".set_list li").eq(0).html(lang_switch_on + "<i></i>")
+                $(".set_list li").eq(1).html(lang_switch_off + "<i></i>")
+            }else if(info.getItem("type") == "Ai"){
+                $(".set_list li").eq(0).html(lang_switch_on + "<i></i>")
+                $(".set_list li").eq(1).html(lang_switch_off + "<i></i>")
+                var listcount = $(".set_list li").length;
+                if(listcount <= 2) {
+                    $(".set_list").append("<li>" + lang_switch_cut + "<i></i></li>")
+                }
+			}else if(info.getItem("type") == "A6"){
+                $(".set_list li").eq(0).html(lang_play + "<i></i>")
+                $(".set_list li").eq(1).remove()
+            }else if(info.getItem("type") == "Aw") {
+                // 获取模组开关模式，"1"电铃模式，"0"开关模式
+           		var mode = info.getItem("AwMode"+info.getItem("deviceID"));
+           		if (mode == "1"){
+           			$(".set_list li").eq(0).html(aw_bell_short + "<i></i>")
+					$(".set_list li").eq(1).html(aw_bell_long + "<i></i>")
+	                var listCount = $(".set_list li").length;
+	                if(listCount <=2){
+	                    $(".set_list").append("<li>"+ aw_bell_stop +"<i></i></li>")
+	                }
+           		}else {
+           			$(".set_list li").eq(0).html(lang_switch_on + "<i></i>")
+					$(".set_list li").eq(1).html(lang_switch_off + "<i></i>")
+	                var listCount = $(".set_list li").length;
+	                if(listCount <=2){
+	                    $(".set_list").append("<li>"+ lang_switch_cut +"<i></i></li>")
+	                }
+           		}
+            }else if(info.getItem("type") == "Ax") {
+                $(".set_list li").eq(0).html(lang_switch_on + "<i></i>")
+                $(".set_list li").eq(1).html(lang_switch_off + "<i></i>")
+                var listcount = $(".set_list li").length;
+                if(listcount <= 2) {
+                    $(".set_list").append("<li>" + lang_switch_cut + "<i></i></li>")
+                }
+            }else if(info.getItem("type") == "CMICA4"){
+            	$(".set_list").html("")
+				var position = JSON.parse(info.getItem("smCameraPosition"))
+				for(var i = 0; i < position.length; i++) {
+					var htmlStr = "<li>"+position[i].name+"<i id="+position[i].id+"></i></li>"
+					$(".set_list").append(htmlStr)
+				}
+
+            }
+			$(".set_list li").on("click",function(){
+				$(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+				info.setItem("deviceState", $(this).text())
+
+				if (info.getItem("type") == "CMICA4") {
+					var code = $(this).find("i").attr("id")
+					if (code == "01") {
+						info.setItem("epData","0104061")
+					} else if (code == "02") {
+						info.setItem("epData","0104071")
+					} else if (code == "03") {
+						info.setItem("epData","0104081")
+					} else if (code == "04") {
+						info.setItem("epData","0104091")
+					}
+					info.setItem("description", $(this).text())
+
+				}
+
+				window.location = "addDelay.html"
+			})
+		})
+	</script>
+
+</html>

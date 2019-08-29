@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:paddingLeft="@dimen/default_padding_small"
+        android:id="@+id/tv_wifi_name"
+        style="@style/config_wifi_text"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/config_device_btn_height"
+        android:layout_marginTop="23dp"
+        android:background="@color/white"
+        android:drawablePadding="@dimen/default_padding_normal"
+        android:gravity="center_vertical" />
+
+    <RelativeLayout
+        android:id="@+id/rl_wifi_pwd_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_padding_small">
+
+        <LinearLayout
+            android:id="@+id/ll_wifi_pwd_show"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/config_device_btn_height"
+            android:layout_alignParentRight="true"
+            android:background="@color/white">
+
+            <CheckBox
+                android:id="@+id/cb_wifi_pwd_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:button="@drawable/selector_checkbox_wifi_pwd"
+                android:paddingRight="@dimen/default_padding_small" />
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/et_wifi_pwd"
+            style="@style/config_wifi_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/config_device_btn_height"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_toLeftOf="@id/ll_wifi_pwd_show"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:hint="@string/Input_Wifi_Password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:paddingLeft="@dimen/default_padding_small"
+            android:textSize="@dimen/default_editText_size"
+            android:textCursorDrawable="@null" />
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/btn_next_step"
+        style="@style/config_next_button"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/default_padding_large"
+        android:text="@string/Config_Next_Step" />
+</LinearLayout>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta charset="UTF-8">
+    <title>新风控制器</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/device.css">
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+
+<body>
+    <header class="header" style="position:fixed;left:0;top:0;">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_Oj_name" href="javascript:;">新风控制器</a>
+            <a class="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section class="content">
+        <div class="openState">
+            <div class="indoorCon comment">
+                <div class="indoorCon2">
+                    <dl>
+                        <dt class="autoSwitchLanguager" key="airsystem_Oj_outdoor">室外</dt>
+                        <dd class="dataOutside">--℃ / --％RH</dd>
+                    </dl>
+                    <dl class="insideState">
+                        <dt class="autoSwitchLanguager" key="airsystem_Oj_indoor">室内</dt>
+                        <dd class="dataInside">--℃ / --％RH</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="blastCapacity comment">
+                <h4 class="autoSwitchLanguager" key="airsystem_Oj_Wind_speed">风速</h4>
+                <ul class="line">
+                    <li class="auto" style="display:none;">
+                        <i id="node1" class="openBtn" child-mode="pass"></i>
+                        <hr id="line1" class="openLine" line-mode="pass" />
+                    </li>
+                    <li>
+                        <i id="node2" class="openBtn" child-mode="on"></i>
+                        <hr id="line2" class="openLine" line-mode="no" />
+                    </li>
+                    <li>
+                        <i id="node3" class="openBtn" child-mode="off"></i>
+                        <i id="node4" class="openBtn" child-mode="off"></i>
+                        <hr id="line3" class="openLine" line-mode="no" />
+                    </li>
+                </ul>
+                <ul class="text">
+                    <li class="auto" style="display:none;">
+                        <span>AUTO</span>
+                    </li>
+                    <li>
+                        <span class="autoSwitchLanguager" key="airsystem_Oj_Wind_speed_low">低风</span>
+                    </li>
+                    <li>
+                        <span class="autoSwitchLanguager" key="airsystem_Oj_Wind_speed_medium">中风</span>
+                    </li>
+                    <li>
+                        <span class="autoSwitchLanguager" key="airsystem_Oj_Wind_speed_high">高风</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="mode comment">
+                <h4 class="autoSwitchLanguager" key="airsystem_Oj_mode">模式</h4>
+                <ul class="modeList">
+                    <li class="modeBtn">
+                        <i></i>
+                        <span class="autoSwitchLanguager" key="airsystem_Oj_mode_Ventilation">换气</span>
+                    </li>
+                    <li class="modeBtn">
+                        <i></i>
+                        <span class="autoSwitchLanguager" key="airsystem_Oj_mode_Exhaust">排风</span>
+                    </li>
+                    <li class="modeBtn">
+                        <i></i>
+                        <span class="autoSwitchLanguager" key="airsystem_Oj_mode_smart">智能</span>
+                    </li>
+                    <li class="modeBtn">
+                        <i></i>
+                        <span class="autoSwitchLanguager" key="airsystem_Oj_mode_strong">强劲</span>
+                    </li>
+                    <li class="modeBtn">
+                        <i></i>
+                        <span class="autoSwitchLanguager" key="airsystem_Oj_mode_Power_saving">省电</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="controlBtn">
+                <button id="btnPower"></button>
+                <span class="autoSwitchLanguager textPower" key="airsystem_Oj_open">已开机，点击关机</span>
+            </div>
+        </div>
+        <!--<div class="closeState">-->
+        <!--<div class="indoorCon comment">-->
+        <!--<dl>-->
+        <!--<dt>室内</dt>-->
+        <!--<dd>27℃ / 79％RH</dd>-->
+        <!--</dl>-->
+        <!--<dl>-->
+        <!--<dt>室外</dt>-->
+        <!--<dd>27℃ / 79％RH</dd>-->
+        <!--</dl>-->
+        <!--</div>-->
+        <!--<div class="controlBtn closeControlBtn">-->
+        <!--<button></button>-->
+        <!--<span>已关机，点击开机</span>-->
+        <!--</div>-->
+        <!--</div>-->
+    </section>
+    <section class="mask_layer" style="display:none;"><i></i><span id="offLine" class="autoSwitchLanguager" key="offLine"></span></section>
+</body>
+<script type="text/javascript" src="../../source/js/rem.js"></script>
+<script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="lang/lang.js"></script>
+<script type="text/javascript" src="js/more.js"></script>
+<script type="text/javascript">
+    /**********************************************************************
+     *                              变量区域
+     **********************************************************************/
+    /**
+     * 控制器控制：
+     * @type {number}
+     * 0 关
+     * 1 开
+     */
+    var control04 = 2;
+    /**
+     * 风量控制：
+     * 应产品要求 去掉自动挡
+     * @type {number}
+     * 00 自动
+     * 01 低风
+     * 02 中风
+     * 03 高风
+     */
+    var blastCapacity = 1;
+    /**
+     * 运转模式控制
+     * @type {number}
+     * 01:换气
+     * 02:排风
+     * 03:智能
+     * 04:强劲
+     * 05:省电
+     */
+    var modeControl = 0;
+    /**
+     * 温湿度
+     */
+    var mTempIn = '--',
+        mTempOut = '--',
+        mHumiIn = '--',
+        mHumiOut = '--';
+    /**
+     * 是否为控制器
+     */
+    var isCtrl = false;
+    /**
+     * 常规需要参数
+     */
+    var deviceID, gwID, appID;
+    /**
+     * 是否有品牌信息
+     */
+    var hasBrand = false;
+    /**
+     * 是否有性能信息
+     */
+    var hasState = false;
+
+    var reloadtime;
+    /**********************************************************************
+     *                              初始化
+     **********************************************************************/
+    initlan();
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(function (result) {
+            deviceID = result.devID;
+            gwID = result.gwID;
+            getMoreConfig(deviceID);
+            modeState(result);
+            // 查询设备所有状态
+            sendCmd(0x0105, ['00']);
+            // 如果没有品牌信息
+            // 就查询
+            if (!hasBrand) {
+                sendCmd(0x0106, []);
+                console.log('查品牌');
+            } else {
+                console.log('不查品牌');
+            }
+            // 如果没有性能信息
+            // 就查询
+            if (!hasState) {
+                sendCmd(0x0107, []);
+                console.log('查性能');
+            } else {
+                console.log('不查性能');
+            }
+            var name = result.name.indexOf("#$default$#") != -1 ? device_Oj_name + result.name.split(
+                "#")[2] : result.name;
+            $(".deviceName").html(name);
+        });
+        rush_500();
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".content")[0].style.paddingTop = "8.6rem";
+            $(".content")[0].style.height = "calc(100% - 8.4rem)";
+        }
+    });
+
+    function rush_500() {
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            if (data.cmd == "500" && data.devID == deviceID) {
+                var name = data.name.indexOf("#$default$#") != -1 ? device_Oj_name + data.name.split("#")[2] :
+                    data.name;
+                $(".deviceName").html(name);
+                modeState(data);
+            } else if (data.cmd == "502" && data.devID == deviceID) {
+                if (data.name != undefined || data.name != '') {
+                    $(".deviceName").html(data.name)
+                }
+            }
+        });
+    }
+
+    function timerRefresh() {
+        clearInterval(reloadtime);
+        reloadtime = setInterval(function () {
+            refreshAllInfo();
+        }, 5000);
+    }
+
+    function modeState(result) {
+        if (result.mode === 2) {
+            $(".mask_layer").show()
+        } else if (result.mode === 3) {
+            //原生做的操作
+        } else {
+            $(".mask_layer").hide();
+            handleEp(result.endpoints);
+            updateType();
+        }
+    }
+
+    // 处理 endpoints
+    // 遍历解析
+    function handleEp(endpoints) {
+        timerRefresh();
+        endpoints.forEach(function (endpoint) {
+            var clusters = endpoint.clusters;
+            clusters.forEach(function (cluster) {
+                var attributes = cluster.attributes;
+                attributes.forEach(function (attribute) {
+                    var attributeId = attribute.attributeId;
+                    var attributeValue = attribute.attributeValue;
+                    reloadUI(attributeId, attributeValue);
+                })
+            })
+        });
+    }
+
+    function reloadUI(id, value) {
+        console.log("Id: " + id.toString(16) + "\t\tValue: " + value);
+        switch (id) {
+            case 0x8101:
+                if(value && value != control04){
+                    // 室内机:0停止 1运转
+                    control04 = parseInt(value);
+                    //更新 控制器页面变化
+                    updateCtrlBtn(control04);
+                }
+                break;
+            case 0x8102:
+                //运转模式上报:01:换气 02:排风 03:智能 04:强劲 05:省电
+                if(value && value != modeControl){
+                    modeControl = parseInt(value);
+                    //更新模式
+                    console.log('模式:' + value);
+                    console.log('模式:' + modeControl);
+                    updateMode(modeControl);
+                }
+                break;
+            case 0x8103:
+                //风量上报:00:自动 01:低档 02:中档 03:高档
+                if(value && value != blastCapacity){
+                    blastCapacity = parseInt(value);
+                    //更新风量状态
+                    updateWindState(blastCapacity);
+                }
+                break;
+            case 0x810B:
+                hasState = true;
+                // 翻译器
+                if (value.endsWith('00')) {
+                    isCtrl = false;
+                } else {
+                    isCtrl = true;
+                }
+                updateType();
+                break;
+            case 0x8104:
+                // 0x8104   室外温度上报
+                if (value == '') {
+                    value = '--';
+                }
+                mTempOut = value;
+                updateData();
+                break;
+            case 0x8105:
+                // 0x8105   室外湿度上报
+                if (value == '') {
+                    value = '--';
+                }
+                mHumiOut = value;
+                updateData();
+                break;
+            case 0x8106:
+                // 0x8106   室内温度上报
+                if (value == '') {
+                    value = '--';
+                }
+                mTempIn = value;
+                updateData();
+                break;
+            case 0x8107:
+                // 0x8107   室内湿度上报
+                if (value == '') {
+                    value = '--';
+                }
+                mHumiIn = value;
+                updateData();
+                break;
+            case 0x810c:
+                // 品牌信息
+                hasBrand = true;
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**********************************************************************
+     *                              更新状态
+     **********************************************************************/
+    function updateType() {
+        if (isCtrl) {
+            // 控制器
+            $('.insideState').show();
+            $('.auto').hide();
+            $('.line li').css('width', '50%');
+            $('.text li').css('width', '33.33333%');
+
+            $('.text').css({
+                'margin-left': '-13%',
+                'width': '126%'
+            });
+        } else {
+            // 翻译器
+            $('.insideState').hide();
+            $('.auto').hide();
+            $('.line li').css('width', '50%');
+            $('.text li').css('width', '33.33333%');
+
+            $('.text').css({
+                'margin-left': '-13%',
+                'width': '126%'
+            });
+        }
+    }
+
+    // 更新控制器
+    function updateCtrlBtn(value) {
+        // 关机
+        if (value === 0) {
+            $(".blastCapacity").hide();
+            $(".mode").hide();
+
+            $('.textPower').html(languageUtil.getResource("airsystem_Oj_close"));
+            $('#btnPower').css('background-color', '#8dd652');
+        } else if (value === 1) {
+            $(".blastCapacity").show();
+            $(".mode").show();
+
+            $('.textPower').html(languageUtil.getResource("airsystem_Oj_open"));
+            $('#btnPower').css('background-color', '#ff8212');
+        }
+    }
+    // 更新温湿度
+    function updateData() {
+        $('.dataInside').html(mTempIn + '℃ / ' + mHumiIn + '%RH');
+        $('.dataOutside').html(mTempOut + '℃ / ' + mHumiOut + '%RH');
+    }
+
+    //更新模式
+    function updateMode(value) {
+        //更新 i标签中的icon
+        // $(".modeList li").find("i").css('background', 'pink');
+        // $(".modeList li").eq(value).find("i").css('background', 'red');
+
+        $(".modeList li").find("i").attr('mode-state', '');
+        $(".modeList li").eq(value - 1).find("i").attr('mode-state', 'on');
+    }
+    //更新风量
+    function updateWindState(value) {
+        if (isCtrl) {
+            if (value == 0) {
+                value = 1;
+            }
+        }
+        switch (value) {
+            case 1:
+                $('.openBtn').attr('child-mode', '');
+                $('.openLine').attr('line-mode', '');
+
+                $('#node2').attr('child-mode', 'on');
+                $('#line1').attr('line-mode', 'no');
+                $('#line2').attr('line-mode', 'no');
+                break;
+            case 2:
+                $('.openBtn').attr('child-mode', '');
+                $('.openLine').attr('line-mode', '');
+
+                $('#node2').attr('child-mode', 'pass');
+                $('#node3').attr('child-mode', 'on');
+                $('#line1').attr('line-mode', 'pass');
+                $('#line2').attr('line-mode', 'pass');
+                break;
+            case 3:
+                $('.openBtn').attr('child-mode', 'pass');
+                $('.openLine').attr('line-mode', 'pass');
+
+                $('#node4').attr('child-mode', 'on');
+                break;
+        }
+    }
+
+    /**********************************************************************
+     *                              事件绑定
+     **********************************************************************/
+    $('#back').on('click', function () {
+        plus.tools.back();
+    });
+    $('.more').on('click', function () {
+        plus.tools.more(moreConfig, function () {})
+    });
+
+    $('.openBtn').on('click', function () {
+        var id = $(this).attr('id').substr(4, 1);
+        console.log(["0" + (id - 1)]);
+        sendCmd(0x0104, ["0" + (id - 1)]);
+        setTimeout(function () {
+            // 查询设备所有状态
+            sendCmd(0x0105, ['00']);
+        }, 1000)
+
+        if (modeControl == 3 || modeControl == 4 || modeControl == 5) {
+            plus.tools.toast(languageUtil.getResource("airsystem_Oj_not_support"));
+        }
+        // TODO 测试代码
+        updateWindState((id - 1));
+    });
+
+    $('.modeList li').on('click', function () {
+        var index = $(this).index();
+        console.log(index);
+        sendCmd(0x0103, ["0" + (index + 1)]);
+        setTimeout(function () {
+            // 查询设备所有状态
+            sendCmd(0x0105, ['00']);
+        }, 1000)
+
+        // TODO 测试代码
+        updateMode((index + 1));
+    });
+
+    $('#btnPower').on('click', function () {
+        console.log('power');
+        if (control04 == 0) {
+            sendCmd(0x0102, ['1']);
+        } else {
+            sendCmd(0x0102, ['0']);
+        }
+        setTimeout(function () {
+            // 查询设备所有状态
+            sendCmd(0x0105, ['00']);
+        }, 1000)
+    });
+
+    /**********************************************************************
+     *                              公共方法
+     **********************************************************************/
+
+
+    // 发送命令
+    function sendCmd(commandId, parameter) {
+        console.log('sendCmd: ' + commandId.toString(16) + ', ' + parameter);
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = deviceID;
+        jsonData.endpointNumber = 1;
+        jsonData.commandType = 1;
+        jsonData.clusterId = 0x0203;
+        jsonData.commandId = commandId;
+        if (parameter) {
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData, function () {})
+    }
+
+    function refreshAllInfo() {
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = deviceID;
+        jsonData.endpointNumber = 1;
+        jsonData.clusterId = 0x0203;
+        jsonData.commandType = 1;
+        jsonData.commandId = 0x0105;
+
+        plus.gatewayCmd.controlDevice(jsonData, function () {});
+    }
+</script>
+
+</html>

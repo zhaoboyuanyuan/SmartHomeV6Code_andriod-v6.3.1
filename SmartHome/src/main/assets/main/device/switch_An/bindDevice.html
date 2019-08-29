@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>绑定设备</title>
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/bindDevice.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	</head>
+
+	<body>
+		<header class="header">
+			<a class="back" href="javascript:;"></a>
+			<a class="deviceName autoSwitchLanguager" href="javascript:;" key="BindDeviceTitle">绑定设备</a>
+			<a class="done" href="javascript:;"></a>
+		</header>
+		<section class="get_list">
+			<ul>
+			</ul>
+			<div class="no_list autoSwitchLanguager" key="noDevice" id="not_device">没有可选择的设备</div>
+		</section>
+	</body>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("deviceAn");
+		var deviceList;
+		var deviceID = info.getItem("deviceID");
+		initlan()
+		plus.plusReady(function() {
+			plus.gatewayCmd.getDeviceInfo(function(data) {
+				info.setItem("gwID", data.gwID);
+			});
+			plus.gatewayCmd.getDeviceList(function(data) {
+				if(data.length > 0) {
+					deviceList = data;
+					$(".get_list ul").html('')
+					var modeState = ''
+					var name = '';
+					var icon = '';
+					var stateUrl = ''
+					for(var i = 0; i < data.length; i++) {
+						if(data[i].type == "Am") {
+							name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_am + data[i].name.split("#")[2] : data[i].name;
+							icon = 'fonts/icon_am.png';
+							stateUrl = "bindDeviceChooseSwitch.html";
+							modeTest(i, data, name, icon, stateUrl)
+						} else if(data[i].type == "An" && data[i].devID != deviceID) {
+							name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_an + data[i].name.split("#")[2] : data[i].name;
+							icon = 'fonts/icon_an.png';
+							stateUrl = "bindDeviceChooseSwitch.html";
+							modeTest(i, data, name, icon, stateUrl)
+						} else if(data[i].type == "Ao") {
+							name = data[i].name.indexOf("#$default$#") != -1 ? lang_name_ao + data[i].name.split("#")[2] : data[i].name;
+							icon = 'fonts/icon_ao.png';
+							stateUrl = "bindDeviceChooseSwitch.html?";
+							modeTest(i, data, name, icon, stateUrl)
+						}
+					}
+				} else {
+					$(".no_list").show()
+				}
+			})
+
+			function modeTest(i, data, name, icon, stateUrl) {
+				var modeState = ''
+				if(data[i].mode == "3") {
+					//					modeState = "设备主动退网"
+				} else {
+					if(data[i].mode == "2") {
+						modeState = lang_offLine
+					} else {
+						modeState = lang_onLine
+					}
+					info.setItem("" + data[i].type, data[i]);
+					createList(i, name, icon, modeState, (data[i].roomName == undefined || data[i].roomName == null || data[i].roomName == "") ? lang_un_room : data[i].roomName, stateUrl, data[i].endpoints[0].endpointNumber, data[i].devID, data[i].type)
+				}
+			}
+			$(".back").on("click", function() {
+				info.setItem("flag", "0")
+				//                window.location = "switch_An.html"
+				plus.tools.goBack(function() {
+
+				})
+			});
+
+			function createList(i, name, src, mode, area, aSrc, endpNum, devID, type) {
+				var str = '<li data-num="' + endpNum + '" data-id="' + devID + '" data-type="' + type + '"><a class="item" index="' + i + '" href="javascript:;"><i class="left" style="background:url(' + src + ') no-repeat center center;background-size:4.75rem auto;"></i><div class="right"><p>' + name + '</p><br /><em>' + mode + '</em><span>[' + area + ']</span></div></a></li>'
+				$(".get_list ul").append(str)
+				$(".item").on("click", function() {
+					info.setItem("data", JSON.stringify(deviceList[$(this).attr("index")]));
+					window.location = "bindDeviceChooseSwitch.html"
+				})
+			}
+		})
+	</script>
+
+</html>

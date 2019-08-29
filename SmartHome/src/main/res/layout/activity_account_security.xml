@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/item_account_security_phone"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_ripper_effect">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:text="@string/AccountSecurity_PhoneNumber"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+
+        <ImageView
+            android:id="@+id/item_account_security_phone_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/system_intent_right" />
+
+        <TextView
+            android:id="@+id/item_account_security_phone_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:layout_toLeftOf="@id/item_account_security_phone_iv"
+            android:textSize="@dimen/mine_wl_text_size" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_account_security_mail"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/bg_ripper_effect">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:text="@string/AccountSecurity_Email"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+
+        <ImageView
+            android:id="@+id/item_account_security_mail_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/system_intent_right" />
+
+        <TextView
+            android:id="@+id/item_account_security_mail_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:layout_toLeftOf="@id/item_account_security_mail_iv"
+            android:text="@string/AccountSecurity_Unbind"
+            android:textSize="@dimen/mine_wl_text_size" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_account_security_account_info"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_ripper_effect">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:text="@string/AccountSecurity_Pwd"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+
+        <ImageView
+            android:id="@+id/item_account_security_account_info_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/system_intent_right" />
+
+        <TextView
+            android:id="@+id/item_account_account_info_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:layout_toLeftOf="@id/item_account_security_account_info_iv"
+            android:text="@string/Not_set"
+            android:textSize="@dimen/mine_wl_text_size" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_account_security_bind_wechat"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_ripper_effect">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:text="@string/AccountSecurity_Bunding_Wechat"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+
+        <ToggleButton
+            android:id="@+id/item_bind_wechat"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@android:color/transparent"
+            android:button="@drawable/button_toggle_switch"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_account_security_bind_qq"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/bg_ripper_effect">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:text="@string/AccountSecurity_Bunding_QQ"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+
+        <ToggleButton
+            android:id="@+id/item_bind_qq"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@android:color/transparent"
+            android:button="@drawable/button_toggle_switch"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_account_security_bind_weibo"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/bg_ripper_effect">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:text="@string/AccountSecurity_Bunding_Weibo"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mine_text_size" />
+
+        <ToggleButton
+            android:id="@+id/item_bind_weibo"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@android:color/transparent"
+            android:button="@drawable/button_toggle_switch"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/v6_line" />
+    </RelativeLayout>
+</LinearLayout>

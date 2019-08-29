@@ -1,0 +1,31 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_A2_name = "二路輸出型轉換器";
+$lang.device_A2_add_button = "添加控制按鍵";
+$lang.device_A2_button_name_status = "按鍵名稱與狀態";
+$lang.device_A2_name_1 = "名稱";
+$lang.device_A2_enter_name = "請輸入名稱";
+$lang.device_A2_status = "狀態";
+$lang.device_A2_way = "路";
+$lang.device_A2_action = "作動";
+$lang.device_A2_action_close = "關閉";
+$lang.device_A2_action_open = "斷開";
+$lang.device_A2_action_close_open = "關閉後斷開";
+$lang.device_A2_action_open_close = "斷開後關閉";
+$lang.device_A2_cancel = "取消";
+$lang.device_A2_ok = "確定";
+$lang.device_A2_close_time = "關閉時間";
+$lang.device_A2_open_time = "斷開時間";
+$lang.device_A2_s = "秒";
+$lang.device_A2_save = "儲存";
+$lang.device_A2_re_edit = "重新編輯";
+$lang.device_A2_delete = "刪除";
+$lang.device_A2_delete_sure = "要刪除嗎？";
+$lang.device_A2_sent = "指令已送出";
+$lang.device_A2_Offline = "設備已離線";
+$lang.device_A2_set = "設定";
+$lang.device_A2_initial_action = "初始作動設定";
+$lang.device_A2_initial_action_hint = "註：當設定的按鈕作動與實際設備相反時，可通過調整初始作動來保持一致";

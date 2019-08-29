@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SW16内嵌式开关</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body style="width:100%;height:100%;">
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_Ai_name" href="javascript:;">DIN开关计量版</a>
+            <a class="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section class="content">
+        <div class="handle">
+            <ul class="doing-handle">
+                <li class="state">OFF</li>
+                <li class="state">ON</li>
+                <li class="slideBlock" data-id="1"></li>
+            </ul>
+            <span class="theLast"></span>
+        </div>
+        <div class="handle-btn">
+            <a id="delay" data-state="on" href="javascript:;"><i class="autoSwitchLanguager" key="device_Delay_off">延时关闭</i></a>
+            <a id="history" href="javascript:;"><i class="autoSwitchLanguager" key="device_Datastatistics">数据统计</i></a>
+        </div>
+        <ul class="handle-data">
+            <li><b class="autoSwitchLanguager" key="device_Realtime_power">实时功率</b><span>--<em>W</em></span></li>
+            <li><b class="autoSwitchLanguager" key="device_Accumulated_electricity">累计电量</b><span>--<em>kW.h</em></span></li>
+        </ul>
+    </section>
+    <section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="offLine">设备已离线</span></section>
+    <section class="gw_toast autoSwitchLanguager" key="device_toast">通过账号登录后才可查看</section>
+</body>
+    <script type="text/javascript" src="js/plus.js"></script>
+    <script type="text/javascript" src="js/gatewayCmd.js"></script>
+    <script type="text/javascript" src="js/tools.js"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/alert.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/more.js"></script>
+    <script type="text/javascript">
+        var state = 1;
+        var gwID,dID;
+        var timer;
+        var cost = "W.h";
+        initlan();
+        plus.plusReady(function(){
+            $("#back").click(function(){
+                plus.tools.back(function(){})
+            });
+            plus.gatewayCmd.getDeviceInfo(function(data){
+//                modeState(data)
+                gwID = data.gwID;
+                dID = data.devID;
+                var name = data.name.indexOf("#$default$#") != -1 ? device_Ai_name + data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+                if(data.mode === 2){
+                    $(".mask_layer").show()
+                }else if(data.mode === 3){
+                    //原生做的操作
+                }else{
+                    $(".mask_layer").hide()
+                }
+                sendCmd(gwID,dID,1,6,2,'')
+                control(gwID,dID)
+                $(".more").on("click",function(){
+                    var moreData = getMoreConfig(dID,gwID)
+                    plus.tools.more(moreData,function(){})
+                })
+            });
+            plus.gatewayCmd.newDataRefresh(function(data){
+                if(data.cmd == "500" && data.devID == dID){
+                    var name = data.name.indexOf("#$default$#") != -1 ? device_Ai_name + data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+                    modeState(data)
+                    isSendCmd = false;
+                }else if(data.cmd == "502" && data.devID == dID){
+                    if(data.name != undefined || data.name != ''){
+                        $(".deviceName").html(data.name)
+                    }
+                }
+                gwID = data.gwID;
+                dID = data.devID;
+            });
+            $("#delay").on("click",function(){
+                console.log($(this).attr("data-state"))
+                window.location = "device_Ai_delay.html?state="+ $(this).attr("data-state") + "&gwID=" + gwID + "&dID="+ dID;
+            });
+            //判断网关登录还是云登录
+            $("#history").on("click", function() {
+                plus.tools.getLoginType(function(data) {
+                    if(data == "100") {
+                        window.location = "device_Ai_history.html?cost="+cost;
+                    } else {
+                        $(".gw_toast").show()
+                        setTimeout(function() {
+                            $(".gw_toast").hide()
+                        }, 3000)
+                    }
+                })
+            });
+        });
+        function control(gwID,dID){
+            $(".doing-handle").on("click",function(){
+                if($(".slideBlock").attr("data-id") == '0'){
+                    $(".slideBlock").attr("data-id",1);
+                    $(".slideBlock").animate({
+                        top:'0.9rem'
+                    },500);
+                    $(".doing-handle").css("background","#8dd652");
+                    $("#delay").attr("data-state","off")
+                    $("#delay").html("<i>"+device_delay_off+"</i>");
+                }else if($(".slideBlock").attr("data-id") == '1'){
+                    $(".slideBlock").attr("data-id",0);
+                    $(".slideBlock").animate({
+                        top:'9.9rem'
+                    },500);
+                    $(".doing-handle").css("background","#dadce2");
+                    $("#delay").attr("data-state","on")
+                    $("#delay").html("<i>"+device_delay_on+"</i>")
+                }
+                sendCmd(gwID,dID,1,6,parseInt($(".slideBlock").attr("data-id")),'')
+            });
+        }
+        function sendCmd(gwID,dID,endpointNumber,clusterId,commandId,parameter){
+            var jsonData = {}
+            jsonData.cmd = "501";
+            jsonData.gwID = gwID;
+            jsonData.devID = dID;
+            jsonData.endpointNumber = endpointNumber;
+            jsonData.clusterId = clusterId;
+            jsonData.commandType = 1;
+            jsonData.commandId = commandId;
+            if(parameter){
+                jsonData.parameter = [parameter]
+            }
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+        }
+        function modeState(result){
+            if(result.mode === 2){
+                $(".mask_layer").show()
+            }else if(result.mode === 3){
+                //原生做的操作
+            }else{
+                $(".mask_layer").hide()
+                for(var i = 0;i<result.endpoints[0].clusters.length;i++){
+                    var attributeId = result.endpoints[0].clusters[i].attributes[0].attributeId;
+                    var attributeValue = result.endpoints[0].clusters[i].attributes[0].attributeValue
+                    reloadUI(attributeId,attributeValue,JSON.parse(atob(result.extData))[0])
+//                    reloadUI(attributeId,attributeValue,result.extData[0])
+                }
+            }
+        }
+//        reloadUI(0,0,"1234")
+//        reloadUI(0x8002,"01")
+        function reloadUI(id,value,list){
+            switch (id){
+                case 0:{
+                    clearInterval(timer);
+                    $(".theLast").hide();
+                    //value 0 表示开关关闭状态
+                    //1 表示开关打开状态
+                    //$(".handle_icon i")切换背景图
+                    if(value == "0"){
+                        $(".slideBlock").attr("data-id",0);
+                        $("#delay").attr("data-state","on")
+                        $(".slideBlock").animate({
+                            top:'9.9rem'
+                        },500);
+                        $(".doing-handle").css("background","#dadce2");
+                        $("#delay").html("<i>"+device_delay_on+"</i>")
+                        $(".handle-data li").eq(0).find("span").html("--<em>W</em>");
+                        countDown(device_time_on,list)
+                    }else if(value == "1"){
+                        $(".slideBlock").attr("data-id",1);
+                        $("#delay").attr("data-state","off")
+                        $(".slideBlock").animate({
+                            top:'0.9rem'
+                        },500);
+                        $(".doing-handle").css("background","#8dd652");
+                        $("#delay").html("<i>"+device_delay_off+"</i>");
+                        countDown(device_time_off,list)
+                    }
+                }
+                    break;
+                case 32769:{
+                    /*aaaa:当前电流(16进制,扩大100倍，单位：A)
+                     yyyyyy:当前功率(16进制,扩大10倍,单位：W)
+                     zzzzzz:当前的累计电量(16进制,单位WH)
+                     cc:是否过载，01 功率过载，10电流过载，11电流大于81A，严重过载
+                     */
+                    var yyyy = parseInt(value.substr(4,6),16)
+                    var zzzzzz = parseInt(value.substr(10,6),16)
+                    if(yyyy == 0){
+                        yyyy = yyyy+".0"
+                    } else {
+                    	    yyyy = yyyy/10.0
+                    }
+                    if(zzzzzz > 1000){
+                        zzzzzz = (zzzzzz/1000).toFixed(1) + "<em>kW.h</em>";
+                        cost = "kW.h";
+                    }else{
+                        zzzzzz = zzzzzz.toFixed(1) + "<em>W.h</em>"
+                        cost = "W.h";
+                    }
+                    if($(".slideBlock").attr("data-id") == 0){
+                        $(".handle-data li").eq(0).find("span").html("--<em>W</em>")
+                    }else{
+                        $(".handle-data li").eq(0).find("span").html(yyyy+"<em>W</em>")
+                    }
+                    $(".handle-data li").eq(1).find("span").html(zzzzzz)
+                }
+                    break;
+                case 32770:{
+                    /*00：表示消除报警
+                     01：功率过载
+                     10：电流过载*/
+                    //只监听消除报警和功率过载
+                    //功率过载时弹出alert
+                    //消除过载消失alert
+                    if(value == "00"){
+                        cancel()
+                    }else if(value == "01"){
+                        editPopup({"num":2,"txt":device_titleTxt,"isClick":1,"aTxt1":device_sure})
+                        $(".alertBtn a").on("click",function(){
+                            cancel()
+                        })
+                    }
+                }
+                    break;
+                case 32771:{
+                    /*表示设置的最大保护功率值*/
+                }
+                    break;
+                case 32772:{
+                    /*为设置的功率上报阀值*/
+                }
+                    break;
+                case 32773:{
+                    /*清除累计电量*/
+                    $(".handle-data li").eq(1).find("span").html("0<em>W.h</em>")
+                    cost = "W.h";
+                }
+                    break;
+                default:{
+
+                }
+                    break;
+            }
+        }
+
+        function cancel(){
+            if($(".sect_content")){
+                $(".sect_content").remove();
+            }
+        }
+//        countDown("后开启",{"delaySec": "5075", "endpointNumber": "1"})
+        function countDown(str,list){
+            if(list.delaySec != 0){
+                var date = new Date().getTime();
+                var minute = parseInt(list.delaySec)*1000;
+                var hour = (new Date(date+minute).getHours()+"").length == 1 ? "0" + new Date(date+minute).getHours() : new Date(date+minute).getHours()
+                var min = (new Date(date+minute).getMinutes() +"").length == 1 ? "0" + new Date(date+minute).getMinutes() : new Date(date+minute).getMinutes();
+                $(".theLast"). show();
+                $(".theLast").html(str+" "+hour+":"+min)
+            }else{
+                $(".theLast").hide()
+            }
+        }
+    </script>
+</html>

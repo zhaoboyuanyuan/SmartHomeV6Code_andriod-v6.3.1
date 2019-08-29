@@ -1,0 +1,39 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.DoorLookInputPWD = "請輸入密碼";
+$lang.DoorLookOpenTouchIDTip = "點擊開啟指紋認證";
+$lang.DoorLookFailed = "操作失敗，請重試";
+$lang.DoorLookTouchIDTip = "您可以通過Touch ID 已有指紋開鎖";
+$lang.DoorLookNeverNotify = "不再提醒";
+$lang.DoorLookToSetting = "去設置";
+$lang.DoorLookPWDERRORTip = "開鎖密碼已被修改，請先驗證開鎖密碼後重試";
+$lang.DoorLookOK = "確定";
+$lang.DoorLookDeviceOffLine = "設備已離線";
+$lang.DoorLookInsure = "上保險";
+$lang.DoorLookRemoveInsure = "解除保險";
+$lang.DoorLookRemoveLock = "解除反鎖";
+$lang.DoorLookLocked = "門已反鎖";
+$lang.DoorLookOpen = "門鎖已開";
+$lang.DoorLookPWDERROR = "密碼錯誤，請重試";
+$lang.DoorLookForcedLock = "強制上鎖";
+$lang.DoorLookAutoLock = "自動上鎖";
+$lang.DoorLookRegisterPWD = "登記密碼";
+$lang.Log = "日誌";
+$lang.Alarm = "報警消息";
+$lang.DoorLockTittle = "智能門鎖";
+$lang.alarmSet_js_32 = "開鎖中...";
+$lang.device_op_normal_04 = "密碼";
+$lang.device_op_temp_03 = "密碼有效期";
+$lang.DoorLookDeleteSuccessed = "刪除成功";
+$lang.device_70_User_Management = "用戶管理";
+$lang.device_70_set_name = "設定暱稱";
+$lang.device_70_set_name_hint = "在門鎖上新增指紋或卡片後，請先操作一次開鎖，使用者資訊會同步到下方列表，可為使用者設定暱稱";
+$lang.device_70_fingerprint = "指紋";
+$lang.device_70_card = "卡片";
+$lang.device_70_delete_ok = "確定刪除嗎？";
+$lang.device_70_no_user = "無使用者資訊";
+$lang.device_70_cancel = "取消";
+$lang.device_70_delete = "刪除";

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:id="@+id/rl_device_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="@dimen/default_padding_normal"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Device_Rename" />
+
+            <TextView
+                android:id="@+id/tv_device_name"
+                style="@style/device_setting_text"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/default_padding_normal"
+                android:layout_marginRight="@dimen/default_padding_small"
+                android:layout_toLeftOf="@+id/iv_arrows"
+                android:ellipsize="end"
+                android:gravity="center_vertical|right"
+                android:maxLines="1"
+                android:paddingLeft="@dimen/default_padding_normal" />
+
+            <ImageView
+                android:id="@+id/iv_arrows"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_device_information"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="1dp"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Device_Info" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_property"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/config_device_btn_height"
+            android:layout_marginTop="20dp"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="小区物业" />
+
+
+            <ImageView
+                android:id="@+id/iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_safe_center"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="1dp"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="安全中心" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_call_record"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="1dp"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Message_Center_Log" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+        </RelativeLayout>
+
+
+        <Button
+            android:id="@+id/btn_device_unbind"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="@dimen/default_padding_normal"
+            android:background="@color/white"
+            android:gravity="center"
+            android:outlineProvider="none"
+            android:text="@string/Delete_Camera"
+            android:textColor="@color/red"
+            android:textSize="@dimen/default_text_size" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

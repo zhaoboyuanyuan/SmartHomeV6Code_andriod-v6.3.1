@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/transparent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/v6_line" />
+
+    <cc.wulian.smarthomev6.support.customview.ClearEditText
+        android:id="@+id/et_register_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:hint="@string/Register_tips01"
+        android:inputType="textVisiblePassword"
+        android:lines="1"
+        android:maxLength="16"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp"
+        android:textSize="@dimen/default_editText_size" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/v6_line" />
+
+    <LinearLayout
+        android:id="@+id/item_pwd_hint"
+        android:layout_width="match_parent"
+        android:layout_height="22dp"
+        android:layout_marginTop="5dp"
+        android:visibility="invisible"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_pwd_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:ellipsize="end"
+            android:text="@string/Register_tips11"
+            android:textColor="@color/v6_text_secondary"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_pwd_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/icon_three_01"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_register_button"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/shape_btn_negative_bg"
+        android:gravity="center"
+        android:text="@string/Sure"
+        android:textColor="@color/white"
+        android:textSize="@dimen/default_text_size" />
+
+</LinearLayout>

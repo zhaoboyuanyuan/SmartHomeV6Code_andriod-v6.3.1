@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <title>绑定设备</title>
+        <link rel="stylesheet" href="css/mui.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/base.css" />    
+        <link rel="stylesheet" type="text/css" href="css/device.css" />
+        <link rel="stylesheet" type="text/css" href="css/bindDevice.css" />
+        <script src="js/mui.min.js" type="text/javascript" charset="UTF-8"></script>
+        <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+        <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/devbase.js" type="text/javascript" charset="UTF-8"></script>
+        <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    </head>
+    <body>
+        <header  class="header" style="position: fixed;">
+        	<div class="header_top">
+        		<a class="back" href="javascript:;"></a>
+	            <a class="autoSwitchLanguager" href="javascript:;" key="BindDeviceTitle">绑定设备</a>
+	            <a class="done" href="javascript:;"></a>
+        	</div>   
+        </header>
+        <div class="lockbackimageview" style="height: auto;">
+        	<section class="get_list">
+            <ul>
+            	<!--<li data-num="01" data-id="02" data-type="Am" style="height: 60px;">
+            		<a class="item" index="0" >
+            			<i class="left" style="background: url(fonts/icon_dev_Am.png) no-repeat center center;background-size:32px auto;">
+
+            			</i>
+            			<div class="right">
+            				<p>金属一键开关001</p>
+            				<br />
+            				<em>在线</em>
+            				<span>[未分区]</span>
+            			</div>
+            		</a>
+            	</li>-->
+            </ul>
+            <div class="no_list autoSwitchLanguager" key="noDevice" id="not_device">没有可选择的设备</div>
+        	</section>
+        </div>
+        
+        <!--Toast_询问弹窗-->
+		<section class="changeName" style="display:none;" id="toast_forask">
+			<div class="nameToast">
+				<div class="inputname">
+					<p  id="askContent" class="autoSwitchLanguager" key="switch_Ao_04"></p>
+				</div>
+				
+				<div class="choose_1" align="center">
+					<a id="addDevice_sure" href="javascript:;" 
+						onclick="toast_sureask()" 
+						class="autoSwitchLanguager" 
+						style="width:100%;border-right:0px"
+						key="switch_Ao_14">确定</a>
+				</div>				
+			</div>
+		</section>
+		<section id="fail" class="toast" style="display:none;">
+				<p class="autoSwitchLanguager" id="toastText"></p>
+		</section>
+		<!--<input type="button" value="test" onclick="testMytest();" />-->
+    </body>
+    <script type="text/javascript">
+    	var curbindDevId="";
+        var bindingStep=0;//0 未开始；1 转换模式；2 清除绑定；3 绑定窗帘控制器；
+        var info = window.sysfun;
+        info.init("deviceAn");
+        var deviceList;
+        var deviceID = info.getItem("deviceID");
+        var devID,gwID;
+        var bindNum=null;
+        var bindType="";
+        var isChangeBindMode=false;
+        initlan(function(){
+//      	var result=getTestDataForDevlist();
+//      	fillData(result);
+        });
+        
+        plus.plusReady(function () {
+            var iphoneX = { sysFunc: "getItem:", room: "iphoneX", id: "iphoneX", data: "" };
+            var iStr = '';
+            if(!window.v6sysfunc) {
+                iStr = prompt(JSON.stringify(iphoneX))
+            }
+            if(iStr == "iphoneX") {
+                var get_list = document.getElementsByClassName("get_list")[0];
+                get_list.style.paddingTop = "2.4rem"
+            }
+        	plus.gatewayCmd.getDeviceInfo(function(result){
+        		bindNum=decodeURI(getUrlParam("bindNum"));
+				devID = result.devID;
+				gwID = result.gwID;				
+				rush_500();
+			});
+
+            plus.gatewayCmd.getDeviceList(function (data) {
+                fillData(data);
+            })
+            $(".back").on("click", function() {
+                info.setItem("flag", "0")
+//                window.location = "switch_An.html"
+                plus.tools.goBack(function () {
+                    
+                })
+            });
+        });
+        
+        function getTestDataForDevlist(){
+        	var data=[];
+        	for(var i=0;i<20;i++){
+        		var item={};
+        		item.type="Am";
+        		item.name="测试数据_"+i;
+        		item.devID="devID_"+i;
+        		data.push(item);
+        	}
+        	return data;
+        }
+        function modeTest(i,data,name,icon,stateUrl){
+                var modeState = ''
+                if(data[i].mode == "3"){
+//					modeState = "设备主动退网"
+                }else{
+                    if(data[i].mode == "2"){
+                        modeState = lang_offLine
+                    }else {
+                        modeState = lang_onLine
+                    }
+                    info.setItem(""+data[i].type, data[i]);
+                    var roomName=(data[i].roomName == undefined||data[i].roomName=="") ? lang_un_room : data[i].roomName;
+                    var endpointNumber=0;
+                    if(data[i].endpoints!=undefined&&data[i].endpoints.len>0&&data[i].endpoints[0]!=undefined&&data[i].endpoints[0].endpointNumber!=undefined){
+                    	endpointNumber=data[i].endpoints[0].endpointNumber;
+                    }                    
+                    createList(i, name, icon, modeState, roomName, stateUrl, endpointNumber, data[i].devID, data[i].type)
+                }
+        }
+        function createList(i, name, src, mode, area, aSrc, endpNum, devID, type) {
+                var str = '<li data-num="' + endpNum 
+                + '" data-id="' + devID
+                + '" data-type="' + type
+                + '"><a class="item" index="'+i+'" href="javascript:;"><i class="left" style="background:url(' + src + ') no-repeat center center;background-size:32px auto;"></i><div class="right"><p style="color:#000;">' + name + '</p><br /><em>' + mode + '</em><span>[' + area + ']</span></div></a></li>'
+                $(".get_list ul").append(str)
+                $(".item").on("click", function () {
+                	var theDev=deviceList[$(this).attr("index")];
+                	if(theDev.type == "Ar"){
+                		curbindDevId=theDev.devID;
+                		if(bindNum!=null&&bindNum!=undefined&&bindNum<3){
+                			console.log("Ar-"+curbindDevId);
+                			document.getElementById("toast_forask").style.display="block";
+                		}else{
+                			toast_cancel();
+				        	if(bindingStep==0){
+				        		createToast(switch_Ao_Saving); 
+				        		showTimeOutCallBack(switch_Ao_timeout,function(){
+				        			bindingStep=0;
+				        		});
+//				        		BindingAr_Step3();
+								BindingAr_V2();
+				        	}
+                		}
+                	}else{
+                		info.setItem("data", JSON.stringify(deviceList[$(this).attr("index")]));
+                    	window.location = "bindDeviceChooseSwitch.html"
+                	}
+                })
+            }
+        function fillData(data){
+        	if (data.length > 0) {
+                    deviceList = data;
+                    $(".get_list ul").html('')
+                    var modeState = ''
+                    var name = '';
+                    var icon = '';
+                    var stateUrl = ''
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].type == "Am") {//
+                            name = data[i].name.indexOf("#$default$#") != -1 ? switch_Am_Name + data[i].name.split("#")[2] : data[i].name;
+                            icon = 'fonts/icon_am.png';
+                            stateUrl = "bindDeviceChooseSwitch.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if (data[i].type == "An" ) {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? switch_An_Name + data[i].name.split("#")[2] : data[i].name;
+                            icon = 'fonts/icon_an.png';
+                            stateUrl = "bindDeviceChooseSwitch.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if (data[i].type == "Ao"&& data[i].devID != deviceID) {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? switch_Ao_Name + data[i].name.split("#")[2] : data[i].name;
+                            icon = 'fonts/icon_ao.png';
+                            stateUrl = "bindDeviceChooseSwitch.html?";
+                            modeTest(i, data, name, icon, stateUrl)
+                        } else if (data[i].type == "Ar") {
+                            name = data[i].name.indexOf("#$default$#") != -1 ? switch_Ar_Name + data[i].name.split("#")[2] : data[i].name;
+                            icon = 'fonts/icon_ar.png';
+                            stateUrl = "bindDeviceChooseSwitch.html";
+                            modeTest(i, data, name, icon, stateUrl)
+                        }
+                    }
+                } else {
+                    $(".no_list").show()
+                }
+        }
+        
+        function toast_cancel(){
+        	document.getElementById("toast_forask").style.display="none";
+        }
+        
+        function toast_sureask(){
+        	toast_cancel();
+//      	if(bindingStep==0){
+//      		createToast(""); 
+//      		setTimeout(switch_Ao_timeout);
+//      		BindingAr_Step1_ChangeBindMode();
+//      	}
+        }
+        function rush_500(){
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				var isright = result != null &&
+					result != undefined &&
+					result.devID == devID;
+				if(isright) {
+					if(result.cmd == "500"&&bindingStep>0){
+						if(bindingStep==1){
+							if(isChangeBindMode==true){
+								isChangeBindMode=false;
+								setTimeout(function(){
+									BindingAr_Step2();
+								},1000);
+							}else{
+								BindingAr_Step2();
+							}							
+						}else if(bindingStep==2){
+							BindingAr_Step3();
+						}else if(bindingStep==3){
+							console.log("######绑定成功#######");
+							bindingStep=0;
+							//绑定成功
+							showSucToastLong(switch_Ao_BindingSuc,function(){
+								plus.tools.goBack(function () {
+	                    
+	                			})
+							});
+						}
+					}
+				}
+			});
+		}
+        
+        function testMytest(){
+        	createToast("绑定");
+        	closeToast();
+//      	showTimeOut("超时");
+        	//绑定成功
+			showSucToast(switch_Ao_BindingSuc,function(){
+//				console.log("haha");
+			});
+        }
+    /***********************************访问接口*******************************/
+	
+	/*
+	 * 设备控制
+	 */
+	function sendCmd(jsonData) {
+		plus.gatewayCmd.controlDevice(jsonData, function(result) {
+			console.log("result" + result);
+		})
+	}
+	/*向三键金属开关发送命令
+	 * endpointNumber：0表示对所有按键都有作用
+	 * commandId：表示执行不同的操作
+	 * param:参数,注意，这个是数组
+	 * */
+	function sendCmdForAo(endpointNumber,commandId,param){
+		var jsonData;
+		if(param!=null){
+			jsonData = {
+				"cmd": "501",
+				"gwID": gwID,
+				"devID": devID,
+				"endpointNumber": endpointNumber,
+				"commandType": 1,
+				"commandId": commandId,
+				"parameter": param
+			};
+		}else{
+			jsonData = {
+				"cmd": "501",
+				"gwID": gwID,
+				"devID": devID,
+				"endpointNumber": endpointNumber,
+				"commandType": 1,
+				"commandId": commandId
+			};	
+		}	
+		sendCmd(jsonData);
+	}
+	/*绑定设备
+	 * ep：发起设备的端口,一键为1,二键为2…
+	 * bindDevId：绑定设备的ID
+	 * bindEp：绑定设备的端口一键为1,二键为2…
+	 * */
+	function BindingDev(ep,bindDevId,bindEp){
+		var parm=[
+			{"ep":ep+"",
+			  "bindDevId":bindDevId,
+			  "bindEp":bindEp+""
+			}
+		]
+		sendCmdForAo(ep,0x8011,parm);
+	}
+	function BindingDevForAr(bindDevId){
+		jsonData = {
+			"cmd": "501",
+			"gwID": gwID,
+			"devID": devID,
+			"endpointNumber": 0,
+			"commandType": 1,
+			"commandId": 0x8011,
+			"parameter": [
+				{"ep":"1",
+				  "bindDevId":bindDevId,
+				  "bindEp":"1"
+				},
+				{"ep":"2",
+				  "bindDevId":bindDevId,
+				  "bindEp":"1"
+				},
+				{"ep":"3",
+				  "bindDevId":bindDevId,
+				  "bindEp":"1"
+				},
+			]
+		};
+		sendCmd(jsonData);
+	}
+	/*改变绑定模式：改变为绑定模式*/
+	function changeModeToBind(endpointNumber){		
+		sendCmdForAo(endpointNumber,0x8010,["2"]);
+	}
+	/*清空命令*/
+	/*解绑，ep=0表示清除所有的绑定关系*/
+	function BindingAr_Step2(){
+		bindingStep=2;
+		sendCmdForAo(0,0x8012,["0"]);			
+		console.log("绑定窗帘：step2");
+	}
+	/*绑定窗帘控制器*/
+	function BindingAr_Step3(){		
+		console.log("绑定窗帘：step3");
+		var delayTime=1000;
+		bindingStep=0;
+		setTimeout(function(){
+			console.log("绑定窗帘：step3 第1个键");
+			bindingStep=3;
+			BindingDev(1,curbindDevId,1);
+			/*setTimeout(function(){
+				console.log("绑定窗帘：step3 第2个键");
+				BindingDev(2,curbindDevId,1);
+				setTimeout(function(){
+					console.log("绑定窗帘：step3 第3个键");
+					bindingStep=3;
+					BindingDev(3,curbindDevId,1);
+				},delayTime);
+			},delayTime);*/
+		},delayTime);
+	}
+	
+	function BindingAr_V2(){
+		console.log("绑定窗帘：step3");
+		var delayTime=1000;
+		bindingStep=0;
+		setTimeout(function(){
+			console.log("绑定窗帘：step3 第1个键");
+			bindingStep=3;
+			BindingDev(1,curbindDevId,1);
+		},delayTime);
+	}
+	/*第一步：全部转换为绑定模式*/
+	function BindingAr_Step1_ChangeBindMode(){
+		bindingStep=1;
+		sendCmdForAo(0,0x8010,["2"]);
+		console.log("绑定窗帘：step1");
+	}
+    </script>
+</html>

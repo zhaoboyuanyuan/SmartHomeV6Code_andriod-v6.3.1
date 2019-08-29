@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设置设备状态</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/editok.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<a href="javascript:window.history.back(-1);"></a>
+			<a id="setDeviceState_tittle" class="autoSwitchLanguager" href="javascript:;">设置设备状态</a>
+			<a class="complete"  href="javascript:;"></a>
+		</header>
+		<section style="margin-top: 6.4rem;">
+			<ul class="set_list">
+				<li id="light"><b key="minigateway_Lantern" class="autoSwitchLanguager">彩灯效果</b><i></i></li>
+				<li id="voice"><b key="minigateway_Soundrepertoire" class="autoSwitchLanguager">声音曲目</b><i></i></li>
+			</ul>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Housekeeper");
+		initlan()
+		var Task = decodeURI(getUrlParam("Task"));
+		plus.plusReady(function() {
+            plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+            });
+			$(".set_list li").eq(0).html(lang_D8_light + "<i></i>")
+			$(".set_list li").eq(1).html(lang_D8_voice + "<i></i>")
+			$('#light').on("click", function() {
+				window.location = "D8Light.html?Task=" + Task;
+			});
+			$('#voice').on("click", function() {
+				window.location = "D8Song.html?Task=" + Task;
+			});
+		})
+	</script>
+
+</html>

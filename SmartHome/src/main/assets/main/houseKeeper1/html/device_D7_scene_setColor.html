@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>灯设置颜色和亮度</title>
+	<link rel="stylesheet" type="text/css" href="../css/base.css" />
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+
+<body>
+	<header class="header">
+		<a href="javascript:window.history.back(-1);"></a>
+		<a class="deviceName autoSwitchLanguager" key="set_colour" href="javascript:;">设置颜色和亮度</a>
+		<a key="customScene_sure" class="complete autoSwitchLanguager" onclick="save()" href="javascript:;">确定</a>
+	</header>
+	<!--
+        	作者：offline
+        	时间：2017-12-05
+        	描述：取色盘
+        -->
+	<section class="container iphoneX">
+		<h3 class="autoSwitchLanguager title_h3" id="colour">颜色RGB</h3>
+		<input class="HexColor" onkeyup="limitInput()" maxlength="6" />
+	</section>
+	<section class="pickerBg" align="center">
+		<div class="colorpicker">
+			<canvas id="picker" width="200" height="200"></canvas>
+			<div class="preview"></div>
+		</div>
+	</section>
+
+	<!--
+        	作者：offline
+        	时间：2017-12-05
+        	描述：亮度
+        -->
+
+	<section style="margin-top: -1rem;">
+		<h3 class="autoSwitchLanguager title_h3" id="brightness">亮度</h3>
+		<i class="sun_class" style="float: left;"></i>
+		<section style="width: calc(100% - 3.5rem);float: left;">
+			<div id="bar1" style="width: 100%;background-color: none;height: 0.4rem;padding-top: 1rem;">
+				<div id="bar3" style="border-radius: 1rem;margin-left: 5%;width: 80%;height: 0.4rem;background-color: gainsboro;">
+					<div id="bar2" style=" width: 0%;float: left;background-color: #F9D92C;height: 0.4rem;border-radius: 1rem;">
+						<div id="Btn" style="box-shadow: 0rem 0rem 0.4rem 0.4rem gainsboro;position: absolute;width: 2rem;border-radius: 2rem;background-color: white;height: 2rem;margin-top: -0.7rem;">
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<span id="range">0%</span>
+	</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/colorPicker.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var info = window.sysfun;
+	info.init("V6Housekeeper");
+
+	var rgbStr = '';
+	var light = 50;
+	var onOffStatus = false;
+	var bar = document.getElementById("Btn");
+	var bar1 = document.getElementById("bar1");
+	var bar2 = document.getElementById("bar2");
+	var bar3 = document.getElementById("bar3");
+	$("body").css('background-color', "#FFFFFF");
+	initlan();
+
+	//温湿度感应器
+	plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+		showLightNum(50);
+	})
+
+	$("#back").on("click", function () {
+		plus.tools.back(function () {})
+	})
+
+	//亮度
+	function showLightNum(light) {
+		bar.style.left = bar3.offsetWidth * light / 100.0 + bar3.offsetLeft - bar.offsetWidth * 0.5 + "px";
+		bar2.style.width = bar3.offsetWidth * light / 100.0 + "px"
+		$('#range').html(light + "%");
+	}
+
+	function limitInput() {
+
+		var reg = /^[A-Fa-f0-9]+$/;
+		var len = $('.HexColor').val().length;
+		if (len > 0) {
+			if (reg.test($('.HexColor').val())) {
+				$('.HexColor').val($('.HexColor').val().toUpperCase());
+				if (len == 6) {
+					$('.preview').css('backgroundColor', "#" + $('.HexColor').val());
+					rgbStr = $('.HexColor').val();
+				}
+			} else {
+
+				$('.HexColor').val($('.HexColor').val().substr(0, len - 1));
+			}
+		}
+	}
+
+	function save() {
+		rgbStr = $('.HexColor').val();
+		if (rgbStr.length == 6 && light > 0) {
+			var hexLight = light.toString(16);
+			if (hexLight.length == 1) {
+				hexLight = "0" + hexLight;
+			}
+			info.setItem("epData", "AA55090510" + rgbStr + "00,AA550621" + hexLight + "00");
+			info.setItem("switchName", lang_D7_rgb + rgbStr);
+			info.setItem("deviceState", lang_D7_light + light + "%");
+
+			window.location = "setDelay_sceneTask.html"
+
+		} else {
+			if (rgbStr.length < 6) {
+				alert("lang_D7_setColor_tips");
+			}
+		}
+	}
+
+	bar.addEventListener("touchend", function (evt) {
+		var range = (Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2);
+		var deviceState = parseInt(range * 100);
+		if ((deviceState + "").length == 1) {
+			deviceState = "00" + deviceState;
+		} else if ((deviceState + "").length == 2) {
+			deviceState = "0" + deviceState;
+		} else {
+			deviceState = "" + deviceState;
+		}
+		if (range <= 0.01) {
+			range = 0.01
+		}
+		document.getElementById("range").innerHTML = parseInt(range * 100) + "%";
+		light = parseInt(range * 100);
+	})
+
+	bar.addEventListener("touchstart", function (evt) {
+		var openX = Number(bar3.offsetLeft);
+		var closeX = Number(bar3.offsetLeft + bar3.offsetWidth);
+		var touch = evt.touches[0];
+		var x = Number(touch.pageX)
+		var y = Number(touch.pageY)
+		bar1.addEventListener("touchmove", function (e) {
+			var touch1 = e.touches[0];
+			var xx = Number(touch1.pageX)
+			var yy = Number(touch1.pageY)
+			if (Math.abs(Number(bar.offsetLeft) - Number(touch1.pageX)) > 20) {
+				if (openX >= Number(touch1.pageX)) {
+					bar.style.left = openX - bar.offsetWidth / 2 + "px";
+					bar2.style.width = 0 + "px"
+					return;
+				}
+				if (closeX <= Number(touch1.pageX)) {
+					bar.style.left = closeX - bar.offsetWidth / 2 + "px";
+					bar2.style.width = bar3.offsetWidth + "px"
+					return;
+				}
+				bar.style.left = touch1.pageX + "px";
+				bar2.style.width = bar.offsetLeft - bar3.offsetLeft + "px";
+			}
+		})
+	})
+</script>
+
+</html>

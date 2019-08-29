@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_activate_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/bg_activate_xw01"
+            android:layout_marginTop="@dimen/config_wifi_margin_top" />
+
+        <TextView
+            android:id="@+id/tv_add_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_activate_icon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/default_padding_normal"
+            android:layout_marginTop="@dimen/default_padding_large"
+            android:text="@string/addDevice_XW01_activation_hint"
+            android:textColor="@color/device_config_wifi_tips_color"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_scan_activate"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_height="@dimen/config_device_btn_height"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/shape_config_btn_bg"
+            android:text="@string/addDevice_XW01_activation" />
+
+    </RelativeLayout>
+
+</LinearLayout>

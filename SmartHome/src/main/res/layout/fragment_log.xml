@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/log_swipe_text_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/message_center_detail_no_result_MarginTop"
+        android:text="@string/Message_Center_NoAlarm"
+        android:textColor="@color/message_center_no_result_text_color"/>
+
+    <cc.wulian.smarthomev6.support.customview.SwipeRefreshLayout
+        android:id="@+id/log_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/log_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </cc.wulian.smarthomev6.support.customview.SwipeRefreshLayout>
+</FrameLayout>

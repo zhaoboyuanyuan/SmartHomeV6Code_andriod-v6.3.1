@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/thermostat1.css" />
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+    <header class="header" style="position: fixed;left:0;top:0;width:100%;">
+        <a href="javascript:window.history.back(-1);"></a>
+        <a id="device_a0_name" class="autoSwitchLanguager" href="javascript:;">设置设备状态</a>
+        <a href="javascript:;" onclick="save()" key="saveScene" class="complete autoSwitchLanguager">保存</a>
+    </header>
+    <section id="content">
+        <ul class="device_list">
+            <!-- <li class="selectAll">
+                <span>全选</span>
+                <span>
+                    <img src="../fonts/icon_none.png" alt="">
+                </span>
+            </li>
+            <li>
+                <span>空调2</span>
+                <span>
+                    <img src="../fonts/icon_none.png" alt="">
+                </span>
+            </li>
+            <li>
+                <span>空调3</span>
+                <span>
+                    <img src="../fonts/icon_none.png" alt="">
+                </span>
+            </li> -->
+        </ul>
+    </section>
+    <!--<section class="toast autoSwitchLanguager" key="editScene_OZ_TIPS1">请至少选择一个空调</section>-->
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var gwID;
+    var appID;
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    initlan();
+    var devID = info.getItem("deviceID");
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        plus.gatewayCmd.getCurrentAppID(function (result) {
+            appID = result;
+        });
+        plus.gatewayCmd.getDeviceInfo(devID, function (data) {
+            devID = data.devID;
+            gwID = data.gwID;
+            drawDeviceList(data);
+            var attributes = data.endpoints[0].clusters[0].attributes[0]
+            if (attributes.attributeId == 0x8301) {
+                if (attributes.attributeValue == 0) {
+                    //获取转换器状态
+                    sendCmd(gwID, devID, 0, 0x0301);
+                } else {
+                    sendCmd_510(gwID, devID, appID);
+                }
+            }
+        })
+        plus.gatewayCmdRush.newDataRefresh(function (data) {
+            if (data.cmd == "500" && devID == data.devID) {
+                if (data.mode != 0) {
+                    drawDeviceList(data);
+                }
+            } else if (data.cmd == "502" && devID == data.devID) {
+                var endpointName = data.endpointName;
+                var endpointNumber = data.endpointNumber;
+                if (!endpointName) {
+                    endpointName = endpointNumber;
+                }
+                $("#" + endpointNumber).find("a").find("span").eq(0).html(endpointName);
+            }
+        });
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $("#content")[0].style.paddingTop = "8.8rem";
+            $("#content")[0].style.height = "calc(100% - 8.8rem)";
+        }
+
+    })
+
+    function drawDeviceList(data) {
+        var allStr = '<li class="selectAll"><span>' + lang_OZ_TIPS2 +
+            '</span><span><img data-state="none" src="../fonts/icon_none.png" alt=""></span></li>'
+        $(".device_list").html('');
+        $(".device_list").append(allStr);
+        var allListStr = "";
+        var listStr = "";
+        var jump16 = false;
+        var jump32 = false;
+        var jump48 = false;
+        for (var i = 0; i < data.endpoints.length; i++) {
+            var endpoint = data.endpoints[i];
+            listData(endpoint);
+            var param = listData(endpoint);
+            var isHost = param.isHost ? "(" + Device_a0_host + ")" : "";
+            var numName = endpoint.endpointName ? endpoint.endpointName : (Device_a0_air + endpoint.endpointNumber);
+            var name = "";
+            if (param.isHost) {
+                name = '<i class="name" data-name="' + numName + '">' + numName +
+                    '</i><i style="color:red"' + isHost +
+                    '">' + isHost + '</i>'
+            } else {
+                name = '<i class="name" data-name="' + numName + '">' + numName + '</i>'
+            }
+            var str = '<li class="select" id="' + endpoint.endpointNumber + '">' +
+                '<span>' + name + '</span>' +
+                '<span><img data-state="none" src="../fonts/icon_none.png" alt=""></span>' +
+                '</li>';
+
+            if (endpoint.endpointNumber >= 16 && jump16 == false) {
+                $(".device_list").append(allListStr);
+                $(".device_list").append(listStr);
+                allListStr = "";
+                listStr = "";
+                jump16 = true;
+            } else if (endpoint.endpointNumber >= 32 && jump32 == false) {
+                $(".device_list").append(allListStr);
+                $(".device_list").append(listStr);
+                allListStr = "";
+                listStr = "";
+                jump32 = true;
+            } else if (endpoint.endpointNumber >= 48 && jump48 == false) {
+                $(".device_list").append(allListStr);
+                $(".device_list").append(listStr);
+                allListStr = "";
+                listStr = "";
+                jump48 = true;
+            }
+
+            if (param.isHost) {
+                allListStr += str;
+            } else {
+                listStr += str;
+            }
+        }
+        $(".device_list").append(allListStr);
+        $(".device_list").append(listStr);
+
+        $(".device_list .selectAll span img").on("click", function () {
+            if ($(this).attr("data-state") == "none") {
+                $(this).attr("src", "../fonts/icon_select.png");
+                $(".device_list .select span img").attr("src", "../fonts/icon_select.png");
+                $(".device_list .select span img").attr("data-state", "select");
+                $(this).attr("data-state", "select")
+            } else {
+                $(this).attr("src", "../fonts/icon_none.png");
+                $(".device_list .select span img").attr("src", "../fonts/icon_none.png");
+                $(".device_list .select span img").attr("data-state", "none");
+                $(this).attr("data-state", "none")
+            }
+        });
+        $(".device_list .select span img").on("click", function () {
+            if ($(this).attr("data-state") == "none") {
+                $(this).attr("src", "../fonts/icon_select.png");
+                $(this).attr("data-state", "select")
+            } else {
+                $(this).attr("src", "../fonts/icon_none.png");
+                $(this).attr("data-state", "none")
+            }
+            var lis = $(".device_list .select")
+            var count = 0;
+            for (var i = 0; i < lis.length; i++) {
+                if ($(lis[i]).find("img").attr("src") == "../fonts/icon_select.png") {
+                    count++;
+                }
+            }
+            if (count == lis.length) {
+                $(".selectAll").find("img").attr("src", "../fonts/icon_select.png")
+                $(".device_list .selectAll span img").attr("data-state", "select");
+            } else {
+                $(".selectAll").find("img").attr("src", "../fonts/icon_none.png")
+                $(".device_list .selectAll span img").attr("data-state", "none");
+            }
+        })
+    }
+
+    function listData(list) {
+        var param = {};
+        if (list.clusters[0].attributes) {
+            for (var k = 0; k < list.clusters[0].attributes.length; k++) {
+                var attributes = list.clusters[0].attributes[k];
+                switch (attributes.attributeId) {
+                    case 0x8407:
+                        param.isHost = (attributes.attributeValue == "2")
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return param;
+    }
+
+    function sendCmd(gwID, dID, endpointNumber, commandId, parameter) {
+        var jsonData = {}
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = dID;
+        jsonData.endpointNumber = endpointNumber;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if (parameter) {
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData, function () {})
+    }
+    //请求设备详情列表
+    function sendCmd_510(gwID, devID, appID) {
+        var jsonData = {}
+        jsonData.cmd = "510";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        plus.gatewayCmd.controlDevice(jsonData, function () {})
+    }
+
+    function save() {
+        var selectList = $(".device_list .select span img");
+        var count = 0;
+        var selectArr = "";
+        var nameArr = "";
+        for (var i = 0; i < selectList.length; i++) {
+            if ($(selectList[i]).attr("data-state") === "select") {
+                if (count === 0) {
+                    nameArr = $(selectList[i]).parent().siblings("span").find(".name").html();
+                    selectArr = $(selectList[i]).parents("li").attr("id");
+                } else {
+                    nameArr += "-" + $(selectList[i]).parent().siblings("span").find(".name").html();
+                    selectArr += "-" + $(selectList[i]).parents("li").attr("id");
+                }
+                count++;
+            }
+        }
+        if (count == 0) {
+            window.showDialog.show(languageUtil.getResource("houseKeeper2_OZ_TIPS1"),3000);
+            return;
+        } else {
+            console.log(selectArr);
+            console.log(nameArr);
+            info.setItem("description", nameArr);
+            window.location = "device_a0_02.html?num=" + selectArr;
+        }
+    }
+</script>
+
+</html>

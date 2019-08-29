@@ -1,0 +1,197 @@
+@charset "utf-8";
+
+html,body{
+	width:100%;
+	height:100%;
+	position:fixed;
+	left:0;
+	top:0;
+	background:#fff;
+}
+button{
+	border:0;
+}
+b,strong{
+	font-weight:normal!important;
+}
+.main_con{
+	position:relative;
+	width:100%;
+	height:100%;
+}
+
+.temperature{
+	position: absolute;
+	font-size: 1.3rem;
+	line-height: 2rem;
+	top: 0.3rem;
+	left: 4%;
+	text-align: center;
+}
+
+.humidity{
+	position: absolute;
+	font-size: 1.3rem;
+	line-height: 2rem;
+	left: 4%;
+	top: 1.8rem;
+	text-align: center;
+}
+
+.main_con i{
+	position: relative;
+	float: right;
+	width: 4rem;
+	height: 4rem;
+	right: 2%;
+}
+
+.main_con .middle{
+	position: absolute;
+	left: 50%;
+	top: 5%;
+	width: 17rem;
+	height: 17rem;
+	text-align: center;
+	line-height: 17rem;
+	-webkit-transform: translate(-50%);
+	-moz-transform: translate(-50%);
+	-ms-transform: translate(-50%);
+	-o-transform: translate(-50%);
+	transform: translate(-50%);
+}
+
+.main_con .middle_strong{
+	background: url("../fonts/icon_state_strong.png") no-repeat center center;
+	background-size: contain;
+}
+
+.main_con .middle_suitable{
+	background: url("../fonts/icon_state_suitable.png") no-repeat center center;
+	background-size: contain;
+}
+
+.main_con .middle_weak{
+	background: url("../fonts/icon_state_weak.png") no-repeat center center;
+	background-size: contain;
+}
+
+.main_con .state_tip{
+	position: absolute;
+	left: 50%;
+	top: 34%;
+	color: #6B6B6B;
+	font-size: 1.6rem;
+	-webkit-transform: translate(-50%);
+	-moz-transform: translate(-50%);
+	-ms-transform: translate(-50%);
+	-o-transform: translate(-50%);
+	transform: translate(-50%);
+}
+
+.main_con .middle .state {
+	font-size: 3.2rem;
+}
+
+.main_con .middle .state_strong{
+	color: #F54747;
+}
+
+.main_con .middle .state_suitable{
+	color: #8AD54D;
+}
+
+.main_con .middle .state_weak{
+	color: #FF973A;
+}
+
+.main_con .bottom{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 60%;
+	text-align: center;
+}
+
+.main_con .bottom_strong{
+	background: url("../fonts/icon_bg_strong.png") no-repeat center center;
+	background-size: contain;
+}
+
+.main_con .bottom_suitable{
+	background: url("../fonts/icon_bg_suitable.png") no-repeat center center;
+	background-size: contain;
+}
+
+.main_con .bottom_weak{
+	background: url("../fonts/icon_bg_weak.png") no-repeat center center;
+	background-size: contain;
+}
+
+.main_con .current_value_div{
+	position: absolute;
+	left: 50%;
+	bottom: 26%;
+	color: #ffffff;
+	-webkit-transform: translate(-50%);
+	-moz-transform: translate(-50%);
+	-ms-transform: translate(-50%);
+	-o-transform: translate(-50%);
+	transform: translate(-50%);
+}
+.main_con .current_value_div span{
+	float: left;
+	display: block;
+
+}
+
+.main_con .current_value_div span:nth-child(1){
+	font-size: 4.5rem;
+}
+
+.main_con .current_value_div span:nth-child(2){
+	font-size: 1.9rem;
+	line-height: 7rem;
+}
+
+.main_con #describe{
+	position: absolute;
+	left: 50%;
+	bottom: 26%;
+	font-size: 1.6rem;
+	color: #ffffff;
+	-webkit-transform: translate(-50%);
+	-moz-transform: translate(-50%);
+	-ms-transform: translate(-50%);
+	-o-transform: translate(-50%);
+	transform: translate(-50%);
+}
+.main_con #electricity{
+	position: absolute;
+	left: 50%;
+	bottom: 16%;
+	font-size: 1.3rem;
+	color: #ffffff;
+	-webkit-transform: translate(-50%);
+	-moz-transform: translate(-50%);
+	-ms-transform: translate(-50%);
+	-o-transform: translate(-50%);
+	transform: translate(-50%);
+}
+
+/*toast提示*/
+.gw_toast{
+	display:none;
+	position:fixed;
+	left:20%;
+	top:50%;
+	z-index:1000;
+	width:60%;
+	height:3rem;
+	line-height:3rem;
+	text-align:center;
+	background:rgba(0,0,0,.3);
+	font-size:1.4rem;
+	color:#fff;
+	border-radius: 4rem;
+}

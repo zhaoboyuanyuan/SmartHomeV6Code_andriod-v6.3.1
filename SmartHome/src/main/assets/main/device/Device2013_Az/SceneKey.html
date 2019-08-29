@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>六键场景开关</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="controll/index.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName" href="javascript:;"></a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<div class="wrap" style="margin-top: 35px;font-size: 1.4rem">
+			<ul class="BoxLeft">
+				<li>
+					<div id="keyImg1">
+						<i id="scene1"></i>
+					</div>
+					<div id="key1" key="device_Az_Unbound" class="autoSwitchLanguager">未绑定</div>
+				</li>
+				<li>
+					<div id="keyImg3">
+						<i id="scene3"></i>
+					</div>
+					<div id="key3" key="device_Az_Unbound" class="autoSwitchLanguager">未绑定</div>
+				</li>
+				<li>
+					<div id="keyImg5">
+						<i id="scene5"></i>
+					</div>
+					<div id="key5" key="device_Az_Unbound" class="autoSwitchLanguager">未绑定</div>
+				</li>
+			</ul>
+
+			<ul class="BoxRight">
+				<li>
+					<div id="keyImg2">
+						<i id="scene2"></i>
+					</div>
+					<div id="key2" key="device_Az_Unbound" class="autoSwitchLanguager">未绑定</div>
+				</li>
+				<li>
+					<div id="keyImg4">
+						<i id="scene4"></i>
+					</div>
+					<div id="key4" key="device_Az_Unbound" class="autoSwitchLanguager">未绑定</div>
+				</li>
+				<li>
+					<div id="keyImg6">
+						<i id="scene6"></i>
+					</div>
+					<div id="key6" key="device_Az_Unbound" class="autoSwitchLanguager">未绑定</div>
+				</li>
+			</ul>
+		</div>
+
+		<section class="mask_layer " style="display:none; ">
+			<i></i>
+			<span id="offline " class="autoSwitchLanguager" key='device_Az_Offline'></span>
+		</section>
+	</body>
+	<script>
+		var num = 2; //动画数组长度
+		var timer; //定时器动画
+		var GWID;
+		var DEVID;
+		var ENDPOINTNUMBER;
+		var DEVICEINFO;
+		var APPID;
+		var MVC = {};
+		var SceneList = [];
+		//初始化绑定关系
+		var bindMap = {
+			"1": "-1",
+			"2": "-1",
+			"3": "-1",
+			"4": "-1",
+			"5": "-1",
+			"6": "-1"
+		};
+
+		var key1 = document.getElementById("key1");
+		var key2 = document.getElementById("key2");
+		var key3 = document.getElementById("key3");
+		var key4 = document.getElementById("key4");
+		var key5 = document.getElementById("key5");
+		var key6 = document.getElementById("key6");
+
+		var keyImg1 = document.getElementById("keyImg1");
+		var keyImg2 = document.getElementById("keyImg2");
+		var keyImg3 = document.getElementById("keyImg3");
+		var keyImg4 = document.getElementById("keyImg4");
+		var keyImg5 = document.getElementById("keyImg5");
+		var keyImg6 = document.getElementById("keyImg6");
+
+		var shadow = document.getElementsByClassName("mask_layer")[0];
+		var deviceName = document.getElementsByClassName("deviceName")[0];
+
+		/*
+		 * 页面启动完成入口
+		 */
+		plus.plusReady(function() {
+			initlan();
+			MVC.C.initInfo();
+		});
+		//view    页面渲染
+		MVC.V = {
+			bindClick: function() {
+				document.getElementById("back").addEventListener("click", function() {
+					MVC.C.back();
+				});
+				document.getElementsByClassName("more")[0].addEventListener("click", function() {
+					MVC.C.more();
+				});
+				keyImg1.addEventListener("click", function() {
+					window.location = 'KeyBindingScene.html?endPointNum=1&&bindSceneID=' + bindMap["1"];
+				});
+				keyImg2.addEventListener("click", function() {
+					window.location = 'KeyBindingScene.html?endPointNum=2&&bindSceneID=' + bindMap["2"];
+				});
+				keyImg3.addEventListener("click", function() {
+					window.location = 'KeyBindingScene.html?endPointNum=3&&bindSceneID=' + bindMap["3"];
+				});
+				keyImg4.addEventListener("click", function() {
+					window.location = 'KeyBindingScene.html?endPointNum=4&&bindSceneID=' + bindMap["4"];
+				});
+				keyImg5.addEventListener("click", function() {
+					window.location = 'KeyBindingScene.html?endPointNum=5&&bindSceneID=' + bindMap["5"];
+				});
+				keyImg6.addEventListener("click", function() {
+					window.location = 'KeyBindingScene.html?endPointNum=6&&bindSceneID=' + bindMap["6"];
+				});
+			},
+		};
+	</script>
+	<script src="controll/index.js" type="text/javascript" charset="utf-8"></script>
+	<script src="model/model.js" type="text/javascript" charset="utf-8"></script>
+
+</html>

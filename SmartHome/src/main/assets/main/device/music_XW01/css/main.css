@@ -1,0 +1,709 @@
+body, html {
+    width: 100%;
+    height: 100%;
+}
+
+/**********************************************************************
+ *                              场景
+ **********************************************************************/
+.stage {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+.mainStage {
+    z-index: 100;
+    background-color: #f1f4f8;
+}
+.playerStage {
+    position: fixed;
+    display: none;
+    z-index: 105;
+    left: 0;
+    background: url(../fonts/icon_play_bg.png) no-repeat center center;
+    background-size: 100% 100%;
+}
+.timerStage {
+    position: fixed;
+    display: none;
+    z-index: 3000;
+    background-color: #f1f4f8;
+}
+
+.animSlideIn {
+    left: 0;
+    -webkit-animation: slideIn 0.2s ease-in;
+}
+.animSlideOut {
+    left: 100%;
+    -webkit-animation: slideOut 0.2s ease-out;
+}
+@-webkit-keyframes slideIn{
+    from {left: 100%;}
+    to{ left:0%}
+}
+@-webkit-keyframes slideOut{
+    from {left: 0%;}
+    to{ left:100%}
+}
+/**********************************************************************
+ *                              头部随机播放
+ **********************************************************************/
+.secPlayRandom {
+    position: fixed;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    top: 6.4rem;
+    background-color: white;
+    border-bottom: 1rem #f1f4f8 solid;
+    z-index: 104;
+    box-sizing: content-box;
+}
+.iconPlayRandom {
+    display: block;
+    height: 5rem;
+    width: 5rem;
+    background: url(../fonts/icon_play.png) no-repeat center center;
+    background-size: 3rem auto;
+    float: left;
+}
+.secPlayRandom .textPlayRandom {
+    font-size: 1.6rem;
+}
+.secPlayRandom .textPlaySongs {
+    font-size: 1.4rem;
+    color: #676767;
+}
+.secPlayRandom .textPlayCount {
+    font-size: 1.4rem;
+    color: #8dd652;
+}
+
+/**********************************************************************
+ *                              歌曲列表
+ **********************************************************************/
+.secSongList {
+    display: none;
+    width: 100%;
+    margin-top: 12.4rem;
+    margin-bottom: 8rem;
+}
+.secSongEmpty {
+    display: block;
+    width: 100%;
+    margin-top: calc(100% - 10rem);
+}
+.secSongEmpty .emptyTitle {
+    width: 100%;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    font-size: 2.4rem;
+}
+.secSongEmpty .emptyDesc {
+    width: 100%;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    font-size: 1.4rem;
+}
+.mui-content {
+    background-color: #f1f4f8;
+}
+.mui-scroll-wrapper {
+    top: 12.4rem;
+    bottom: 8rem;
+}
+.songItem {
+    height: 5.4rem;
+    background-color: white;
+    overflow: hidden;
+}
+.songItemNum {
+    float: left;
+    display: block;
+    height: 5.4rem;
+    width: 4.8rem;
+    line-height: 5.4rem;
+    font-size: 1.6rem;
+    text-align: center;
+}
+.songItemNum[song-state = playing] {
+    font-size: 0;
+    background: url("../fonts/icon_voice.png") no-repeat center center;
+    background-size: 1.6rem auto;
+}
+.songItemLineContainer{
+    float:left;
+    width:calc(100% - 4.8rem);
+    height:5rem;
+    border-bottom:1px solid rgba(241, 244, 248, 0.618);
+    padding: 0.7rem 0;
+    box-sizing: content-box;
+}
+.songItemContainer {
+    display: inline-block;
+    height: 5rem;
+    overflow: hidden;
+}
+.songItemName {
+    display: block;
+    font-size: 1.6rem;
+    /*line-height: 1.6rem;*/
+    height: 1.6rem;
+    color: black;
+}
+.songItemName[song-state = playing] {
+    color: #8dd652;
+}
+.songItemSinger {
+    display: block;
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+    height: 1.4rem;
+    margin-top: 1.0rem;
+    color: #676767;
+}
+
+/**********************************************************************
+ *                              底部播放控制
+ **********************************************************************/
+.secPlayCtrl {
+    /*overflow: hidden;*/
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 8rem;
+    background-color: white;
+    z-index: 104;
+}
+
+/*#progressBar{*/
+/*width:100%;*/
+/*height:0.2rem;*/
+/*background: #e4e4e4;*/
+/*}*/
+/*.progressExpand {*/
+/*width: 30%;*/
+/*height:0.2rem;*/
+/*background:#8dd652;*/
+/*position:absolute;*/
+/*!*-webkit-animation:fullexpand 10s linear;*!*/
+/*}*/
+.fullwidth .progressExpand {
+    width: 100%;
+    --progress: 30%;
+    -webkit-animation:fullexpand 10s linear;
+}
+@-webkit-keyframes fullexpand{
+    from {width: var(--progress);}
+    to{ width:100%}
+}
+
+.contentPlayCtrl {
+    width: 100%;
+    height: 7.8rem;
+    line-height: 7.8rem;
+    border-top: 1px solid rgba(183, 183, 183, 0.5);
+}
+.songsCover {
+    margin: 1.9rem;
+    height: 4rem;
+    width: 4rem;
+    float: left;
+}
+.songsDetail {
+    display: inline-block;
+    position: absolute;
+    height: 6.2rem;
+    padding-top: 1.6rem;
+    overflow: hidden;
+}
+.songsName {
+    font-size: 1.6rem;
+    line-height: 2rem;
+    height: 2rem;
+    color: black;
+    display: block;
+}
+.songsSinger {
+    font-size: 1.4rem;
+    line-height: 2rem;
+    height: 2rem;
+    top: 0.6rem;
+    color: #676767;
+    display: block;
+}
+.playCtrlPlay {
+    display: block;
+    height: 7.8rem;
+    width: 5rem;
+    float: right;
+    background: url(../fonts/icon_play.png) no-repeat center center;
+    background-size: 4rem auto;
+}
+.playCtrlPlay[play-state = pause] {
+    background: url(../fonts/icon_play.png) no-repeat center center;
+    background-size: 4rem auto;
+}
+.playCtrlPlay[play-state = play] {
+    background: url(../fonts/icon_pause.png) no-repeat center center;
+    background-size: 4rem auto;
+}
+
+.playCtrlNext {
+    display: block;
+    height: 7.8rem;
+    width: 5rem;
+    background: url(../fonts/icon_next.png) no-repeat center center;
+    background-size: 2.4rem auto;
+    float: right;
+}
+.playCtrlLast {
+    display: block;
+    height: 7.8rem;
+    width: 5rem;
+    background: url(../fonts/icon_last.png) no-repeat center center;
+    background-size: 2.4rem auto;
+    float: right;
+}
+
+/**********************************************************************
+ *                              播放页头部
+ **********************************************************************/
+.playerHeader {
+    width: 100%;
+    height: 4.4rem;
+    padding-top: 2rem;
+    border-bottom:1px solid rgba(183, 183, 183, 0.5);
+    z-index: 160;
+    position: absolute;
+    background-color: #00000000;
+    box-sizing: content-box;
+}
+.backToMain {
+    display: block;
+    height: 4.4rem;
+    width: 13.4%;
+    background: url(../fonts/icon_back_1.png) no-repeat center center;
+    background-size: 2.2rem auto;
+    float: left;
+}
+.playSongsDetail {
+    float: left;
+    display: inline-block;
+    width: 73.2%;
+    text-align: center;
+    padding-top: 2rem;
+}
+.playSongsName {
+    display: block;
+    height: 1.6rem;
+    line-height: 1.6rem;
+    font-size: 1.6rem;
+    color: #fff;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.playSongsSinger {
+    display: block;
+    height: 1.2rem;
+    font-size: 1.2rem;
+    margin-top: 0.2rem;
+    color: #e5e5e5;
+}
+
+/**********************************************************************
+ *                              播放页唱针
+ **********************************************************************/
+.secSingingNeedle {
+    position: absolute;
+    top: 6.4rem;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 6.4rem);
+    overflow: hidden;
+    z-index: 150;
+}
+.singingNeedle {
+    display: block;
+    position: absolute;
+    top: -1.5rem;
+    left: 50%;
+    width: 20rem;
+    height: auto;
+    transform-origin: center 1.5rem;
+}
+.singingNeedle[play-state = play] {
+    transform: translateX(-50%) rotate(-0deg);
+}
+.singingNeedle[play-state = pause] {
+    transform: translateX(-50%) rotate(-15deg);
+}
+
+/**********************************************************************
+ *                              播放页 唱盘
+ **********************************************************************/
+.secSingingDisc {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: auto;
+    top: 12rem;
+}
+.singingDisc {
+    display: inline-block;
+    position: relative;
+    width: 80%;
+    height: auto;
+    left: 10%;
+    z-index: 140;
+}
+.singingCover {
+    display: inline-block;
+    position: absolute;
+    width: 56%;
+    height: auto;
+    left: 22%;
+    top: 14.5%;
+    z-index: 141;
+    border-radius: 50%;
+}
+.singingCoverPlaying[play-state = pause] {
+    /*transform-origin: center center;*/
+    -webkit-animation:coverRotate 24s infinite linear;
+    -webkit-animation-play-state: paused;
+}
+.singingCoverPlaying[play-state = play] {
+    /*transform-origin: center center;*/
+    -webkit-animation:coverRotate 24s infinite linear;
+    -webkit-animation-play-state: running;
+}
+@-webkit-keyframes coverRotate{
+    from {transform: rotate(0deg);}
+    to{ transform: rotate(360deg);}
+}
+/**********************************************************************
+ *                              播放 面板
+ **********************************************************************/
+.secPlayPanel {
+    width: 100%;
+    height: auto;
+    bottom: 0;
+    position: fixed;
+    z-index: 1000;
+}
+/* 按钮 */
+.playMusicBtn {
+    width: 90%;
+    /*overflow: hidden;*/
+    height: 4rem;
+    margin-left: 5%;
+}
+.playMusicMode {
+    display: block;
+    width: 33.3%;
+    height: 3rem;
+    background: url(../fonts/icon_list_order.png) no-repeat center center;
+    background-size: 2.2rem auto;
+    float: left;
+}
+.playMusicMode[play-mode = '1'] {
+    background: url(../fonts/icon_random.png) no-repeat center center;
+    background-size: 2.2rem auto;
+}
+.playMusicMode[play-mode = '2'] {
+    background: url(../fonts/icon_list_loop.png) no-repeat center center;
+    background-size: 2.2rem auto;
+}
+.playMusicMode[play-mode = '3'] {
+    background: url(../fonts/icon_single_loop.png) no-repeat center center;
+    background-size: 2.2rem auto;
+}
+.playMusicMode[play-mode = '4'] {
+    background: url(../fonts/icon_list_order.png) no-repeat center center;
+    background-size: 2.2rem auto;
+}
+.playMusicVoice {
+    display: block;
+    width: 33.3%;
+    height: 3rem;
+    background: url(../fonts/icon_voice.png) no-repeat center center;
+    background-size: 2.2rem auto;
+    float: left;
+}
+.playMusicEffect {
+    display: block;
+    width: 33.3%;
+    height: 3rem;
+    background: url(../fonts/icon_music_effect.png) no-repeat center center;
+    background-size: 2.2rem auto;
+    float: left;
+}
+.playMusicTimer {
+    display: block;
+    width: 33.3%;
+    height: 3rem;
+    background: url(../fonts/icon_timer.png) no-repeat center center;
+    background-size: 2.2rem auto;
+    float: left;
+}
+
+/* 控制 */
+.playMusicCtrl {
+    width: 70%;
+    /*overflow: hidden;*/
+    height: 5rem;
+    margin-left: 15%;
+    margin-bottom: 3rem;
+}
+.playMusicLast {
+    display: block;
+    width: 25%;
+    height: 5rem;
+    background: url(../fonts/icon_ctrl_last.png) no-repeat center center;
+    background-size: 2.4rem auto;
+    float: left;
+}
+.playMusicNext {
+    display: block;
+    width: 25%;
+    height: 5rem;
+    background: url(../fonts/icon_ctrl_next.png) no-repeat center center;
+    background-size: 2.4rem auto;
+    float: left;
+}
+.playMusicPlay {
+    display: block;
+    width: 50%;
+    height: 5rem;
+    background: url(../fonts/icon_play_large.png) no-repeat center center;
+    background-size: 5rem auto;
+    float: left;
+}
+.playMusicPlay[play-state = pause] {
+    background: url(../fonts/icon_play_large.png) no-repeat center center;
+    background-size: 4rem auto;
+}
+.playMusicPlay[play-state = play] {
+    background: url(../fonts/icon_pause_large.png) no-repeat center center;
+    background-size: 4rem auto;
+}
+
+/**********************************************************************
+ *                              音效选择
+ **********************************************************************/
+.secPlayEffect {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: auto;
+    bottom: 0;
+    z-index: 2000;
+    padding-bottom: 3.2rem;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+.secPlayEffect .divEffectTitle {
+    display: block;
+}
+.secPlayEffect .textEffectTitle {
+    display: inline-block;
+    color: white;
+    font-size: 1.4rem;
+    margin-left: 50%;
+    margin-top: 0.8rem;
+    transform: translateX(-50%);
+}
+.secPlayEffect .iconEffectClose {
+    display: block;
+    width: 3rem;
+    height: 3rem;
+    float: right;
+    background: url("../fonts/icon_close.png") no-repeat center center;
+    background-size: 1.4rem auto;
+}
+.secPlayEffect .listEffect {
+    width: 100%;
+    margin-top: 1.6rem;
+}
+.secPlayEffect .itemEffect {
+    float: left;
+    width: 33.3%;
+    margin-top: 1.6rem;
+}
+.secPlayEffect .textEffect {
+    display: block;
+    color: white;
+    text-align: center;
+    font-size: 1rem;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    background: url("../fonts/icon_circle_white_border.png") no-repeat center center;
+    background-size: 5rem 5rem;
+}
+.secPlayEffect .textEffect[effect-checked = true] {
+    color: black;
+    background: url("../fonts/icon_circle_white_fill.png") no-repeat center center;
+    background-size: 5rem 5rem;
+}
+
+/**********************************************************************
+ *                              音量调节
+ **********************************************************************/
+ .secPlayVoice {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: auto;
+    bottom: 0;
+    z-index: 2000;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+.secPlayVoice .divVoiceTitle {
+    display: block;
+}
+.secPlayVoice .textVoiceTitle {
+    display: inline-block;
+    color: white;
+    font-size: 1.4rem;
+    margin-left: 50%;
+    margin-top: 0.8rem;
+    transform: translateX(-50%);
+}
+.secPlayVoice .iconVoiceClose {
+    display: block;
+    width: 3rem;
+    height: 3rem;
+    float: right;
+    background: url("../fonts/icon_close.png") no-repeat center center;
+    background-size: 1.4rem auto;
+}
+
+.slideBarContainer {
+    display: inline-block;
+    width: 100%;
+    height: 5rem;
+}
+/* 滑块 */
+.slideBar{
+    width:74.375%;
+    margin-left: 15%;
+    height:0.2rem;
+    position: relative;
+    background: transparent;
+    z-index: 1110;
+    top: 0;
+}
+.slideExpand {
+    width: 30%;
+    height:0.2rem;
+    background:#8dd652;
+    position:absolute;
+    z-index: 1120;
+    /*-webkit-animation:fullexpand 10s linear;*/
+}
+.slideCircle {
+    display: block;
+    width: 4rem;
+    height: 4rem;
+    left: 30%;
+    position:absolute;
+    transform: translateX(-50%) translateY(-1.9rem);
+    background: url(../fonts/icon_slide_circle.png) no-repeat center center;
+    background-size: 1.8rem auto;
+    z-index: 1130;
+}
+.textVoiceSec {
+    display: block;
+    color: white;
+    width: 100%;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: 1rem;
+    text-align: left;
+    padding-left: 1.6rem;
+}
+.iconVoice {
+    float: left;
+    width: 5rem;
+    height: 2rem;
+    background: url("../fonts/icon_voice_none.png") no-repeat center center;
+    background-size: 1.2rem auto;
+}
+.spanVoicePer {
+    float: right;
+    color: white;
+    width: calc(5rem - 4.375%);
+    height: 2rem;
+    line-height: 2rem;
+    text-align: left;
+}
+.voiceList {
+    display: block;
+    width: 100%;
+    height: 2rem;
+}
+.voiceList li {
+    float: left;
+    width: 6.25%;
+    height: 2rem;
+}
+.voiceList li i {
+    display: block;
+    width: 100%;
+    height: 2rem;
+    box-sizing: content-box;
+    background-size: 0.2rem 0.5rem;
+}
+.voiceList li i[m-choose = 'yes'] {
+    background: url("../fonts/icon_p.png") left bottom no-repeat;
+    /*background-size: 0.2rem 0.5rem;*/
+    border-bottom: #8dd652 0.1rem solid;
+}
+.voiceList li i[m-choose = 'yes press'] {
+    background: url("../fonts/icon_p.png") left bottom no-repeat;
+    /*background-size: 0.2rem 0.5rem;*/
+    border-bottom: transparent 0.1rem solid
+}
+.voiceList li i[m-choose = 'false'] {
+    background: url("../fonts/icon_pp.png") left bottom no-repeat;
+    /*background-size: 0.2rem 0.5rem;*/
+    border-bottom: transparent 0.1rem solid
+}
+
+/*************************************************************************
+ *                             设备离线遮罩层                            *
+ *************************************************************************/
+.mask_layer {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 6.4rem;
+    width: 100%;
+    height: 94%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7)
+}
+
+.mask_layer i {
+    display: inline-block;
+    width: 8rem;
+    height: 8rem;
+    margin-top: 15rem;
+    background: url(../fonts/icon_new.png) no-repeat center center;
+    background-size: 8rem auto;
+}
+
+.mask_layer span {
+    display: block;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #fff;
+}

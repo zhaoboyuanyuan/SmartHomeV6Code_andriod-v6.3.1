@@ -1,0 +1,407 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+
+    <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/thermostat.css"/>
+
+    <script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/mui/js/mui.picker.all.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <div class="header_top" style="box-sizing: content-box;-webkit-box-sizing: content-box">
+        <a href="javascript:window.history.back(-1);"></a>
+        <a id="setDeviceStatus" class="autoSwitchLanguager" href="javascript:;">设置设备状态</a>
+        <a key="confirm" class="complete autoSwitchLanguager" onclick="save()" href="javascript:;">确定</a>
+    </div>
+</header>
+<section class="mainListView">
+    <ul>
+        <li><a  class="autoSwitchLanguager" key="editScene_Oi_Open">开关</a><dd><i><em></em></i></dd></li>
+        <li style="display: none"><a  class="autoSwitchLanguager" key="editScene_Oi_Type">模式</a><a></a><i></i></li>
+        <li style="display: none"><a  class="autoSwitchLanguager" key="editScene_Oi_Temperature">温度</a><a></a><i></i></li>
+        <li style="display: none"><a  class="autoSwitchLanguager" key="editScene_Oi_Speed">风速</a><a></a><i></i></li>
+        <li style="display: none"><a  class="autoSwitchLanguager" key="editScene_Oi_Direction">风向</a><a></a><i></i></li>
+    </ul>
+</section>
+</body>
+<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var status = "0";
+    var mode = "FF";//模式
+    var temperature = "FF";//温度
+    var dd = "FF";//湿度
+    var fx = "FF";//"eeee"风向
+    var fan = "FF";//"ff"风量
+    var gg = "FF";//"gg"换气模式
+    var hh = "FF";//"hh"辅热
+</script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Scene");
+    var deviceID = info.getItem("deviceID");
+
+    initlan();
+    function globalLang() {
+        window.lang_houseKeeper1_Oi_Temperature = languageUtil.getResource("editScene_Oi_Temperature") //"温度"
+        window.lang_houseKeeper1_Oi_Speed = languageUtil.getResource("editScene_Oi_Speed") //"风速"
+
+        window.lang_houseKeeper1_82_Temperature1 = languageUtil.getResource("editScene_82_Temperature1") //"最大"
+        window.lang_houseKeeper1_82_Temperature2 = languageUtil.getResource("editScene_82_Temperature2") //"最小"
+
+        window.lang_houseKeeper1_Oi_Type1 = languageUtil.getResource("editScene_Oi_Type1") //"制冷";
+        window.lang_houseKeeper1_Oi_Type2 = languageUtil.getResource("editScene_Oi_Type2") //"制热";
+        window.lang_houseKeeper1_Oi_Type3 = languageUtil.getResource("editScene_Oi_Type3") //"送风";
+        window.lang_houseKeeper1_Oi_Type4 = languageUtil.getResource("editScene_Oi_Type4") //"除湿";
+
+        window.lang_houseKeeper1_Oi_Speed4 = languageUtil.getResource("editScene_Oi_Speed4") //"自动";
+
+        window.lang_houseKeeper1_Oi_Cancel = languageUtil.getResource("editScene_82_Cancel");//
+        window.lang_houseKeeper1_Oi_Confirm = languageUtil.getResource("editScene_82_Confirm");//
+    }
+    initlan();
+    //
+    var deviceSuooortedModes = [];
+    var deviceHeatMinTemperature;
+    var deviceHeatMaxTemperature;
+    var deviceCoolMaxTemperature;
+    var deviceCoolMinTemperature;
+    var deviceSuooortedFans = [];
+    var deviceSuooortedFX;
+    var deviceSuooortedFXs = [];
+    //
+    var devID;
+    var gwID;
+    var ep;
+
+    function sendCmd(gwID,dID,endpointNumber,commandId,parameter){
+        var jsonData = {}
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = dID;
+        jsonData.endpointNumber = endpointNumber;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        plus.gatewayCmd.getDeviceInfo(deviceID, function (data) {
+            devID = data.devID;
+            gwID = data.gwID;
+            ep = ~~(data.endpoints[0].endpointNumber)
+            handleData(data);
+            if(deviceSuooortedModes.length == 0){
+                sendCmd(gwID,devID,ep,0x0304,["0101"]);
+            }
+        })
+        plus.gatewayCmdRush.newDataRefresh(deviceID,function (data) {
+            if(data.cmd == "500" && devID == data.devID){
+                if(deviceSuooortedModes.length == 0){
+                    handleData(data);
+                }
+            }
+        })
+
+        $(".mainListView").find("ul").find("li").find("i").off("click");
+        $(".mainListView").find("ul").find("li").find("i").on("click", function(){
+            var self = $(this)
+            if($(this).attr("class") == "on") {
+                status = "0"
+            } else {
+                status = "1"
+            }
+            updateStatus();
+        });
+        function updateStatus() {
+            if(status == "0") {
+                $(".mainListView").find("ul").find("li").find("i").removeClass("on")
+                $(".mainListView ul:first li").hide();
+                $(".mainListView ul:first li:first").show();
+            } else {
+                $(".mainListView").find("ul").find("li").find("i").addClass("on")
+                $(".mainListView ul:first li").show();
+            }
+        }
+        $(".mainListView").find("ul").find("li").off("click");
+        $(".mainListView").find("ul").find("li").on("click",function () {
+            var liIndexNum = $(this).index();
+            var picker = new mui.PopPicker({});
+            $(".mui-poppicker-btn-cancel").html(lang_houseKeeper1_Oi_Cancel);
+            $(".mui-poppicker-btn-ok").html(lang_houseKeeper1_Oi_Confirm);
+            switch (liIndexNum){
+                case 1:{
+                    var showSupportModes = [];
+                    for(var i = 0;i<deviceSuooortedModes.length;i++){
+                        var tempMode = deviceSuooortedModes[i];
+                        if(tempMode=="1"){
+                            showSupportModes.push(lang_houseKeeper1_Oi_Type1);
+                        }else if(tempMode=="2"){
+                            showSupportModes.push(lang_houseKeeper1_Oi_Type2);
+                        }else if(tempMode=="3"){
+                            showSupportModes.push(lang_houseKeeper1_Oi_Type3);
+                        }else if(tempMode=="5"){
+                            showSupportModes.push(lang_houseKeeper1_Oi_Type4);
+                        }
+
+                    }
+                    picker.setData(showSupportModes);
+                    picker.show(function(item) {
+                        var modeShowStr = item.toString();
+                        var modeShowStrIndex = $.inArray(modeShowStr, showSupportModes);
+                        if(modeShowStrIndex >= 0){
+                            mode = "0"+ deviceSuooortedModes[modeShowStrIndex];
+                            $(".mainListView ul:first-child li:nth-child(2) a:nth-child(2)").html(modeShowStr);
+                        }
+                    });
+                }
+                    break;
+                case 2:{
+                    var tempArry = [];
+                    if(mode == "01"){
+                        if(deviceCoolMaxTemperature && deviceCoolMinTemperature){
+                            var deviceCoolMaxTemperatureNum = parseInt(deviceCoolMaxTemperature);
+                            var deviceCoolMinTemperatureNum = parseInt(deviceCoolMinTemperature);
+                            for (var i = deviceCoolMinTemperatureNum;i <= deviceCoolMaxTemperatureNum;i++){
+                                tempArry.push(i);
+                            }
+                        }
+                    }else if(mode == "02"){
+                        if(deviceHeatMaxTemperature && deviceHeatMinTemperature){
+                            var deviceHeatMaxTemperatureNum = parseInt(deviceHeatMaxTemperature);
+                            var deviceHeatMinTemperatureNum = parseInt(deviceHeatMinTemperature);
+                            for (var i = deviceHeatMinTemperatureNum;i <= deviceHeatMaxTemperatureNum;i++){
+                                tempArry.push(i);
+                            }
+                        }
+                    }
+                    picker.setData(tempArry);
+                    picker.show(function(item) {
+                        temperature = item.toString();
+                        var temperatureStrIndex = $.inArray(temperature, tempArry);
+                        if(temperatureStrIndex >= 0) {
+                            $(".mainListView ul:first-child li:nth-child(3) a:nth-child(2)").html(temperature);
+                        }
+                    });
+                }
+                    break;
+                case 3:{
+                    var showSupportFans = [];
+                    for(var i = 0;i<deviceSuooortedFans.length;i++){
+                        var tempFan = deviceSuooortedFans[i];
+                        if(tempFan=="0"){
+                            showSupportFans.push(lang_houseKeeper1_Oi_Speed4);
+                        }else{
+                            showSupportFans.push(tempFan);
+                        }
+                    }
+                    picker.setData(showSupportFans);
+                    picker.show(function(item) {
+                        var FanShowStr = item.toString();
+                        var FanShowStrIndex = $.inArray(FanShowStr, showSupportFans);
+                        if(FanShowStrIndex >= 0){
+                            fan = "0"+deviceSuooortedFans[FanShowStrIndex];
+                            $(".mainListView ul:first-child li:nth-child(4) a:nth-child(2)").html(FanShowStr);
+                        }
+                    });
+                }
+                    break;
+                case 4:{
+                    var showSupportFXs = [];
+                    for(var i = 0;i<deviceSuooortedFXs.length;i++){
+                        var tempFX = deviceSuooortedFXs[i];
+                        if(tempFX=="0"){
+                            showSupportFXs.push(lang_houseKeeper1_Oi_Speed4);
+                        }else{
+                            showSupportFXs.push(tempFX);
+                        }
+                    }
+                    picker.setData(showSupportFXs);
+                    picker.show(function(item) {
+                        var FXShowStr = item.toString();
+                        var FXShowStrIndex = $.inArray(FXShowStr, showSupportFXs);
+                        if(FXShowStrIndex >= 0){
+                            fx = deviceSuooortedFX + "0" + deviceSuooortedFXs[FXShowStrIndex];
+                            $(".mainListView ul:first-child li:nth-child(5) a:nth-child(2)").html(FXShowStr);
+                        }
+                    });
+                }
+                    break;
+            }
+        })
+
+    })
+
+
+    function handleData(data){
+        for (var i = 0; i < data.endpoints.length; i++) {
+            var endpoint = data.endpoints[i];
+            var endpointNumber = endpoint.endpointNumber;
+            var endpointName = endpoint.endpointName;
+            var endpointType = endpoint.endpointType;
+            var clusters = endpoint.clusters;
+            for (var k = 0; k < clusters.length; k++) {
+                var attributes = clusters[k].attributes;
+                for (var j = 0;j < attributes.length;j++){
+                    var attributeId = attributes[j].attributeId;
+                    var attributeValue = attributes[j].attributeValue;
+                    dealWithData(attributes[j]);
+                }
+            };
+        }
+    }
+
+    function dealWithData(attributeData){
+        var attributeId = attributeData.attributeId;
+        var attributeValue = attributeData.attributeValue;
+        switch (attributeId){
+            case 0x8401:{
+                /*室内机性能信息——模式: 0:无   1：有   （）括号内的数字表示第几位
+（1） 制冷模式  （2） 制热模式  （3） 送风模式  （4） 预热模式  （5） 除湿模式
+（6） 自动模式  （7） 干燥模式  （8） 清爽模式  （9） 睡眠模式  （10） 杀菌模式
+（11） 干爽除湿模式   （12）强力除湿模式*/
+
+                if (attributeValue.length == 12){
+                    deviceSuooortedModes.length = 0;
+                    for (var i = 0;i < attributeValue.length;i++){
+                        var tempStr = attributeValue.substring(i,i+1);
+                        if (tempStr == "1"){
+                            deviceSuooortedModes.push((i+1).toString());
+                        }
+                    }
+                }
+            }
+                break;
+            case 0x8402:{
+                /*室内机的制热模式设定温度下限*/
+                if (attributeValue){
+                    deviceHeatMinTemperature = parseInt(attributeValue);
+                    MinTemperature = deviceHeatMinTemperature;
+                }
+            }
+                break;
+            case 0x8403:{
+                /*室内机的制热模式设定温度上限*/
+                if (attributeValue){
+                    deviceHeatMaxTemperature = parseInt(attributeValue);
+                    MaxTemperature = deviceHeatMaxTemperature;
+                }
+            }
+                break;
+            case 0x8404:{
+                /*制冷模式温度上限*/
+                if (attributeValue){
+                    deviceCoolMaxTemperature = parseInt(attributeValue);
+                    MaxTemperature = deviceCoolMaxTemperature;
+                }
+            }
+                break;
+            case 0x8405:{
+                /*制冷模式温度下限*/
+                if (attributeValue){
+                    deviceCoolMinTemperature = parseInt(attributeValue);
+                    MinTemperature = deviceCoolMinTemperature;
+                }
+            }
+                break;
+            case 0x8408:{
+                /*室内性能信息-风向风量
+1：风向自动    0：无      1：有
+2：风量自动    0：无      1：有
+3：风量调节   0：无      1：有
+4-6：风量/换气量的风速设定  （数值范围：0-6）（当 3 的值为 0 时，此值无意义）
+7：风向摆动   0：无      1：有
+8：缺省
+9：风向调节（上下） 0：无      1：有
+10-12：风向叶片位置数设定（上下）（数值范围：0-6）(当 9 的值为 0 时，此值无意义)
+13：风向调节（左右） 0：无      1：有
+14-16：风向叶片位置数设定（左右）（数值范围：0-6）(当 13的值为 0 时，此值无意义)*/
+                if (attributeValue){
+                    //1110110011100000
+                    deviceSuooortedFans.length = 0;
+                    deviceSuooortedFXs.length = 0;
+
+                    if(attributeValue.substring(0,1)=="1"){
+                        //风向自动
+                        deviceSuooortedFXs.push("0");
+                    }
+                    if(attributeValue.substring(1,2)=="1"){
+                        deviceSuooortedFans.push("0");
+                    }
+                    if(attributeValue.substring(2,3)=="1"){
+                        var suooortedFansB = attributeValue.substring(3,6);
+                        var suooortedFansO = parseInt(suooortedFansB.toString(),2);
+                        for (var i = 1;i < suooortedFansO+1;i++){
+                            deviceSuooortedFans.push(i.toString());
+                        }
+                    }else{
+                        deviceSuooortedFans.length = 0;
+                    }
+                    if(attributeValue.substring(8,9)=="1"){
+                        //上下风向
+                        deviceSuooortedFX = "00";
+                        var suooortedFXsB = attributeValue.substring(9,12);
+                        var suooortedFXsO = parseInt(suooortedFXsB.toString(),2);
+                        for (var i = 1;i < suooortedFXsO+1;i++){
+                            deviceSuooortedFXs.push(i.toString());
+                        }
+                        deviceSuooortedFXs.push("7");//摆动
+                    } else if(attributeValue.substring(12,13)=="1"){
+                        //左右风向
+                        deviceSuooortedFX = "01";
+                        var suooortedFXsB = attributeValue.substring(13,16);
+                        var suooortedFXsO = parseInt(suooortedFXsB.toString(),2);
+                        for (var i = 1;i < suooortedFXsO+1;i++){
+                            deviceSuooortedFXs.push(i.toString());
+                        }
+                        deviceSuooortedFXs.push("7");//摆动
+                    }
+                }
+            }
+                break;
+        }
+    }
+
+    function save() {
+        var epdataStr = "AAAA000E0100";
+        if(status == "0"){
+            //off
+            epdataStr = epdataStr +"09"+"00"+"FFFFFFFFFFFFFFFF";
+            info.setItem("deviceState", languageUtil.getResource('device_status_close'));
+        }else if(status == "1"){
+            var sendTemperatureStr =  parseInt(temperature).toString(16);
+            if(sendTemperatureStr.length < 2){
+                sendTemperatureStr = "0"+sendTemperatureStr;
+            }else if(temperature == "FF"){
+                sendTemperatureStr = temperature;
+            }
+            epdataStr = epdataStr +"09"+"01"+mode+sendTemperatureStr+dd+fx+fan+gg+hh;
+            info.setItem("deviceState", languageUtil.getResource('device_status_open'));
+        }
+        info.setItem("epData", epdataStr);
+        window.location = "addDelay.html";
+    }
+</script>
+</html>

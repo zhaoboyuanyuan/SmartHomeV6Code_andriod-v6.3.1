@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>中继器</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/device.css" />
+		<script src="../../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../../skinSource/css/skin.css" />
+	</head>
+
+	<body>
+		<header class="header" style="position: fixed;top: 0px;z-index: 100;">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" href="javascript:;" id="Device_31_name">中继器</a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="socket" >
+			<img src="../fonts/repeater_01.png" style="width: 100%;" />
+			<span class="autoSwitchLanguager hint" id="Repeater_hint"></span>
+			<span class="autoSwitchLanguager scenario_1" id="Repeater_Use_scenario_1"></span>			
+			<span class="autoSwitchLanguager scenario_2" id="Repeater_Use_scenario_2"></span>
+			<span class="autoSwitchLanguager hint_2" id="Repeater_How_to_join"></span>
+			<span class="autoSwitchLanguager scenario_2" id="Repeater_join_hint"></span>
+		</section>
+		<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" id="offLine">设备已离线</span></section>
+	</body>
+	<script src="../js/bridge.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/navigator.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/more.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/controlDevice.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        plus.plusReady(function() {
+            var iphoneX = {
+                sysFunc: "getItem:",
+                room: "iphoneX",
+                id: "iphoneX",
+                data: ""
+            };
+            var iStr = '';
+            if (!window.v6sysfunc) {
+                iStr = prompt(JSON.stringify(iphoneX))
+            }
+            if (iStr == "iphoneX") {
+                $(".mask_layer")[0].style.top = "8.8rem";
+                $(".mask_layer")[0].style.height = "89.2%";
+            }
+
+        })
+	</script>
+</html>

@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <RelativeLayout
+            android:id="@+id/layoutStep1_ChooseWifi"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <View
+                android:id="@+id/layoutStep1_line1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/v6_line2" />
+
+            <LinearLayout
+                android:id="@+id/Layoutstep1_wifiName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutStep1_line1"
+                android:layout_gravity="center_vertical"
+                android:background="@color/newTextBackground"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/step1_showWifiNames"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:src="@drawable/icon_wifi_focused" />
+
+                <EditText
+                    android:id="@+id/step1_wifiName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:enabled="false"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/default_editText_size" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/layoutStep1_line2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/Layoutstep1_wifiName"
+                android:background="@color/v6_line2" />
+
+            <TextView
+                android:id="@+id/step1_msg1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutStep1_line2"
+                android:layout_margin="10dp"
+                android:text="@string/Tips_No_Support_5G"
+                android:textColor="@color/gray" />
+
+            <View
+                android:id="@+id/layoutStep1_line3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/step1_msg1"
+                android:background="@color/v6_line2" />
+
+            <LinearLayout
+                android:id="@+id/step1_layoutpw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layoutStep1_line3"
+                android:layout_gravity="center_vertical"
+                android:background="@color/newTextBackground"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:src="@drawable/password_icon" />
+
+                <EditText
+                    android:id="@+id/step1_wifiPw"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/transparent"
+                    android:gravity="center_vertical"
+                    android:hint="@string/Input_Wifi_Password"
+                    android:inputType="textPassword"
+                    android:text=""
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/v6_texthintcolor"
+                    android:textSize="@dimen/default_editText_size" />
+
+                <ImageView
+                    android:id="@+id/step1_hspw"
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="15dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/passwordhide" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/layoutStep1_line4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/step1_layoutpw"
+                android:background="@color/v6_line2" />
+
+            <LinearLayout
+                android:id="@+id/step1_nonewifipw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layoutStep1_line4"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/step1_nonePw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/checknone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/No_WiFi_Password"
+                    android:textColor="@color/default_value_color" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/step1_wifiNameList"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@id/Layoutstep1_wifiName"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_btn_border"
+                android:visibility="gone"></ListView>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutStep2_Setting"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:gravity="center"
+                android:text="@string/Device_Vidicon_WiFiConnecting"
+                android:textColor="@color/grey" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="@string/Device_Vidicon_WiFiConnectingTip"
+                android:textColor="@color/grey" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginRight="30dp"
+                    android:src="@drawable/icon_bc_config_left_img" />
+
+                <ImageView
+                    android:id="@+id/step2_wifiConnect"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/xiaodian1_2x" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/icon_wifi" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutStep3_Success"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_config_wifi_success" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:text="@string/WiFi_Config_Fail"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutStep4_Failed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_config_wifi_fail" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:text="@string/Device_Vidicon_WiFiFailed_config"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/Device_Vidicon_WiFiFailed_configTip"
+                android:textColor="@color/grey" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnSomething"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:background="@drawable/shape_btn_negative_bg"
+        android:text="@string/Config_Next_Step"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/btnSomethingTest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:background="@color/newIconNor"
+        android:text="测试"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+</LinearLayout>

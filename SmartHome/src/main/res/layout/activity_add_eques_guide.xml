@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_camera_guide_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/default_padding_large"
+            android:background="@drawable/add_eques_guide" />
+
+        <TextView
+            android:id="@+id/tv_config_tips1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_camera_guide_icon"
+            android:layout_marginLeft="@dimen/default_margin_normal"
+            android:layout_marginTop="@dimen/default_padding_large"
+            android:text="@string/Cateyemini_Adddevice_Deadwork"
+            android:textColor="@color/v6_config_wifi_tips"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_config_tips2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/tv_config_tips1"
+            android:layout_below="@+id/tv_config_tips1"
+            android:layout_marginTop="@dimen/default_padding_small"
+            android:text="@string/Cateyemini_Adddevice_Boot"
+            android:textColor="@color/v6_config_wifi_tips"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_config_tips3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/tv_config_tips2"
+            android:layout_below="@+id/tv_config_tips2"
+            android:layout_marginTop="@dimen/default_padding_small"
+            android:text="@string/Cateyemini_Adddevice_ConnectionWiFi"
+            android:textColor="@color/v6_config_wifi_tips"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_next_step"
+            style="@style/config_next_button"
+            android:layout_alignParentBottom="true"
+            android:text="@string/Cateyemini_Adddevice_Addcateyemini" />
+    </RelativeLayout>
+
+</LinearLayout>

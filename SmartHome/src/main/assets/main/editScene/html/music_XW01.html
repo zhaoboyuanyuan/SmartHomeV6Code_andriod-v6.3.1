@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>设置设备状态</title>
+
+    <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+
+
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/editok.css" />
+
+    <script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/mui/js/mui.picker.all.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+        .set_list li {
+            width: 100%;
+        }
+
+        .stage {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            background-color: #f1f4f8;
+        }
+
+        .stateStage {
+            z-index: 100;
+        }
+
+        .voiceStage {
+            position: fixed;
+            display: none;
+            z-index: 200;
+        }
+
+        .item {
+            background-color: white;
+            width: 100%;
+            height: 2.4rem;
+            line-height: 2.4rem;
+            font-size: 1.6rem;
+            margin-top: 0.2rem;
+            padding: 0.8rem 0;
+        }
+
+        .item .itemText {
+            margin-left: 0.8rem;
+        }
+
+        .arrow {
+            float: right;
+            width: 5rem;
+            height: 2.4rem;
+            background: url("../fonts/icon_right.png") no-repeat center center;
+            background-size: 1rem auto;
+        }
+
+        .slideBarContainer {
+            display: inline-block;
+            width: 100%;
+            height: 6rem;
+            margin-top: 0.8rem;
+        }
+
+        .slideBarContainerHeHe {
+            background-color: white;
+            height: 4rem;
+            padding-top: 0.8rem
+        }
+
+        /* 滑块 */
+
+        .slideBar {
+            width: 74.375%;
+            margin-left: 15%;
+            height: 0.2rem;
+            position: relative;
+            background: transparent;
+            z-index: 1110;
+            top: 0;
+        }
+
+        .slideExpand {
+            width: 30%;
+            height: 0.2rem;
+            background: #8dd652;
+            position: absolute;
+            z-index: 1120;
+            /*-webkit-animation:fullexpand 10s linear;*/
+        }
+
+        .slideCircle {
+            display: block;
+            width: 4rem;
+            height: 4rem;
+            left: 30%;
+            position: absolute;
+            transform: translateX(-50%) translateY(-1.9rem);
+            background: url(../fonts/icon_slide_circle.png) no-repeat center center;
+            background-size: 1.8rem auto;
+            z-index: 1130;
+        }
+
+        .textVoiceSec {
+            display: block;
+            color: black;
+            width: 100%;
+            height: 2rem;
+            line-height: 2rem;
+            font-size: 1.2rem;
+            text-align: left;
+            padding-left: 1.6rem;
+        }
+
+        .iconVoice {
+            float: left;
+            width: 5rem;
+            height: 2rem;
+            background: url("../fonts/icon_voice_none.png") no-repeat center center;
+            background-size: 1.2rem auto;
+        }
+
+        .spanVoicePer {
+            float: right;
+            color: black;
+            width: calc(5rem - 4.375%);
+            height: 2rem;
+            line-height: 2rem;
+            text-align: center;
+        }
+
+        .voiceList {
+            display: block;
+            width: 100%;
+            height: 2rem;
+        }
+
+        .voiceList li {
+            float: left;
+            width: 6.25%;
+            height: 2rem;
+        }
+
+        .voiceList li i {
+            display: block;
+            width: 100%;
+            height: 2rem;
+            box-sizing: content-box;
+            background-size: 0.2rem 0.5rem;
+        }
+
+        .voiceList li i[m-choose='yes'] {
+            background: url("../fonts/icon_DD_p.png") left bottom no-repeat;
+            /*background-size: 0.2rem 0.5rem;*/
+            border-bottom: #8dd652 0.1rem solid;
+        }
+
+        .voiceList li i[m-choose='yes press'] {
+            background: url("../fonts/icon_DD_p.png") left bottom no-repeat;
+            /*background-size: 0.2rem 0.5rem;*/
+            border-bottom: transparent 0.1rem solid
+        }
+
+        .voiceList li i[m-choose='false'] {
+            background: url("../fonts/icon_DD_pp.png") left bottom no-repeat;
+            /*background-size: 0.2rem 0.5rem;*/
+            border-bottom: transparent 0.1rem solid
+        }
+    </style>
+
+</head>
+
+<body>
+    <header class="header">
+        <div class="header_top" style="box-sizing: content-box;-webkit-box-sizing: content-box;z-index: 105;">
+            <a class="D9_back"></a>
+            <a id="setDeviceStatus" class="autoSwitchLanguager" href="javascript:;">设置设备状态</a>
+            <a class="complete" href="javascript:;"></a>
+        </div>
+    </header>
+    <section id="selectAction" class="" style="display: block; width: 100%">
+        <ul class="set_list">
+            <li>
+                <b class="autoSwitchLanguager" key="Music_houseKeeper_play">播放</b>
+                <i class="trigger"></i>
+            </li>
+            <li>
+                <b class="autoSwitchLanguager" key="Music_houseKeeper_stop">停止播放</b>
+                <i class="trigger"></i>
+            </li>
+        </ul>
+    </section>
+
+    <!--选择播放歌曲列表-->
+    <div id="chooseMusic" class="mui-content mui-scroll-wrapper" style="margin-top:6.5rem;margin-bottom: 1rem;display: none">
+        <div class="mui-scroll">
+            <form class="mui-input-group">
+            </form>
+        </div>
+    </div>
+
+    <!--选择播放模式-->
+    <section id="playMode" class="mainView" style="display: none">
+        <div class="mainTop" onclick="chooseMe('.mainTop')" style="height:4.4rem;margin-top: 0.1rem;padding: 0 2rem;line-height:4.4rem;font-size:1.4rem;background-color: white;">
+            <span class="autoSwitchLanguager" key="Music_mode_1">列表循环</span>
+            <i class="iconRight" style="display: none;top: 1rem;position: relative;float:right;width: 2rem;height: 2rem;background:url(../fonts/icon_5.png) no-repeat center center;background-size: 100% auto;"></i>
+        </div>
+        <div class="mainMiddle" onclick="chooseMe('.mainMiddle')" style="height:4.4rem;margin-top: 0.1rem;padding: 0 2rem;line-height:4.4rem;font-size:1.4rem;background-color: white;">
+            <span class="autoSwitchLanguager" key="Music_mode_2">
+                随机播放</span>
+            <i class="iconRight" style="display: none;top: 1rem;position: relative;float:right;width: 2rem;height: 2rem;background:url(../fonts/icon_5.png) no-repeat center center;background-size: 100% auto;"></i>
+        </div>
+        <div class="mainBottom" onclick="chooseMe('.mainBottom')" style="height:4.4rem;margin-top: 0.1rem;padding: 0 2rem;line-height:4.4rem;font-size:1.4rem;background-color: white;">
+            <span class="autoSwitchLanguager" key="Music_mode_3">
+                顺序播放</span>
+            <i class="iconRight" style="display: none;top: 1rem;position: relative;float:right;width: 2rem;height: 2rem;background:url(../fonts/icon_5.png) no-repeat center center;background-size: 100% auto;"></i>
+        </div>
+    </section>
+
+    <style>
+        .mui-input-range input[type=range]::-webkit-slider-thumb {
+            width: 28px;
+            height: 28px;
+            border-color: #0062cc;
+            border-radius: 50%;
+            background-clip: padding-box;
+            border: solid 2px #ddd;
+            background-color: white;
+            -webkit-appearance: none !important
+        }
+
+        .mui-input-range span {
+            display: none !important;
+        }
+    </style>
+
+    <!--设置音量-->
+    <!-- <div id="volSlider" class="mui-content" style="display: none">
+    <div class="mui-input-row mui-input-range" style="background: white">
+        <i style="left: 3%;top: 0.6rem;float:left;position: relative;width: 1.5rem;height: 1.5rem;background:url(../fonts/icon_less_volume.png) no-repeat center center;background-size: 100% auto;"></i>
+        <input  style="left: 8%;width: 78%" type="range" id='inline-range' value="50" min="0" max="100" >
+        <label class="value_show" style="width: 10%;float: right;padding:0 0;padding-top: 1rem;text-align:right;">50%</label>
+    </div>
+</div> -->
+    <section class="stage voiceStage">
+        <div class="slideBarContainer" style="margin-top: 1.6rem;">
+            <div class="slideBarContainerHeHe">
+                <i class="iconVoice"></i>
+                <span class="spanVoicePer songsTimeText">0</span>
+                <div id="slideBarVoice" class="slideBar" m-section="1">
+                    <ul class="voiceList">
+                        <li>
+                            <i class="voiceIndex00" m-choose="yes press"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex01" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex02" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex03" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex04" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex05" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex06" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex07" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex08" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex09" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex10" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex11" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex12" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex13" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex14" m-choose="false"></i>
+                        </li>
+                        <li>
+                            <i class="voiceIndex15" m-choose="false"></i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var viewTag = 0;
+    var selectedStatus = "0";
+
+    function chooseMe(ele) {
+        $(".mainView").find('i').hide();
+        $(ele).find('i').show();
+    }
+
+    $(".set_list li").on("click", function () {
+
+        if ($(this).index() == 0) {
+            //播放
+            selectedStatus = $(this).text();
+            //设置音量
+            showChooseMusicView();
+        } else if ($(this).index() == 1) {
+            //停止播放
+            selectedStatus = $(this).text();
+
+            var data = {};
+            data.action = "controlDevice";
+            data.deviceId = devID;
+            var endpoint = [];
+            var endpoint1 = {};
+            var endpoint2 = {};
+            endpoint1.endpointNum = 1;
+            var action = {};
+            var play = {};
+            play.value = "stop";
+            play.resource = selectedId;
+            action.Play = play;
+            endpoint1.action = action;
+            endpoint.push(endpoint1);
+            data.endpoint = endpoint;
+            info.setItem("epData", JSON.stringify(data));
+            info.setItem("deviceState", languageUtil.getResource("Music_houseKeeper_stop"));
+            window.location = "addDelay.html";
+        }
+    });
+
+    $(".complete").on('click', function () {
+        switch (viewTag) {
+            case 1:
+                {
+                    if (selectedId && (selectedId.length > 0)) {
+                        showVolSliderView();
+                    }
+                }
+                break;
+            case 2:
+                {
+                    //拼装epData
+
+                    var data = {};
+                    data.action = "controlDevice";
+                    data.deviceId = devID;
+                    var endpoint = [];
+                    var endpoint1 = {};
+                    var endpoint2 = {};
+                    if (selectedId.length > 0) {
+                        endpoint1.endpointNum = 1;
+                        var action = {};
+                        var play = {};
+                        play.value = "play";
+                        if (selectedId != -1) {
+                            play.resource = selectedId;
+                        }
+                        action.Play = play;
+                        endpoint1.action = action;
+                        endpoint.push(endpoint1);
+                    }
+                    if (selectedVol >= 0) {
+                        endpoint2.endpointNum = 1;
+                        var action = {};
+                        var volume = {};
+                        volume.value = selectedVol;
+                        action.Volume = volume;
+                        endpoint2.action = action;
+                        endpoint.push(endpoint2);
+                    }
+                    data.endpoint = endpoint;
+                    info.setItem("epData", JSON.stringify(data));
+                    info.setItem("deviceState", languageUtil.getResource("Music_houseKeeper_play") + " " +
+                        languageUtil.getResource("minigateway_Sound_volume") + " " + selectedVol);
+                    window.location = "addDelay.html";
+                }
+                break;
+        }
+    })
+
+    mui.init({
+        pullRefresh: {
+            container: '#chooseMusic',
+            down: {
+                contentrefresh: '正在刷新',
+                callback: onRefresh
+            },
+            up: {
+                auto: false,
+                contentrefresh: '正在加载',
+                callback: onLoadMore
+            }
+        },
+    });
+
+    function onRefresh() {
+        getMusicListRequest(1);
+        setTimeout(function () {
+            mui('#chooseMusic').pullRefresh().endPulldownToRefresh(); //
+        }, 1500);
+    }
+
+    function onLoadMore() {
+        getMusicListRequest(currentPager + 1);
+        setTimeout(function () {
+            mui('#chooseMusic').pullRefresh().endPullupToRefresh(); //
+        }, 1500);
+    }
+
+    function showChooseMusicView() {
+        getMusicListRequest(1);
+        viewTag = 1;
+        updateShowViews();
+    }
+
+    function showVolSliderView() {
+        viewTag = 2;
+        updateShowViews();
+        updateVoice();
+        resetVoiceHeight();
+    }
+    $(".D9_back").on('click', function () {
+        goBack();
+    })
+
+    function goBack() {
+        if (viewTag <= 0) {
+            javascript: history.back(-1);
+        }
+        viewTag--;
+        updateShowViews();
+    }
+
+    function updateShowViews() {
+        if (viewTag == 0) {
+            $("#selectAction").show();
+            $("#chooseMusic").hide();
+            $("#playMode").hide();
+            $(".stage").hide();
+            $(".complete").text("");
+        } else if (viewTag == 1) {
+            $("#selectAction").hide();
+            $("#chooseMusic").show();
+            $("#playMode").hide();
+            $(".stage").hide();
+            $(".complete").text(languageUtil.getResource("confirm"));
+        } else if (viewTag == 2) {
+            $("#selectAction").hide();
+            $("#chooseMusic").hide();
+            $("#playMode").hide();
+            $(".stage").show();
+            $(".complete").text(languageUtil.getResource("confirm"));
+        }
+    }
+
+    function getMusicListRequest(pager) {
+        var paramToNative = {};
+        var urlStr = "/ent/music/get/music/list";
+        var paramToCilent = {};
+        paramToCilent.deviceId = devID;
+        paramToCilent.platformId = 2;
+        paramToCilent.page = pager;
+        paramToNative.url = urlStr;
+        paramToNative.param = paramToCilent;
+
+        plus.gatewayCmd.WLHttpGetBase(paramToNative, function (result) {
+            console.log(result);
+            if (result.resultCode == 0) {
+                if (result.data) {
+                    currentPager = parseInt(result.data.currentPage);
+                    if (pager == 1) {
+                        mui('#chooseMusic').pullRefresh().endPulldownToRefresh();
+                        songsList = result.data.entContents;
+                        var chooseCur = {};
+                        chooseCur.trackTitle = languageUtil.getResource("music_current");
+                        chooseCur.songId = "-1";
+                        chooseCur.nickname = " < unknown> ";
+                        songsList.unshift(chooseCur);
+                        refreshUI(songsList);
+                    } else if (result.data.currentPage == pager && result.data.totalPage >= pager) {
+                        mui('#chooseMusic').pullRefresh().endPullupToRefresh();
+                        addSongsList(result.data.entContents);
+                    }
+                }
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    var devID = '';
+    var songsList = [];
+    var info = window.sysfun;
+    var selectedStatus = '';
+    var selectedId = '-1';
+    var selectedMode = '';
+    var selectedVol = '7';
+    var currentPager = 1;
+    info.init("V6Scene");
+
+    var deviceID = info.getItem("deviceID");
+    var exp;
+    initlan();
+
+    function globalLang() {
+
+    }
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            goBack();
+        });
+        plus.gatewayCmd.getDeviceInfo(deviceID, function (data) {
+            devID = data.devID;
+            gwID = data.gwID;
+        })
+    });
+</script>
+<script>
+    var isALLSelected = false;
+
+    function refreshUI(data) {
+        $(".mui-input-group")[0].innerHTML = "";
+        for (var i = 0; i < data.length; i++) {
+            var itemDiv = document.createElement("div");
+            itemDiv.style.height = "4.4rem";
+            itemDiv.className = "mui-input-row mui-radio";
+            var itemLbl = document.createElement("label");
+            itemLbl.innerHTML = data[i].trackTitle;
+            var itemInput = document.createElement("input");
+            itemInput.style.top = "0.8rem";
+            itemInput.name = "radio1";
+            itemInput.value = data[i].trackTitle;
+            itemInput.type = "radio";
+            if (i == 0) {
+                itemLbl.style.color = "#8dd652";
+                itemLbl.style.fontSize = "18px";
+                itemInput.checked = "checked";
+            }
+
+            itemDiv.appendChild(itemLbl);
+            itemDiv.appendChild(itemInput);
+
+            // $(".mui-input-group")[0].append(itemDiv);
+            document.getElementsByClassName('mui-input-group')[0].appendChild(itemDiv);
+        }
+    }
+
+    function addSongsList(data) {
+        for (var i = 0; i < data.length; i++) {
+            var itemDiv = document.createElement("div");
+            itemDiv.style.height = "4.4rem";
+            itemDiv.className = "mui-input-row mui-radio";
+            var itemLbl = document.createElement("label");
+            itemLbl.innerHTML = data[i].trackTitle;
+            itemLbl.id = data[i].songId;
+            var itemInput = document.createElement("input");
+            itemInput.style.top = "0.8rem";
+            itemInput.name = "radio1";
+            itemInput.value = data[i].trackTitle;
+            itemInput.type = "radio";
+
+
+            itemDiv.appendChild(itemLbl);
+            itemDiv.appendChild(itemInput);
+
+            $(".mui-input-group")[0].append(itemDiv);
+        }
+    }
+
+    mui('.mui-input-group').on('change', 'input', function () {
+        console.log(this);
+        var divItem = this;
+        if (divItem.checked) {
+            var lblStr = divItem.value;
+            selectedRadioUrl(lblStr);
+        }
+    });
+
+    function selectedRadioUrl(trackTitle) {
+        if (songsList && songsList.length > 0) {
+            var trankIndex = songsList.length;
+            while (trankIndex--) {
+                if (songsList[trankIndex].trackTitle == trackTitle) {
+                    selectedId = songsList[trankIndex].songId;
+                }
+            }
+        }
+    }
+
+    // 设置 音量条 高度
+    function resetVoiceHeight() {
+        $('.slideBar').each(function (i0, e) {
+            $(e).find('i').each(function (i, ei) {
+                $(ei).css('background-size', '0.2rem ' + (0.5 + i / 10) + 'rem');
+            })
+        })
+    }
+
+    function updateVoice() {
+
+        $('#slideBarVoice').find('i').attr('m-choose', 'false');
+        $('#slideBarVoice').find('i:eq(' + selectedVol + ')').attr('m-choose', 'yes press');
+        $('#slideBarVoice').find('i:lt(' + selectedVol + ')').attr('m-choose', 'yes');
+        $('#slideBarVoice').siblings('.spanVoicePer').html(selectedVol);
+    }
+
+    $('.voiceList li').on('click', function () {
+        var parent = $(this).parents('.slideBar');
+        parent.find('i').attr('m-choose', 'yes');
+        var index = $(this).index();
+        parent.find('i').each(function (i, e) {
+            $(e).css('background-size', '0.2rem ' + (0.5 + i / 10) + 'rem');
+            if (i < index) {
+                $(e).attr('m-choose', 'yes');
+            } else if (i == index) {
+                $(e).attr('m-choose', 'yes press');
+            } else {
+                $(e).attr('m-choose', 'false');
+            }
+        });
+        parent.siblings('.spanVoicePer').html(index);
+        selectedVol = index;
+    });
+
+    var iphoneX = {
+        sysFunc: "getItem:",
+        room: "iphoneX",
+        id: "iphoneX",
+        data: ""
+    };
+    var iStr = '';
+    if (!window.v6sysfunc) {
+        iStr = prompt(JSON.stringify(iphoneX))
+    }
+    if (iStr == "iphoneX") {
+        $("#chooseMusic")[0].style.marginTop = "8.8rem";
+        //        $("#volSlider")[0].style.marginTop = "8.8rem";
+    }
+</script>
+
+</html>

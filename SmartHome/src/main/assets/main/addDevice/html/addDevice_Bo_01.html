@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加设备_Bo_01</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/setState.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a class="back_addScene" href="javascript:history.back(-1)"></a>
+				<a href="javascript:;" class="addDoorC autoSwitchLanguager" id="addDevice_Bo_title">添加二路输出型翻译器02型</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section style="width: 100%;">
+			<section style="width: 100%;text-align: center;">
+				<img style="width: 20rem;margin-top: 8rem;" src="../fonts/add_Bo_01.png" />
+			</section>
+			<div style="width: 100%;height: 12rem;margin-top: 4rem;">
+				<div class="addCommon_p addCommon_p_01">
+					<i class="addCommon_div2" data_name="1" onclick="read(this)"></i>
+					<span class="autoSwitchLanguager" id="addDevice_Ol_step_1">正确安装设备并接通电源</span>
+				</div>
+				<div class="addCommon_p addCommon_p_01">
+					<i class="addCommon_div2" data_name="1" onclick="read(this)"></i>
+					<span class="autoSwitchLanguager" id="addDevice_step_2">使设备处于网关的有效通信距离内</span><br/>
+				</div>
+			</div>
+		</section>
+
+		<section class="addSensorBtn">
+			<a class="autoSwitchLanguager" id="addDevice_01_01_add" href="javascript:;">开始添加</a>
+		</section>
+		<section id="succeed" class="toast" style="display:none;">
+			<i class="rotate"></i>
+			<p class="autoSwitchLanguager" id="addDoorContack2_starting">正在启动加网模式，请稍后...</p>
+		</section>
+		<section id="fail" class="toast" style="display:none;">
+			<p class="autoSwitchLanguager" id="addDevice_failing">加网模式启动失败，请重试</p>
+		</section>
+		<!--编辑弹框-->
+		<section class="changeName" style="display: none;">
+			<div class="nameToast giveUp">
+				<span class="openFail autoSwitchLanguager" id="gatewayAddDevice_fail_01" style="display:block;height: 12rem;padding-top: 2rem;padding-bottom: 0px;line-height: 2rem;word-wrap:break-word;word-break:break-all;overflow: auto;">
+					加网模式开启失败，您可以手动打开加网模式，找到网关上的set键快速按4下。(如果您是首次启用添加新设备，可能设备正在建网，请3分钟后再试)
+				</span>
+				<div class="choose_1" style="width: 100%;">
+					<a href="javascript:;" style="width: 100%;" onclick="cancel()" class="autoSwitchLanguager" id="addDevice_sure">确定</a>
+				</div>
+			</div>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan()
+		function read(ele) {
+			ele.style.backgroundImage = "url(../../skinSource/img/checkbox_" + ele.getAttribute("data_name") + ".png)";
+			var data_name = ele.getAttribute("data_name");
+			data_name = data_name == 1 ? 2 : 1;
+			ele.setAttribute("data_name", data_name);
+			var first = document.getElementsByClassName("addCommon_div")[0].getAttribute("data_name")
+			var second = document.getElementsByClassName("addCommon_div")[1].getAttribute("data_name")
+			var btn = document.getElementsByClassName("addSensorBtn")[0].getElementsByTagName("a")[0];
+			if(second == "2" && first == second) {
+				btn.style.backgroundImage = "url(../../skinSource/img/bigBtnEnable.png)";
+
+			} else {
+				btn.style.backgroundImage = "url(../../skinSource/img/bigBtnDisable.png)";
+			}
+		}
+		plus.plusReady(function() {
+            plus.gatewayCmd.getCurrentGWInfo(function(data){
+                if(JSON.parse(data).gwType === "GW08"){
+                    $(".openFail").html(languageUtil.getResource("gatewayAddDevice_GW08fail_01"));
+                }else{
+                    $(".openFail").html(languageUtil.getResource("gatewayAddDevice_fail_01"));
+                }
+            });
+			plus.gatewayCmd.newDataRefresh(function(data) {
+				if(data.cmd == "511") {
+					$("#succeed").hide()
+					window.location = "addDevice_Bo_02.html";
+				}
+			});
+			$(".addSensorBtn").unbind("click").on("click", function() {
+				plus.gatewayCmd.isBindGw(function(result) {
+					if(result == "NO") {
+						$(".changeName").show();
+						return;
+					} else {
+						plus.gatewayCmd.gatewayAddDevice(function() {
+							$("#succeed").show()
+							setTimeout(function() {
+								$("#succeed").hide();
+								$(".changeName").show();
+							}, 10000)
+						});
+					}
+				})
+			})
+		})
+
+		function cancel() {
+			$(".changeName").hide();
+		}
+
+		function bingGateway() {
+			plus.gatewayCmd.goToBind(function() {})
+		}
+	</script>
+
+</html>

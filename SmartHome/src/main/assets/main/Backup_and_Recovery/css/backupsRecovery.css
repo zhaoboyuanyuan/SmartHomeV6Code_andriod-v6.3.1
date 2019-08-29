@@ -1,0 +1,327 @@
+.content_top {
+    width: 100%;
+    height: 18rem;
+}
+.content_top>img{
+    height: 100%;
+    width: 100%;
+}
+.content_describe{
+    padding: 0 1rem;
+    margin-top: 5rem;
+    font-size: 1.5rem;
+}
+.content_bottom{
+    width: 100%;
+    text-align: center;
+    margin-top: 5.5rem;
+}
+.content_bottom button,.add_backups button,.complete{
+    width: 94%;
+    height: 4rem;
+    background-color: #8dd652;
+    color:#fff;
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+}
+.content_bottom h5{
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    color: #000;
+    text-decoration: underline;
+}
+.backups_record{
+    margin-top: 2rem;
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+    color: #000;
+    font-weight: bold;
+    font-size: 1.5rem;
+    position: relative;
+}
+.backups_record:after,.backups_num li:after,.verification>ul>li:after,.popUp>div:after{
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: #cccccc;
+    bottom: 0;
+    left: 0;
+    content: "";
+}
+.add_backups{
+    width: 100%;
+    text-align: center;
+    margin-top: 3.5rem;
+}
+.backups_num{
+    list-style: none;
+}
+.backups_num li{
+    padding: 1rem;
+    font-size: 1.5rem;
+    color: #000;
+    position: relative;
+}
+
+#wrapper{
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    transform: translate(-50%,-50%);
+}
+#progressbar{
+    height: 0.3rem;
+    background-color: #ebeeee;
+}
+/*在进度条元素上调用动画*/
+#fill{
+    animation: move 120s;
+    animation-fill-mode:forwards;
+    text-align: center;
+    background-color: #393c59;
+    height: 0.3rem;
+}
+/*实现元素宽度的过渡动画效果*/
+@keyframes move {
+    0%{
+        width:0;
+
+    }
+    100%{
+        width:95%;
+    }
+}
+#progressbar p{
+    margin-top: 1rem;
+    font-size: 1.3rem;
+    color: #999999;
+}
+#wrapper>h5{
+    font-size: 1.6rem;
+    margin-bottom: 1.3rem;
+    color: #666666;
+    vertical-align: middle;
+}
+#wrapper>p{
+    margin-top: 10rem;
+    color: #666666;
+    font-size: 1.5rem;
+}
+#wrapper>h5>img{
+    vertical-align: middle;
+    height: 2rem;
+    width: 2rem;
+    margin-right: 1rem;
+}
+.backups_result{
+    width: 100%;
+    text-align: center;
+}
+.backups_result>img{
+    height: 7rem;
+    width: 7rem;
+    margin-top: 6rem;
+    margin-bottom: 3rem;
+}
+.backups_result>h5{
+    color: #000;
+    font-size: 1.7rem;
+}
+.complete_location{
+    position: fixed;
+    bottom: 5rem;
+    margin-left: -47.5%;
+    left: 50%;
+}
+.recovery_explain{
+    padding: 0 1rem;
+    color: #000000;
+    font-weight: bold;
+    font-size: 1.6rem;
+    margin-top: 7rem;
+}
+.verification{
+    margin-top: 4rem;
+}
+.verification>ul{
+    list-style: none;
+    padding: 0 1rem;
+}
+.verification>ul>li{
+    position: relative;
+    padding: 1rem 0 0;
+    width: 100%;
+    overflow:hidden;
+    height:3rem;
+}
+.verification>ul>li>input{
+    display:block;
+    float:left;
+    border: none;
+    width: 60%;
+    height:3rem;
+    line-height:3rem;
+    font-size:1.5rem;
+}
+.verification>ul>li>span{
+    display:block;
+    float:left;
+    max-width:28%;
+    margin-right:2%;
+    color: #000000;
+    font-size: 1.5rem;
+    overflow:hidden;
+    white-space: nowrap;
+    height:3rem;
+    line-height:3rem;
+}
+.verification>ul>li>input::placeholder{
+    font-size: 1.5rem;
+    line-height:2rem;
+    color: #999999;
+}
+.eyes{
+    float:right;
+    width:10%;
+    height:3rem;
+}
+.eyes[data-type=visible]{
+    background:url(../img/eye1.png) no-repeat center center;
+    background-size:1.5rem auto;
+}
+.eyes[data-type=hidden]{
+    background:url(../img/eye2.png) no-repeat center center;
+    background-size:1.5rem auto;
+}
+.backups_record_null{
+    text-align: center;
+    font-size: 1.5rem;
+    color: #666666;
+    padding: 3rem;
+    display: block;
+}
+.mask{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.4);
+    left: 0;
+    top: 0;
+    display: none;
+}
+.popUp{
+    position: fixed;
+    width: 70%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    display: block;
+}
+.popUp>p{
+    padding: 2.8rem 2rem;
+    font-size:1.5rem;
+    color:#333;
+
+}
+.popUp>div{
+    position: relative;
+    margin-top: 1rem;
+    width: 100%;
+}
+.popUp>div:after{
+    top: 0;
+}
+.popUp>div>div{
+    display: table-row;
+    width: 100%;
+}
+.popUp>div>div>div{
+    display: table-cell;
+    width: 1%;
+    text-align: center;
+    height:5rem;
+    line-height:5rem;
+    font-size:1.7rem;
+    color:#8dd652;
+}
+.popUp>div>div>div:nth-child(1){
+    border-right: 1px solid #cccccc;
+    color:#000;
+}
+.recovery_result{
+    padding-bottom: 1rem;
+}
+.result_tips>ul{
+    list-style: none;
+    padding-left: 1rem;
+}
+.result_tips>ul>li{
+    margin: 1rem 0rem;
+    color: #666666;
+    font-size: 1.3rem;
+}
+.result_tips>ul>li:first-child{
+    color: #000000;
+    font-size: 1.5rem;
+}
+
+/**
+  * 单选框自定义样式
+  **/
+input[type=radio]{
+    /*去除浏览器默认样式*/
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /*自定义样式*/
+    position: absolute;
+    display: inline-block;
+    vertical-align: top;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #8dd652;
+    outline: none;
+    cursor: pointer;
+    /*设置为圆形，看起来是个单选框*/
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    right: 1rem;
+}
+
+/**
+* 单选框 选中之后的样式
+**/
+input[type=radio]:after{
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    display: block;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background: #8dd652;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    transform: scale(0);
+    /*增加一些动画*/
+    -webkit-transition : all ease-in-out 300ms;
+    -moz-transition : all ease-in-out 300ms;
+    transition : all ease-in-out 300ms;
+}
+input[type=radio]:checked:after{
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    transform: scale(1);
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <a class="back" href="javascript:window.history.back(-1);"></a>
+    <a id="setDeviceState_tittle" class="autoSwitchLanguager" href="javascript:;">设置设备状态</a>
+    <a class="complete" id="finishState" href="javascript:;"></a>
+</header>
+<section style="margin-top:6.4rem;">
+    <ul class="set_list">
+    </ul>
+</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var arr = [];
+    initlan()
+    plus.plusReady(function() {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        //清除列表
+        $(".set_list").html("")
+        // 添加安全防护
+        var htmlStr = "<li><b id='safety'>" + lang_camera_safety + "</b><i></i></li>"
+        $(".set_list").append(htmlStr)
+
+        // 判断设备,随便看、企鹅、企鹅4G 要加开启视频
+        if (info.getItem("type") == "CMICA2" || info.getItem("type") == "CMICA3" || info.getItem("type") == "CMICA6") {
+            var htmlStr = "<li><b id='openCamera'>" + lang_camera_opencamera + "</b><i></i></li>"
+            $(".set_list").append(htmlStr)
+
+        }
+
+        $(".set_list li").unbind("click").click(function () {
+            $(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+            var elid = $(this).find("b").attr("id")
+            actionSelect(elid)
+        })
+
+        // 判断设备,小物要加预置位
+        if (info.getItem("type") == "CMICA4") {
+            var deviceID = info.getItem("deviceID");
+            plus.tools.getSTCameraPrz(deviceID, function (responseObject) {
+                if (responseObject.data && responseObject.data.position && responseObject.data.position.length > 0) {
+                    // 获取预置位
+                    info.setItem("smCameraPosition", JSON.stringify(responseObject.data.position))
+                    // 添加预置位选项
+                    var htmlStr = "<li><b id='position'>" + lang_camera_position + "</b><i></i></li>"
+                    $(".set_list").append(htmlStr)
+                    $(".set_list li").unbind("click").click(function () {
+                        $(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+                        var elid = $(this).find("b").attr("id")
+                        actionSelect(elid)
+                    })
+
+                }
+            })
+        }
+    })
+
+    function actionSelect(actionID) {
+        if (actionID == "safety") {// 安全防护
+            window.location = "setSafetyState.html"
+        } else if (actionID == "position") { // 预置位
+            window.location = "setCameraState.html"
+        } else if (actionID == "openCamera") {
+            info.setItem("epData", "0104051")
+            info.setItem("actionType", "3")
+            info.setItem("deviceState", $('#'+actionID).text())
+            var taskType = info.getItem('taskType')
+            if (taskType === 'sceneTask') {
+                window.location = "setDelay_sceneTask.html"
+            } else {
+                window.location = "setDelay_timeTask.html"
+            }
+        }
+    }
+
+</script>
+</html>

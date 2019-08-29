@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>智能水阀</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <link rel="stylesheet" href="css/mui.min.css">
+    <link rel="stylesheet" href="css/mui.picker.min.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+</head>
+
+<body style="width:100%;height:100%;">
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" href="javascript:;" id="device_28_name">智能水阀</a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+
+<section class="waterValve">
+    <div class="popup">
+        <img class="IconImg" data-state="off" src="fonts/icon_water_valve_on.png"
+             alt=""/>
+    </div>
+    <div class="delayTime">
+        <span class="theLast">&nbsp&nbsp&nbsp&nbsp</span>
+        <span class="countTip autoSwitchLanguager" id="device_28_Countdown_off" style="display:none">倒计时关闭</span>
+        <img id="pickDateBtn" style="width: 2rem;height: 2rem;margin-right: 1rem"
+             src="fonts/icon_edit.png">
+    </div>
+
+</section>
+
+<section class="switch">
+    <div class="switchState" style="width: 100% ;text-align: center">
+        <img class="switchImg" style="width: 10rem;height: 10rem" data-state="off" src="fonts/switch_on.png" alt=""/>
+        <em id="keySwitchImgLoading"></em>
+    </div>
+</section>
+<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager"
+                                                               id="device_28_offline">设备已离线</span></section>
+</body>
+<script src="js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    mui.init();
+    var state = 1;
+    var gwID, dID;
+    var timer;
+    var switchState;
+    var appID;
+    //国际化初始化函数
+    initlan();
+    plus.plusReady(function () {
+        plus.gatewayCmd.getCurrentAppID(function(result){
+            appID = result;
+        });
+        plus.gatewayCmd.getDeviceInfo(null, function (data) {
+            gwID = data.gwID;
+            dID = data.devID;
+            if (data.mode == 2) {
+                $(".mask_layer").show();
+            } else {
+                $(".mask_layer").hide();
+                sendCmd_510(gwID,dID,appID)
+                editHtml(data)
+            }
+            var name = data.name.indexOf("#$default$#") != -1 ? lang_name_06 + data.name.split("#")[2] : data.name
+            $(".deviceName").html(name)
+            getMoreConfig(dID)
+            // contorl(data.gwID, data.devID, data.endpoints[0].endpointNumber)
+        })
+        plus.gatewayCmdRush.newDataRefresh(function (data) {
+            if (data.cmd == "500" && dID == data.devID) {
+                if (data.mode == 2) {
+                    $(".mask_layer").show();
+                } else {
+                    $(".mask_layer").hide();
+                    $("#keySwitchImgLoading").removeClass("rotate").hide();
+                    editHtml(data)
+                }
+                var name = data.name.indexOf("#$default$#") != -1 ? lang_name_06 + data.name.split("#")[2] : data.name
+                $(".deviceName").html(name)
+            } else if (data.cmd == "502" && dID == data.devID) {
+                if ((data.name != undefined || data.name != '') && data.name.indexOf("#$default$#") == -1) {
+                    $(".deviceName").html(data.name)
+                } else {
+                    var name = data.name.indexOf("#$default$#") != -1 ? lang_name_06 + data.name.split("#")[2] : data.name
+                    $(".deviceName").html(name)
+                }
+            }
+        })
+    })
+    //返回到设备详情页
+    $("#back").on("click", function () {
+        plus.tools.back(function () {
+        })
+    })
+    //跳转到更多页面
+    $(".more").on("click", function () {
+        plus.tools.more(moreConfig, function () {
+        })
+    })
+
+    //请求设备详情列表
+    function sendCmd_510(gwID,devID,appID){
+        var jsonData = {}
+        jsonData.cmd = "510";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+
+    function editHtml(data) {
+        switchState = data.endpoints[0].clusters[0].attributes[0].attributeValue
+        for (var i = 0; i < data.endpoints[0].clusters.length; i++) {
+            var attributeId = data.endpoints[0].clusters[i].attributes[0].attributeId;
+            var attributeValue = data.endpoints[0].clusters[i].attributes[0].attributeValue
+            reloadUI(attributeId, attributeValue, JSON.parse(atob(data.extData))[0])
+            console.log("timer = " + JSON.parse(atob(data.extData))[0].delayTime);
+        }
+    }
+
+
+
+    function reloadUI(id, switchState, list) {
+        switch (id) {
+            case 0:
+                if (switchState == "0") {
+                    // setCountDown(device_28_close_after, list)
+                    $(".IconImg").attr("src", "fonts/icon_water_valve_off.png")
+                    $(".switchImg").attr("src", "fonts/switch_off.png")
+                    $(".delayTime").hide()
+                    $(".countTip").hide()
+                    $("#pickDateBtn").hide()
+                } else if (switchState == "1") {
+                    if (list.delaySec == 0) {
+                        $(".theLast").hide()
+                        $(".countTip").show()
+                    } else {
+                        $(".theLast").show()
+                        $(".countTip").hide()
+                    }
+                    setCountDown(device_28_close_after, list)
+                    $(".IconImg").attr("src", "fonts/icon_water_valve_on.png")
+                    $(".switchImg").attr("src", "fonts/switch_on.png")
+                    $(".delayTime").show()
+                    $("#pickDateBtn").show()
+
+                }
+                break;
+        }
+
+    }
+
+    $(".switchImg").on("click", function () {
+        $("#keySwitchImgLoading").show().addClass("rotate");
+        doTimeout();
+        if (switchState == "0") {
+            console.log("open waterValve")
+            sendCmd(gwID, dID, 6, 1, "")
+        } else if (switchState == "1") {
+            console.log("close waterValve")
+            sendCmd(gwID, dID, 6, 0, "")
+        }
+    })
+
+
+    function doTimeout() {
+        var timer = setTimeout(function () {
+            $("#keySwitchImgLoading").removeClass("rotate").hide();
+        }, 15000)
+    }
+
+    function sendCmd(gwID, dID, clusterId, commandId, parameter) {
+        var jsonData = {}
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = dID;
+        jsonData.clusterId = clusterId;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if (parameter) {
+            jsonData.parameter = [parameter]
+        }
+        plus.gatewayCmd.controlDevice(jsonData, function () {
+        })
+    }
+
+    document.getElementById("pickDateBtn").addEventListener("click", function () {
+        //初始化PopPicker组件
+        var picker = new mui.DtPicker({
+            type: "time",
+            labels: ['', '', '', device_28_hour, device_28_minute],
+        })
+        $(".header-title").html(device_28_Countdown_off)
+        $(".mui-dtpicker").find(".btn-cancel").html(device_28_cancel)
+        $(".mui-dtpicker").find(".btn-ok").html(device_28_confirm)
+        //设置默认值
+        picker.setSelectedValue("2013-01-01 00:00")
+        picker.show(function (item) {
+            console.log(item)
+            $(".countTip").hide()
+            if (item.h.text == "00" && item.i.text == "00") {
+                $(".theLast").hide()
+            } else {
+                $(".theLast").show()
+                var sec = parseInt(item.h.text) * 3600 + parseInt(item.i.text) * 60
+                var data = sec + "";
+                if (data.length == 0) {
+                    data = "0000";
+                } else if (data.length == 2) {
+                    data = "00" + data;
+                } else if (data.length == 3) {
+                    data = "0" + data;
+                } else {
+                    data = data;
+                }
+                if (parseInt(data) > 7200) {
+                    data = "7200";
+                }
+                sendCmd(gwID, dID, 6, 2, data)
+            }
+        })
+    })
+
+
+    //倒计时功能
+    function setCountDown(str, list) {
+        if (list.delaySec != 0) {
+            var minute = parseInt(list.delaySec)
+            var hour = (parseInt(minute / 3600) + '').length == 1 ? ("0" + parseInt(minute / 3600)) : (parseInt(minute / 3600) + '')
+            var min = (parseInt((minute % 3600) / 60) + '').length == 1 ? ('0' + parseInt((minute % 3600) / 60)) : (parseInt((minute % 3600) / 60) + '')
+            var second = (parseInt(minute % 60) + '').length == 1 ? ('0' + parseInt(minute % 60)) : (parseInt(minute % 60) + '')
+            // $(".theLast").show()
+            $(".theLast").html("<span>" + hour + ":" + min + ":" + second + "</span>" + str)
+            countTime(minute)
+        }
+    }
+
+    function countTime(sec) {
+        clearInterval(timer)
+        timer = setInterval(function () {
+            if (sec <= 0) {
+                $(".theLast").hide()
+                clearInterval(timer)
+            }
+            sec--;
+            var minute = parseInt(sec)
+            var hour = (parseInt(minute / 3600) + '').length == 1 ? ("0" + parseInt(minute / 3600)) : (parseInt(minute / 3600) + '')
+            var min = (parseInt((minute % 3600) / 60) + '').length == 1 ? ('0' + parseInt((minute % 3600) / 60)) : (parseInt((minute % 3600) / 60) + '')
+            var second = parseInt((minute % 60) + '').length == 1 ? ('0' + parseInt(minute % 60)) : (parseInt(minute % 60) + '')
+            $(".theLast span").html(((hour + '').length == 1 ? "0" + hour : hour) + ":" + ((min + '').length == 1 ? "0" + min : min) + ":" + ((second + '').length == 1 ? "0" + second : second))
+        }, 1000)
+    }
+
+</script>
+</html>

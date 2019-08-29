@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_pir_switch"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="@dimen/default_padding_normal"
+            android:background="@color/white">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentTop="true"
+                android:background="@color/v6_line" />
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Cateyemini_Humandetection_Switch" />
+
+            <ToggleButton
+                android:id="@+id/tb_pir_switch"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@android:color/transparent"
+                android:button="@drawable/button_toggle_switch"
+                android:checked="true"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_pir_sensibility"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Cateyemini_Humandetection_Sensitivity" />
+
+            <TextView
+                android:id="@+id/tv_pir_sensibility"
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/default_padding_small"
+                android:layout_toLeftOf="@+id/iv_pir_sensibility"
+                android:gravity="center_vertical"
+                android:textColor="@color/v6_text_gray" />
+
+            <ImageView
+                android:id="@+id/iv_pir_sensibility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_pir_time"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Stay_Detection_Check" />
+
+            <TextView
+                android:id="@+id/tv_pir_time"
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/default_padding_small"
+                android:layout_toLeftOf="@+id/iv_rl_pir_time"
+                android:gravity="center_vertical"
+                android:textColor="@color/v6_text_gray" />
+
+            <ImageView
+                android:id="@+id/iv_rl_pir_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_pir_type"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Record_Type" />
+
+            <TextView
+                android:id="@+id/tv_pir_type"
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/default_padding_small"
+                android:layout_toLeftOf="@+id/iv_pir_type"
+                android:gravity="center_vertical"
+                android:textColor="@color/v6_text_gray" />
+
+            <ImageView
+                android:id="@+id/iv_pir_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_pir_ring"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Cateyemini_Humandetection_Bell" />
+
+            <TextView
+                android:id="@+id/tv_pir_ring"
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/default_padding_small"
+                android:layout_toLeftOf="@+id/iv_pir_ring"
+                android:gravity="center_vertical"
+                android:textColor="@color/v6_text_gray" />
+
+            <ImageView
+                android:id="@+id/iv_pir_ring"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_pir_volume"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="20dp"
+            android:background="@color/white">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentTop="true"
+                android:background="@color/v6_line" />
+
+            <TextView
+                android:id="@+id/tv_pir_volume"
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Cateyemini_Humandetection_Volume" />
+
+            <ImageView
+                android:id="@+id/iv_pir_volume_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/tv_pir_volume"
+                android:src="@drawable/iv_pir_volume_1" />
+
+            <ImageView
+                android:id="@+id/iv_pir_volume_100"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/iv_pir_volume_100" />
+
+            <cc.wulian.smarthomev6.support.customview.NumTipSeekBar
+                android:id="@+id/sb_pir_volume"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:layout_toStartOf="@+id/iv_pir_volume_100"
+                android:layout_toEndOf="@+id/iv_pir_volume_0"
+                app:NumTipSeekBar_circleButtonColor="@color/white"
+                app:NumTipSeekBar_circleButtonRadius="10dp"
+                app:NumTipSeekBar_circleApertureColor="#22000000"
+                app:NumTipSeekBar_circleApertureWidth="0.5dp"
+                app:NumTipSeekBar_borderSize="15dp"
+                app:NumTipSeekBar_isRound="true"
+                app:NumTipSeekBar_isShowButton="true"
+                app:NumTipSeekBar_maxProgress="6"
+                app:NumTipSeekBar_progressColor="#FDB463"
+                app:NumTipSeekBar_progressHeight="10dp"
+                app:NumTipSeekBar_tickBarColor="@color/v6_bg"
+                app:NumTipSeekBar_tickBarHeight="10dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/v6_line" />
+        </RelativeLayout>
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/default_padding_large"
+        android:layout_marginLeft="@dimen/default_padding_normal"
+        android:layout_marginRight="@dimen/default_padding_normal">
+
+        <Button
+            android:id="@+id/btn_device_save"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:background="@color/v6_green"
+            android:gravity="center"
+            android:text="@string/Save"
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_text_size" />
+    </RelativeLayout>
+
+</RelativeLayout>

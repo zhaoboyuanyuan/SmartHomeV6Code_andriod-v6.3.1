@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/widget_padding_horizontal"
+    android:paddingRight="@dimen/widget_padding_horizontal"
+    android:paddingTop="@dimen/widget_padding_vertical"
+    android:paddingBottom="@dimen/widget_padding_vertical">
+
+    <include layout="@layout/view_widget_title" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/widget_padding_vertical">
+
+        <FrameLayout
+            android:id="@+id/one_socket_fl"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/one_socket_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/home_widget_circle_gray"
+                android:padding="18dp"
+                android:src="@drawable/switch_off" />
+
+            <cc.wulian.smarthomev6.support.customview.ProgressRing
+                android:id="@+id/one_socket_progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                app:ringEndColor="@color/colorPrimary"
+                app:ringStartColor="#F7FAF5"
+                app:ringWidth="1.5dp" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/socket_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/one_socket_fl"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="@string/Device_switch_Widget_Off"
+            android:textSize="@dimen/widget_secondary_text_size" />
+
+        <TextView
+            android:id="@+id/text_toast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/shape_home_widget_toast"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="10dp"
+            android:textSize="@dimen/widget_secondary_text_size"
+            android:textColor="@color/white"
+            android:visibility="invisible" />
+    </RelativeLayout>
+</LinearLayout>

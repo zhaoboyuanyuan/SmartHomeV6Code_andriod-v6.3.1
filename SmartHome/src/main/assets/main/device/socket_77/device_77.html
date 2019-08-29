@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../../source/js/rem.js"></script>
+    <script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+</head>
+<body style="width:100%;height:100%;">
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_77_name" href="javascript:;">移动插座计量版</a>
+            <a class="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section class="main_con">
+        <div class="handle">
+            <div class="handle_icon"></div>
+            <i></i>
+        </div>
+        <div class="handle_btn handle_color" data-id="0"></div>
+    </section>
+    <section class="bottom_etc">
+        <ul class="handle-data">
+            <li><b class="autoSwitchLanguager" key="device_Realtime_power">实时功率</b><span>--<em>W</em></span></li>
+            <li><b class="autoSwitchLanguager" key="device_Accumulated_electricity">累计电量</b><span>--<em>kW.h</em></span></li>
+        </ul>
+    </section>
+    <section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="offLine">设备已离线</span></section>
+</body>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script type="text/javascript" src="js/plus.js"></script>
+    <script type="text/javascript" src="js/gatewayCmd.js"></script>
+    <script type="text/javascript" src="js/tools.js"></script>
+    <script type="text/javascript" src="js/alert.js"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/more.js"></script>
+    <script type="text/javascript">
+        var gwID,dID;
+        var timer;
+        initlan()
+        plus.plusReady(function(){
+            $("#back").click(function(){
+                plus.tools.back(function(){})
+            })
+            plus.gatewayCmd.getDeviceInfo(function(data){
+                gwID = data.gwID;
+                dID = data.devID;
+                var name = data.name.indexOf("#$default$#") != -1 ? device_77_name + data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+                if(data.mode === 2){
+                    $(".mask_layer").show()
+                }else if(data.mode === 3){
+                    //原生做的操作
+                }else{
+                    $(".mask_layer").hide()
+                };
+                modeState(data);
+                sendCmd(gwID,dID,1,6,2,'');
+                control(gwID,dID)
+                $(".more").on("click",function(){
+                    var moreData = getMoreConfig(dID,gwID)
+                    plus.tools.more(moreData,function(){})
+                })
+            })
+            plus.gatewayCmd.newDataRefresh(function(data){
+                if(data.cmd == "500" && data.devID == dID){
+                    var name = data.name.indexOf("#$default$#") != -1 ? device_77_name + data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+                    modeState(data)
+                    isSendCmd = false;
+                }else if(data.cmd == "502" && data.devID == dID){
+                    if(data.name != undefined || data.name != ''){
+                        $(".deviceName").html(data.name)
+                    }
+                }
+                gwID = data.gwID;
+                dID = data.devID;
+            })
+        })
+        function control(gwID,dID){
+            $(".handle_btn").on("click",function(){
+                $(".handle_icon").addClass("scale")
+                if($(this).attr("data-id") == 1){
+                    sendCmd(gwID,dID,1,6,0,'')
+                }else if($(this).attr("data-id") == 0){
+                    sendCmd(gwID,dID,1,6,1,'')
+                }
+            })
+        }
+        function sendCmd(gwID,dID,endpointNumber,clusterId,commandId,parameter){
+            var jsonData = {}
+            jsonData.cmd = "501";
+            jsonData.gwID = gwID;
+            jsonData.devID = dID;
+            jsonData.endpointNumber = endpointNumber;
+            jsonData.clusterId = clusterId;
+            jsonData.commandType = 1;
+            jsonData.commandId = commandId;
+            if(parameter){
+                jsonData.parameter = [parameter]
+            }
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+        }
+        function modeState(result){
+            if(result.mode === 2){
+                $(".mask_layer").show()
+            }else if(result.mode === 3){
+                //原生做的操作
+            }else{
+                $(".mask_layer").hide()
+                for(var i = 0;i<result.endpoints[0].clusters.length;i++){
+                    var attributeId = result.endpoints[0].clusters[i].attributes[0].attributeId;
+                    var attributeValue = result.endpoints[0].clusters[i].attributes[0].attributeValue
+                    reloadUI(attributeId,attributeValue)
+//                    reloadUI(attributeId,attributeValue,result.extData[0])
+                }
+            }
+        }
+//        window.onload = function(){
+//            setTimeout(function(){
+//                reloadUI(0,1)
+//            },5000)
+//        };
+        function reloadUI(id,value){
+            switch (id){
+                case 0:{
+                    clearInterval(timer)
+                    $(".handle_icon").removeClass("scale")
+                    //value 0 表示开关关闭状态
+                    //1 表示开关打开状态
+                    //$(".handle_icon i")切换背景图
+                    if(value == "0"){
+                        $(".handle_icon").hide()
+                        $(".handle_btn").addClass("handle_color")
+                        $(".handle_btn").attr("data-id","0")
+                        $(".handle-data li").eq(0).find("span").html("--<em>W</em>")
+                    }else if(value == "1"){
+                        $(".handle_icon").show()
+                        $(".handle_btn").removeClass("handle_color")
+                        $(".handle_btn").attr("data-id","1")
+                    }
+                }
+                    break;
+                case 32769:{
+                    /*yyyy:当前的功率(16进制,单位:W)
+                     zzzzzz:当前电量(16进制,单位:WH)
+                     */
+                    var yyyy = parseInt(value.substr(0,4),16)
+                    var zzzzzz = parseInt(value.substr(4,6),16)
+                    if(yyyy == 0){
+                        yyyy = yyyy+".0"
+                    }
+                    if(zzzzzz > 1000){
+                        zzzzzz = (zzzzzz/1000).toFixed(1) + "<em>kW.h</em>"
+                    }else{
+                        zzzzzz = zzzzzz.toFixed(1) + "<em>W.h</em>"
+                    }
+                    if($(".handle_btn").attr("data-id") == 0){
+                        $(".handle-data li").eq(0).find("span").html("--<em>W</em>")
+                    }else{
+                        $(".handle-data li").eq(0).find("span").html(yyyy + "<em>W</em>")
+                    }
+                    $(".handle-data li").eq(1).find("span").html(zzzzzz)
+                }
+                    break;
+                case 32771:{
+                    /*表示设置的最大保护功率值*/
+                }
+                    break;
+                case 32772:{
+                    /*为设置的功率上报阀值*/
+                }
+                    break;
+                case 32775:{
+                    /*电量校准值,单位:WH*/
+                }
+                    break;
+                default:{
+
+                }
+                    break;
+            }
+        }
+    </script>
+</html>

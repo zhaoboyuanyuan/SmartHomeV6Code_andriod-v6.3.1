@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加网关第二步</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/more.css"/>
+</head>
+
+<body style="background: #F1F4F8;">
+<header class="header">
+    <div class="header_top">
+        <a class="back_addScene" href="javascript:history.back(-1)"></a>
+        <a href="javascript:;" class="autoSwitchLanguager" id="device_binding">绑定</a>
+        <a href="javascript:;"></a>
+    </div>
+</header>
+<section style="width:100%;height:18rem;background: #fff;text-align: center;padding-top: 2.5rem;">
+    <img style="display:inline-block;width:14rem;height:14rem;" src="../img/add_gateway_09_02.jpg" alt=""/>
+</section>
+<section style="width: 100%;height:7rem;text-align: left;padding-top: 3rem;">
+    <p style="margin: 1rem;font-size: 1.5rem;">
+        <span class="autoSwitchLanguager" id="addGateway3_step_01">扫描底部ZigBee二维码或输入网关号密码绑定网关</span><br/>
+    </p>
+</section>
+<section class="add_gate1" style="margin-top:0.5rem;">
+    <ul>
+        <li><span class="autoSwitchLanguager" id="addGateway3_gateway_code">网关号</span>
+            <a id="getCode" href="javascript:;"></a><input class="gwId autoSwitchLanguager"
+                                                           id="addGateway3_gateway_text" type="text"
+                                                           placeholder="输入网关账号"/></li>
+        <li><span class="autoSwitchLanguager" id="addGateway3_gateway_pwd">密码</span>
+            <a id="auto" href="javascript:;">Auto</a><input class="gwPwd autoSwitchLanguager"
+                                                            id="addGateway3_gateway_pwdtext" type="password"
+                                                            placeholder="输入密码"/></li>
+    </ul>
+</section>
+<section class="addSensorBtn" style="margin-top:10rem;overflow: hidden;">
+    <a href="javascript:;" style="position:static;margin-left:4%;" class="autoSwitchLanguager disableBtn"
+       id="addGateway">绑定网关</a>
+</section>
+<section class="toast_state toast_gw" style="display:none">
+    <span class="autoSwitchLanguager toast_span" id="addGateway3_gateway_toast">账号或密码错误，请重新输入</span>
+</section>
+</body>
+<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan()
+    var info = window.sysfun;
+    info.init("V6addDevice");
+    initlan()
+    plus.plusReady(function () {
+        if (info.getItem("gwId")) {
+            $(".gwId").val(info.getItem("gwId"))
+        }
+        //获取扫描二维码
+        $("#getCode").on("click", function () {
+            var self = $(this)
+            plus.gatewayCmd.getQRCode(null, function (data) {
+                if (data.indexOf("http") == 0 && data.length > 11) {
+                    $(self).siblings("input").val(data.substr(-12, 12));
+                }else{
+                    $(self).siblings("input").val(data);
+                }
+
+            })
+        })
+        $(".gwPwd").on("focus", function () {
+            //                $(this).attr("placeholder",addGateway_toast)
+            $(this).siblings("a").css("visibility", "visible")
+        })
+        $("#auto").on("click", function () {
+            $(".gwPwd").val($(".gwId").val().substr($(".gwId").val().length - 6, 6))
+            $("#addGateway").removeClass("disableBtn")
+        })
+        $(".add_gate1 ul li input").on("input porpertychange", function () {
+            if ($(".gwId").val().trim() != '' && $(".gwPwd").val().trim() != '') {
+                $("#addGateway").removeClass("disableBtn")
+            } else {
+                $(".login").addClass("disableBtn")
+            }
+        })
+        $("#addGateway").on("click", function () {
+            if ($(this).attr("class").indexOf("disableBtn") == -1) {
+                var deviceId = $(".gwId").val()
+                var devicePasswd = $(".gwPwd").val()
+                if (deviceId == '' || devicePasswd == '') {
+                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_00"));
+                    $(".toast_span").html(addGateway_empty);
+                    $(".toast_gw").fadeIn()
+                    setInterval(function () {
+                        $(".toast_gw").fadeOut()
+                    }, 4000)
+                } else {
+                    var jsonData = {
+                        "deviceType": '',
+                        "deviceId": deviceId,
+                        "devicePasswd": devicePasswd
+                    }
+                    plus.gatewayCmd.bindingDevice(jsonData, function (data) {
+                        if (data.resultCode == 0) {
+                            plus.tools.back(function () {
+                            })
+                        } else {
+                            switch (data.resultCode) {
+                                case 20101: {
+                                    $(".toast_span").html(addGateway3_toast_01)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_01"));//用户不存在
+                                }
+                                    break;
+                                case 20102: {
+                                    $(".toast_span").html(addGateway3_toast_02)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_02"));//用户密码错误
+                                }
+                                    break;
+                                case 20103: {
+                                    $(".toast_span").html(addGateway3_toast_03)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_03"));//token错误
+                                }
+                                    break;
+                                case 20104: {
+                                    $(".toast_span").html(addGateway3_toast_04)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_04"));//用户名已被使用
+                                }
+                                    break;
+                                case 20105: {
+                                    $(".toast_span").html(addGateway3_toast_05)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_05"));//手机号已被注册
+                                }
+                                    break;
+                                case 20106: {
+                                    $(".toast_span").html(addGateway3_toast_06)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_06"));//手机号未认证
+                                }
+                                    break;
+                                case 20107: {
+                                    $(".toast_span").html(addGateway3_toast_07)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_07"));//邮箱已被注册
+                                }
+                                    break;
+                                case 20108: {
+                                    $(".toast_span").html(addGateway3_toast_08)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_08"));//邮箱未认证
+                                }
+                                    break;
+                                case 20109: {
+                                    $(".toast_span").html(addGateway3_toast_09)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_09"));//手机验证码错误
+                                }
+                                    break;
+                                case 20110: {
+                                    $(".toast_span").html(addGateway3_toast_10)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_10"));//设备不存在
+                                }
+                                    break;
+                                case 20111: {
+                                    $(".toast_span").html(addGateway3_toast_11)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_11"));//该设备不是网关
+                                }
+                                    break;
+                                case 20112: {
+                                    $(".toast_span").html(addGateway3_toast_12)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_12"));//设备密码错误
+                                }
+                                    break;
+                                case 20113: {
+                                    $(".toast_span").html(addGateway3_toast_13)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_13"));//用户不是设备的拥有者
+                                }
+                                    break;
+                                case 20114: {
+                                    $(".toast_span").html(addGateway3_toast_14)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_14"));//设备已与用户绑定
+                                }
+                                    break;
+                                case 20115: {
+                                    $(".toast_span").html(addGateway3_toast_15)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_15"));//设备与用户未绑定
+                                }
+                                    break;
+                                case 20116: {
+                                    $(".toast_span").html(addGateway3_toast_16)
+                                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_16"));//设备密码错误
+                                }
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            $(".toast_gw").fadeIn();
+                            setInterval(function () {
+                                $(".toast_gw").fadeOut()
+                            }, 4000)
+                        }
+                    })
+                }
+            }
+        })
+    })
+</script>
+
+</html>

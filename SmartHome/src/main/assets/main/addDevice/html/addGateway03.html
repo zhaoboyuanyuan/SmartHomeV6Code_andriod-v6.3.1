@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>添加网关第三步</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/more.css" />
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:window.history.back(-1);"></a>
+				<a href="javascript:;" class="autoSwitchLanguager" id="addScene_gateway"></a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="gate_img"><img style="width:12rem;height:12.6rem;margin-top:3rem;" src="../fonts/addGateway.png" alt="" /></section>
+		<section class="add_gate" style="margin-top:0.5rem;">
+			<ul>
+				<li><span class="autoSwitchLanguager" id="addGateway3_gateway_code">网关号</span><em id="getCode" class="codeImg"></em><input class="gwId autoSwitchLanguager"  id="addGateway3_gateway_text" type="text" minlength="11" maxlength="30" placeholder="输入网关账号" /></li>
+				<li><span class="autoSwitchLanguager" id="addGateway3_gateway_pwd">密码</span><em></em><input class="gwPwd autoSwitchLanguager" id="addGateway3_gateway_pwdtext" type="password" placeholder="输入密码"/></li>
+			</ul>
+		</section>
+		<section class="step_btn">
+			<a href="javascript:;" class="autoSwitchLanguager" id="nextStep">下一步</a>
+			<a style="opacity: 0" href="javascript:;"></a>
+		</section>
+		<section class="toast_state toast_gw" style="display:none">
+			<span class="autoSwitchLanguager toast_span" id="addGateway3_gateway_toast">账号或密码错误，请重新输入</span>
+		</section>
+	</body>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<!--<script src="../js/returnAddScene.js" type="text/javascript" charset="utf-8"></script>-->
+	<script type="text/javascript">
+        initlan()
+		var info = window.sysfun;
+        info.init("V6addDevice");
+		plus.plusReady(function () {
+		    if(info.getItem("gwId")){
+		        $(".codeImg").attr("id","");
+		        $(".gwId").val(info.getItem("gwId"));
+                $(".gwId").attr("disabled",true)
+			}else{
+                $(".codeImg").attr("id","getCode");
+                $(".gwId").attr("disabled",false)
+			}
+            //获取扫描二维码
+            $("#getCode").on("click", function() {
+                var self = $(this)
+                plus.gatewayCmd.getQRCode(null, function(data) {
+                    $(self).siblings("input").val(data)
+                })
+            })
+            $("#nextStep").unbind("click").on("click", function() {
+                var deviceId = $(".gwId").val()
+                var devicePasswd = $(".gwPwd").val()
+                if(deviceId == '' || devicePasswd == '') {
+                    //$(".toast_gw").html(languageUtil.getResource("addGateway3_toast_00"));
+                    $(".toast_span").html(addGateway_empty);
+                    $(".toast_gw").fadeIn()
+                    setInterval(function() {
+                        $(".toast_gw").fadeOut()
+                    }, 4000)
+                } else {
+                    var jsonData = {
+                        "deviceType": '',
+                        "deviceId": deviceId,
+                        "devicePasswd": devicePasswd
+                    }
+                    plus.gatewayCmd.bindingDevice(jsonData, function(data) {
+                        console.log(data)
+                        if(data.resultCode == 0) {
+                            window.location = "addGateway04.html"
+                        } else {
+                            switch(data.resultCode) {
+                                case 20101:
+                                    window.showDialog.show(addGateway3_toast_01,3000);//用户不存在
+                                    break;
+                                case 20102:
+                                    window.showDialog.show(addGateway3_toast_02,3000);//用户密码错误
+                                    break;
+                                case 20103:
+                                    window.showDialog.show(addGateway3_toast_03,3000);//token错误
+                                    break;
+                                case 20104:
+                                    window.showDialog.show(addGateway3_toast_04,3000);//用户名已被使用
+                                    break;
+                                case 20105:
+                                    window.showDialog.show(addGateway3_toast_05,3000);//手机号已被注册
+                                    break;
+                                case 20106:
+                                    window.showDialog.show(addGateway3_toast_06,3000);//手机号未认证
+                                    break;
+                                case 20107:
+                                    window.showDialog.show(addGateway3_toast_07,3000);//邮箱已被注册
+                                    break;
+                                case 20108:
+                                    window.showDialog.show(addGateway3_toast_08,3000);//邮箱未认证
+                                    break;
+                                case 20109:
+                                    window.showDialog.show(addGateway3_toast_09,3000);//手机验证码错误
+                                    break;
+                                case 20110:
+                                    window.showDialog.show(addGateway3_toast_10,3000);//设备不存在
+                                    break;
+                                case 20111:
+                                    window.showDialog.show(addGateway3_toast_11,3000);//该设备不是网关
+                                    break;
+                                case 20112:
+                                    window.showDialog.show(addGateway3_toast_12,3000);//设备密码错误
+                                    break;
+                                case 20113:
+                                    window.showDialog.show(addGateway3_toast_13,3000);//用户不是设备的拥有者
+                                    break;
+                                case 20114:
+                                    window.showDialog.show(addGateway3_toast_14,3000);//设备已与用户绑定
+                                    break;
+                                case 20115:
+                                    window.showDialog.show(addGateway3_toast_15,3000);//设备与用户未绑定
+                                    break;
+                                case 20116:
+                                    window.showDialog.show(addGateway3_toast_16,3000);//设备密码错误
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    })
+                }
+            })
+        })
+	</script>
+</html>

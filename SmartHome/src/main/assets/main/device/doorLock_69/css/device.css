@@ -1,0 +1,651 @@
+@charset "utf-8";
+
+html{
+	background:#8dd652;
+}
+html,body{
+	height:100%;
+}
+button{
+	border:0;
+}
+/*头部*/
+.header{
+	background:#8dd652;
+}
+/*添加步骤*/
+.step_img{
+	margin-top:2.5rem;
+	width:100%;
+	height:4.2rem;
+	text-align:center;
+}
+.step_img img{
+	display:inline-block;
+	width:72%;
+	height:auto;
+}
+.step_switch img{
+	display:inline-block;
+	width:50.5%;
+	height:auto;
+}
+.step_main{
+	width:100%;
+	margin-top:1rem;
+	text-align:center;
+	overflow:hidden;
+}
+.step_main p{
+	width:100%;
+	/*height:2.5rem;*/
+	text-align:center;
+	line-height:2.5rem;
+	font-size:1.8rem;
+	color:#fff;
+}
+.step_main img{
+	display:inline-block;
+	width:70%;
+	height:auto;
+}
+
+.step_main .explain{
+	width:100%;
+	/*height:1.9rem;*/
+	line-height:1.9rem;
+	text-align:center;
+	font-size:1.2rem;
+}
+.step_btn{
+	overflow:hidden;
+}
+.step_btn a{
+	display:block;
+	position:fixed;
+	left:4%;
+	bottom:10%;
+	width:92%;
+	height:5rem;
+	line-height:5rem;
+	text-align: center;
+	background:#fff;
+	color:#64c31b;
+	font-size:1.7rem;
+	border-radius: 5px;
+}
+/*第二步*/
+.step_main2{
+	margin-top:3.5rem;
+}
+.step_main2 img{
+	margin:3.5rem 0 1rem;
+}
+/*返回上一步*/
+.step_btn2 a{
+	bottom:11%;
+}
+.step_btn2 a:nth-child(2){
+	box-sizing: border-box;
+	bottom:2%;
+	background:none;
+	color:#fff;
+	border:1px solid #fff;
+}
+/*第三步*/
+.step_main3{
+	margin-top:3rem!important;
+}
+.step_main p em{
+	display:inline-block;
+	margin:0 0.3rem;
+	font-size:2.2rem;
+}
+/*背景图*/
+.lockbackimageview{
+	width: 100%;
+	height: 94%;
+	position:fixed;
+	text-align:center;
+	top:6.4rem;
+	overflow:hidden;
+	background:#fff;
+}
+
+/*门锁状态*/
+.lockstate{
+	width:90%;
+	height: 7.5rem;
+	margin-left: 5%;
+	margin-right: 5%;
+	text-align:center;
+	overflow:auto;
+}
+
+/*.lockstate img{
+	margin-top:1.5rem ;
+	margin-bottom: 1.5rem;
+	display:inline-block;
+	width:3.25rem;
+	height:4.5rem;
+}*/
+.lockstateClosed{
+	margin-top:1.5rem ;
+	margin-bottom: 1.5rem;
+	display:inline-block;
+	width:3.25rem;
+	height:4.0rem;
+	background: url(../fonts/icon_doorLock_off.png) no-repeat center center;
+	background-size: 100% 100%;
+}
+
+.lockstateOpened{
+	margin-top:1.5rem ;
+	margin-bottom: 1.5rem;
+	display:inline-block;
+	width:4.69rem;
+	height:4.0rem;
+	background: url(../fonts/icon_doorLock_on.png) no-repeat center center;
+	background-size: 100% 100%;
+}
+
+/*密码输入框*/
+.lockPWDInput{
+	margin-top: 7%;
+	width:80%;
+	height: 8%;
+	margin-left: 10%;
+	text-align:center;
+}
+.lockPWDInput i{
+	display: inline-block;
+	width:100%;
+	height: 100%;
+	border:1px solid #a6a6a6;
+	border-radius:5rem;
+}
+
+.lockPWDInput i a{
+	display: inline-block;
+	margin-left: 0.4rem;
+	margin-right: 0.4rem;
+	margin-top: 1.8rem;
+	width:1.2rem;
+	height:1.2rem;
+	background: #a6a6a6;
+	border-radius:0.7rem;
+	/*background:url(../fonts/icon_doorLock_button_bg.png) no-repeat center;
+	background-size: 100%;*/
+}
+
+/*状态提示*/
+.lockStateNotice{
+	margin-top: 2%;
+	margin-bottom: 1%;
+	width:100%;
+	height:2rem;
+	text-align:center;
+	overflow:hidden;
+}
+.lockStateNotice a{
+	color: #666;
+	font-size: 1.5rem;
+	line-height: 1.8rem;
+}
+/*密码键盘*/
+.lockKeyBoard{
+	overflow:hidden;
+	width: 80%;
+	margin-left: 10%;
+	background:0;
+}
+.lockKeyBoard a{
+	display:block;
+	float:left;
+	box-sizing: border-box;
+	width:33.333333333333333333%;
+	height:8.15rem;
+	text-align:center;
+}
+.lockKeyBoard a button{
+	width:6.5rem;
+	height:6.5rem;
+	border-radius:6.5rem;
+	margin-top: 1rem;
+	background:#e5e5e5;
+	color: #000;
+	font-size: 2.8rem;
+	text-align:center;
+	
+}
+.lockKeyBoard a:nth-child(10) button{
+	background:#e5e5e5 url(../fonts/icon_doorLock_del_nor.png) no-repeat center center;
+	background-size: 1.8rem auto;
+}
+
+.lockKeyBoard a:nth-child(12) button{
+	background:#e5e5e5 url(../fonts/backspace.png) no-repeat center center;
+	background-size: 3rem auto;
+}
+.lockKeyBoard a:nth-child(14) button i{
+	display: inline-block;
+	background:url(../fonts/icon_doorLock_Bc_camera.png) no-repeat center center;
+	background-size: 3rem 3rem;
+	width:3rem;
+	height:3rem;
+}
+
+.touchIDSpace{
+	overflow:hidden;
+	width: 80%;
+	margin-left: 10%;
+	background:0;
+	text-align:center;
+}
+.touchIDSpace p{
+	color:#FFFFFF;
+	width: 100%;
+}
+.touchIDButton{
+	display: inline-block;
+	margin-top: 1.0rem;
+	width:4.5rem;
+	height:4.5rem;
+}
+/*操作失败提示toast*/
+.toast_state{
+	display:none;
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0,.1)
+}
+.toast_state span{
+	display:block;
+	position:fixed;
+	left:15%;
+	bottom:10%;
+	width:70%;
+	height:3rem;
+	line-height:3rem;
+	text-align:center;
+	background:rgba(0,0,0,.4);
+	font-size:1.4rem;
+	color:#fff;
+	border-radius:5px;
+}
+/*遮罩层*/
+.mask_layer{
+	display:none;
+	position:absolute;
+	z-index:1000;
+	left:0;
+	top:0rem;
+	width:100%;
+	height:100%;
+	text-align:center;
+	background:rgba(0,0,0,0.5)
+}
+.mask_layer i{
+	display:inline-block;
+	width:8rem;
+	height:8rem;
+	margin-top:15rem;
+	background:url(../fonts/icon_new.png) no-repeat center center;
+	background-size:8rem auto;
+}
+.mask_layer span{
+	display:block;
+	width:100%;
+	height:5rem;
+	line-height:5rem;
+	text-align:center;
+	font-size:1.6rem;
+	color:#fff;
+}
+
+/*TouchID弹框*/
+.changeName{
+	display:none;
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0,0.4)
+}
+.nameToast{
+	position:absolute;
+	left:11%;
+	top:50%;
+	width:78%;
+	/*height:14rem;*/
+	-webkit-transform:translateY(-50%);
+	-ms-transform:translateY(-50%);
+	-moz-transform:translateY(-50%);
+	transform:translateY(-50%);
+	background:#fff;
+	border-radius:8px;
+	overflow:hidden;
+}
+.nameToast span{
+	display:block;
+	width:100%;
+	height:5.3rem;
+	line-height:5.3rem;
+	text-align:center;
+	font-size:1.7rem;
+	color:#555;
+}
+.nameToast .name{
+	margin:0 5%;
+	width:90%;
+	background:#f2f2f2;
+	border-radius:5px;
+	overflow:hidden;
+}
+.nameToast input{
+	display:block;
+	float:left;
+	padding-left:5%;
+	width:85%;
+	height:3.6rem;
+	line-height:3.6rem;
+	border:0;
+	font-size:1.4rem;
+	background:#f2f2f2;
+}
+.nameToast i{
+	display:block;
+	float:right;
+	width:10%;
+	height:3.6rem;
+	background:url(../fonts/icon_del_01.png) no-repeat center center;
+	background-size:1.6rem auto;
+}
+.nameToast .choose_1{
+	margin-top:2rem;
+	border-top:1px solid #d9d9d9;
+}
+.nameToast .choose_1 a{
+	display:block;
+	box-sizing: border-box;
+	float:left;
+	width:50%;
+	height:5.5rem;
+	line-height:5.5rem;
+	text-align:center;
+	border-right:1px solid #d9d9d9;
+	font-size:1.5rem;
+	color:#555;
+}
+.nameToast .choose_1 em:last-child{
+	border-right:0;
+}
+.giveUp span{
+	display:block;
+	width:100%;
+	height:11.5rem;
+	line-height:11.5rem;
+}
+.giveUp .choose_1{
+	margin-top:0;
+}
+.toast{
+	display:none;
+	position:absolute;
+	left:27.2%;
+	top:47%;
+	width:42%;
+	height:3rem;
+	text-align:center;
+	line-height:3rem;
+	padding:0 2%;
+	background:rgba(44,44,44,0.9);
+	transform: translateY(-47%);
+	-webkit-transform: translateY(-47%);
+	-moz-transform: translateY(-47%);
+	-ms-transform: translateY(-47%);
+	transform: translateY(-47%);
+	border-radius:3px;
+	color:#fff;
+	font-size:1.2rem;
+}
+
+.shareBtn{
+	overflow:hidden;
+}
+.shareBtn a{
+	display:block;
+	position:absolute;
+	left:4%;
+	top:47rem;
+	width:92%;
+	height:5rem;
+	line-height:5rem;
+	text-align: center;
+	background:#8dd652;
+	color:#fff;
+	font-size:1.7rem;
+	border-radius: 5px;
+}
+
+.doneBtn{
+	overflow:hidden;
+}
+.doneBtn a{
+	display:block;
+	position:absolute;
+	left:4%;
+	top:52rem;
+	width:92%;
+	height:5rem;
+	line-height:5rem;
+	text-align: center;
+	color:#8dd652;
+	font-size:1.7rem;
+	border-radius: 5px;
+}
+
+/*正在保存*/
+.saveToast{
+	position:absolute;
+	left:0;
+	top:10%;
+	width:100%;
+	height:90%;
+}
+.saveToast div{
+	position:absolute;
+	left:25%;
+	top:50%;
+	width:50%;
+	height:6rem;
+	text-align:center;
+	background:rgba(0,0,0,0.0);
+	border-radius:5px;
+	-webkit-transform:translateY(-50%);
+	transform:translateY(-50%);
+}
+.saveToast div i{
+	display:inline-block;
+	height:6rem;
+	line-height:6rem;
+	font-size:1.4rem;
+	color:#fff;
+}
+@-webkit-keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+@keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+.saveToast div i em{
+	display:block;
+	float:left;
+	width:2rem;
+	height:6rem;
+	margin-right:1rem;
+	background:url(../fonts/icon_loading.png) no-repeat center center;
+	background-size: 2rem auto;
+}
+.saveToast div i em.rotate{
+	-webkit-animation: rotate 0.7s linear infinite;
+	animation: rotate 0.7s linear infinite;
+}
+
+/*初次设置密码弹框*/
+.firstSetPWD{
+	display:block;
+	position:absolute;
+	left:0;
+	top:0%;
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0,0.4)
+}
+
+.pwdInputToast{
+	position:absolute;
+	left:12%;
+	top:31%;
+	width:76%;
+	/*height:14rem;*/
+	-webkit-transform:translateY(-50%);
+	-ms-transform:translateY(-50%);
+	-moz-transform:translateY(-50%);
+	transform:translateY(-50%);
+	background:#fff;
+	border-radius:8px;
+	overflow:hidden;
+}
+.pwdInputToast span{
+	overflow: hidden;
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+	display: block;
+	width: 100%;
+	/* height: 5.3rem; */
+	line-height: 2.5rem;
+	text-align: center;
+	font-size: 1.7rem;
+	color: #555;
+}
+
+.pwdInputToast .name{
+	margin:0 5%;
+	width:90%;
+	background:#f2f2f2;
+	border-radius:5px;
+	overflow:hidden;
+	height: 3.6rem;
+}
+.pwdInputToast input{
+	display:block;
+	float:left;
+	padding-left:5%;
+	width:85%;
+	height:3.6rem;
+	line-height:3.6rem;
+	border:0;
+	font-size:1.4rem;
+	background:#f2f2f2;
+	outline: none;
+}
+.pwdInputToast i{
+	display:block;
+	float:right;
+	width:10%;
+	height:3.6rem;
+	background:url(../fonts/icon_close.png) no-repeat center center;
+	background-size:1.6rem auto;
+}
+
+.pwdInputToast .choose_1{
+	margin-top:2rem;
+	border-top:1px solid #d9d9d9;
+}
+.pwdInputToast .choose_1 a{
+	display:block;
+	box-sizing: border-box;
+	float:left;
+	width:100%;
+	height:5.5rem;
+	line-height:5.5rem;
+	text-align:center;
+	border-right:1px solid #d9d9d9;
+	font-size:1.5rem;
+	color:#555;
+}
+.pwdInputToast .choose_1 em:last-child{
+	border-right:0;
+}
+
+/*超时*/
+.timeOutToastDiv{
+	display:block;
+	position:absolute;
+	left:0;
+	top:0%;
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0,0.4)
+}
+.timeOutToast{
+	position:absolute;
+	left:12%;
+	top:50%;
+	width:76%;
+	/*height:14rem;*/
+	-webkit-transform:translateY(-50%);
+	-ms-transform:translateY(-50%);
+	-moz-transform:translateY(-50%);
+	transform:translateY(-50%);
+	background:#fff;
+	border-radius:8px;
+	overflow:hidden;
+}
+
+.timeOutToast span{
+	display:block;
+	width:100%;
+	height:5.3rem;
+	line-height:5.3rem;
+	text-align:center;
+	font-size:1.7rem;
+	color:#555;
+}
+
+.timeOutToast .choose_1{
+	/*margin-top:2rem;*/
+	border-top:1px solid #d9d9d9;
+}
+
+.timeOutToast .choose_1 a{
+	display:block;
+	box-sizing: border-box;
+	float:left;
+	width:100%;
+	height:4.5rem;
+	line-height:4.5rem;
+	text-align:center;
+	border-right:1px solid #d9d9d9;
+	font-size:1.5rem;
+	color:#555;
+}

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/v6_bg">
+
+    <RelativeLayout
+        android:id="@+id/rl_avoid_cold"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_item_height"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Device_Bm_Details_Low_Protect" />
+
+        <ToggleButton
+            android:id="@+id/tb_avoid_cold"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/default_padding_small"
+            android:background="@drawable/selector_togglebutton"
+            android:paddingRight="@dimen/default_padding_small"
+            android:textOff=""
+            android:textOn="" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_avoid_tip"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:layout_below="@+id/rl_avoid_cold"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Bs_More_Antifreeze_01" />
+
+        <TextView
+            android:id="@+id/tv_avoid_tip"
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/iv_arrows_storage"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/default_padding_small"
+            android:textColor="@color/v6_text_gray"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_arrows_storage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/system_intent_right" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_mode_leave"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:layout_below="@+id/rl_avoid_tip"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Device_Bs_temperature_005" />
+
+        <TextView
+            android:id="@+id/tv_leave_mode"
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/iv_arrows_storage2"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/default_padding_small"
+            android:textColor="@color/v6_text_gray"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_arrows_storage2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/system_intent_right" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_temp_ground"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/device_setting_textview_height"
+        android:layout_below="@+id/rl_mode_leave"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:background="@color/white">
+
+        <TextView
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/default_padding_normal"
+            android:text="@string/Bs_More_Limit_01" />
+
+        <TextView
+            android:id="@+id/tv_temp_ground_mode"
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/tv_temp_ground"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/default_padding_small"
+            android:textColor="@color/v6_text_gray"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_temp_ground"
+            style="@style/device_setting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/iv_arrows_storage3"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/default_padding_small"
+            android:textColor="@color/v6_text_gray"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_arrows_storage3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/default_padding_normal"
+            android:background="@drawable/system_intent_right" />
+
+    </RelativeLayout>
+
+    <TextView
+        style="@style/config_wifi_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_temp_ground"
+        android:layout_marginTop="@dimen/default_padding_small"
+        android:paddingLeft="@dimen/default_padding_normal"
+        android:paddingRight="@dimen/default_padding_normal"
+        android:text="@string/Bs_More_Limit_04" />
+
+</RelativeLayout>

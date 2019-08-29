@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>设置设备状态</title>
+	<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+	<div class="header_top">
+		<a href="javascript:;" onClick="javascript:back();"></a>
+		<a href="javascript:;" key="setDeviceStatus" class="autoSwitchLanguager" id='setDeviceStatus'>设置设备状态</a>
+		<a href="javascript:;"></a>
+	</div>
+</header>
+<section>
+	<ul class="set_list state" style="margin-top: 0">
+		<li><i></i></li>
+		<li><i></i></li>
+		<li><i></i></li>
+	</ul>
+</section>
+</body>
+<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Scene");
+    initlan()
+
+	function back() {
+		window.history.back(-1);
+    }
+
+    plus.plusReady(function(){
+        plus.gatewayCmd.androidBack(function () {
+            back();
+        });
+        $(".state li").eq(0).html((switch_AoEs_01)+"<i></i>")
+        $(".state li").eq(1).html((switch_AoEs_02)+"<i></i>")
+        $(".state li").eq(2).html((lang_switch_cut)+"<i></i>")
+        info.setItem("num",1)
+        $(".state li").on("click",function(){
+            $(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+			var deviceState = $(this).text();
+            var index = $(this).index();
+            if(index == 0){
+                window.location = "set_light_Be.html"
+            }else if(index == 1){
+                info.setItem("deviceState", deviceState)
+                info.setItem("epData","40");
+                window.location = "addDelay.html"
+            }else if(index == 2){
+                info.setItem("deviceState", deviceState)
+                info.setItem("epData","43");
+                window.location = "addDelay.html"
+            }
+        })
+    })
+</script>
+</html>

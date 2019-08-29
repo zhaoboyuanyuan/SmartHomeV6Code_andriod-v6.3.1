@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="UTF-8">
+    <title>地暖</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <link href="../../source/mui/css/mui.picker.css" rel="stylesheet" />
+    <link href="../../source/mui/css/mui.min.css" rel="stylesheet" />
+    <script src="../../source/mui/js/mui.min.js"></script>
+    <script src="../../source/picker/picker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+
+<body>
+    <header class="header">
+        <a id="back" class="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="Device_Bx_Details_Name" href="javascript:;">Zigbee地暖控制器</a>
+        <a id="more" href="javascript:;"></a>
+    </header>
+
+    <section class="power">
+        <div id="switch">
+            <i></i>
+            <span class="autoSwitchLanguager" key="Device_Bx_Details_Open">开关</span>
+        </div>
+    </section>
+
+    <section class="num_scroll_show">
+        <div class="panel1" style="top: 10rem;opacity: 0;left: 30%;width: 40%;">
+            <p style="color:black">-2</p>
+        </div>
+        <div class="panel2" style="top: 17rem; left: 30%;width: 40%;">
+            <p style="color:black">-1</p>
+        </div>
+        <div class="panel3" style="top: 24rem; left: 30%;width: 40%;">
+            <p style="color:black">29</p>
+        </div>
+        <div class="panel4" style="top: 31rem; left: 30%;width: 40%;">
+            <p style="color:black">1</p>
+        </div>
+        <div class="panel5" style="top: 38rem;opacity: 0; left: 30%;width: 40%;">
+            <p style="color:black">2</p>
+        </div>
+    </section>
+    <section class="num_scroll_Unit">
+        <i class="tempScale">℃</i>
+    </section>
+
+    <scetion class="bottomView">
+        <div class="bottomLeft">
+            <i class="errorLeft" onclick="clickTopLeft()"></i>
+            <p class="tempLeft normalLeft">25</p><i class="tempScale normalLeft">℃</i>
+            <span class="autoSwitchLanguager" key="Device_Bx_Details_Temperature1">当前室内温度</span>
+        </div>
+        <div class="timer" id="countDown">
+            <i></i>
+            <span class="autoSwitchLanguager" key="Device_Bx_Details_Time">定时</span> 
+        </div>
+        <div class="bottomRight">
+            <i class="errorRight" onclick="clickTopRight()"></i>
+            <p class="tempRight floorText normalRight">27</p><i class="tempScale floorText normalRight">℃</i>
+            <span class="autoSwitchLanguager" key="Device_Bx_Details_Temperature2">当前地表温度</span>
+        </div>
+    </scetion>
+
+    <section class="countDownView">
+        <div>
+            <i class="countDownText">01时30分后关机</i>
+            <p class="cancelTime autoSwitchLanguager" key="Device_Bx_Details_Cancel">取消</p>
+        </div>
+    </section>
+
+    <!--倒计时取消确认框-->
+    <section class="cancelTimeAlert" style="display:none;z-index: 1000">
+        <div class="nameToast">
+            <span class="autoSwitchLanguager" key="device_Bx_Sure_to_cancel">确定取消倒计时？</span>
+            <div class="choose_1">
+                <a class="autoSwitchLanguager cancel_click" key="Device_Bx_Details_Cancel" href="javascript:;">取消</a>
+                <a class="autoSwitchLanguager sure_click" key="Device_Bx_Details_Confirm">确定</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- <section class="alert" style="display:none;">
+        <div class="nameToast">
+            <span class="tip autoSwitchLanguager" key="Device_Bx_Details_Prompt">提示</span>
+            <div class="msg"></div>
+            <div class="choose_1">
+                <a class="autoSwitchLanguager sure_click" key="Device_Bx_Details_Confirm" href="javascript:;" onclick="sure()">确定</a>
+                <a class="autoSwitchLanguager sure_click" key="Device_Bx_Details_Confirm" href="javascript:;" onclick="sure()">确定</a>
+            </div>
+        </div>
+    </section> -->
+    <section class="mask_layer" style="display:none;"><i></i><span id="offLine" class="autoSwitchLanguager" key="Device_Bx_Details_Offline"></span></section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/scrollPanel.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    initlan();
+    var devID, gwID;
+    // 电源状态
+    var powerState = '0';
+    // 定时器状态, 剩余 时分秒, 倒计时, 定时器显示的字
+    var timerState, timerText;
+    var info = window.sysfun;
+    info.init("deviceBx");
+
+    // 室温, 地表温度, 制热温度
+    var tempRoom;
+    var tempFloor;
+    var tempMain;
+    // 内部传感器 外部传感器 是否异常
+    // 0 正常; 1 异常; 2 已经查看
+    var isInnerOnWork = 0;
+    var isOuterOnWork = 0;
+    var choosePicker;
+
+    // 摄氏度数组    10 - 32     步进 0.5   默认 26℃
+    var mainTempArrC = [];
+    var mainTempValC = 26;
+    for (var i = 0; i <= 44; i++) {
+        var t = 10.0 + i / 2;
+        mainTempArrC.push(t)
+    }
+
+    scrollPanelInit(mainTempArrC, 32, setMainTemp);
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(function (data) {
+            gwID = data.gwID;
+            devID = data.devID;
+            getMoreConfig(devID, gwID);
+            query();
+            reloadUI(data);
+        });
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            reloadUI(data);
+        });
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header")[0].style.paddingTop = "4.8rem";
+            $(".mask_layer")[0].style.top = "9rem";
+
+        }
+    });
+
+    $("#back").on("click", function () {
+        // 返回
+        plus.tools.back(function () {});
+    });
+    $("#more").on("click", function () {
+        // 更多
+        query(2);
+        plus.tools.more(moreConfig, function () {})
+    });
+    $("#countDown").on("click", function () {
+        // 定时
+        //弹出倒计时选择框
+        var hoursArry = [];
+        var minusArry = [];
+        for (var i = 0; i < 25; i++) {
+            var dic = {};
+            dic.text = i < 10 ? "0" + i : i;
+            hoursArry.push(dic);
+        }
+        for (var j = 0; j < 2; j++) {
+            var dic = {};
+            dic.text = j == 0 ? "00" : "30";
+            dic.value = j;
+            minusArry.push(dic);
+        }
+        if (!choosePicker) {
+            choosePicker = new Picker({
+                data: [hoursArry, minusArry]
+            });
+        }
+        choosePicker.show();
+        $(".picker").addClass("pickerIndex0");
+        document.getElementsByClassName("cancel-hook")[0].innerHTML = langCancel;
+        document.getElementsByClassName("confirm-hook")[0].innerHTML = langConfirm;
+
+        choosePicker.on("picker.select",
+            function (selectedVal, selectedIndex) { //确定 
+                if ((selectedIndex[0] == 0 && selectedIndex[1] == 0) || (selectedIndex[0] == 24 && selectedIndex[1] == 1)) {
+                } else {
+                    var selectedHour = selectedIndex[0];
+                    var selectedMin = selectedIndex[1];
+                    var sendSec = selectedHour * 3600 + selectedMin * 30 * 60;
+                    var timeStr = String(sendSec / 1800)
+                    requestDelay(powerState, parseInt(timeStr).toString(16))
+                }
+            });
+    });
+    $("#switch i").on("click", function () {
+        // 开关
+        setPower();
+    });
+
+    $(".cancelTime").on("click", function () {
+        // sendCmd(0x8016, ["0000"]);
+        // showAlert("确定取消定时");
+        //点击取消倒计时按钮，弹框确认
+        $(".cancelTimeAlert").show();
+    })
+
+    $(".sure_click").on("click", function () {
+        sendCmd(0x8016, ["0000"]);
+        $(".cancelTimeAlert").hide();
+    });
+
+    $(".cancel_click").on("click", function () {
+        $(".cancelTimeAlert").hide();
+    });
+
+    // 重载 UI
+    function reloadUI(data) {
+        if (data.type == 'Bx') {
+            if (data.mode == 2) {
+                $(".mask_layer").show();
+            } else {
+                $(".mask_layer").hide();
+                editHtml(data);
+            }
+        }
+
+        var name = data.name.indexOf("#$default$#") != -1 ? Device_Bx_Details_Name + data.name.split("#")[2] :
+            data.name;
+        showDeviceName(name);
+    }
+
+    // 查询
+    function query(q) {
+        q = q || 1;
+        sendCmd(0x8010, ["" + q])
+    }
+
+    /**********************************************************************
+     *                              显示弹框
+     **********************************************************************/
+    function showAlert(msg) {
+        $('.msg').html(msg);
+        $('.alert').show()
+    }
+    /**********************************************************************
+     *                              弹框确认按钮                          *
+     **********************************************************************/
+    function sure() {
+        $('.alert').hide()
+    }
+    /**********************************************************************
+     *                              点击内部传感器                        *
+     **********************************************************************/
+    function clickTopLeft() {
+        // 如果外部传感器也坏了
+        if (isOuterOnWork == 1) {
+            $('.msg').css('height', '5rem');
+            $('.choose_1').css('margin-top', '5rem');
+        } else {
+            $('.msg').css('height', '5rem');
+            $('.choose_1').css('margin-top', '5rem');
+        }
+    }
+    /**********************************************************************
+     *                              点击外部传感器                        *
+     **********************************************************************/
+    function clickTopRight() {
+        // 如果内部传感器也坏了
+        if (isInnerOnWork == 1) {
+            $('.msg').css('height', '5rem');
+            $('.choose_1').css('margin-top', '5rem');
+        } else {
+            $('.msg').css('height', '16rem');
+            $('.choose_1').css('margin-top', '16rem');
+        }
+    }
+
+    function editHtml(data) {
+        var endpoints = data.endpoints;
+        handleEp(endpoints);
+    }
+
+    // 设备名
+    function showDeviceName(name) {
+        $(".deviceName").html(name)
+    }
+
+    // 处理 endpoints
+    // 遍历解析
+    function handleEp(endpoints) {
+        endpoints.forEach(function (endpoint) {
+            var endpointNumber = endpoint.endpointNumber;
+            var endpointName = endpoint.endpointName;
+            var endpointType = endpoint.endpointType;
+            var clusters = endpoint.clusters;
+            clusters.forEach(function (cluster) {
+                var clusterId = cluster.clusterId;
+                var attributes = cluster.attributes;
+                attributes.forEach(function (attribute) {
+                    var attributeId = attribute.attributeId;
+                    var attributeValue = attribute.attributeValue;
+                    handleAttribute(attributeId, attributeValue)
+                })
+            })
+        });
+    }
+
+    // 处理 attribute
+    function handleAttribute(attributeId, attributeValue) {
+        console.log("attributeId:\t\t" + attributeId.toString(16));
+        console.log("attributeValue:\t\t" + attributeValue);
+        switch (attributeId) {
+            case 0x8001:
+                {
+                    //开关状态 0 关闭 1：打开
+                    showPower(attributeValue);
+                }
+                break;
+            case 0x8002:
+                {
+                    //主传感器选择 0：内部 1：外部 3：内外双
+                }
+                break;
+            case 0x8003:
+                {
+                    //过温保护 范围 40-80
+                }
+                break;
+            case 0x8004:
+                {
+                    //防冻保护开关 0：关闭 1：打开
+                }
+                break;
+            case 0x8005:
+                {
+                    //防冻保护温度 范围 5-9 步进1
+                }
+                break;
+            case 0x8006:
+                {
+                    //系统选择 0：水电暖 1：电地暖
+                }
+                break;
+            case 0x8007:
+                {
+                    //制热温度 xx 精确至0.5
+                    showMainTemp(attributeValue);
+                }
+                break;
+            case 0x8008:
+                {
+                    //当前环境温度数值 （精确至0.5） 温度零下 带负号 例： xx=25.5 xx= -5 xx= 13 注:上报03E8 代表异常
+                    showRoomTemp(attributeValue);
+                }
+                break;
+            case 0x8009:
+                {
+                    //回差温度 （1-10） 步进1
+                }
+                break;
+            case 0x800A:
+                {
+                    //定时器设状态
+                    //0：关闭 （之前已经设置了定时但时间未到想取消定时） 1： 定时开 2： 定时关
+                    showTimerView(attributeValue);
+                    break;
+                }
+            case 0x800B:
+                {
+                    //定时器倒计时时间
+                    //单位为30min ,定时器最大值24h) 例: xx= (01、02、03...... 45、46、47、48)
+                    // 关机状态下 定时开
+                    showTimerStatus(attributeValue);
+                }
+                break;
+            case 0x800C:
+                {
+                    //内部校准温度 精确至0.5，放大10倍，补码形式
+                }
+                break;
+            case 0x800D:
+                {
+                    //外部校准温度(精确至0.5，放大10倍，补码形式)
+                }
+                break;
+            case 0x800E:
+                {
+                    //地表温度，带符号位(精确至0.5) 温度零下 带负号
+                    showFloorTemp(attributeValue);
+                }
+                break;
+            case 0x800F:
+                {
+                    //是否进入过温保护状态
+                    showFloorTempProtect(attributeValue);
+                }
+                break;
+            default:
+                {
+
+                }
+                break;
+        }
+    }
+
+    /**
+     * 显示开关状态 00 关 01 开
+     */
+    function showPower(x) {
+        powerState = x;
+        if (powerState == '0') {
+            $('.power').find('i').css('background-image', 'url(fonts/icon_power_1.png)');
+            $('.power span').html(Device_Bx_On);
+            setScrollPanelEnable(false);
+        } else {
+            $('.power').find('i').css('background-image', 'url(fonts/icon_power_2.png)');
+            $('.power span').html(Device_Bx_Off);
+            setScrollPanelEnable(true);
+        }
+    }
+
+    /**
+     * 显示定时器
+     */
+
+    function showTimerView(status) {
+        timerState = status;
+        if (powerState == '0' && status == '1') {
+            $('.countDownView').show();
+        } else if (powerState == '1' && status == '2') {
+            $('.countDownView').show();
+        } else {
+            $('.countDownView').hide();
+        }
+    }
+
+    /**
+     * 显示定时器时间
+     */
+    function showTimerStatus(hour) {
+
+        if (powerState == '0' && timerState == '1') {
+            // 关机状态下 定时开
+            $('.timer').find('i').css('background-image', 'url(fonts/icon_time_act.png)');
+            timerText = Device_Bx_Details_Time1;
+            $('.countDownText').html((hour * 0.5) + langHour + " " + timerText);
+        } else if (powerState == '1' && timerState == '2') {
+            // 开机状态下 定时关
+            $('.timer').find('i').css('background-image', 'url(fonts/icon_time_act.png)');
+            timerText = Device_Bx_Details_Time2;
+            $('.countDownText').html((hour * 0.5) + langHour + " " + timerText);
+        } else {
+            // 定时取消
+            $('.timer').find('i').css('background-image', 'url(fonts/icon_time.png)');
+        }
+    }
+
+    // 显示 室内温度
+    function showRoomTemp(t) {
+        // 负数 要减去65536
+        if (t > 32767) {
+            t = t - 65536;
+        }
+        tempRoom = t;
+        if (tempRoom == 100) {
+            isInnerOnWork = 1;
+        } else {
+            isInnerOnWork = 0;
+        }
+        if (isInnerOnWork == 0) {
+            $('.errorLeft').css('display', 'none');
+            $('.normalLeft').show();
+            $(".tempLeft").html(tempRoom);
+        } else if (isInnerOnWork == 1) {
+            $('.errorLeft').css('display', 'inline-block');
+            $('.normalLeft').hide();
+        }
+    }
+
+    // 显示地表温度
+    function showFloorTemp(t) {
+        // 负数 要减去65536
+        if (t > 32767) {
+            t = t - 65536;
+        }
+        tempFloor = t;
+        if (tempFloor == 100) {
+            isOuterOnWork = 1;
+        } else {
+            isOuterOnWork = 0;
+        }
+        if (isOuterOnWork == 0) {
+            $('.normalRight').show();
+            $('.errorRight').css('display', 'none');
+            $(".tempRight").html(tempFloor);
+        } else if (isOuterOnWork == 1) {
+            $('.normalRight').hide();
+            $('.errorRight').css('display', 'inline-block');
+        }
+    }
+
+    // 显示主温度
+    function showMainTemp(t) {
+
+        var s = t / 1;
+        var i = mainTempArrC.indexOf(s);
+        if (tempMain != s) {
+            scrollPanelInit(mainTempArrC, i, setMainTemp);
+        }
+        if (powerState == '0') {
+            setScrollPanelEnable(false);
+        } else {
+            setScrollPanelEnable(true);
+        }
+
+        tempMain = s;
+    }
+
+    //进入过温保护
+    function showFloorTempProtect(moreTemp) {
+
+        if (moreTemp == 1) {
+            $('.floorText').css('color', '#F00');
+        } else {
+            $('.floorText').css('color', '#000')
+        }
+    }
+
+    /**
+     * 设置电源状态
+     */
+    function setPower() {
+        if (powerState == '0') {
+            // 关机状态
+            sendCmd(1, [])
+        } else {
+            // 开机状态
+            sendCmd(0, [])
+        }
+    }
+
+    // 设置主温度
+    function setMainTemp(t) {
+        var i = mainTempArrC[t];
+        var temp = i;
+        tempMain = temp;
+        var s = (temp * 10).toString(16);
+        if (s.length == 2) {
+            s = '00' + s;
+        } else if (s.length == 3) {
+            s = '0' + s;
+        }
+        sendCmd(0x8013, [s]);
+        console.log('设置主温度: ' + (s))
+    }
+
+    function sendCmd(commandId, parameter) {
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.endpointNumber = 1;
+        jsonData.commandType = 1;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandId = commandId;
+        if (parameter) {
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData, function () {})
+    }
+    //倒计时
+    function requestDelay(status, timeNum) {
+        var state = (status == 0) ? "01" : "02";
+        var timeN = (timeNum.length == 1) ? "0" + timeNum : timeNum;
+        sendCmd(0x8016, [state + timeN]);
+    }
+</script>
+
+</html>

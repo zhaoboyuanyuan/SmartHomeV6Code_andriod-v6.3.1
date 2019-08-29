@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/device.css">
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="device_38_name" href="javascript:;">小型四键遥控器</a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<section class="content">
+    <div class="mainImg">
+        <img src="fonts/img_38.png" alt="">
+    </div>
+    <ul class="mainList">
+        <li id="1" class="bindScene" data-id="">
+            <b class="autoSwitchLanguager" key="device_38_Key_1">1号场景键</b>
+            <span data-state="bind"></span>
+            <i></i>
+        </li>
+        <li id="3" class="bindScene" data-id="">
+            <b class="autoSwitchLanguager" key="device_38_Key_3">3号场景键</b>
+            <span data-state="noBind"></span>
+            <i></i>
+        </li>
+        <li id="2" class="bindLock" data-id="">
+            <b class="autoSwitchLanguager" key="device_38_Key_2_4">2号、4号组合开锁键</b>
+            <span data-state="bind"></span>
+            <i></i>
+        </li>
+    </ul>
+    <div class="mainText">
+        <h5 class="autoSwitchLanguager" key="device_38_hint">温馨提示</h5>
+        <p>
+            <b class="autoSwitchLanguager" key="device_38_hint_1">1.组合开锁功能：</b>
+            <span class="autoSwitchLanguager" key="device_38_hint_2">单击4号键后，指示灯呈蓝色闪烁一次，10秒内单击2号键，指示灯红色闪烁一次</span>
+        </p>
+        <p>
+            <b class="autoSwitchLanguager" key="device_38_hint_3">2.绑定功能：</b>
+            <span class="autoSwitchLanguager" key="device_38_hint_4">按住1或3号键，快击4号键3次，20秒内操作被绑定设备开启绑定模式，绑定成功后，此按键将不再支持场景功能</span>
+        </p>
+    </div>
+</section>
+<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="offLine">设备已离线</span></section>
+</body>
+<script type="text/javascript" src="../../source/js/rem.js"></script>
+<script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="lang/lang.js"></script>
+<script type="text/javascript" src="js/more.js"></script>
+<script type="text/javascript" src="js/base64.js"></script>
+<script type="text/javascript">
+    initlan();
+    var deviceId;
+    var gwId;
+    var appId;
+    plus.plusReady(function(){
+        plus.gatewayCmd.getDeviceInfo(function(result){
+            deviceId = result.devID;
+            gwId = result.gwID;
+            appId = result.appID;
+            //判断设备当前状态
+            var name = result.name.indexOf("#$default$#") != -1 ? device_38_name + result.name.split("#")[2] : result.name;
+            $(".deviceName").html(name);
+            modeState(result.mode,deviceId,gwId,appId);
+        });
+        plus.gatewayCmd.newDataRefresh(function(data){
+            if(data.cmd === "500" && deviceId === data.devID){
+                var name = data.name.indexOf("#$default$#") != -1 ? device_38_name + data.name.split("#")[2] : data.name;
+                $(".deviceName").html(name);
+                if(data.extData){
+                    var extData = JSON.parse(new Base64().decode(data.extData));
+                    drawUI(extData.bindArray);
+                }
+            }else if(data.cmd === "502" && deviceId === data.devID){
+                if (data.name != undefined || data.name != '') {
+                    $(".deviceName").html(data.name)
+                }
+            }
+        });
+    });
+    $(".more").on("click",function(){
+        var moreData = getMoreConfig(deviceId,gwId);
+        plus.tools.more(moreData,function(){})
+    });
+    $("#back").on("click",function(){
+        plus.tools.back(function(){})
+    });
+    // $(".more").on("click", function() {
+    //     plus.tools.more(getMoreConfig(gwId,deviceId), function(){});
+    // });
+    $(".bindScene").on("click",function(){
+        var num = $(this).index();
+        num = num === 0 ? 1 : 3;
+        var id = $(this).attr("data-id");
+        window.location = "sceneList.html?sceneID="+id+"&num="+num;
+    });
+    $(".bindLock").on("click",function(){
+        var num = $(this).index();
+        var id = $(this).attr("data-id");
+        window.location = "deviceLockList.html?bindDevID="+id+"&num="+num+"&gwID="+gwId+"&devID="+deviceId;
+    });
+    function modeState(mode,devID,gwID,appID){
+        switch (mode){
+            case 0:
+            case 1:
+            case 4:
+                $(".mask_layer").hide();
+                send_501(devID,gwID,appID,0x8010,0,"");
+                break;
+            case 2:
+                //设备离线
+                $(".mask_layer").show();
+                break;
+            case 3:
+                //设备主动退网
+                $(".mask_layer").show();
+                break;
+            default:
+                break;
+        }
+    }
+    function drawUI(bindList){
+        for(var i in bindList){
+            if(bindList[i].id === ""){
+                $("#"+bindList[i].key).attr("data-id","");
+                $("#"+bindList[i].key).find("span").html(device_unBind);
+                $("#"+bindList[i].key).find("span").attr("data-state","noBind");
+            }else{
+                if(bindList[i].name === "#$default$#"){
+                    bindList[i].name = languageUtil.getResource("device_name_"+bindList[i].type);
+                }
+                $("#"+bindList[i].key).attr("data-id",bindList[i].id);
+                $("#"+bindList[i].key).find("span").html(bindList[i].name);
+                $("#"+bindList[i].key).find("span").attr("data-state","bind");
+            }
+        }
+    }
+    function send_501(devID,gwID,appID,commandId,num,parameter){
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        jsonData.endpointNumber = num;
+        jsonData.clusterId = 5;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = [parameter]
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+</script>
+</html>

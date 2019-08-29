@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/base.css"/>
+		<script src="rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="networkError.css"/>
+		<link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+	</head>
+	<body>
+		<section class="noWiFi">
+			<div class="imageTop">
+				<img class="noWiFiImage" src="fonts/icon_noWiFi.jpg" />
+			<div>
+			<div class="niticeTop">
+				<p class="notice autoSwitchLanguager" id="Mine_Nonetwork">暂无网络连接</p>
+			</div>
+		</section>
+		<a href="javascript:;" class="back handle_btn autoSwitchLanguager" id="default_back">返回重试</a>
+	</body>
+	<script src="lang/lang.js" type="text/javascript"></script>
+	<script src="js/plus.js" type="text/javascript"></script>
+	<script src="js/tools.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		initlan()
+		document.getElementsByClassName("back")[0].addEventListener("click",function(){
+        		plus.tools.back(function () {
+        		})
+		});
+	</script>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<!--更多>报警设置>人体侦测开关>-->
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>人体侦测设置</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/mui.picker.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/alarmsetting.css" />
+		<script type="text/javascript" src="js/mui.min.js"></script>
+		<script type="text/javascript" src="js/mui.picker.min.js"></script>
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/alarmsetting.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header" style="z-index: 1;">
+			<div class="header_top">
+				<a id="back" href="alarmSetting.html"></a>
+				<a class="deviceName autoSwitchLanguager" href="javascript:;" key="alarmSetting_js_01">人体侦测设置</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<ul class="alarmList" style="z-index: 1;">
+			<li id="alarmOpen">
+				<a class="autoSwitchLanguager" key="alarmSetting_js_02" style="color: black;">人体侦测开关</a>
+				<span data-state="off"><i></i></span></li>
+			<li id="alarmSensitivity">
+				<a class="autoSwitchLanguager" key="alarmSetting_js_03" style="color: black;">人体侦测灵敏度</a>
+				<img src="fonts/icon_right.png" />
+				<div id="alarmSensitivityLevel" class="autoSwitchLanguager" key="alarmSetting_js_04">高</div>
+			</li>
+			<li id="alarmStay">
+				<a class="autoSwitchLanguager" key="alarmSetting_js_05" style="color: black;">逗留检测时间</a>
+				<img src="fonts/icon_right.png" />
+				<div id="alarmStayTime">10s</div>
+			</li>
+			<li id="alarmNote">
+				<a class="autoSwitchLanguager" key="alarmSetting_js_06" style="color: black;">记录类型</a>
+				<img src="fonts/icon_right.png" />
+				<div id="alarmNoteState" class="autoSwitchLanguager" key="alarmSetting_js_07">无</div>
+			</li>
+		</ul>
+		<li id="alarmDesc" class="autoSwitchLanguager" key="alarmSetting_js_09"
+			style="background-color: #F1F4F8;color: #676767;margin-left: 10px;margin-top: 10px;">
+			注意：摄像机未配网时，记录类型不能设置为抓拍或录像。
+		</li>
+		<!--<div id="divOk" style="*position:absolute;top:50%;+left:44%;text-align:center;margin-top: 20px;">
+			<input id="btnOk" class="btnOk" type="button" align="right" value="保存"/>
+		</div>-->
+		<!--<section id="fail" class="toast" style="display:none;">-->
+			<!--<p class="autoSwitchLanguager" id="toastText"></p>-->
+		<!--</section>-->
+		<!--<input type="button" value="测试" onclick="saveSettingPir('1','15');" />-->
+	</body>
+	<script type="text/javascript">
+		initlan()
+		var gwID, devID, type;
+		var alarmSensitivity_value = 2;
+		var alarmStay_value = 10;
+		var alarmNote_value = 0;
+		swichOnOff("on");
+		mui.init();
+		/*window.onload=function(){
+					registerEvent();
+		}*/
+		plus.plusReady(function() {
+			registerEvent();
+			plus.gatewayCmd.getDeviceInfo(function(result) {
+				deviceInfo = result;
+				devID = result.devID;
+				gwID = result.gwID;
+				type = result.type;
+				rush_500();
+				searchSettingInfo();
+			});
+		})
+
+		function registerEvent() {
+			document.getElementById("alarmOpen").addEventListener("click", function() {
+				onclick_alarmOpen();
+			});
+			document.getElementById("alarmSensitivity").addEventListener("click", function() {
+				onclick_alarmSensitivity();
+			});
+			document.getElementById("alarmStay").addEventListener("click", function() {
+				onclick_alarmStay();
+			});
+			document.getElementById("alarmNote").addEventListener("click", function() {
+				onclick_alarmNote();
+			});
+		}
+
+		function rush_500() {
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				var isright = result != null &&
+					result != undefined &&
+					result.cmd == "500" &&
+					result.devID == devID;
+				if(isright) {
+					var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+					var attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+					console.log("attributeId=" + attributeId + " attributeValue=" + attributeValue);
+					if(attributeId == 32775) {
+						$(".comToast").hide();
+						updateUI(attributeValue);
+					} else if(attributeId == 32776) {
+						$(".comToast").hide();
+						if(attributeValue == "01") {
+							toastShow(alarmSetting_js_12);//设置事件触发后是否开启摄像头成功
+						} else if(attributeValue == "02") {
+							toastShow(alarmSetting_js_13);//设置事件触发后是否开启摄像头失败
+						}
+						if(attributeValue == "13") {
+							toastShow(alarmSetting_js_12);//设置PIR灵敏度成功
+						} else if(attributeValue == "14") {
+							toastShow(alarmSetting_js_13);//设置PIR灵敏度失败
+						}
+					}
+				}
+			});
+		}
+		/*更新UI*/
+		function updateUI(attributeValue) {
+			console.log("udpate attributeValue=" + attributeValue);
+			var header = attributeValue.substring(0, 2);
+			/*应该是04，但是现在网关返回是14*/
+			if(header == "04" || header == "14") {
+				/*1.分离出原始值*/
+				var aa = attributeValue.substring(2, 4); /*PIR灵敏度(0关闭 1档 2档)越大越灵敏*/
+				var bb = attributeValue.substring(4, 6); /*PIR检测时间*/
+				var cc = attributeValue.substring(6, 8); /*PIR事件是否开启摄像头功能(0关闭 1开启拍照 2开启录像)*/
+				var dd = attributeValue.substring(8, 10); /*门铃事件是否开启摄像头功能(0关闭 1开启)*/
+				console.log("原始值 aa=" + aa + " bb=" + bb + " cc=" + cc + " dd=" + dd);
+				/*2.解析出可用的值*/
+				alarmSensitivity_value = parseInt(aa, 16); //人体侦测灵敏度
+				alarmStay_value = parseInt(bb, 16); //逗留检测时间
+				alarmNote_value = parseInt(cc, 16); //记录类型
+				//				console.log("转换值： sensitivityValue="+alarmSensitivity_value+" stayTimeValue="+stayTimeValue+" noteStateValue="+noteStateValue);
+				if(alarmSensitivity_value == 0) { /*3.1给UI赋值--若检测aa,cc都是关闭，则是关闭*/
+					swichOnOff("on");
+				} else { /*3.2给UI赋值--aa,cc有一个有值，即打开*/
+					swichOnOff("off");
+					var sensitivityDesc = ""
+					if(alarmSensitivity_value == 60) {
+						sensitivityDesc = alarmSetting_js_08;/*低*/
+					} else if(alarmSensitivity_value==40) {
+						sensitivityDesc = alarmSetting_js_04;/*高*/
+					}
+					var noteStateDesc = "";
+					if(alarmNote_value == 0) {
+						noteStateDesc = alarmSetting_js_07;/*无*/
+					} else if(alarmNote_value == 1) {
+						noteStateDesc = alarmSetting_js_10;/*抓拍*/
+					} else if(alarmNote_value == 2) {
+						noteStateDesc = alarmSetting_js_11;/*录像*/
+					}
+					document.getElementById("alarmSensitivityLevel").innerText = sensitivityDesc;
+					document.getElementById("alarmStayTime").innerText = alarmStay_value + "s";
+					document.getElementById("alarmNoteState").innerText = noteStateDesc;
+
+				}
+			}
+		}
+
+		/*commandId=0x8015	查询事件触发后摄像头是否开启以及PIR的设置信息*/
+		function searchSettingInfo() {
+			createToast(alarmSetting_js_15);/*正在查询*/
+			var jsonData = {
+				"cmd": "501",
+				"gwID": gwID,
+				"devID": devID,
+				"endpointNumber": 1,
+				"clusterId": 257,
+				"commandType": 01,
+				"commandId": 32789,
+			};
+			sendCmd(jsonData);
+			setTimeout(function() {
+				$(".comToast").hide();
+                window.showDialog.show(alarmSet_js_16,2000);
+			}, 60000)
+		}
+		/*设置PIR灵敏度,
+		 * pirSen 表示PIR灵敏度(0关闭  高-40 低-60)越大越灵敏
+		 * pirTime 表示PIR检测时间,需转换为16进制
+		 * */
+		function saveSettingPir(pirSen, pirTime) {
+			createToast(alarmSetting_js_14);/*正在保存*/
+			console.log("saveSettingPir pirSen=" + pirSen + " pirTime=" + pirTime);
+			var pirTimeValue = pirTime+"";
+			console.log("pirTimeValue.length="+pirTimeValue.length);
+			if(pirTimeValue.length== 1) {
+				pirTimeValue = "0" + pirTime;
+			}
+			if(pirSen.length==1){
+				pirSen="0"+pirSen;
+			}
+			
+			var cmdValue = pirSen + pirTimeValue + "0846";
+			console.log(cmdValue);
+			var jsonData = {
+				"cmd": "501",
+				"gwID": gwID,
+				"devID": devID,
+				"endpointNumber": 1,
+				"clusterId": 257,
+				"commandType": 1,
+				"commandId": 0x8014,
+				"parameter": [cmdValue]
+			};
+			sendCmd(jsonData);
+			setTimeout(function() {
+				$(".comToast").hide();
+                window.showDialog.show(alarmSet_js_16,2000);
+			}, 60000)
+		}
+		/* 设置事件触发后是否开启摄像头
+		 * pirEvent:表示PIR事件是否开启摄像头功能(0关闭 1开启拍照 2开启录像)
+		 * doorbellEvent:表示门铃事件是否开启摄像头功能(0关闭 1开启)
+		 */
+		function saveSettingCamera(pirEvent, doorbellEvent) {
+			createToast(alarmSetting_js_14);/*正在保存*/
+			console.log("saveSettingCamera pirEvent=" + pirEvent + " doorbellEvent=" + doorbellEvent);
+            var cmdValue = "";
+			if(type == "Bn"){
+                cmdValue = pirEvent + doorbellEvent;
+			}else{
+                cmdValue = "0" + pirEvent + "0" + doorbellEvent;
+			}
+			var jsonData = {
+				"cmd": "501",
+				"gwID": gwID,
+				"devID": devID,
+				"endpointNumber": 1,
+				"clusterId": 257,
+				"commandType": 01,
+				"commandId": 32787,
+				"parameter": [cmdValue]
+			};
+			sendCmd(jsonData);
+			setTimeout(function() {
+				$(".comToast").hide();
+                window.showDialog.show(alarmSet_js_16,2000);
+			}, 60000)
+		}
+
+		function toastShow(msg) {
+            window.showDialog.show(msg,2000);
+		}
+		/*
+		 * 设备控制
+		 */
+		function sendCmd(jsonData) {
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result" + result);
+			})
+		}
+	</script>
+
+</html>

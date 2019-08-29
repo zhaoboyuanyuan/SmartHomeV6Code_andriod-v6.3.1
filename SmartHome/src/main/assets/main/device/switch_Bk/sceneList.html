@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>离家/回家场景</title>
+	<link rel="stylesheet" href="css/base.css">
+	<link rel="stylesheet" href="css/device.css">
+	<link rel="stylesheet" href="css/sceneRelate.css">
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+<header class="header" style="position:fixed;left:0;top:0;z-index:9999999">
+	<div class="header_top">
+		<a id="back" href="javascript:window.history.back(-1);"></a>
+		<a class="deviceName autoSwitchLanguager" key="Device_Bk_details_name" href="javascript:;">睡觉/起床场景开关</a>
+		<a class="sure autoSwitchLanguager" key="Device_Bk_Details_Confirm" href="javascript:;">确定</a>
+	</div>
+</header>
+<section class="content" id="sceneView" style="padding-top:6.4rem;">
+	<ul class="sceneList">
+		<li id="no_key" class="autoSwitchLanguager" key="Device_Bk_Details_Bound">未绑定</li>
+		<!--<li>离家</li>-->
+		<!--<li>回家</li>-->
+	</ul>
+</section>
+<section class="emptyView" style="display:none;padding-top:6.4rem;">
+	<div style="height: 6.4rem; width:100%;">
+		<img src="fonts/icon_empty.png">
+	</div>
+	<span id="container" class="autoSwitchLanguager" key='device_Bk_NoScene'>暂无场景<br>可前往首页-全部场景中添加</span>
+</section>
+<section class="toast autoSwitchLanguager" style="display:none;" key="Device_Bj_Overtime">请求超时，请重试</section>
+<section class="saveToast" style="display:none;">
+	<div><i><em class="rotate"></em><span class="autoSwitchLanguager" key="Device_Bj_Binding">正在绑定</span></i></div>
+</section>
+<script type="text/javascript" src="../../source/js/rem.js"></script>
+<script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="lang/lang.js"></script>
+<script type="text/javascript">
+    initlan();
+	var endNum = decodeURI(getUrlParam("num"));
+	var getSceneID = decodeURI(getUrlParam("sceneID"));
+	var devID;
+	var gwID;
+	var appID;
+    var check = getSceneID;
+    if(check == ""){
+        check = "no_key";
+    }
+    plus.plusReady(function(){
+        if(getSceneID == ""){
+            $(".sceneList li").eq(0).append("<i></i>");
+        }
+        plus.gatewayCmd.getDeviceInfo(function(data){
+            devID = data.devID;
+            gwID = data.gwID;
+            appID = data.appID;
+            rush_513()
+			plus.gatewayCmd.getSceneList(function(result){
+				if(result.length !== 0){
+                    $("#sceneView").show();
+                    $(".emptyView").hide();
+                    $(".sure").show();
+					for(var i=0;i<result.length;i++){
+					    var str = "<li id='"+result[i].sceneID+"' style='background:url(../../source/sceneIcon/scene_normal_"+result[i].sceneIcon+".png) no-repeat 4% center;background-size:2.8rem auto;'>"+result[i].sceneName+"</li>";
+                        if(getSceneID != ""){
+                            if(result[i].sceneID == getSceneID){
+                                str = "<li id='"+result[i].sceneID+"' style='background:url(../../source/sceneIcon/scene_normal_"+result[i].sceneIcon+".png) no-repeat 4% center;background-size:2.8rem auto;'>"+result[i].sceneName+"<i></i></li>";
+                            }
+                        }
+                        $(".sceneList").append(str);
+					}
+				}else{
+                    $("#sceneView").hide();
+                    $(".emptyView").show();
+                    $(".sure").hide();
+                }
+				$(".sceneList li").on("click",function(){
+					$(".sceneList li").find("i").remove();
+                    check = $(this).attr("id");
+					$(this).append("<i></i>");
+				});
+			});
+            $(".sure").on("click",function(){
+                $(".saveToast").show();
+                send_513_del();
+                //请求超时
+                RequestTimeout();
+            })
+        });
+    });
+    function send_513_del(){
+        var param = {
+            "cmd":"513",
+            "devID":devID,
+            "gwID":gwID,
+            "appID":appID,
+            "mode":3,
+            "data":[{
+                "endpointNumber":endNum
+            }]
+        };
+        plus.gatewayCmd.controlDevice(param,function(){})
+    }
+    function send_513_add(sceneID){
+        var param = {
+            "cmd":"513",
+            "devID":devID,
+            "gwID":gwID,
+            "appID":appID,
+            "mode":1,
+            "data":[{
+                "endpointNumber":endNum,
+				"sceneID":sceneID
+            }]
+        };
+        plus.gatewayCmd.controlDevice(param,function(){})
+    }
+    function rush_513(){
+		plus.gatewayCmd.newDataRefresh(function(data){
+		    if(data.cmd == "513" && data.devID == devID){
+		        if(data.mode == 3 && data.data[0].endpointNumber == endNum){
+		            if(check != "no_key"){
+                        $(".saveToast").show();
+                        send_513_add(check);
+					}else{
+                        window.location = "device_Bk.html";
+					}
+				}else if(data.mode == 1){
+					if(data.mode == 1 && data.data[0].endpointNumber == endNum){
+                        $(".saveToast").hide();
+					    window.location = "device_Bk.html";
+					}
+				}
+			}
+		})
+	}
+    //请求超时
+    function RequestTimeout(){
+        setTimeout(function(){
+            $(".saveToast").hide();
+            showToast(device_overTime);
+        },20000)
+    }
+    function showToast(txt){
+        window.showDialog.show(txt,3000);
+    }
+</script>
+</body>
+</html>

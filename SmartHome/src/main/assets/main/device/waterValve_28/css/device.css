@@ -1,0 +1,138 @@
+@charset "utf-8";
+html {
+    background: white;
+}
+
+html, body {
+    height: 100%;
+}
+
+.waterValve {
+    margin-top: 15rem;
+    display: block;
+    width: 100%;
+    height: 22.5rem;
+    text-align: center;
+}
+
+.waterValve img {
+    display: inline-block;
+    width: 20rem;
+    height: 10rem;
+
+}
+
+.waterValve span {
+    display: inline;
+    width: 100%;
+    height: 7.5rem;
+    line-height: 7.5rem;
+    text-align: center;
+    visibility: visible;
+    font-size: 1.6rem;
+    color: grey;
+}
+
+.cancel {
+    display: inline;
+    width: 100%;
+    height: 7.5rem;
+    line-height: 7.5rem;
+    visibility: visible;
+    font-size: 1.4rem;
+    color: #0bb20c;
+}
+
+.switch {
+    margin-top: 6rem;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    height: 2.5rem;
+    width: 100%;
+    transform: translateY(-50%);
+}
+
+.switch div em{
+    display:none;
+    position:absolute;
+    left:calc(50% - 5rem);
+    top:-0rem;
+    width:10rem;
+    height:10rem;
+    background:url(../fonts/icon_loading.png) no-repeat center center;
+    background-size:10rem auto;
+}
+
+.switch div em.rotate{
+    -webkit-animation: rotate 1s linear infinite;
+    animation: rotate 1s linear infinite;
+}
+
+/*.mui-dtpicker-header{*/
+/*text-align:center;*/
+/*}*/
+.header-title{
+    display:inline-block;
+    width:60%;
+    text-align:center;
+    line-height:28px;
+}
+.mui-btn-blue, .mui-btn-primary, input[type=submit]{
+    background:#8dd652;
+    border:1px solid #8dd652;
+}
+.mui-picker{
+    background:#fff;
+}
+.mui-dtpicker, .mui-poppicker{
+    background:#fff;
+}
+.mui-dtpicker-title h5{
+    background:#fff;
+}
+
+@-webkit-keyframes rotate {
+    from {
+        transform: rotateZ(360deg);
+        -webkit-transform: rotateZ(360deg)
+    }
+    to {
+        transform: rotateZ(0deg);
+        -webkit-transform: rotateZ(0deg)
+    }
+}
+
+@-ms-keyframes rotate {
+    from {
+        transform: rotateZ(360deg);
+        -webkit-transform: rotateZ(360deg)
+    }
+    to {
+        transform: rotateZ(0deg);
+        -webkit-transform: rotateZ(0deg)
+    }
+}
+
+@-moz-keyframes rotate {
+    from {
+        transform: rotateZ(360deg);
+        -webkit-transform: rotateZ(360deg)
+    }
+    to {
+        transform: rotateZ(0deg);
+        -webkit-transform: rotateZ(0deg)
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotateZ(360deg);
+        -webkit-transform: rotateZ(360deg)
+    }
+    to {
+        transform: rotateZ(0deg);
+        -webkit-transform: rotateZ(0deg)
+    }
+}
+

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        >
+
+        <RadioGroup
+            android:id="@+id/rg_switch_gateway_title"
+            android:background="@drawable/shape_switch_header_bg"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+
+            <RadioButton
+                android:id="@+id/rb_tab_bind_gateway"
+                android:background="@drawable/selector_switch_gateway_left_textbg"
+                android:padding="10dp"
+                android:gravity="center_horizontal"
+                android:layout_width="fill_parent"
+                android:checked="true"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textSize="16sp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:button="@null"
+                android:text="@string/GatewayList_BoundGateway"
+                android:textColor="@color/grey"/>
+
+            <RadioButton
+                android:id="@+id/rb_tab_auth_gateway"
+                android:padding="10dp"
+                android:gravity="center_horizontal"
+                android:background="@drawable/selector_switch_gateway_right_textbg"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ellipsize="end"
+                android:lines="1"
+                android:button="@null"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:text="@string/Accept_Share" />
+
+        </RadioGroup>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_switch_gateway_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/v6_bg"/>
+
+</LinearLayout>

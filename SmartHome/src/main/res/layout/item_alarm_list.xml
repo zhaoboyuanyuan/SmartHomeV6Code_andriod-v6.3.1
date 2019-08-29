@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cc.wulian.smarthomev6.support.tools.slidemenu.SlidingMenu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sliding_menu"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/sliding_main"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:layout_height="70dp">
+
+            <ImageView
+                android:id="@+id/iv_alarm_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="16dp"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:src="@drawable/icon_device_unknown"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_alarm_device"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:maxLines="1"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tv_alarm_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="#96999e"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:layout_marginTop="3dp"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/system_intent_right"
+                android:layout_gravity="center_vertical"
+                android:paddingEnd="15dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/sliding_delete"
+            android:layout_width="64dp"
+            android:layout_height="70dp"
+            android:background="#f00"
+            android:layout_gravity="right"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:text="删除"/>
+    </LinearLayout>
+</cc.wulian.smarthomev6.support.tools.slidemenu.SlidingMenu>

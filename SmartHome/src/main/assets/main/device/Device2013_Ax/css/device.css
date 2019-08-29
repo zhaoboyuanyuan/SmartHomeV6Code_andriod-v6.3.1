@@ -1,0 +1,132 @@
+@charset "utf-8";
+
+.content{
+    position:fixed;
+    left:0;
+    top:6.4rem;
+    bottom: 2rem;
+    width: 100%;
+    overflow:hidden;
+    font-size: 1.4rem;
+    margin-top: 1.4rem;
+}
+
+.content ul{
+    width:49%;
+    height:100%;
+    overflow:hidden;
+    float: left;
+}
+.content ul:last-child{
+    margin-left:2%;
+}
+.content ul li {
+    width: 100%;
+    height: 33%;
+    float: right;
+    text-align: center;
+    display: block;
+    margin: auto 0;
+}
+
+.content ul li div{
+    width: 100%;
+    height: 70%;
+    margin-top: 5%;
+    margin-right: 0rem;
+    margin-bottom: 0rem;
+    position: relative;
+}
+
+.left_switchKey li div div[openState = off]{
+    background:url(../fonts/icon_close.png) no-repeat center center;
+    background-size:60%;
+}
+
+.left_switchKey li div div[openState = on]{
+    background:url(../fonts/icon_open.png) no-repeat center center;
+    background-size:60%;
+}
+.left_switchKey li div div{
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.content ul li section{
+    display: block;
+    text-align:center;
+    font-size:1.5rem;
+    color:#535353;
+    overflow:hidden;
+    margin-top:0.5rem;
+}
+
+.content ul li section span{
+    position: static;
+    display:inline-block;
+    max-width:70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align:center;
+    color:#999;
+    font-size:1.4rem;
+}
+
+.left_switchKey li section i{
+    display:inline-block;
+    width:2rem;
+    height:2rem;
+    top:50%;
+    margin: auto;
+    margin-left:0.5rem;
+    background:url(../fonts/icon_edit.png) no-repeat left top;
+    background-size:1.9rem auto;
+}
+
+.right_sceneKey li div{
+    background:url(../fonts/icon_add_1.png) no-repeat center center;
+    background-size:60%;
+}
+
+.right_sceneKey li div i {
+    height: 100%;
+    display: block;
+    margin: auto 0;
+    background-size: 30%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.content ul li div em{
+    display:none;
+    position:absolute;
+    left: 0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:url(../fonts/loading.png) no-repeat center center;
+    background-size:62% auto;
+}
+@-webkit-keyframes rotate{
+    from{transform: rotateZ(0deg);-webkit-transform: rotateZ(0deg)}
+    to{transform: rotateZ(360deg);-webkit-transform: rotateZ(360deg)}
+}
+@-ms-keyframes rotate{
+    from{transform: rotateZ(0deg);-webkit-transform: rotateZ(0deg)}
+    to{transform: rotateZ(360deg);-webkit-transform: rotateZ(360deg)}
+}
+@-moz-keyframes rotate{
+    from{transform: rotateZ(0deg);-webkit-transform: rotateZ(0deg)}
+    to{transform: rotateZ(360deg);-webkit-transform: rotateZ(360deg)}
+}
+@keyframes rotate{
+    from{transform: rotateZ(0deg);-webkit-transform: rotateZ(0deg)}
+    to{transform: rotateZ(360deg);-webkit-transform: rotateZ(360deg)}
+}
+.content ul li div em.rotate{
+    -webkit-animation: rotate 1s linear infinite;
+    animation: rotate 1s linear infinite;
+}

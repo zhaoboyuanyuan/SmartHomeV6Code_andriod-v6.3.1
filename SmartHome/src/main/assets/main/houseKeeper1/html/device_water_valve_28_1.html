@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body style="background-color: white;">
+<header class="header">
+    <a href="javascript:window.history.back(-1);"></a>
+    <a key="device_28_open_time" class="autoSwitchLanguager" href="javascript:;">设置开启时长</a>
+    <a key="customScene_sure" class="complete autoSwitchLanguager" onclick="save()" href="javascript:;">确定</a>
+</header>
+<section
+        style="margin-top: 16rem;width: 100%;height: 5rem;background-color: white;padding-top: 1rem;text-align: center;">
+    <span id="selectTime" style="font-size:1.5rem;">0 min</span>
+    <!--<span id="range" style="padding-left: 1rem;font-size:1.5rem;">120%</span>-->
+</section>
+<i style="float: left;margin-top: 1rem;margin-left: 1rem">0min</i>
+<section style="width: 75%;height: 5rem;background-color: white;float: left;">
+    <div id="bar1" style="auto;width: 100%;background-color: none;height: 2rem;padding-top: 1rem;">
+        <div id="bar3"
+             style="border-radius: 1rem;margin-left: 10%;width: 80%;height: 1rem;background-color: gainsboro;">
+            <div id="bar2" style=" width: 0%;float: left;background-color: #F9D92C;height: 1rem;border-radius: 3rem;">
+                <div id="Btn"
+                     style="box-shadow: 0rem 0rem 0.4rem 0.4rem gainsboro;position: absolute;width: 3rem;border-radius: 3rem;background-color: white;height: 3rem;margin-top: -1rem;margin-right: -1rem;">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<i style="float:right;margin-top: 1rem;margin-right: 1rem">120min</i>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var bar = document.getElementById("Btn");
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        if (info.getItem("taskType") == "timeTask") {
+            info.setItem("epData", "0000")
+            info.setItem("deviceState", "0min"+ device_28_close_after);
+        } else if (info.getItem("taskType") == "sceneTask") {
+            info.setItem("epData", "0000")
+            info.setItem("deviceState", "0min"+ device_28_close_after);
+        }
+        info.setItem("switchName", lang_houseKeeper1_82_Speed1);
+    })
+
+    function save() {
+        if (info.getItem("taskType") == "timeTask") {
+            window.location = "setDelay_timeTask.html"
+        } else if (info.getItem("taskType") == "sceneTask") {
+            window.location = "setDelay_sceneTask.html"
+        }
+    }
+
+    bar.addEventListener("touchend", function (evt) {
+        var bar2 = document.getElementById("bar2");
+        var bar3 = document.getElementById("bar3");
+        var range = (Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2);
+        var deviceState = parseInt(range * 120);
+        var epdata;
+        epdata = deviceState * 60+"";
+        console.log(epdata);
+        if (epdata.length == 0) {
+            epdata = "0000";
+        } else if (epdata.length == 2) {
+            epdata = "00" + epdata;
+        } else if (epdata.length == 3) {
+            epdata = "0" + epdata;
+            console.log("epdata = " + epdata);
+        }
+        if (info.getItem("taskType") == "timeTask") {
+            info.setItem("epData", epdata);
+            info.setItem("deviceState", parseInt(range * 120) + "min" + device_28_close_after);
+        } else if (info.getItem("taskType") == "sceneTask") {
+            info.setItem("epData", epdata);
+            info.setItem("deviceState", lang_txt16 + "  " + parseInt(range * 120) + "min" + device_28_close_after);
+        }
+        document.getElementById("selectTime").innerHTML = parseInt(range * 120) + "min"
+    })
+    bar.addEventListener("touchstart", function (evt) {
+        var bar1 = document.getElementById("bar1");
+        var bar2 = document.getElementById("bar2");
+        var bar3 = document.getElementById("bar3");
+        var openX = Number(bar3.offsetLeft);
+        var closeX = Number(bar3.offsetLeft + bar3.offsetWidth);
+        var touch = evt.touches[0];
+        var x = Number(touch.pageX)
+        var y = Number(touch.pageY)
+        bar1.addEventListener("touchmove", function (e) {
+            var touch1 = e.touches[0];
+            var xx = Number(touch1.pageX)
+            var yy = Number(touch1.pageY)
+            if (Math.abs(Number(bar.offsetLeft) - Number(touch1.pageX)) > 20) {
+                if (openX >= Number(touch1.pageX)) {
+                    bar.style.left = openX + "px";
+                    bar2.style.width = 0 + "px"
+                    return;
+                }
+                if (closeX <= Number(touch1.pageX)) {
+                    bar.style.left = closeX + "px";
+                    bar2.style.width = bar3.offsetWidth + "px"
+                    return;
+                }
+                bar.style.left = touch1.pageX + "px";
+                bar2.style.width = bar.offsetLeft - bar3.offsetLeft + "px";
+            }
+        })
+    })
+</script>
+
+</html>

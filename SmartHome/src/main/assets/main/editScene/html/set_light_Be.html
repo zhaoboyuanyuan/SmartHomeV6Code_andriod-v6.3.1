@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>设置亮度</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<style type="text/css">
+			.container_light{
+				position: absolute;
+				top: 20%;
+				width: 100%;
+			}
+
+			.sun_class{
+				background:url(../fonts/icon_less_light.png) no-repeat center center;
+				background-size:2rem auto;
+				width: 2rem;
+				height: 2rem;
+				float: left;
+				margin-left: 5%;
+			}
+			#range{
+				font-size:1.6rem;
+				color:#5F5F5F;
+				float: right;
+				margin-right: 5%;
+				margin-top: 0;
+			}
+
+			.slideBar{
+				position: absolute;
+				width: 68%;
+				left: 48%;
+				-webkit-tap-highlight-color: transparent;
+				-webkit-transform: translate(-50%);
+				-moz-transform: translate(-50%);
+				-ms-transform: translate(-50%);
+				-o-transform: translate(-50%);
+				transform: translate(-50%);
+			}
+
+			.slideBg{
+				position: absolute;
+				background-color: #F3F3F3;
+				width: 100%;
+				height: 0.5rem;
+				border-radius: 1rem;
+				transform: translateY(0.5rem);
+			}
+
+			.slideExpand{
+				position: absolute;
+				display: inline-block;
+				background-color: #FBD62B;
+				width: 50%;
+				height: 0.5rem;
+				border-radius: 1rem;
+				transform: translateY(0.5rem);
+			}
+
+			.slideCircle{
+				position: absolute;
+				width: 2rem;
+				height: 2rem;
+				background: url(../fonts/icon_slide_btn.png) no-repeat center center;
+				background-size: 2rem auto;
+				left: 50%;
+				transform: translate(-50%);
+			}
+		</style>
+	</head>
+	<body style="background-color: #ffffff;">
+	   <header class="header">
+		   <div class="header_top">
+			   <a href="javascript:;" onClick="javascript:history.back(-1);"></a>
+			   <a href="javascript:;" key="LEDlight_90_Set_Brightness" class="autoSwitchLanguager">设置亮度</a>
+			   <a key="LEDlight_90_ok" class="complete autoSwitchLanguager" onclick="save()" href="javascript:;">确定</a>
+		   </div>
+	   </header>
+		<section class="container_light">
+			<i class="sun_class"></i>
+			<div class="slideBar">
+				<span class="slideBg"></span>
+				<span class="slideExpand"></span>
+				<i class="slideCircle" m-section="2"></i>
+			</div>
+			<span id="range">50%</span>
+		</section>
+	</body>
+	<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+        var lightPercent = 50;
+        var info = window.sysfun;
+        info.init("V6Scene");
+        initlan();
+        plus.plusReady(function(){
+            plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+            });
+        })
+		$(".back").on("click",function(){
+			plus.tools.back(function(){})
+		})
+
+        function save() {
+            if(lightPercent > 0) {
+                var light;
+                if(lightPercent < 10){
+                    light = "00" + lightPercent;
+				}else if(lightPercent < 100){
+                    light = "0" + lightPercent;
+                }
+                info.setItem("epData","1" + light);
+                info.setItem("deviceState",switch_AoEs_01 + "&nbsp;&nbsp;&nbsp;&nbsp;" + lang_D7_brightness + "&nbsp;&nbsp;" + lightPercent +"%");
+                window.location = "addDelay.html";
+            }
+        }
+
+        $('.slideCircle').on('touchmove', function (e) {
+            var parent = $(this).parents('.slideBar');
+            var touch = e.touches[0]; //获取第一个触点
+            var left = parent.offset().left;
+            var width = parent.width();
+            var x = touch.pageX;
+            var per = (x - left) / width;
+            if (per < 0) {
+                per = 0;
+            } else if (per > 1) {
+                per = 1;
+            }
+            per = per * 100;
+            parent.find('.slideExpand').css('width', per + '%');
+            parent.find('.slideCircle').css('left', per + '%');
+            parent.next().html(~~per + '%');
+            // console.log('滑动中 : ' + per + '%');
+        });
+
+        $('.slideBar').on('click', function (e) {
+            var left =  $(this).offset().left;
+            var width =  $(this).width();
+            var x = e.pageX;
+            var per = (x - left) / width;
+            if (per < 0) {
+                per = 0;
+            } else if (per > 1) {
+                per = 1;
+            }
+            per = per * 100;
+            lightPercent = parseInt(per);
+            $(this).find('.slideExpand').css('width', per + '%');
+            $(this).find('.slideCircle').css('left', per + '%');
+            $(this).next().html(~~per + '%');
+            console.log('========== 点击结束 ==========');
+            console.log($(this).attr('m-section') + '分区' + ', ' + per);
+            document.getElementById("range").innerHTML = lightPercent + "%"
+        });
+
+        $('.slideCircle').on('touchend', function (e) {
+            var parent = $(this).parents('.slideBar');
+            var touch = e.changedTouches[0]; //获取第一个触点
+            var left = parent.offset().left;
+            var width = parent.width();
+            var x = touch.pageX;
+            var per = (x - left) / width;
+            if (per < 0) {
+                per = 0;
+            } else if (per > 1) {
+                per = 1;
+            }
+            lightPercent = parseInt(per * 100);
+            console.log('========== 滑动结束 ==========');
+            console.log($(this).attr('m-section') + '分区' + ', ' + per);
+            document.getElementById("range").innerHTML = lightPercent + "%"
+        });
+	</script>
+</html>

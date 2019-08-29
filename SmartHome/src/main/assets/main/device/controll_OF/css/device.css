@@ -1,0 +1,278 @@
+@charset "utf-8";
+body,html{
+    width:100%;
+    height:95%;
+    background:#f1f4f8;
+}
+.content{
+    margin-top:6.4rem;
+    width:100%;
+    height:calc(100% - 6.4rem);
+}
+.imgState{
+    width:100%;
+    height:17rem;
+    background:url("../fonts/icon_bg.png") no-repeat center center;
+    background-size: 100% 100%;
+}
+.controlBtn{
+    padding:0 5%;
+    width:100%;
+    height:7rem;
+    margin:0.6rem 0;
+    background:#fff;
+    overflow:hidden;
+}
+.controlBtn dl{
+    float:left;
+    display:block;
+    width:33.33333333333%;
+    height:8rem;
+    text-align:center;
+}
+.controlBtn dl dt{
+    display:block;
+    width:100%;
+    height:4rem;
+    text-align:center;
+    margin-top:0.6rem;
+}
+.controlBtn dl dt img{
+    display:inline-block;
+    width:3.8rem;
+    height:3.8rem;
+    margin-top:0.2rem;
+    border-radius: 50%;
+}
+.controlBtn dl dd{
+    display:block;
+    width:100%;
+    height:2rem;
+    line-height:2rem;
+    font-size:1.4rem;
+    color:#000;
+}
+.other_control{
+    width:100%;
+    overflow:hidden;
+    background:#fff;
+}
+.other_control li{
+    box-sizing:border-box;
+    width:100%;
+    height:5rem;
+    line-height:5rem;
+    padding:0 4%;
+    border-top:1px solid #f1f4f8;
+    font-size:1.6rem;
+    color:#000;
+}
+.other_control .divider {
+    border-top:4px solid #f1f4f8;
+}
+.other_control li[play="yes"]{
+    background:#fff;
+}
+.other_control li[play="no"]{
+    background:#f8f8f8;
+    color:#666666;
+}
+.other_control li.switch div{
+    position:relative;
+    float:right;
+    width: 5rem;
+    height: 2.5rem;
+    margin-top:1.25rem;
+    border-radius:2.2rem;
+}
+.other_control li.switch div span{
+    display:block;
+    position:absolute;
+    left:2.9rem;
+    top:0.5rem;
+    width:1.5rem;
+    height:1.5rem;
+    background:#fff;
+    border-radius:50%;
+}
+@keyframes slideOn {
+    from{left:0.6rem;}
+    to{left:2.9rem;}
+}
+@-webkit-keyframes slideOn {
+    from{left:0.6rem;}
+    to{left:2.9rem;}
+}
+
+@keyframes slideOff {
+    from{left:2.9rem;}
+    to{left:0.6rem;}
+}
+@-webkit-keyframes slideOff {
+    from{left:2.9rem;}
+    to{left:0.6rem;}
+}
+.other_control li.switch div[switch="on"]{
+    background:#8dd652;
+}
+.other_control li.switch div[switch="on"] span{
+    animation: slideOn 0.1s linear 1 both;
+    -webkit-animation: slideOn 0.1s linear 1 both;
+}
+.other_control li.switch div[switch="off"]{
+    background:#aeb8bb;
+}
+.other_control li.switch div[switch="off"] span{
+    animation: slideOff 0.1s linear 1 both;
+    -webkit-animation: slideOff 0.1s linear 1 both;
+}
+
+.other_control li.time i{
+    display:block;
+    float:right;
+    padding-right:2rem;
+    height:5rem;
+    line-height:5rem;
+    font-size:1.4rem;
+    color:#676767;
+    background:url(../fonts/icon_right.png) no-repeat right center;
+    background-size:0.8rem auto;
+}
+
+.mui-pciker-rule-ft{
+    font-weight:500;
+    font-size:1.4rem;
+    color:#666;
+    line-height:32px;
+}
+
+/*************************************************************************
+ *                          内部传感器异常弹框                           *
+ *************************************************************************/
+.alert{
+    display:block;
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4)
+}
+.nameToast{
+    position:absolute;
+    left:12%;
+    top:50%;
+    width:76%;
+    /*height:14rem;*/
+    -webkit-transform:translateY(-50%);
+    -ms-transform:translateY(-50%);
+    -moz-transform:translateY(-50%);
+    transform:translateY(-50%);
+    background:#fff;
+    border-radius:8px;
+    overflow:hidden;
+}
+.nameToast span{
+    display:block;
+    width:100%;
+    height:3rem;
+    line-height:3rem;
+    text-align:center;
+    font-size:1.7rem;
+    color:#555;
+}
+.nameToast .name{
+    margin:0 5%;
+    width:90%;
+    background:#f2f2f2;
+    border-radius:5px;
+    overflow:hidden;
+}
+.msg{
+    display:block;
+    float:left;
+    width:100%;
+    height:8rem;
+    line-height:2rem;
+    border:0;
+    font-size:1.4rem;
+    text-align: center;
+    overflow:auto;
+    padding-top: 2rem;
+}
+.nameToast .choose_1{
+    margin-top: 8rem;
+    border-top: 1px solid #d9d9d9;
+}
+.nameToast .choose_1 a{
+    display:block;
+    box-sizing: border-box;
+    float:left;
+    width:50%;
+    height:4.5rem;
+    line-height:4.5rem;
+    text-align:center;
+    border-right:1px solid #d9d9d9;
+    font-size:1.5rem;
+    color:#555;
+}
+.nameToast .choose_1 em:last-child{
+    border-right:0;
+}
+
+/**********************************************************************
+ *                              重写 picker样式
+ **********************************************************************/
+.mui-poppicker-body{
+    height:200px;
+}
+
+.mui-backdrop{
+    background-color:transparent;
+}
+/* 选择器头部颜色 */
+.mui-poppicker-header{
+    background-color: #f7f7f7;
+}
+.mui-btn {
+    background: transparent;
+    border: none;
+    color: #8dd652;
+}
+.mui-picker{
+    background:#fff;
+}
+
+/*************************************************************************
+ *                             设备离线遮罩层                            *
+ *************************************************************************/
+.mask_layer {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 6.4rem;
+    width: 100%;
+    height: 94%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7)
+}
+
+.mask_layer i {
+    display: inline-block;
+    width: 8rem;
+    height: 8rem;
+    margin-top: 15rem;
+    background: url(../fonts/icon_new.png) no-repeat center center;
+    background-size: 8rem auto;
+}
+
+.mask_layer span {
+    display: block;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #fff;
+}

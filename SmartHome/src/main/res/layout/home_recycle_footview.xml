@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/v6_bg"
+    android:gravity="center"
+    android:layout_height="wrap_content"
+    android:paddingBottom="5dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="@string/Home_Edit_Detail"
+        android:textColor="#7D7D7D"
+        android:gravity="center"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_home_edit"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/Edit"
+        android:textSize="13sp"
+        android:textColor="#babec7"/>
+</LinearLayout>

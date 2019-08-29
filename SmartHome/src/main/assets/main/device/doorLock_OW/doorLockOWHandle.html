@@ -1,0 +1,539 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="css/device.css"/>
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+        <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a id = "DoorLockTittle" class="deviceName autoSwitchLanguager" href="javascript:;">紫金山锁</a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<div class="lockbackimageview">
+			<section class="lockstate">
+				<a  class="lockstateClosed"></a>
+			</section>
+			<section class="lockPWDInput">
+				<i class="lockPWDInputBg">
+				</i>
+			</section>
+			<section class="lockStateNotice">
+				<a id="DoorLookInputPWD" class="autoSwitchLanguager"></a>
+			</section>
+			<section class="lockKeyBoard">
+				<span href="javascript:;"><button>1</button></span>
+				<span href="javascript:;"><button>2</button></span>
+				<span href="javascript:;"><button>3</button></span>
+				<span href="javascript:;"><button>4</button></span>
+				<span href="javascript:;"><button>5</button></span>
+				<span href="javascript:;"><button>6</button></span>
+				<span href="javascript:;"><button>7</button></span>
+				<span href="javascript:;"><button>8</button></span>
+				<span href="javascript:;"><button>9</button></span>
+				<span href="javascript:;"><button id="lockKeyBoard_Clean"></button></span>
+				<span href="javascript:;"><button>0</button></span>
+				<span href="javascript:;"><button id="lockKeyBoard_Submit"></button></span>
+			</section>
+			<section class="touchIDSpace" style="display: none;">
+				<img class="touchIDButton" src="fonts/icon_doorLock_VOC_fingerprint_touchId.png"/>
+				<p id="DoorLookOpenTouchIDTip" class="autoSwitchLanguager"></p>
+			</section>
+			<section class="toast_state">
+				<span id="DoorLookFailed" class="autoSwitchLanguager"></span>
+			</section>
+			<!--TouchID弹框-->
+			<section class="changeName" id="giveUpEdit" style="display:none">
+				<div class="nameToast giveUp">
+					<span id="DoorLookTouchIDTip" class="autoSwitchLanguager"></span>
+					<div class="choose_1 choose_2">
+						<a id="DoorLookNeverNotify" href="javascript:;" class="isNo autoSwitchLanguager"></a>
+						<a id="DoorLookToSetting" href="javascript:;" class="toSet autoSwitchLanguager"></a>
+					</div>
+				</div>
+			</section>
+			<section class="changeName" id="TOUCHIDFailed" style="display:none">
+				<div class="nameToast giveUp">
+					<span id="DoorLookPWDERRORTip1" class="autoSwitchLanguager" style="padding:2rem;padding-bottom: 0px;line-height:2.2rem;text-align:center;color:#454749;font-size:2rem;">TouchID指纹开锁失效</span>
+					<span id="DoorLookPWDERRORTip" class="autoSwitchLanguager" style="width:80%;padding:2rem 10%;padding-top: 0;line-height:3rem;">开锁密码被修改，Touch ID指纹开锁失效，请重新设置后再试</span>
+					<div class="choose_1">
+						<a id="DoorLookOK" style="width:100%;" href="javascript:;" class="isOK autoSwitchLanguager">确定</a>
+					</div>
+				</div>
+			</section>
+			<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="DoorLookDeviceOffLine">设备已离线</span></section>
+		</div>
+	</body>
+	<script src="js/doorControl.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+    initlan();
+	var info = window.sysfun;
+	info.init("V6DoorLockVOC");
+//	var info = window.localStorage;
+//	window.getItem();window.setItem()
+	var touchpassword;
+    var isSend;
+    var isTouchIdSend;
+	var deviceInfo;
+	var endpointNumber;
+	var endpointType;
+	var clusterId;
+	var shadow = document.getElementsByClassName("mask_layer")[0];
+	var deviceName = document.getElementsByClassName("deviceName")[0];
+	//取消放弃编辑
+	document.getElementsByClassName("isNo")[0].addEventListener("click",function(){
+		document.getElementById("giveUpEdit").style.display = "none";
+		//关闭touchID Switch
+		var touchIDSwitchKey = "TouchIDSWITCH"+deviceInfo.devID;
+		if(touchIDSwitchKey){
+			info.setItem(touchIDSwitchKey,0);
+		}
+	})
+	//确认密码失效
+	document.getElementsByClassName("isOK")[0].addEventListener("click",function(){
+		document.getElementById("TOUCHIDFailed").style.display = "none";
+		document.getElementsByClassName("touchIDSpace")[0].style.display = "none";
+		//关闭touchID Switch
+		var touchIDKey = "TouchIDPassword"+deviceInfo.devID;
+		if(touchIDKey){
+			info.removeItem(touchIDKey);
+		}
+	})
+	//去设置
+	document.getElementsByClassName("toSet")[0].addEventListener("click",function(){
+		document.getElementById("giveUpEdit").style.display = "none";
+		//打开指纹
+				plus.gatewayCmd.verifyTouchID(function(result) {
+					console.log("result" + result);
+					if(result == "YES"){
+						//指纹验证成功
+						var touchIDKey = "TouchIDPassword"+deviceInfo.devID;
+						if(touchIDKey && touchpassword){
+							info.setItem(touchIDKey,touchpassword);
+						}
+						document.getElementsByClassName("touchIDSpace")[0].style.display = "block";
+					}
+				})
+				console.log("touchIDSpace")
+	})
+
+	plus.plusReady(function() {
+			updateTouchIDState();
+			plus.gatewayCmd.getDeviceInfo(function(result) {
+				console.log(result);
+				deviceInfo = result;
+				endpointNumber = result.endpoints[0].endpointNumber;
+				endpointType = result.endpoints[0].endpointType;
+				clusterId = result.endpoints[0].clusterId;
+				devID = result.devID;
+				gwID = result.gwID;
+				updateTouchIDState();
+				if(result.mode == 2) {
+					shadow.style.display = "block";
+				}else{
+					shadow.style.display = "none";
+				}
+                getMoreConfig(devID)
+				var name = result.name.indexOf("#$default$#") != -1 ? lang_DoorLockTittle + result.name.split("#")[2]:result.name
+				deviceName.textContent = name;
+				rush_500(devID, gwID);
+			});
+			document.getElementById("back").addEventListener("click", function() {
+				plus.tools.back(function() {});
+			});
+			document.getElementsByClassName("more")[0].addEventListener("click", function() {
+				plus.tools.more(moreConfig,function() {});
+			});
+			//提交
+			document.getElementById("lockKeyBoard_Submit").addEventListener("click",function(){
+				//开锁
+				if(lockPWD.length >= numlimmitmin){
+					console.log("lockKeyBoard_Submit")
+					if(isSend){
+						return;
+					}
+					isSend = true;
+					setTimeout(function() {
+						if(isSend){
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = lang_DoorLookInputPWD;
+						}
+                       isSend = false;
+                    }, 8000)
+					var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+					notice.textContent = lang_alarmSet_js_32;
+					sendCmd(lockPWD);
+				}else{
+					console.log("lockKeyBoard_NotSubmit")
+				}
+			})
+			document.getElementsByClassName("touchIDSpace")[0].addEventListener("click",function(){
+				//打开指纹
+				isTouchIdSend = false;
+				plus.gatewayCmd.useTouchID(function(result) {
+					console.log("result" + result);
+					if(result == "YES"){
+						//指纹验证成功
+						var touchIDKey = "TouchIDPassword"+deviceInfo.devID;
+						var touchIDValueStr = info.getItem(touchIDKey);
+						if(touchIDValueStr && touchIDValueStr.length > 0){
+							isTouchIdSend = true;
+							setTimeout(function() {
+								if(isTouchIdSend){
+								var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+								notice.textContent = lang_DoorLookInputPWD;
+								}
+                       				isTouchIdSend = false;
+                    			}, 8000)
+							var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+							notice.textContent = lang_alarmSet_js_32;
+							sendCmd(touchIDValueStr);
+						}else{
+							document.getElementsByClassName("touchIDSpace")[0].style.display = "none";
+						}
+					}
+				})
+				console.log("touchIDSpace")
+			})
+		function updateTouchIDState(){
+			if(deviceInfo && deviceInfo.devID){
+				plus.gatewayCmd.supportTouchID(function(result){
+				console.log(result);
+				if(result == "YES"){
+					//指纹可用,显示指纹开锁快捷按钮
+					var touchIDKey = "TouchIDPassword"+deviceInfo.devID;
+					var touchID = info.getItem(touchIDKey);
+					if(touchID && touchID.length > 0){
+						document.getElementsByClassName("touchIDSpace")[0].style.display = "block";
+					}else{
+						document.getElementsByClassName("touchIDSpace")[0].style.display = "none";
+					}
+					
+				}else{
+					//指纹不可用
+					document.getElementsByClassName("touchIDSpace")[0].style.display = "none";
+				}
+			})
+			}
+		}
+		
+		function cleanpassword(){
+			lockPWD = "";
+			var imglength = document.getElementsByClassName("lockPWDInputBg")[0].getElementsByTagName("a").length;
+			if(imglength){
+				for(var i = imglength; i>0;i--){
+					var parent=document.getElementsByClassName("lockPWDInputBg")[0];
+					var child=document.getElementsByClassName("lockPWDInputBg")[0].getElementsByTagName("a")[i-1];
+					parent.removeChild(child);
+				}
+			}
+		}
+		
+		function rush_500(dID, gID) {
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				updateTouchIDState();
+				if(result.cmd == "500" && deviceInfo.devID == result.devID){
+					var name = result.name.indexOf("#$default$#") != -1 ? lang_DoorLockTittle + result.name.split("#")[2]:result.name
+                    deviceName.textContent = name;
+					if(result.mode == 2) {
+						shadow.style.display = "block";
+					}else if(result.mode == 1){
+						shadow.style.display = "none";
+					}else{
+						shadow.style.display = "none";
+					}
+				}else if((result.cmd == "502") && result.name){
+                    if(result.name != undefined || result.name != ''){
+                         deviceName.textContent = result.name;
+                    }
+                }
+				if(dID == result.devID && gID == result.gwID && result.cmd == "500") {
+					switch(parseInt(result.mode)){
+						case 0:
+						{
+							//设备状态变化
+							shadow.style.display = "none";
+							var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+							var attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+							reloadUI(parseInt(attributeId),parseInt(attributeValue));
+						}
+						break;
+						case 1:
+						{
+							//设备上线
+							shadow.style.display = "none";
+							var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+							var attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+							reloadUI(parseInt(attributeId),parseInt(attributeValue));
+						}
+						break;
+						case 2:
+						{
+							//设备离线
+							shadow.style.display = "block";
+						}
+						break;
+						case 3:
+						{
+							//设备主动退网
+							shadow.style.display = "block";
+						}
+						break;
+						case 4:
+						{
+							//设备第一次上线
+							shadow.style.display = "none";
+						}
+						break;
+						default:
+						{
+					
+						}
+						break;
+					}
+				}
+			})
+		}
+		
+		function reloadUI(attributeId,attributeValue){
+			switch(attributeId){
+				case 0x0000:
+				{
+					doorLockStatue(attributeValue);
+				}
+				break;
+				case 0x8001:
+				{
+					doorLockAlarm(attributeValue);
+				}
+				break;
+				case 0x8002:
+				{
+					doorLockUser(attributeValue);
+				}
+				break;
+				case 0x8003:
+				{
+					doorLockVerifyPWD(attributeValue);
+				}
+				break;
+				case 0x8006:
+				{
+					doorLockVerifyPWD(attributeValue);
+				}
+				break;
+				default:
+				{
+					
+				}
+				break;
+			}
+		}
+		
+		/*
+		 * touchID密码设置提示
+		 */
+		function touchIDsetNotice(){
+			document.getElementById("giveUpEdit").style.display = "block";
+		}
+		/*
+		 * touchID密码错误提示
+		 */
+		function touchIDreSetNotice(){
+			document.getElementsByClassName("touchIDSpace")[0].style.display = "none";
+			document.getElementById("TOUCHIDFailed").style.display = "block";
+		}
+		/*
+		 * 锁状态
+		 */
+		function doorLockStatue(attributeValue){
+			cleanpassword();
+			switch(attributeValue){
+				case 1:
+				{
+					//上锁
+					var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+					notice.textContent = lang_DoorLookInputPWD;
+					var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+					lockstate.className="lockstateClosed";
+				}
+				break;
+				case 2:
+				{
+					//上保险
+					var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+				}
+				break;
+				case 3:
+				{
+					//解除保险
+					var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+				}
+				break;
+				case 4:
+				{
+					//解除反锁
+					var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+				}
+				break;
+				case 5:
+				{
+					//反锁
+					var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+					notice.textContent = lang_DoorLookLocked;
+					var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+					lockstate.className="lockstateClosed";
+				}
+				break;
+				default:
+				{
+					
+				}
+				break;
+			}
+		}
+		/*
+		 * 锁告警
+		 */
+		function doorLockAlarm(attributeValue){
+			switch(attributeValue){
+				case 1:
+				{
+					//入侵报警
+				}
+				break;
+				case 2:
+				{
+					//报警解除
+				}
+				break;
+				case 3:
+				{
+					//破坏告警
+				}
+				break;
+				case 4:
+				{
+					//密码连续出错
+				}
+				break;
+				case 5:
+				{
+					//欠压报警
+				}
+				break;
+				default:
+				{
+					
+				}
+				break;
+			}
+		}
+		
+		/*
+		 * 用户开锁信息
+		 */
+		function doorLockUser(attributeValue){
+			if(isSend && !isTouchIdSend){
+				isSend = false;
+				touchpassword = "";
+				plus.gatewayCmd.supportTouchID(function(result){
+				console.log(result);
+				if(result == "YES"){
+						//指纹可用,显示指纹开锁快捷按钮
+						var touchIDKey = "TouchIDPassword"+deviceInfo.devID;
+						var touchID = info.getItem(touchIDKey);
+						if(!touchID){
+							touchIDsetNotice();
+						}
+					}
+				})
+			}
+			touchpassword = lockPWD;
+			
+			cleanpassword();
+			var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+			notice.textContent = lang_DoorLookOpen;
+			var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+			lockstate.className = "lockstateOpened";
+		}
+		
+		/*
+		 * 密码验证状态
+		 */
+		function doorLockVerifyPWD(attributeValue){
+			
+			switch(attributeValue){
+				case 1:
+				{
+					//密码验证成功
+					var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+					notice.textContent = lang_DoorLookOpen;
+					var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+					lockstate.className="lockstateOpened";
+					touchpassword = lockPWD;
+				}
+				break;
+				case 10:
+				{
+					//密码验证失败
+					var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+					notice.textContent = lang_DoorLookPWDERROR;
+					var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+					lockstate.className="lockstateClosed";
+					if(isTouchIdSend){
+						isTouchIdSend = false;
+						touchIDreSetNotice();
+					}
+				}
+				break;
+				case 4:
+				{
+					var notice = document.getElementsByClassName("lockStateNotice")[0].getElementsByTagName("a")[0];
+					notice.textContent = lang_DoorLookInputPWD;
+					//自动上锁
+					var lockstate = document.getElementsByClassName("lockstate")[0].getElementsByTagName("a")[0];
+					lockstate.className="lockstateClosed";
+				}
+				break;
+				default:
+				{
+					
+				}
+				break;
+			}
+			cleanpassword();
+		}
+		
+			/*
+		 * 设备控制
+		 */
+		function sendCmd(pwd) {
+			var jsonData = {
+				"cmd": "501",
+				"gwID": gwID,
+				"devID": devID,
+				"endpointNumber": endpointNumber,
+				"clusterId": 257,
+				"commandType": 01,
+				"commandId": 32772,
+				"parameter":[pwd],
+			};
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result" + result);
+			})
+		}
+	});
+	</script>
+</html>

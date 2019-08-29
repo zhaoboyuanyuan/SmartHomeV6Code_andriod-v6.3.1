@@ -1,0 +1,329 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加延时</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/editok.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mobiscroll.custom-2.5.2.min.css" />
+</head>
+
+<body>
+<header class="header">
+    <div class="header_top">
+        <a href="javascript:window.history.back(-1);"></a>
+        <a href="javascript:;" class="autoSwitchLanguager" key="addDelay">添加延时</a>
+        <a href="javascript:;" id="finishDelay" key="complete" class="autoSwitchLanguager">完成</a>
+    </div>
+</header>
+<section>
+    <div class="delay_btn"><span key="addDelay" class="autoSwitchLanguager">添加延时</span>
+        <div class="switch"><i data-state="off" id="on"></i></div>
+    </div>
+</section>
+<input type="text" id="demo" readonly="readonly" style="" />
+</body>
+<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/mobiscroll.core-2.5.2.js" type="text/javascript" charset="utf-8"></script>
+<script src="../build/navigator.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../build/addDelay.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Scene");
+    initlan()
+
+    var slDevList = JSON.parse(info.getItem("batchAdd_slDevList"))  // 已选择的设备
+    var slDevStatus = JSON.parse(info.getItem("batchAdd_slStatus"))  // 已选择的设备状态
+    var statusDic = {}  // 各类别的设备状态字典
+    var currentActions = []  // 本次批量添加的任务
+
+    plus.plusReady(function() {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        //添加延时页点击完成按钮操作
+        $("#finishDelay").on("touchend", function() {
+
+            getStatusDic()
+
+            var delay = ''
+            //判断延时开关
+            if($("#on").attr("data-state") == "off") {
+                //延时开关关闭，延时为0
+                delay = "0"
+            } else {
+                //延时开关打开，存储延时时间
+                delay = $(".dwv").html();
+                var minute = parseInt(delay.substring(0, delay.indexOf(" "))) * 60
+                var scend = parseInt(delay.substring(delay.indexOf(" "), delay.length))
+                delay = "" + (minute + scend)
+            }
+
+            // 遍历选择的设备，设置任务
+            slDevList.forEach(function (model) {
+                var status = statusDic[model.category]
+                setAction(model, status, delay)
+            })
+
+            // 存储本次添加任务
+            var arr = []
+            if(info.getItem("actionArray") == null) {
+
+            } else {
+                arr = JSON.parse(info.getItem("actionArray"))
+            }
+            arr = arr.concat(currentActions)
+            info.setItem("actionArray", JSON.stringify(arr))
+
+            // 删除临时数据
+            info.removeItem("batchAdd_slDevList")
+            info.removeItem("batchAdd_slStatus")
+
+            window.location = "editScene.html?addTask=true"
+        })
+    })
+
+    // 获得状态字典
+    function getStatusDic() {
+        statusDic = {}
+        slDevStatus.forEach(function (status) {
+            var arr = status.split("_")
+            var key = ""
+            if (arr[0] === "onoff") {
+                key = "3"
+            }
+            if (arr[0] === "curtain") {
+                key = "7"
+            }
+            if (arr[0] === "socket") {
+                key = "4"
+            }
+            statusDic[key] = arr[1]
+        })
+    }
+
+    // 设置单个设备的action
+    function setAction(deviceModel, status, delay) {
+
+        var endpointNum = ""
+        var deviceState = ""
+        var epData = ""
+
+        /****************************************
+         *               开关类                  *
+         ****************************************/
+        if (deviceModel.type == "61" ||
+            deviceModel.type == "Am" ||
+            deviceModel.type == "Aj" ||
+            deviceModel.type == "Ai" ||
+            deviceModel.type == "Bu" ||
+            deviceModel.type == "Cl") {
+            if (status === "open") {
+                endpointNum = "1"
+                deviceState = "1:"+lang_switch_on
+                epData = "1"
+            } else if (status === "close") {
+                endpointNum = "1"
+                deviceState = "1:"+lang_switch_off
+                epData = "0"
+            } else if (status === "change") {
+                endpointNum = "1"
+                deviceState = "1:"+lang_switch_cut
+                epData = "3"
+            }
+        } else if ( deviceModel.type == "62" ||
+                    deviceModel.type == "An" ||
+                    deviceModel.type == "At" ||
+                    deviceModel.type == "Bv" ||
+                    deviceModel.type == "Cm") {
+            if (status === "open") {
+                endpointNum = "1"
+                deviceState = "1:"+lang_switch_on+" 2:"+lang_switch_on
+                epData = "11"
+            } else if (status === "close") {
+                endpointNum = "1"
+                deviceState = "1:"+lang_switch_off+" 2:"+lang_switch_off
+                epData = "00"
+            } else if (status === "change") {
+                endpointNum = "1"
+                deviceState = "1:"+lang_switch_cut+" 2:"+lang_switch_cut
+                epData = "33"
+            }
+        } else if ( deviceModel.type == "63" ||
+                    deviceModel.type == "Ao" ||
+                    deviceModel.type == "Bw" ||
+                    deviceModel.type == "Cn") {
+            if (status === "open") {
+                endpointNum = "1"
+                deviceState = "1:"+lang_switch_on+" 2:"+lang_switch_on+" 3:"+lang_switch_on
+                epData = "111"
+            } else if (status === "close") {
+                endpointNum = "1"
+                deviceState = "1:"+lang_switch_off+" 2:"+lang_switch_off+" 3:"+lang_switch_off
+                epData = "000"
+            } else if (status === "change") {
+                endpointNum = "1"
+                deviceState = "1:"+lang_switch_cut+" 2:"+lang_switch_cut+" 3:"+lang_switch_cut
+                epData = "333"
+            }
+        }
+
+        if (deviceModel.type == "Am" ||
+            deviceModel.type == "An" ||
+            deviceModel.type == "Ao" ||
+            deviceModel.type == "Bu" ||
+            deviceModel.type == "Bv" ||
+            deviceModel.type == "Bw" ||
+            deviceModel.type == "Cl" ||
+            deviceModel.type == "Cm" ||
+            deviceModel.type == "Cn") {
+            epData = "4" + epData
+        }
+
+        if (deviceModel.type == "Aj" || deviceModel.type == "At" || deviceModel.type == "Ai") {
+            epData = "1" + epData
+        }
+
+        /****************************************
+         *               插座类                  *
+         ****************************************/
+        if (deviceModel.type == "50" ||
+            deviceModel.type == "16" ||
+            deviceModel.type == "77" ||
+            deviceModel.type == "Bt") {
+            if (status === "open") {
+                endpointNum = "1"
+                deviceState = lang_switch_on
+                epData = "1"
+            } else if (status === "close") {
+                endpointNum = "1"
+                deviceState = lang_switch_off
+                epData = "0"
+            }
+        }
+        if (deviceModel.type == "77") {
+            epData = "1" + epData
+        }
+
+        /****************************************
+         *               窗帘类                  *
+         ****************************************/
+        if (deviceModel.type == "65" ||
+            deviceModel.type == "Ar" ||
+            deviceModel.type == "Ca" ||
+            deviceModel.type == "Au") {
+            if (status === "open") {
+                endpointNum = "1"
+                deviceState = lang_openSingle
+                epData = "2"
+            } else if (status === "close") {
+                endpointNum = "1"
+                deviceState = lang_closeSingle
+                epData = "3"
+            } else if (status === "stop") {
+                endpointNum = "1"
+                deviceState = lang_stopSingle
+                epData = "1"
+            }
+        } else if (deviceModel.type == "80") {
+            if (status === "open") {
+                endpointNum = "1"
+                deviceState = lang_openSingle
+                epData = "0100"
+            } else if (status === "close") {
+                endpointNum = "1"
+                deviceState = lang_closeSingle
+                epData = "0000"
+            } else if (status === "stop") {
+                endpointNum = "1"
+                deviceState = lang_stopSingle
+                epData = "0255"
+            }
+        } else if (deviceModel.type == "81") {
+            if (status === "open") {
+                endpointNum = "1"
+                deviceState = "1:"+lang_openSingle+" 2:"+lang_openSingle
+                epData = "01000100"
+            } else if (status === "close") {
+                endpointNum = "1"
+                deviceState = "1:"+lang_closeSingle+" 2:"+lang_closeSingle
+                epData = "00000000"
+            } else if (status === "stop") {
+                endpointNum = "1"
+                deviceState = "1:"+lang_stopSingle+" 2:"+lang_stopSingle
+                epData = "02550255"
+            }
+        }  else if (deviceModel.type == "Cb") {
+            if (status === "open") {
+                endpointNum = "0"
+                deviceState = "1:"+lang_openSingle+" 2:"+lang_openSingle
+                epData = "22"
+            } else if (status === "close") {
+                endpointNum = "0"
+                deviceState = "1:"+lang_closeSingle+" 2:"+lang_closeSingle
+                epData = "33"
+            } else if (status === "stop") {
+                endpointNum = "0"
+                deviceState = "1:"+lang_stopSingle+" 2:"+lang_stopSingle
+                epData = "11"
+            }
+        } else if (deviceModel.type == "Bh") {
+            if (status === "open") {
+                endpointNum = "0"
+                deviceState = "1:"+lang_openSingle+" 2:"+lang_openSingle
+                epData = "122"
+            } else if (status === "close") {
+                endpointNum = "0"
+                deviceState = "1:"+lang_closeSingle+" 2:"+lang_closeSingle
+                epData = "133"
+            } else if (status === "stop") {
+                endpointNum = "0"
+                deviceState = "1:"+lang_stopSingle+" 2:"+lang_stopSingle
+                epData = "111"
+            }
+        } else if (deviceModel.type == "Co") {
+            if (status === "open") {
+                endpointNum = "1"
+                deviceState = lang_openSingle
+                epData = "100"
+            } else if (status === "close") {
+                endpointNum = "1"
+                deviceState = lang_closeSingle
+                epData = "0"
+            } else if (status === "stop") {
+                endpointNum = "1"
+                deviceState = lang_stopSingle
+                epData = "255"
+            }
+        }
+
+        /****************************************
+         *               over                   *
+         ****************************************/
+
+        var dataInfo = {
+            "type": '2',
+            "object": deviceModel.devID + '>' + endpointNum + '>' + deviceModel.type,
+            "epData": epData, //设备状态命令
+            "delay": delay, //延时
+            "name": deviceModel.name, //设备名称
+            "epName": "", //设备名称
+            "deviceState": deviceState, //设置的设备状态
+            "deviceIcon": "url("+deviceModel.icon+")", //设备icon
+            "roomName": deviceModel.roomName, //设备分区
+            "editUrl": window.deviceList[deviceModel.type].stateUrl //再编辑链接
+        }
+
+        currentActions.push(dataInfo)
+    }
+
+
+</script>
+
+</html>

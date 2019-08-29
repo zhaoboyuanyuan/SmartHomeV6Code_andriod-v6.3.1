@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <title></title>
+    <link href="css/translator.css" rel="stylesheet">
+    <link href="css/loading.css" rel="stylesheet">
+    <link href="css/base.css" rel="stylesheet">
+    <script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+        body,html{
+            background-color: #f1f4f8;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a href="javascript:;" key="device_B9_name" class="deviceName autoSwitchLanguager remove"></a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<ul class="translator_classify" id="translator_classify">
+    <li id="one_way"><span></span><img><img><img src="fonts/more.png"></li>
+    <li id="two_way"><span></span><img src="fonts/more.png"></li>
+</ul>
+<p  class="remarks autoSwitchLanguager" key="device_B9_Rename_hint" >注:长按可进行重命名</p>
+<div class="translator_list" id="mess_detail">
+    <div>
+        <p><span key="device_B9_Alarm" class="autoSwitchLanguager">报警消息</span><span key="device_B9_more" class="autoSwitchLanguager" id="getMoreMess">更多</span></p>
+        <ul>
+            <!--<li><span>1路有报警</span><span>2018.04.20  10:00</span></li>
+            <li><span>1路有报警</span><span>2018.04.20  10:00</span></li>
+            <li><span>1路有报警</span><span>2018.04.20  10:00</span></li>
+            <li><span>1路有报警</span><span>2018.04.20  10:00</span></li>
+            <li><span>1路有报警</span><span>2018.04.20  10:00</span></li>
+            <li><span>1路有报警</span><span>2018.04.20  10:00</span></li>
+            <li><span>1路有报警</span><span>2018.04.20  10:00</span></li>
+            <li><span>1路有报警</span><span>2018.04.20  10:00</span></li>
+            <li><span>1路有报警</span><span>2018.04.20  10:00</span></li>
+            <li><span>1路有报警</span><span>2018.04.20  10:00</span></li>-->
+        </ul>
+    </div>
+</div>
+<!--loading-->
+<div class="spinner">
+    <div class="spinner-container container1">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container2">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container3">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+</div>
+<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="device_B9_Offline" id="offline">设备已离线</span></section>
+<!--弹框-->
+<div class="pop" id="pop">
+    <ul>
+        <li key="device_B9_out_of_time" class="autoSwitchLanguager">
+            连接超时
+        </li>
+        <li onclick="overtime()" key="device_B9_know" class="autoSwitchLanguager">
+            我知道了
+        </li>
+    </ul>
+</div>
+<!--遮罩-->
+<div class="shade" id="shade">
+
+</div>
+
+<div class="rename" id="rename">
+<ul>
+    <li key="device_B9_Rename" class="autoSwitchLanguager">重命名</li>
+    <li><input type="text" id="rename_content"></li>
+</ul>
+    <div>
+        <div onclick="cancel()" key="device_B9_cancel" class="autoSwitchLanguager">取消</div>
+        <div onclick="sure(this.id)" class="sure autoSwitchLanguager" key="device_B9_ok">确定</div>
+    </div>
+</div>
+
+<script src="js/translator.js"></script>
+</body>
+</html>

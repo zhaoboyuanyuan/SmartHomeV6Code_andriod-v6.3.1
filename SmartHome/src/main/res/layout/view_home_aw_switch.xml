@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/widget_padding_vertical"
+    android:paddingLeft="@dimen/widget_padding_horizontal"
+    android:paddingRight="@dimen/widget_padding_horizontal"
+    android:paddingTop="@dimen/widget_padding_vertical">
+
+    <include layout="@layout/view_widget_title" />
+
+    <LinearLayout
+        android:id="@+id/layout_mode_bell"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/widget_padding_vertical"
+        android:gravity="center"
+        android:orientation="horizontal"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_bell"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_marginRight="@dimen/widget_padding_vertical"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_aw_bell_normal" />
+
+        <TextView
+            android:id="@+id/tv_bell_short"
+            android:layout_width="72dp"
+            android:layout_height="26dp"
+            android:background="@drawable/selector_aw_widget_btn1"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingLeft="5dp"
+            android:text="@string/device_Aw_short"
+            android:textColor="@color/v6_text_gray_dark"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_bell_alert"
+            android:layout_width="72dp"
+            android:layout_height="26dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/selector_aw_widget_btn2"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/device_Aw_long"
+            android:textColor="@color/v6_text_gray_dark"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_bell_stop"
+            android:layout_width="72dp"
+            android:layout_height="26dp"
+            android:background="@drawable/selector_aw_widget_btn3"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingRight="5dp"
+            android:text="@string/device_Aw_stop"
+            android:textColor="@color/v6_text_gray_dark"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_mode_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <FrameLayout
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/widget_padding_vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/one_switch_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/home_widget_circle_gray"
+                android:padding="18dp"
+                android:src="@drawable/switch_off" />
+
+            <cc.wulian.smarthomev6.support.customview.ProgressRing
+                android:id="@+id/one_switch_progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                app:ringEndColor="@color/colorPrimary"
+                app:ringStartColor="#F7FAF5"
+                app:ringWidth="1.5dp" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/textSwitchState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:text="@string/widget_door_open" />
+
+    </LinearLayout>
+
+</LinearLayout>

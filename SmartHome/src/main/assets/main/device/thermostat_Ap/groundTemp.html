@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="UTF-8">
+    <title>地面过温保护</title>
+    <link rel="stylesheet" href="mui/css/mui.min.css">
+    <link rel="stylesheet" href="mui/css/mui.picker.min.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/groundTemp.css"/>
+    <script src="mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="mui/js/mui.picker.all.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+<header  class="header">
+    <a class="back" href="javascript:;"></a>
+    <a class="deviceName autoSwitchLanguager" key="Device_Ap_Details_High_Protect" href="javascript:;">地面过温保护</a>
+</header>
+<section >
+    <div class="mainTop">
+        <em class="autoSwitchLanguager" key="Device_Ap_Details_High_Protect">地面过温保护</em>
+        <div class="switch" id="open"><i data-state="off" class="on"></i></div>
+    </div>
+</section>
+<section >
+    <div class="mainBottom" onclick="showPop()">
+        <em class="autoSwitchLanguager" key="Device_Ap_Details_High_Protect_Value">温度选值</em>
+        <span class="currentTemp">60℃</span>
+        <i class="iconRight"></i>
+    </div>
+</section>
+<section class="alert" style="display:none;">
+    <div class="nameToast">
+        <span class="tip autoSwitchLanguager" key="Device_Ap_Details_Prompt">提示</span>
+        <div class="msg autoSwitchLanguager" key="Device_Ap_Details_High_Protect_tips1">关闭地面过温保护后，存在过热风险，确定关闭？</div>
+        <div class="choose_1">
+            <a class="autoSwitchLanguager" key="Device_Ap_Details_Cancel" href="javascript:;" onclick="cancel()">取消</a>
+            <a class="autoSwitchLanguager sure_click" key="Device_Ap_Details_Confirm" href="javascript:;" onclick="sure()" >确定</a>
+        </div>
+    </div>
+</section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    initlan();
+    turnOffSwitch();
+    var devID, gwID;
+    var tempScale = 0;
+    var state = 0;          // 开关状态
+    var temp = 60;          // 温度
+
+    // 摄氏度数组    10 - 32     步进 1    默认 26℃
+    var mainTempArrC = [];
+    var mainTempValC = 60;
+    // 华氏度数组    50 - 90     步进 1     默认 90℉
+    var mainTempArrF = [];
+    var mainTempValF = 140;
+    for (var i = 80; i <= 150; i++) {
+        mainTempArrC.push((i / 2) + '℃')
+    }
+    for (var i = 104; i <= 167; i++) {
+        mainTempArrF.push(i + '℉');
+    }
+
+    var mainTempArrS = mainTempArrC;
+    // 制热温度 默认 26
+    var mainTempValS = -1;
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(function (data) {
+            gwID = data.gwID;
+            devID = data.devID;
+            handleEp(data.endpoints)
+        });
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            handleEp(data.endpoints);
+        })
+    });
+
+    // 弹框取消按钮
+    function cancel() {
+        hideAlert();
+    }
+
+    // 弹框确定按钮
+    function sure() {
+        hideAlert();
+        setState(0);
+        turnOffSwitch()
+    }
+
+    // 隐藏弹框
+    function hideAlert() {
+        $(".alert").hide()
+    }
+
+    // 显示弹框
+    function showAlert() {
+        $(".alert").show()
+    }
+
+    // 处理 endpoints
+    // 遍历解析
+    function handleEp(endpoints) {
+        endpoints.forEach(function (endpoint) {
+            var clusters = endpoint.clusters;
+            clusters.forEach(function (cluster) {
+                var attributes = cluster.attributes;
+                attributes.forEach(function (attribute) {
+                    var attributeId = attribute.attributeId;
+                    var attributeValue = attribute.attributeValue;
+                    handleAttribute(attributeId, attributeValue)
+                })
+            })
+        });
+    }
+
+    // 处理 attribute
+    function handleAttribute(attributeId, attributeValue) {
+        console.log("attributeId:\t\t" + attributeId.toString(16));
+        console.log("attributeValue:\t\t" + attributeValue);
+
+        if (attributeId == 0x8001) {
+            handleAttribute8001(attributeValue)
+        } else if (attributeId == 0x8004) {
+            handleAttribute8004(attributeValue)
+        } else if (attributeId == 0x8006) {
+            handleAttribute8006(attributeValue)
+        }
+    }
+
+    function handleAttribute8001(value) {
+        var yy = parseInt(value.substr(2, 2), 16);        // yy:          过温保护开关
+        var cc = parseInt(value.substr(4, 4), 16);        // cccc:        过温保护温度
+        var zz = parseInt(value.substr(14, 2), 16);       // zz:          温度标志位
+        tempScale = zz;
+        showAnti(666, yy, cc);
+    }
+
+    function handleAttribute8004(value) {
+        var ff = parseInt(value.substr(0, 2), 16);      // ff->00设置开关 ff->01 设置温度
+        var ee = parseInt(value.substr(2, 2), 16);      // ee：防冻保护开关(00：关闭 01：打开)
+        var dd = parseInt(value.substr(4, 4), 16);      // dddd：防冻保护温度（扩大100倍）
+
+        showAnti(ff, ee, dd)
+    }
+
+    function handleAttribute8006(value) {
+        var zz = parseInt(value.substr(0, 2), 16);
+        tempScale = zz;
+    }
+
+    function showAnti(ff, ee, dd) {
+        if (ff == 0) {
+            if (ee == 0) {
+                turnOffSwitch()
+            } else {
+                turnOnSwitch()
+            }
+        } else if (ff == 1) {
+            var t = dd / 100;
+            showTemp(t)
+        } else {
+            if (ee == 0) {
+                turnOffSwitch()
+            } else {
+                turnOnSwitch()
+            }
+            var t = dd / 100;
+            showTemp(t)
+        }
+    }
+
+    function showTemp(t) {
+        temp = t;
+        $(".currentTemp").html(getShownTemp(t) + (tempScale == 0 ? '℃' : '℉'));
+    }
+    function setState(s) {
+        state = s;
+        var tt = temp * 100;
+        var ss = getDeviceTemp(tt).toString();
+        var p = state + ss + '0';
+        sendCmd(0x8011, [p])
+    }
+
+    function setTemp(t) {
+        temp = t;
+        var tt = getDeviceTemp(t) * 100;
+        var s = tt.toString();
+        var p = state + s + '1';
+        sendCmd(0x8011, [p])
+    }
+
+    $("#open").on("click", toggleSwitch);
+    $(".back").on("click", function () {
+        plus.tools.back(function() {});
+    });
+
+    /**
+     * 切换开关
+     */
+    function toggleSwitch() {
+        var state = $("#open .on").attr("data-state");
+        if(state == "off") {
+            setState(1);
+            turnOnSwitch()
+        } else {
+            showAlert();
+        }
+    }
+    function turnOnSwitch() {
+        state = 1;
+        $('.mainBottom').show();
+        $("#open .on").attr("data-state", "on");
+        $("#open").css("background", "#8dd652");
+        $("#open i").animate({
+            left: '60%'
+        }, 200)
+    }
+    function turnOffSwitch() {
+        state = 0;
+        $('.mainBottom').hide();
+        $("#open .on").attr("data-state", "off");
+        $("#open").css("background", "#aaa");
+        $("#open i").animate({
+            left: '10%'
+        }, 200)
+    }
+
+    function showPop() {
+        //初始化PopPicker组件
+        var picker = new mui.PopPicker({});
+        picker.setData(getTempArr());
+        $(".mui-backdrop").css("opacity","0");
+        $(".mui-poppicker-btn-cancel").html(langCancel);//"取消"
+        $(".mui-poppicker-btn-ok").html(langConfirm);//"确定"
+        picker.show(function(item) {
+            var st = item.toString();
+            setTemp(st.substring(0, st.length - 1))
+        });
+    }
+
+
+    // 华氏度 转 摄氏度
+    function F2C(f) {
+        var c = (f - 32) / 1.8;
+        var cFloor = Math.floor(c);
+        if (c - cFloor >= 0.75) {
+            return cFloor + 1;
+        } else if (c - cFloor >= 0.25) {
+            return cFloor + 0.5;
+        } else {
+            return cFloor;
+        }
+    }
+    // 摄氏度  转  华氏度
+    function C2F(c) {
+        return Math.round(c * 1.8 + 32);
+    }
+
+    // 获取正常显示的温度    将摄氏度转为 摄氏度或者华氏度
+    function getShownTemp(t) {
+        if (tempScale == 0) {
+            return t;
+        } else {
+            return C2F(t);
+        }
+    }
+
+    // 获取机器温度       将摄氏度或者华氏度 转为 摄氏度
+    function getDeviceTemp(t) {
+        if (tempScale == 0) {
+            return t;
+        } else {
+            return F2C(t);
+        }
+    }
+
+    // 获取温度数组
+    function getTempArr() {
+        mainTempArrS = tempScale == 0 ? mainTempArrC : mainTempArrF;
+        return mainTempArrS;
+    }
+
+    function getTempValue() {
+        if (mainTempValS < 10) {
+            mainTempValS = tempScale == 0 ? mainTempValC : mainTempValF;
+        }
+        return getShownTemp(mainTempValS);
+    }
+
+    function sendCmd(commandId,parameter){
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.endpointNumber = 1;
+        jsonData.commandType = 1;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+</script>
+
+</html>

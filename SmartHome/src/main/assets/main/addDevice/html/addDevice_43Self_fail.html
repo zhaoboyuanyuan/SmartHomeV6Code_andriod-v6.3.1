@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/fail.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="addDeviceNew.html"></a>
+				<a href="javascript:;" class="addDoorC"></a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="add_fail">
+			<img src="../fonts/icon_failure.png" alt="" />
+			<span class="autoSwitchLanguager" id="addDevice_fail_fail">添加设备失败</span>
+		</section>
+		<section class="add_advise" style="height: 17rem;overflow-y: auto;">
+			<ul>
+				<li class="autoSwitchLanguager" id="addDevice_fail_idea">建议</li>
+				<li class="autoSwitchLanguager" id="addDevice_fail_no1">1.检查网关是否正常工作</li>
+				<li class="autoSwitchLanguager" id="addDevice_fail_no2">2.检查添加的设备是否处于通电状态</li>
+				<li class="autoSwitchLanguager" id="addDevice_fail_no3">3.使添加的设备处于网关的有效通信距离内</li>
+				<li class="autoSwitchLanguager" id="addDevice_fail_no4_43Self">4. 检查设备是否已添加到本网关或其他网关内，或长按自检键 6s，蜂鸣器响1声后立即松开自检键，系统指示灯呈绿色闪烁4次后熄灭， 将设备退出ZigBee网络后重试</li>
+			</ul>
+		</section>
+		<section class="addSensorBtn">
+			<a class="autoSwitchLanguager" id="addDevice_fail_begin" href="javascript:;" style="opacity:1">重试</a>
+		</section>
+	</body>
+	<script src="../js/getUrl.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan()
+		var type;
+		var name
+		plus.plusReady(function() {
+			var info = window.sysfun;
+			info.init("V6addDevice");
+			type = info.getItem("type");
+			name = info.getItem("name");
+			if(type == "04") {
+				document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_fail_04_no4")
+			} else if(type == "OW") {
+				document.getElementById("addDevice_fail_no4").innerHTML = languageUtil.getResource("addDevice_OW_zj_fail_no4")
+			}
+			try {
+				$(".addDoorC").html(addDevice_add + name)
+			} catch(e) {
+				//TODO handle the exception
+			}
+			$(".addSensorBtn a").click(function() {
+				window.location="addDevice_43Self_01.html";
+			});
+		})
+	</script>
+
+</html>

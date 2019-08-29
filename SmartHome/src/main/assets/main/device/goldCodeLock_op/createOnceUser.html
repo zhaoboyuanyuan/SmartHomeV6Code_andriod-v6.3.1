@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加单次用户</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/set.css"/>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_op_once_01" href="javascript:;">创建单次密码</a>
+            <a class="complete autoSwitchLanguager" key="device_op_save" href="javascript:;">保存</a>
+        </div>
+    </header>
+    <section class="content">
+        <strong class="autoSwitchLanguager" key="device_op_once_02">单次密码使用一次后失效</strong>
+        <div class="createInput">
+            <span class="autoSwitchLanguager" key="device_op_normal_03">用户名</span>
+            <input class="autoSwitchLanguager" key="device_op_normal_05" type="text" maxlength="20" id="acname" placeholder="请输入用户名">
+        </div>
+        <strong class="autoSwitchLanguager" key="device_op_normal_04" style="height:4rem;line-height:4rem;color:#000;font-size:1.6rem;">密码</strong>
+        <div class="createPwd" style=""></div>
+        <!--<div class="create autoSwitchLanguager" key="device_op_once_03">生成单次密码</div>-->
+        <section class="create addSensorBtn" style="">
+			<a href="javascript:;" style="opacity:0.6" class="autoSwitchLanguager"  key="device_op_once_03">生成单次密码</a>
+		</section>
+    </section>
+    <!--<section id="fail" class="toast" style="display:none;">-->
+        <!--<p class="autoSwitchLanguager" id="toastText" style="color:#fff;"></p>-->
+    <!--</section>-->
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/onceUser.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/completeToast.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan()
+    var info = window.sysfun;
+    info.init("Token_OP");
+    var arr = JSON.parse(info.getItem("pwdArr"))
+//     var arr = ["12345","019232","876542","109340","874101","039481","459821","132147","923842","937402","823764","045201","192370","324911","387429","923719","387329","387489","787429","357429"]
+    $(".create").on("click",function(){
+        $(this).css("opacity","0.6")
+        $(this).unbind("click")
+        check(arr.length)
+    });
+    $("#acname").on("blur",function(){
+        var value = $(this).val();
+        var valueFace = noFace(value);
+        console.log(valueFace);
+        $(this).val(valueFace);
+    });
+    $("#back").on("click",function(){
+        plus.tools.goBack(function(){})
+    })
+    var PWD, NAME, DEVICEID, GWID, APPID;
+    var token;
+    token = info.getItem("Token_OP")
+    plus.plusReady(function() {
+        $(".complete").on("click",function(){
+            if($("#acname").val() == '' && $(".createPwd").html() == ''){
+                window.showDialog.show(normal_txt_01,2000);
+            }else if($("#acname").val() == ''){
+                window.showDialog.show(normal_txt_02,2000);
+            }else if($(".createPwd").html() == ''){
+                window.showDialog.show(once_txt_03,2000);
+            }else{
+                createToast()
+                send520Cmd()
+                setTimeout(function() {
+                    $(".comToast").hide();
+                    window.showDialog.show(normal_txt_04,2000);
+                }, 60000)
+            }
+        })
+        plus.gatewayCmd.getCurrentAppID(function(result) {
+            APPID = result;
+            plus.gatewayCmd.getDeviceInfo(function(result) {
+                DEVICEID = result.devID;
+                GWID = result.gwID;
+                rush_cmd(DEVICEID,APPID);
+            })
+        })
+    })
+    function load(){
+        $(".complete").on("click",function(){
+            if($("#acname").val() == '' && $(".createPwd").html() == ''){
+                window.showDialog.show(normal_txt_01,2000);
+            }else if($("#acname").val() == ''){
+                window.showDialog.show(normal_txt_02,2000);
+            }else if($(".createPwd").html() == ''){
+                window.showDialog.show(once_txt_03,2000);
+            }else{
+                createToast()
+                send520Cmd()
+                setTimeout(function() {
+                    $(".comToast").hide();
+                    window.showDialog.show(normal_txt_04,2000);
+                }, 60000)
+            }
+        })
+    }
+    addLoadEvent(load)
+
+    function send520Cmd() {
+        var jsonData = {};
+        jsonData.cmd = "520";
+        jsonData.gwID = GWID;
+        jsonData.devID = DEVICEID;
+        jsonData.operType = 2;
+        jsonData.appID = APPID;
+        PWD = $(".createPwd").html()
+        NAME = $("#acname").val();
+        var data = {
+            "tk": token,
+            "ut": "3",
+            "pwd": PWD,
+            "name": NAME
+        }
+        jsonData.data = data;
+        plus.gatewayCmd.controlDevice(jsonData, function(resutl) {
+
+        })
+    }
+
+    /*
+ * 数据回调
+ */
+    function rush_cmd(DEVICEID,APPID) {
+        plus.gatewayCmd.newDataRefresh(function(result) {
+            if(result.cmd == "520" && result.devID == DEVICEID && result.appID == APPID) {
+                if(result.operType == 2) { //operType:2为新增，operType:4为修改
+                    if(result.data.code != 0) {
+                        $(".comToast").hide();
+                        errorCode(parseInt(result.data.code))
+                        return;
+                    }
+                    $(".comToast").hide();
+                    window.showDialog.show(alarm_txt_05,2000);
+                    setTimeout(function(){
+                        // window.location = "accountManage.html"
+                        var shareinfo = window.sysfun;
+                        shareinfo.init("Share_op");
+                        shareinfo.clear();
+                        shareinfo.setItem("state", "1");
+                        shareinfo.setItem("password", PWD);
+                        window.location = "createdSuccess.html"
+                    },1000)
+                }
+            }
+        })
+    }
+</script>
+</html>

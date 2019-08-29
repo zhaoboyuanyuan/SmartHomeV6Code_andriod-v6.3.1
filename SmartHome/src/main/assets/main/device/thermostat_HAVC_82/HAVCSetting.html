@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+		<meta name="format-detection" content="telephone=no">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+
+		<link rel="stylesheet" href="../../source/mui/css/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../source/mui/css/app.css"/>
+
+		<script src="../../source/mui/js/mui.min.js"></script>
+		<script src="../../source/mui/js/mui.picker.js"></script>
+		<script src="../../source/mui/js/mui.poppicker.js"></script>
+		<link href="../../source/mui/css/mui.picker.css" rel="stylesheet" />
+		<link href="../../source/mui/css/mui.poppicker.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/deviceSet.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a class="back" href="javascript:;"></a>
+				<a href="javascript:;" class="deviceName autoSwitchLanguager" key="Device_82_Details_Settings">设置</a>
+				<a></a>
+			</div>
+		</header>
+		<section>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" id="firstRow">
+					<a style="font-size: 1.5rem;line-height: 4.5rem" class="autoSwitchLanguager" key="Device_82_Details_Settings_Equipment">
+						设备选择
+					</a>
+					<span class="currentTemp firstRowCurrentTemp"></span>
+					<span class="mui-icon mui-icon-arrowdown iconRight"></span>
+				</li>
+				<li class="mui-table-view-cell" id="secondRow">
+					<a style="font-size: 1.5rem;line-height: 4.5rem" class="autoSwitchLanguager" key="Device_82_Details_Settings_Heating">
+						设置供热方式
+					</a>
+					<span class="currentTemp secondRowCurrentTemp"></span>
+					<span class="mui-icon mui-icon-arrowdown iconRight"></span>
+				</li>
+				<li class="mui-table-view-cell" id="thirdRow">
+					<a style="font-size: 1.5rem;line-height: 4.5rem" class="autoSwitchLanguager" key="Device_82_Details_Settings_System">
+						系统类型选择
+					</a>
+					<span class="currentTemp thirdRowCurrentTemp"></span>
+					<span class="mui-icon mui-icon-arrowdown iconRight"></span>
+				</li>
+			</ul>
+		</section>
+		<section class="middleBtn_section">
+			<button type="button" class="mui-btn mui-btn-success middleBtn autoSwitchLanguager" key="Device_82_Details_Settings_Finish">发送设置</button>
+		</section>
+		<div id='userResult' class="ui-alert"></div>
+		<!---->
+
+	</body>
+	<script src="js/device82Model.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/sendCMD.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		//国际化初始化函数
+		initlan()
+		var isSendCmd = false;
+		var ishistoryBack;
+		var firstRowNum;
+		var secondRowNum;
+		var thirdRowNum;
+		var firstArry = [];
+		var secondArry = [];
+		var thirdArry = [];
+        var userPickerArry;
+		mui.init();
+		var userPicker = new mui.PopPicker({});
+		var userResult = document.getElementById('userResult');
+//		$(".img_state")
+		$("#firstRow").on('tap',function(){
+			userPicker.setData(firstArry);
+			userPicker.show(function(items) {
+				firstRowNum = items[0].value
+				$(".firstRowCurrentTemp").html(firstArry[firstRowNum].text);
+				});
+		})
+		$("#secondRow").on('tap',function(){
+			userPicker.setData(secondArry);
+			userPicker.show(function(items) {
+				secondRowNum = items[0].value
+                $(".secondRowCurrentTemp").html(secondArry[secondRowNum].text);
+				});
+		})
+		$("#thirdRow").on('tap',function(){
+			if(firstRowNum && secondRowNum){
+				if(firstRowNum == '0' && secondRowNum=='0'){
+                    userPickerArry = thirdArry[0];
+					userPicker.setData(userPickerArry);
+				}else if(firstRowNum == '0' && secondRowNum=='1'){
+                    userPickerArry = thirdArry[1];
+					userPicker.setData(userPickerArry);
+				}else if(firstRowNum == '1' && secondRowNum=='0'){
+                    userPickerArry = thirdArry[2];
+					userPicker.setData(userPickerArry);
+				}else if(firstRowNum == '1' && secondRowNum=='1'){
+                    userPickerArry = thirdArry[3];
+					userPicker.setData(userPickerArry);
+				}
+			}else{
+				return;
+			}
+			userPicker.show(function(items) {
+                thirdRowNum = items[0].value
+                $(".thirdRowCurrentTemp").html(userPickerArry[thirdRowNum].text);
+			})
+		})
+		plus.plusReady(function(){
+            $(".middleBtn_section").find("button").html(lang_Device_82_Details_Settings_Finish);
+            $(".mui-poppicker-btn-cancel").html(lang_Device_82_Details_Cancel);
+            $(".mui-poppicker-btn-ok").html(lang_Device_82_Details_Confirm);
+            firstArry = [{value: '0',text: lang_Device_82_Details_Settings_Equipment1}, {value: '1',text: lang_Device_82_Details_Settings_Equipment2}];
+            secondArry = [{value: '0',text: lang_Device_82_Details_Settings_Heating1}, {value: '1',text: lang_Device_82_Details_Settings_Heating2}];
+            thirdArry = [[{value: '0',text: lang_Device_82_Details_Settings_System1},{value: '1',text: lang_Device_82_Details_Settings_System2},{value: '2',text: lang_Device_82_Details_Settings_System3},{value: '3',text: lang_Device_82_Details_Settings_System4},{value: '4',text: lang_Device_82_Details_Settings_System5},{value: '5',text: lang_Device_82_Details_Settings_System6}],[{value: '0',text: lang_Device_82_Details_Settings_System1},{value: '1',text: lang_Device_82_Details_Settings_System2},{value: '2',text: lang_Device_82_Details_Settings_System3},{value: '3',text: lang_Device_82_Details_Settings_System4},{value: '4',text: lang_Device_82_Details_Settings_System5},{value: '5',text: lang_Device_82_Details_Settings_System6}],[{value: '0',text: lang_Device_82_Details_Settings_System7},{value: '1',text: lang_Device_82_Details_Settings_System8},{value: '2',text: lang_Device_82_Details_Settings_System9},{value: '3',text: lang_Device_82_Details_Settings_System10}],[{value: '0',text: lang_Device_82_Details_Settings_System7},{value: '1',text: lang_Device_82_Details_Settings_System8},{value: '2',text: lang_Device_82_Details_Settings_System9},{value: '3',text: lang_Device_82_Details_Settings_System10}]];
+
+			var url=window.location.href;	  //获取当前页面的url
+			ishistoryBack=url.split("?")[1]; 
+			//返回到设备详情页
+			$(".back").on("click",function(){
+				if(ishistoryBack){
+					window.location.href='thermostat_82.html';
+				}else{
+					plus.tools.back(function() {})
+				}
+			})
+			
+			$(".middleBtn_section").on("click",function () {
+				setThermostatSystem();
+            })
+			////////////////////////////回调---start////////////////////////////
+            plus.gatewayCmd.getDeviceInfo(null, function(data){
+                devID = data.devID;
+                gwID = data.gwID;
+                ep = ~~(data.endpoints[0].endpointNumber)
+            })
+
+            plus.gatewayCmdRush.newDataRefresh(function(data){
+                if(data.cmd == "500" && devID == data.devID){
+                    handleData(data);
+                }
+            })
+
+            function handleData(data){
+                for (var i = 0; i < data.endpoints.length; i++) {
+                    var endpoint = data.endpoints[i];
+                    var endpointNumber = endpoint.endpointNumber;
+                    var endpointName = endpoint.endpointName;
+                    var endpointType = endpoint.endpointType;
+                    var clusters = endpoint.clusters;
+                    var attributes = clusters[0].attributes;
+                    for (var j = 0;j < attributes.length;j++){
+                        var attributeId = attributes[j].attributeId;
+                        var attributeValue = attributes[j].attributeValue;
+                        if(attributeId == 0x8001){
+                            updataModelWith(attributeValue);
+                            if (s_82_systemType != "00" && s_82_temperatureModeType != "00" && isSendCmd){
+                                isSendCmd = false;
+                                //成功
+                                if(ishistoryBack){
+                                    window.location.href='thermostat_82.html';
+                                }else{
+                                    plus.tools.back(function() {})
+                                }
+							}
+						}
+                    }
+
+                }
+            }
+            ////////////////////////////回调---end////////////////////////////
+            ////////////////////////////控制---start////////////////////////////
+			function setThermostatSystem() {
+			    var setThermostatSystemSendStr;
+				if (firstRowNum == '0' && secondRowNum == '0'){
+                    setThermostatSystemSendStr = "1";
+				} else if (firstRowNum == '0' && secondRowNum == '1'){
+                    setThermostatSystemSendStr = "2";
+                } else if (firstRowNum == '1' && secondRowNum == '0'){
+                    setThermostatSystemSendStr = "3";
+                } else if (firstRowNum == '1' && secondRowNum == '1'){
+                    setThermostatSystemSendStr = "4";
+                } else{
+				    
+				}
+				if (setThermostatSystemSendStr && thirdRowNum){
+                    isSendCmd = true;
+                    setThermostatSystemSendStr = setThermostatSystemSendStr + (parseInt(thirdRowNum)+1);
+                    sendCmd(gwID,devID,ep,0x8015,[setThermostatSystemSendStr]);
+				}
+            }
+            ////////////////////////////控制---end////////////////////////////
+			
+		})
+		
+	</script>
+</html>

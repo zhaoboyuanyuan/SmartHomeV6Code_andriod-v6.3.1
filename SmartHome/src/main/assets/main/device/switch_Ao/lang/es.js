@@ -1,0 +1,55 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.switch_Ao_01 = "Cambiar";
+$lang.switch_Ao_02 = "¿Estás seguro de que quieres desvincular el dispositivo?";
+$lang.switch_Ao_03 = "Al soltando un botón del equipo vinculado para el controlador de la cortina， los tres serán soltados ¿Confirma para soltar todos ?";
+$lang.switch_Ao_04 = "Después de que el controlador de la cortina está encuadernado， 1 tecla está ENCENDIDA， 2 teclas están en pausa， 3 teclas están APAGADAS， el número de teclas actuales es insuficiente， por favor cambie las tres teclas al modo de vinculación， desactive y vuelva a intentarlo.";
+$lang.switch_Ao_05 = "¿Seguro que quieres eliminar esta escena?";
+$lang.switch_Ao_06 = "Dispositivo sin consolidar";
+$lang.switch_Ao_07 = "Escena sin consolidar";
+$lang.switch_Ao_08 = "Modificar el nombre del interruptor";
+$lang.swtich_Ao_09 = "Editar";
+$lang.swtich_Ao_10 = "Eliminar Escena";
+$lang.switch_Ao_11 = "Re vincular";
+$lang.switch_Ao_12 = "Desvincular";
+$lang.switch_Ao_13 = "Cancelar";
+$lang.switch_Ao_14 = "Confirmar";
+$lang.switch_Ao_15 = "Por favor renombrar";
+$lang.switch_Ao_On = "Abierto";
+$lang.switch_Ao_Off = "Cerrar";
+$lang.switch_Ao_Stop = "Parar";
+$lang.switch_Ao_Binding = "Vinculando";
+$lang.switch_Ao_BindingSuc = "Vinculación exitosa";
+$lang.switch_Ao_BindingFail = "Vinculación falló";
+$lang.switch_Ao_NoSwitchMode = "Modo sin interruptor";
+$lang.switch_Ao_ChangeMode01 = "Cambiar modos";
+$lang.switch_Ao_ChangeMode02 = "El dispositivo vinculado original se liberará después de cambiar el modo";
+$lang.switch_Ao_ChangeMode03 = "La escena vinculado original se liberará después de cambiar el modo";
+$lang.switch_Ao_ChangeMode04 = "Actual";
+$lang.switch_mode_01 = "Cambiar el modo";
+$lang.switch_mode_02 = "Unirse al modo";
+$lang.switch_mode_03 = "Modo de escena";
+$lang.un_room = "Desclasificado";
+$lang.offLine = "Offline";
+$lang.onLine = "Offline";
+$lang.switch_Ao_timeout = "Requerimiento fuera de tiempo";
+$lang.switch_Ao_saveSuc = "Guardado con éxito";
+$lang.switch_Ao_ChooseScene = "Seleccionar escena";
+$lang.swtich_Ao_Complete = "Finalizado";
+$lang.BindDeviceTitle = "Vinculando Dispositivo";
+$lang.switch_Ao_ChooseBtn = "Seleccionar botón";
+$lang.switch_Ao_Saving = "Guardando";
+$lang.switch_Ao_UpdateSuc = "Modificación exitosa";
+$lang.swich_Ao_UnbindSuc = "Desvinculación exitosa";
+$lang.Log = "Historial";
+$lang.Alarm = "Mensaje de alarma";
+$lang.device_Am_name = "Interruptor Smart Metallic (1 botón)";
+$lang.device_An_name = "Interruptor Smart Metallic (2 botón)";
+$lang.device_Ao_name = "Interruptor Smart Metallic (3 botón)";
+$lang.device_Ar_Name = "Smart Metallic Curtain Switch";
+$lang.swich_Ao_Unbundling = "Desvinculando...";
+$lang.device_Ao_NoScene = "Ninguna escena aún <br /> puede ir al hogar - todas las escenas añadidas";
+$lang.Share_No_Permission = "Equipo compartido， sin derecho a operar";

@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>编辑场景</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/slip.js" type="text/javascript"></script>
+</head>
+
+<body>
+<!--<section id="header_one">
+        <nav>
+            <li class="back" id="goback">
+                <a href="javascript:;"></a>
+            </li>
+            <li class="text">
+                <a id="editScene_select_brands" key="editScene" class="autoSwitchLanguager" href="javascript:;">编辑场景</a>
+            </li>
+            <li class="finish" id="finishScene">
+                <a id="editScene_complete" key="saveScene" class="autoSwitchLanguager" href="javascript:;">保存</a>
+            </li>
+        </nav>
+    </section>-->
+<header class="header">
+    <div class="header_top">
+        <a href="javascript:;" id="goback"></a>
+        <a href="javascript:;" key="editScene" class="autoSwitchLanguager"></a>
+        <a id="finishScene" key="saveScene" class="autoSwitchLanguager" href="javascript:;"></a>
+    </div>
+</header>
+<section>
+    <div class="img_bg">
+        <a href="customScene.html?mode=modify">
+            <i></i>
+            <span></span>
+            <em></em>
+        </a>
+    </div>
+</section>
+<section>
+    <ul class="scene_list">
+        <li id="editScene_support_tasks" key="supportTasks" class="autoSwitchLanguager list-no-reorder">此场景支持以下任务</li>
+        <li id="editScene_add_tasks_quickly" key="noTask" class="null autoSwitchLanguager  list-no-reorder"
+            style="display:none;">还没有添加任何任务，赶快添加吧
+        </li>
+        <ul id="action_list"
+            style="width: 100%;height:calc(100% - 36.5rem);position: fixed;overflow-y: scroll;overflow-x: hidden;"></ul>
+        <!--<li class="sce_list">-->
+            <!--<i style="background:url(../fonts/icon_4.png) no-repeat center center;background-size:3.9rem 4rem"></i>-->
+            <!--<div class="left"><span>墙面插座</span><em>[客厅]</em><em></em><em></em><em>打开</em><em>5分0秒后开始执行5分0秒后开始执行</em></div>-->
+            <!--<div class="delete">删除</div>-->
+            <!--</li>-->
+        <!--<li class="sce_list">-->
+        <!--<i style="background:url(../fonts/icon_offline.png) no-repeat center center;background-size:3rem 3rem"></i>-->
+        <!--<div class="left" style="line-height: 7.4rem;">设备已删除</div>-->
+        <!--<div class="delete">删除</div>-->
+        <!--</li>-->
+    </ul>
+</section>
+<section class="addSensorBtn" id="button_1"
+         style="position: fixed;left: 0;bottom: 0;width: 100%;height: 10rem;background: #fff;">
+    <a id="editScene_add_equipment" key="addTask" class="addDevice autoSwitchLanguager" href="javascript:;"
+       style="position:fixed;">添加任务</a>
+</section>
+<section class="shade" style="display: none;">
+    <div class="bounce_list">
+        <a id="editScene_leave_scene" key="ifReturn" class="autoSwitchLanguager" href="javascript:;">编辑的场景尚未保存，是否退出</a>
+        <a id="editScene_leave" key="return" class="return autoSwitchLanguager" href="javascript:;">退出</a>
+        <a id="editScene_leave_save" key="returnAndSave" class="sendReturn autoSwitchLanguager" href="javascript:;">保存并退出</a>
+        <a id="editScene_cancel" key="cancel" class="close autoSwitchLanguager" href="javascript:;">取消</a>
+    </div>
+</section>
+<section class="saveToast" style="display:none;">
+    <div>
+        <i>
+            <em class="rotate"></em>
+        </i>
+        <p key="device_HS05_Loading" class="autoSwitchLanguager">正在加载...</p>
+    </div>
+</section>
+<section class="overTime autoSwitchLanguager" key="device_B9_out_of_time">请求超时，请重试</section>
+</body>
+<script src="../js/leftDelete.js" type="text/javascript" charset="utf-8"></script>
+<script src="../build/navigator.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../model/scene.js" type="text/javascript" charset="utf-8"></script>
+<script src="../model/housekeeper.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Scene");
+    var isClick = "false";
+    var arr = new Array()
+    var AppID;
+    var gwID;
+    var overtime;
+    var allPage;
+    var currentPage = 1;
+    var beginAchieve = "false";
+    var closeAchieve = "false";
+    var actionDic = {}
+    initlan()
+    plus.plusReady(function () {
+        $(".addDevice").on("click", function () {
+            info.setItem("sourcePage", "editScene");
+            window.location = "sceneList.html";
+        });
+        plus.gatewayCmd.androidBack(function () {
+            if ($(".shade").css("display") === "none") {
+                goBack();
+            } else {
+                $(".shade").hide();
+            }
+        });
+        //editScene(); //判断是否为编辑场景入口
+        if (decodeURI(getUrlParam("edit")) == "true") {
+            info.clear();
+        }
+        plus.gatewayCmd.getCurrentAppID(function (data) {
+            AppID = data;
+        });
+        plus.gatewayCmd.getCurrentGatewayID(function (data) {
+            gwID = data;
+        });
+        //edit()
+        if (decodeURI(getUrlParam("edit")) == "true") {
+            $(".saveToast").show();
+            overtimeWarn();
+            //入口为全部场景页
+            $(".img_bg span").html(window.urlData.sceneName)
+            $(".img_bg i").css({
+                "background": "url(../../source/sceneIcon/scene_quick_" + window.urlData.sceneIcon +
+                ".png) no-repeat center center",
+                "background-size": "4.75rem auto"
+            })
+
+            info.setItem("sceneID", window.urlData.sceneID)
+            //请求场景列表
+            editScene()
+        } else if (decodeURI(getUrlParam("addTask")) == "true") {
+            //编辑场景，添加任务
+            $(".img_bg span").html(info.getItem("sceneName"))
+            $(".img_bg i").css({
+                "background": "url(../../source/sceneIcon/scene_quick_" + info.getItem("imgSrc") + ".png)",
+                "background-size": "4.75rem auto"
+            })
+            edit()
+        } else {
+            //入口为创建场景页或重命名页
+            $(".img_bg span").html(info.getItem("sceneName"))
+            $(".img_bg i").css({
+                "background": "url(../../source/sceneIcon/scene_quick_" + info.getItem("imgSrc") + ".png)",
+                "background-size": "4.75rem auto"
+            })
+
+            if (info.getItem("flag") == null) {
+                $(".null").show();
+                $("#action_list").hide();
+            } else {
+                edit()
+            }
+        }
+        $("#button_1").on("click", function () {
+            isClick = "true"
+            info.setItem("isClick", isClick)
+            info.setItem("index", "noEdit")
+        })
+        $("#goback").on("click", function () {
+            goBack();
+        });
+
+        function goBack() {
+            //				console.log("123123")
+            //返回时判断场景是否被编辑过
+            if (info.getItem("isClick") == "true" && info.getItem("isClick") != null) {
+                //弹出返回弹窗
+                $(".shade").fadeIn()
+            } else {
+                //回到全部场景页
+                info.removeItem("isClick")
+                plus.tools.back(function () {
+                })
+                info.clear();
+            }
+        }
+
+        $(".return").on("click", function () {
+            plus.tools.back(function () {
+            })
+        })
+        $(".sendReturn").on("click", function () {
+            $(".saveToast").show();
+            overtimeWarn();
+            //返回并保存时，判断是新建场景还是修改场景
+            if (info.getItem("isChange") != undefined && info.getItem("isChange") == "true") {
+                //修改场景命令
+                changeSceneTask()
+            } else {
+                //新建场景命令
+                addSceneTask()
+            }
+        })
+        //关闭弹窗
+        $(".close").on("click", function () {
+            $(".shade").hide()
+        })
+        //点击修改场景图标或名称
+        $(".img_bg a").on("click", function () {
+            info.setItem("isTrue", "true")
+            info.setItem("isRename", "true")
+            info.setItem("sceneName", $(this).find("span").html())
+            info.setItem("imgSrc", $(this).find("i").css("background-image").substr($(this).find("i").css("background-image")
+                .lastIndexOf(".") - 2, 2))
+        })
+
+        //请求场景列表
+        function editScene() {
+            if (window.urlData && window.urlData != null) {
+                //console.log(window.urlData);
+                info.setItem("sceneName", window.urlData.sceneName);
+                info.setItem("imgSrc", window.urlData.sceneIcon);
+                info.setItem("groupID", window.urlData.groupID);
+                //获取场景任务列表
+                var param;
+                plus.gatewayCmd.getCurrentGatewayID(function (data) {
+                    var gwID = data;
+                    plus.gatewayCmd.getCurrentAppID(function (result) {
+                        var appID = result;
+                        if (window.urlData.programID && window.urlData.programID != "") {
+                            var paramScene = {
+                                "cmd": "507",
+                                "gwID": gwID,
+                                "appID": appID,
+                                "operType": "R",
+                                "programID": window.urlData.programID,
+                                "programType": "0"
+                            }
+                            plus.gatewayCmd.houserkeep_507(paramScene, function (data) {
+                                $(".saveToast").hide();
+                                clearOvertimeWarn();
+                                if (data.triggerArray != undefined && data.triggerArray[0].object == window.urlData.sceneID && data.actionArray !=
+                                    null) {
+                                    console.log(data)
+                                    var deviceIcon;
+                                    var arr1 = [];
+                                    info.setItem("isChange", "true")
+                                    info.setItem("programID", data.programID)
+                                    data.actionArray.map(function (list1, d) {
+                                        var jsonData = {
+                                            "deviceIcon": "",
+                                            "name": "",
+                                            "object": "",
+                                            "delay": "",
+                                            "deviceState": "",
+                                            "epData": "",
+                                            "roomName": ""
+                                        };
+                                        if (list1.name == undefined) {
+                                            jsonData.name = window.deviceList[list1.object.split(">")[2]].name
+                                        } else {
+                                            jsonData.name = list1.name.indexOf("#$default$#") != -1 ? window.deviceList[list1.object.split(">")[
+                                                2]].name + list1.name.split("#")[2] : list1.name;
+                                        }
+                                        deviceIcon = "url(" + window.deviceList[list1.object.split(">")[2]].icon + ")";
+                                        jsonData.editUrl = window.deviceList[list1.object.split(">")[2]].stateUrl;
+                                        if (list1.type == 3) {
+                                            jsonData.type = "3";
+                                            if (list1.object.split(">")[2] == "CMICA4") {
+                                                if (list1.description != undefined && list1.description.length > 0) {
+                                                    jsonData.deviceState = list1.description;
+                                                    jsonData.description = list1.description;
+                                                }
+                                            }
+                                            if (list1.object.split(">")[2] == "CMICA2" ||
+                                                list1.object.split(">")[2] == "CMICA6" ||
+                                                list1.object.split(">")[2] == "CMICA3") {
+                                                jsonData.deviceState = languageUtil.getResource("camera_houseKeeper_task");
+                                                jsonData.description = languageUtil.getResource("camera_houseKeeper_task");
+
+                                            }
+                                        } else if (list1.type == 1) {
+                                            jsonData.type = "1";
+                                            if (list1.object.split(">")[2] == "CMICA2" ||
+                                                list1.object.split(">")[2] == "CMICA3" ||
+                                                list1.object.split(">")[2] == "CMICA4" ||
+                                                list1.object.split(">")[2] == "CMICA5" ||
+                                                list1.object.split(">")[2] == "CMICA6") {
+                                                if (list1.epData != undefined && list1.epData.length > 0) {
+                                                    var epData = JSON.parse(list1.epData)
+                                                    if (epData.action === 'startSafety') {
+                                                        jsonData.deviceState = lang_camera_safety_open;
+                                                    } else if (epData.action === 'stopSafety') {
+                                                        jsonData.deviceState = lang_camera_safety_close;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (list1.type == 4) {
+                                            jsonData.type = "4";
+                                            if (list1.object.split(">")[2] == "XW01") {
+                                                console.log(list1.epdata);
+                                                var epdata = JSON.parse(list1.epData);
+                                                var epdataArr = epdata.endpoint;
+                                                if (epdataArr != undefined) {
+                                                    if (epdataArr.length == 1) {
+                                                        var action = epdataArr[0].action;
+                                                        for (var key in action) {
+                                                            if (key == "Play") {
+                                                                var play = action.Play;
+                                                                if (play.value == "stop") {
+                                                                    jsonData.deviceState = lang_XW01_stop;
+                                                                }
+                                                            }
+                                                        }
+                                                    } else if (epdataArr.length == 2) {
+                                                        var playState;
+                                                        var volume;
+                                                        for (var i = 0; i < epdataArr.length; i++) {
+                                                            var action = epdataArr[i].action;
+                                                            for (var key in action) {
+                                                                if (key == "Play") {
+                                                                    var play = action.Play;
+                                                                    if (play.value == "play") {
+                                                                        playState = lang_XW01_play;
+                                                                    }
+                                                                }
+                                                                if (key == "Volume") {
+                                                                    volume = action.Volume.value;
+                                                                }
+                                                            }
+                                                        }
+                                                        jsonData.deviceState = playState + " " + lang_XW01_volume + ":" + volume;
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "HS05") {
+                                                console.log(list1.epData);
+                                                var epdata = JSON.parse(list1.epData);
+                                                var epdataArr = epdata.endpoint;
+                                                if (epdataArr != undefined) {
+
+                                                    for (var i = 0; i < epdataArr.length; i++) {
+                                                        var action = epdataArr[i].action;
+                                                        for (var key in action) {
+                                                            if (key == "Temperature") {
+                                                                var Temperature = action.Temperature;
+                                                                if (Temperature.zone == "1") {
+                                                                    jsonData.deviceState += Temperature.value + "℃  ";
+                                                                } else if (Temperature.zone == "2") {
+                                                                    jsonData.deviceState += Temperature.value + "℃  ";
+                                                                } else if (Temperature.zone == "3") {
+                                                                    jsonData.deviceState += Temperature.value + "℃  ";
+                                                                }
+                                                            }
+                                                            if (key == "FridgeMode") {
+                                                                var FridgeMode = action.FridgeMode;
+                                                                if (FridgeMode.value == "0") {
+                                                                    jsonData.deviceState += lang_HS05_model_0;
+                                                                } else if (FridgeMode.value == "1") {
+                                                                    jsonData.deviceState += lang_HS05_model_1;
+                                                                } else if (FridgeMode.value == "2") {
+                                                                    jsonData.deviceState += lang_HS05_model_2;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "IF02") {
+                                                console.log(list1.epData);
+                                                var epdata = JSON.parse(list1.epData);
+                                                var extraData = epdata.extraData;
+                                                if (extraData != undefined) {
+                                                    var blockName = extraData.blockName;
+                                                    if (blockName != undefined) {
+                                                        jsonData.deviceState = blockName;
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            jsonData.type = "2";
+                                            jsonData.roomName = list1.roomName;
+                                            if (list1.object.split(">")[2] == "50") {
+                                                if (list1.epData == "1") {
+                                                    jsonData.deviceState = lang_openSingle
+                                                } else {
+                                                    jsonData.deviceState = lang_closeSingle
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Bt") {
+                                                if (list1.epData == "1") {
+                                                    jsonData.deviceState = lang_openSingle
+                                                } else {
+                                                    jsonData.deviceState = lang_closeSingle
+                                                }
+                                            } else if (list1.object.split(">")[2] == "03" ||
+                                                list1.object.split(">")[2] == "06" ||
+                                                list1.object.split(">")[2] == "02" ||
+                                                list1.object.split(">")[2] == "09" ||
+                                                list1.object.split(">")[2] == "43" ||
+                                                list1.object.split(">")[2] == "A5" ||
+                                                list1.object.split(">")[2] == "Ad" ||
+                                                list1.object.split(">")[2] == "C0" ||
+                                                list1.object.split(">")[2] == "a1") {
+                                                if (list1.epData == "0") {
+                                                    jsonData.deviceState = lang_disarming
+                                                } else {
+                                                    jsonData.deviceState = lang_fortify
+                                                }
+                                            } else if (list1.object.split(">")[2] == "01") {
+                                                if (list1.epData == "0") {
+                                                    jsonData.deviceState = lang_resetAlarm
+                                                } else if (list1.epData == "1") {
+                                                    jsonData.deviceState = lang_normalAlarm
+                                                } else {
+                                                    jsonData.deviceState = lang_fireAlarm
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Ar" ||
+                                                list1.object.split(">")[2] == "Au" ||
+                                                list1.object.split(">")[2] == "65" ||
+                                                list1.object.split(">")[2] == "25") {
+                                                if (list1.epData == "2") {
+                                                    jsonData.deviceState = lang_openSingle
+                                                } else if (list1.epData == "3") {
+                                                    jsonData.deviceState = lang_closeSingle
+                                                } else {
+                                                    jsonData.deviceState = lang_stopSingle
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Aj" ||
+                                                list1.object.split(">")[2] == "At") {
+                                                var num = list1.epData.length - 1;
+                                                for (var n = 0; n < num; n++) {
+                                                    if (list1.epData.substr(n + 1, 1) == 0) {
+                                                        jsonData.deviceState += (n + 1) + ":" + lang_switch_off + " ";
+                                                    } else if (list1.epData.substr(n + 1, 1) == 1) {
+                                                        jsonData.deviceState += (n + 1) + ":" + lang_switch_on + " ";
+                                                    } else if (list1.epData.substr(n + 1, 1) == 3) {
+                                                        jsonData.deviceState += (n + 1) + ":" + lang_switch_cut + " ";
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "80") {
+                                                var deviceData = list1.epData.substring(1, 4);
+                                                if (deviceData === "000") {
+                                                    jsonData.deviceState = lang_closeSingle
+                                                } else if (deviceData === "100") {
+                                                    jsonData.deviceState = lang_openSingle
+                                                } else if (deviceData === "255") {
+                                                    jsonData.deviceState = lang_stopSingle
+                                                } else {
+                                                    jsonData.deviceState = Number(list1.epData.substring(1, 4)) + "%";
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Co") {
+                                                var deviceData = list1.epData;
+                                                if (deviceData === "000") {
+                                                    jsonData.deviceState = lang_closeSingle
+                                                } else if (deviceData === "100") {
+                                                    jsonData.deviceState = lang_openSingle
+                                                } else if (deviceData === "255") {
+                                                    jsonData.deviceState = lang_stopSingle
+                                                } else {
+                                                    jsonData.deviceState = Number(list1.epData) + "%";
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Am" || list1.object.split(">")[2] == "Bu" || list1.object.split(">")[2] == "Cl") {
+                                                var num = list1.epData.length;
+                                                if (list1.epData.substr(0, 1) == "1") {
+                                                    if (list1.epData.substr(2, 1) == 0) {
+                                                        jsonData.deviceState += 1 + ":" + lang_switch_off + " ";
+                                                    } else if (list1.epData.substr(2, 1) == 1) {
+                                                        jsonData.deviceState += 1 + ":" + lang_switch_on + " ";
+                                                    } else if (list1.epData.substr(2, 1) == 3) {
+                                                        jsonData.deviceState += 1 + ":" + lang_switch_cut + " ";
+                                                    }
+                                                } else {
+                                                    for (var n = 1; n < num; n++) {
+                                                        if (list1.epData.substr(n, 1) == 0) {
+                                                            jsonData.deviceState += (n) + ":" + lang_switch_off + " ";
+                                                        } else if (list1.epData.substr(n, 1) == 1) {
+                                                            jsonData.deviceState += (n) + ":" + lang_switch_on + " ";
+                                                        } else if (list1.epData.substr(n, 1) == 3) {
+                                                            jsonData.deviceState += (n) + ":" + lang_switch_cut + " ";
+                                                        }
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "An" || list1.object.split(">")[2] == "Bv" || list1.object.split(">")[2] == "Cm") {
+                                                var num = list1.epData.length;
+                                                if (list1.epData.substr(0, 1) == "1") {
+                                                    if (list1.epData.substr(1, 1) == "1") {
+                                                        if (list1.epData.substr(2, 1) == 0) {
+                                                            jsonData.deviceState += 1 + ":" + lang_switch_off + " ";
+                                                        } else if (list1.epData.substr(2, 1) == 1) {
+                                                            jsonData.deviceState += 1 + ":" + lang_switch_on + " ";
+                                                        } else if (list1.epData.substr(2, 1) == 3) {
+                                                            jsonData.deviceState += 1 + ":" + lang_switch_cut + " ";
+                                                        }
+                                                    } else if (list1.epData.substr(1, 1) == "2") {
+                                                        if (list1.epData.substr(2, 1) == 0) {
+                                                            jsonData.deviceState += 2 + ":" + lang_switch_off + " ";
+                                                        } else if (list1.epData.substr(2, 1) == 1) {
+                                                            jsonData.deviceState += 2 + ":" + lang_switch_on + " ";
+                                                        } else if (list1.epData.substr(2, 1) == 3) {
+                                                            jsonData.deviceState += 2 + ":" + lang_switch_cut + " ";
+                                                        }
+                                                    }
+                                                } else {
+                                                    for (var n = 1; n < num; n++) {
+                                                        if (list1.epData.substr(n, 1) == 0) {
+                                                            jsonData.deviceState += (n) + ":" + lang_switch_off + " ";
+                                                        } else if (list1.epData.substr(n, 1) == 1) {
+                                                            jsonData.deviceState += (n) + ":" + lang_switch_on + " ";
+                                                        } else if (list1.epData.substr(n, 1) == 3) {
+                                                            jsonData.deviceState += (n) + ":" + lang_switch_cut + " ";
+                                                        }
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Ao" || list1.object.split(">")[2] == "Bw" || list1.object.split(">")[2] == "Cn") {
+                                                var num = list1.epData.length;
+                                                if (list1.epData.substr(0, 1) == "1") {
+                                                    if (list1.epData.substr(1, 1) == 0) {
+                                                        if (list1.epData.substr(2, 1) == 0) {
+                                                            for (var m = 0; m < num; m++) {
+                                                                jsonData.deviceState += (m + 1) + ":" + lang_switch_off + " ";
+                                                            }
+                                                        } else if (list1.epData.substr(2, 1) == 1) {
+                                                            for (var m = 0; m < num; m++) {
+                                                                jsonData.deviceState += (m + 1) + ":" + lang_switch_on + " ";
+                                                            }
+                                                        } else if (list1.epData.substr(2, 1) == 3) {
+                                                            for (var m = 0; m < num; m++) {
+                                                                jsonData.deviceState += (m + 1) + ":" + lang_switch_cut + " ";
+                                                            }
+                                                        }
+                                                    } else if (list1.epData.substr(1, 1) == "1") {
+                                                        if (list1.epData.substr(2, 1) == 0) {
+                                                            jsonData.deviceState += 1 + ":" + lang_switch_off + " ";
+                                                        } else if (list1.epData.substr(2, 1) == 1) {
+                                                            jsonData.deviceState += 1 + ":" + lang_switch_on + " ";
+                                                        } else if (list1.epData.substr(2, 1) == 3) {
+                                                            jsonData.deviceState += 1 + ":" + lang_switch_cut + " ";
+                                                        }
+                                                    } else if (list1.epData.substr(1, 1) == "2") {
+                                                        if (list1.epData.substr(2, 1) == 0) {
+                                                            jsonData.deviceState += 2 + ":" + lang_switch_off + " ";
+                                                        } else if (list1.epData.substr(2, 1) == 1) {
+                                                            jsonData.deviceState += 2 + ":" + lang_switch_on + " ";
+                                                        } else if (list1.epData.substr(2, 1) == 3) {
+                                                            jsonData.deviceState += 2 + ":" + lang_switch_cut + " ";
+                                                        }
+                                                    } else if (list1.epData.substr(1, 1) == "3") {
+                                                        if (list1.epData.substr(2, 1) == 0) {
+                                                            jsonData.deviceState += 3 + ":" + lang_switch_off + " ";
+                                                        } else if (list1.epData.substr(2, 1) == 1) {
+                                                            jsonData.deviceState += 3 + ":" + lang_switch_on + " ";
+                                                        } else if (list1.epData.substr(2, 1) == 3) {
+                                                            jsonData.deviceState += 3 + ":" + lang_switch_cut + " ";
+                                                        }
+                                                    }
+                                                } else {
+                                                    for (var n = 1; n < num; n++) {
+                                                        if (list1.epData.substr(n, 1) == 0) {
+                                                            jsonData.deviceState += (n) + ":" + lang_switch_off + " ";
+                                                        } else if (list1.epData.substr(n, 1) == 1) {
+                                                            jsonData.deviceState += (n) + ":" + lang_switch_on + " ";
+                                                        } else if (list1.epData.substr(n, 1) == 3) {
+                                                            jsonData.deviceState += (n) + ":" + lang_switch_cut + " ";
+                                                        }
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "61" ||
+                                                list1.object.split(">")[2] == "62" ||
+                                                list1.object.split(">")[2] == "63" ||
+                                                list1.object.split(">")[2] == "64") {
+                                                var num = list1.epData.length;
+                                                for (var n = 0; n < num; n++) {
+                                                    if (list1.epData.substr(n, 1) == 0) {
+                                                        jsonData.deviceState += (n + 1) + ":" + lang_switch_off + " ";
+                                                    } else if (list1.epData.substr(n, 1) == 1) {
+                                                        jsonData.deviceState += (n + 1) + ":" + lang_switch_on + " ";
+                                                    } else if (list1.epData.substr(n, 1) == 3) {
+                                                        jsonData.deviceState += (n + 1) + ":" + lang_switch_cut + " ";
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "D8") {
+                                                var mode = list1.epData.substring(0, 3);
+                                                var mode_1 = list1.epData.substring(3, 5);
+                                                var voiceOrLight = list1.epData.substring(0, 1);
+                                                if (mode == "301") {
+                                                    jsonData.deviceState = lang_D8_voice1
+                                                } else if (mode == "302") {
+                                                    jsonData.deviceState = lang_D8_voice2
+                                                } else if (mode == "303") {
+                                                    jsonData.deviceState = lang_D8_voice3
+                                                } else if (mode == "304") {
+                                                    jsonData.deviceState = lang_D8_voice4
+                                                } else if (mode == "305") {
+                                                    jsonData.deviceState = lang_D8_voice5
+                                                } else if (mode == "306") {
+                                                    jsonData.deviceState = lang_D8_voice6
+                                                } else if (mode == "307") {
+                                                    jsonData.deviceState = lang_D8_voice7
+                                                } else if (mode == "308") {
+                                                    jsonData.deviceState = lang_D8_voice8
+                                                } else if (mode == "309") {
+                                                    jsonData.deviceState = lang_D8_voice9
+                                                } else if (mode == "310") {
+                                                    jsonData.deviceState = lang_D8_voice10
+                                                } else if (mode == "311") {
+                                                    jsonData.deviceState = lang_D8_voice11
+                                                }
+                                                if (mode == "101") {
+                                                    jsonData.deviceState = lang_D8_color1
+                                                } else if (mode == "105") {
+                                                    jsonData.deviceState = lang_D8_color2
+                                                } else if (mode == "104") {
+                                                    jsonData.deviceState = lang_D8_color3
+                                                } else if (mode == "103") {
+                                                    jsonData.deviceState = lang_D8_color4
+                                                } else if (mode == "102") {
+                                                    jsonData.deviceState = lang_D8_color5
+                                                } else if (mode == "107") {
+                                                    jsonData.deviceState = lang_D8_color6
+                                                }
+                                                if (voiceOrLight == "1") {
+                                                    if (mode_1 == "00") {
+                                                        jsonData.deviceState = lang_D8_mode1;
+                                                    } else if (mode_1 == "01") {
+                                                        jsonData.deviceState = lang_D8_mode2 + " " + jsonData.deviceState;
+                                                    } else if (mode_1 == "02") {
+                                                        jsonData.deviceState = lang_D8_mode3 + " " + jsonData.deviceState;
+                                                    } else if (mode_1 == "03") {
+                                                        jsonData.deviceState = lang_D8_mode4 + " " + jsonData.deviceState;
+                                                    } else if (mode_1 == "04") {
+                                                        jsonData.deviceState = lang_D8_mode5 + " " + jsonData.deviceState;
+                                                    }
+                                                } else if (voiceOrLight == "3") {
+                                                    jsonData.deviceState = jsonData.deviceState + " " + parseInt(mode_1) + "%"
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Ai") {
+                                                if (list1.epData == "10") {
+                                                    jsonData.deviceState = lang_switch_off
+                                                } else if (list1.epData == "11") {
+                                                    jsonData.deviceState = lang_switch_on
+                                                } else {
+                                                    jsonData.deviceState = lang_switch_cut
+                                                }
+                                            } else if (list1.object.split(">")[2] == "77") {
+                                                if (list1.epData == "10") {
+                                                    jsonData.deviceState = lang_switch_off
+                                                } else {
+                                                    jsonData.deviceState = lang_switch_on
+                                                }
+                                            } else if (list1.object.split(">")[2] == "12") {
+                                                jsonData.deviceState = Number(list1.epData) + "%";
+                                                if (Number(list1.epData) == 0) {
+                                                    jsonData.switchName = lang_switch_off;
+                                                } else {
+                                                    jsonData.switchName = lang_switch_on;
+                                                }
+                                            } else if (list1.object.split(">")[2] == "81") {
+                                                var deviceData = list1.epData;
+                                                if (deviceData.substr(0, 1) == '9') {
+                                                    if (deviceData.substr(5, 3) == "000") {
+                                                        jsonData.deviceState = "2:" + lang_closeSingle;
+                                                    } else if (deviceData.substr(5, 3) == "100") {
+                                                        jsonData.deviceState = "2:" + lang_openSingle;
+                                                    } else if (deviceData.substr(5, 3) == "255") {
+                                                        jsonData.deviceState = "2:" + lang_stopSingle;
+                                                    } else {
+                                                        jsonData.deviceState = "2:" + Number(deviceData.substr(5, 3)) + "%";
+                                                    }
+                                                } else if (deviceData.substr(4, 1) == '9') {
+                                                    if (deviceData.substr(1, 3) == "000") {
+                                                        jsonData.deviceState = "1:" + lang_closeSingle;
+                                                    } else if (deviceData.substr(1, 3) == "100") {
+                                                        jsonData.deviceState = "1:" + lang_openSingle;
+                                                    } else if (deviceData.substr(1, 3) == "255") {
+                                                        jsonData.deviceState = "1:" + lang_stopSingle;
+                                                    } else {
+                                                        jsonData.deviceState = "1:" + Number(deviceData.substr(1, 3)) + "%";
+                                                    }
+                                                } else if (deviceData.substr(0, 1) != '9' && deviceData.substr(4, 1) != '9') {
+                                                    if (deviceData.substr(5, 3) == "000" || deviceData.substr(1, 3) == "000") {
+                                                        jsonData.deviceState = "1:" + lang_closeSingle + " 2:" + lang_closeSingle;
+                                                    } else if (deviceData.substr(5, 3) == "100" || deviceData.substr(1, 3) == "000") {
+                                                        jsonData.deviceState = "1:" + lang_openSingle + " 2:" + lang_openSingle;
+                                                    } else if (deviceData.substr(5, 3) == "255" || deviceData.substr(1, 3) == "000") {
+                                                        jsonData.deviceState = "1:" + lang_stopSingle + " 2:" + lang_stopSingle;
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "A6") {
+                                                if (list1.epData == "11") {
+                                                    jsonData.deviceState = lang_play;
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Bh") {
+                                                var epDataBh = list1.epData.substr(1,2);
+                                                for (var i = 0; i < epDataBh.length; i++) {
+                                                    var state = epDataBh[i];
+                                                    if (state === "1") {
+                                                        jsonData.deviceState += ((i == 0) ? "1:" : " 2:") + lang_stopSingle;
+                                                    } else if (state === "2") {
+                                                        jsonData.deviceState += ((i == 0) ? "1:" : " 2:") + lang_openSingle
+                                                    } else if (state === "3") {
+                                                        jsonData.deviceState += ((i == 0) ? "1:" : " 2:") + lang_closeSingle
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Av") {
+                                                if (Number(list1.epData) == 20) {
+                                                    jsonData.switchName = lang_switch_off;
+                                                    jsonData.deviceState = "0%";
+                                                } else {
+                                                    jsonData.switchName = lang_switch_on;
+                                                    jsonData.deviceState = Number(list1.epData.substring(1)) + "%";
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Cc") {
+                                                if (Number(list1.epData) == 20) {
+                                                    jsonData.switchName = lang_switch_off;
+                                                    jsonData.deviceState = "0%";
+                                                } else {
+                                                    jsonData.switchName = lang_switch_on;
+                                                    jsonData.deviceState = Number(list1.epData.substring(1)) + "%";
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Ap") {
+                                                var state = list1.epData.substr(0, 2);
+                                                var temp = list1.epData.substr(4, 4);
+                                                if (state == "20") {
+                                                    jsonData.switchName = lang_closeSingle;
+                                                } else {
+                                                    jsonData.switchName = lang_openSingle;
+                                                    temp = parseInt(temp) / 100;
+                                                    jsonData.deviceState = '' + temp + '℃';
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Bm") {
+                                                var state = list1.epData.substr(0, 4);
+                                                var temp = list1.epData.substr(7, 4);
+                                                if (state == "0100") {
+                                                    jsonData.switchName = lang_closeSingle;
+                                                } else {
+                                                    jsonData.switchName = lang_openSingle;
+                                                    temp = parseInt(temp, 16) / 10;
+                                                    jsonData.deviceState = '' + temp + '℃';
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Oi") {
+                                                //09aabbccddeeeeffgghh09：长度，aa:开关，bb：模式，cc：温度，dd：湿度，eeee:风向，ff：风量，gg:换气模式，hh:辅热）备注：当某一设置项缺省时，填 0xFF。
+                                                var state = list1.epData.substr(14, 2);
+                                                var bb = list1.epData.substr(16, 2);
+                                                var cc = list1.epData.substr(18, 2);
+                                                var ee = list1.epData.substr(24, 2);
+                                                var ff = list1.epData.substr(26, 2);
+                                                if (bb == "01") {
+                                                    bb = "制冷"
+                                                } else if (bb == "02") {
+                                                    bb = "制热"
+                                                } else if (bb == "03") {
+                                                    bb = "送风"
+                                                } else if (bb == "05") {
+                                                    bb = "除湿"
+                                                } else {
+                                                    bb = "";
+                                                }
+                                                if (cc == "FF") {
+                                                    cc = "";
+                                                }
+                                                if (ee == "00") {
+                                                    ee = "自动";
+                                                } else if (ee == "07") {
+                                                    ee = "摆动";
+                                                } else {
+                                                    ee = "";
+                                                }
+                                                if (ff == "00") {
+                                                    ff = "自动";
+                                                } else {
+                                                    ff = "";
+                                                }
+                                                if (state == "00") {
+                                                    jsonData.deviceState = lang_closeSingle
+                                                } else {
+                                                    jsonData.deviceState = lang_openSingle;
+                                                }
+                                            } else if (list1.object.split(">")[2] == "82") {
+                                                var state = list1.epData.substr(0, 2);
+                                                var temp = list1.epData.substr(4, 4);
+                                                if (state == "20") {
+                                                    jsonData.deviceState = lang_closeSingle;
+                                                } else {
+                                                    jsonData.deviceState = lang_openSingle;
+                                                }
+                                            } else if (list1.object.split(">")[2] == "16") {
+                                                if (list1.epData == "0") {
+                                                    jsonData.deviceState = lang_switch_off
+                                                } else {
+                                                    jsonData.deviceState = lang_switch_on
+                                                }
+                                            } else if (list1.object.split(">")[2] == "D7") {
+                                                if (list1.epData.length == 10) {
+                                                    var mode = list1.epData.substr(9, 1);
+                                                    if (mode == 0) {
+                                                        jsonData.deviceState = "OFF";
+                                                    } else if (mode == 1) {
+
+                                                    } else if (mode == 2) {
+                                                        jsonData.deviceState = lang_D7_mode_dinner;
+                                                    } else if (mode == 3) {
+                                                        jsonData.deviceState = lang_D7_mode_moon;
+                                                    } else if (mode == 4) {
+                                                        jsonData.deviceState = lang_D7_mode_blue;
+                                                    } else if (mode == 5) {
+                                                        jsonData.deviceState = lang_D7_mode_green;
+                                                    }
+                                                } else if (list1.epData.indexOf(",") > 0) {
+                                                    var result = list1.epData.split(",");
+                                                    if (result[0].length == 18 && result[1].length == 12) {
+                                                        jsonData.switchName = lang_D7_rgb + result[0].substr(10, 6);
+                                                        jsonData.deviceState = lang_D7_light + parseInt(result[1].substr(8, 2), 16).toString() + "%"
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "DD") {
+                                                var arr = list1.epData.split(',');
+                                                var state = list1.epData.substr(0, 1);
+                                                var voice1 = '',
+                                                    voice2 = '',
+                                                    voice3 = '',
+                                                    voice4 = '';
+                                                for (var i = 1; i < arr.length; i++) {
+                                                    var s = arr[i].substr(0, 1);
+                                                    var v = arr[i].substring(1);
+                                                    switch (s) {
+                                                        case '1':
+                                                            voice1 = lang_DD_1 + v;
+                                                            break;
+                                                        case '2':
+                                                            voice2 = lang_DD_2 + v;
+                                                            break;
+                                                        case '3':
+                                                            voice3 = lang_DD_3 + v;
+                                                            break;
+                                                        case '4':
+                                                            voice4 = lang_DD_4 + v;
+                                                            break;
+                                                    }
+                                                }
+                                                var voiceStr = voice1 + ' ' + voice2 + ' ' + voice3 + ' ' + voice4;
+                                                if (state == "1") {
+                                                    // 暂停
+                                                    jsonData.deviceState = lang_DD_stop;
+                                                } else {
+                                                    // 播放
+                                                    jsonData.deviceState = lang_DD_play + " " + voiceStr;
+                                                }
+                                            } else if (list1.object.split(">")[2] == "D9") {
+                                                if (list1.epData.length > 0) {
+                                                    var result = list1.epData.split(",");
+                                                    var state = '';
+                                                    var vol = '';
+                                                    for (var l = 0; l < result.length; l++) {
+                                                        if (result[l].substr(0, 1) == "1") {
+                                                            state = languageUtil.getResource("Radio_houseKeeper_play");
+                                                        } else if (result[l].substr(0, 1) == "3") {
+                                                            var stateStr = result[l].substr(1, 1);
+                                                            state = (stateStr == '0') ? languageUtil.getResource("Radio_houseKeeper_play") : languageUtil.getResource(
+                                                                "Radio_houseKeeper_stop");
+                                                        } else if (result[l].substr(0, 1) == "4") {
+                                                            vol = result[l].substr(1, result[l].length - 1) + '%';
+                                                        }
+                                                        jsonData.deviceState = state + " " + vol;
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "OF") {
+                                                var a = list1.epData.split(',');
+                                                if (a[0] != '') {
+                                                    if (a[0] == '0') {
+                                                        // 暂停
+                                                        jsonData.switchName = languageUtil.getResource("clothes_hanger_time_out");
+                                                    } else if (a[0] == '1') {
+                                                        // 上升
+                                                        jsonData.switchName = languageUtil.getResource("clothes_hanger_up")
+                                                    } else {
+                                                        // 下降
+                                                        jsonData.switchName = languageUtil.getResource("clothes_hanger_decline")
+                                                    }
+                                                } else if (a[3] != '') {
+                                                    if (a[3] == '1') {
+                                                        // 照明开
+                                                        jsonData.switchName = languageUtil.getResource("clothes_hanger_light") +
+                                                            ': ' +
+                                                            languageUtil.getResource("clothes_hanger_open")
+                                                    } else {
+                                                        // 照明关
+                                                        jsonData.switchName = languageUtil.getResource("clothes_hanger_light") +
+                                                            ': ' +
+                                                            languageUtil.getResource("clothes_hanger_close")
+                                                    }
+                                                } else if (a[4] != '') {
+                                                    if (a[4].substr(0, 1) == '0') {
+                                                        // 风干关
+                                                        jsonData.switchName = languageUtil.getResource("clothes_hanger_Air_dry") +
+                                                            ': ' +
+                                                            languageUtil.getResource("clothes_hanger_close")
+                                                    } else {
+                                                        // 风干开
+                                                        var time = parseInt(a[4].substr(1, 3));
+                                                        var hour = parseInt(time / 60);
+                                                        var min = time % 60;
+                                                        var timeText = '';
+                                                        if (time < 60) {
+                                                            timeText = min + languageUtil.getResource("clothes_hanger_mine")
+                                                        } else {
+                                                            timeText = hour +
+                                                                languageUtil.getResource("clothes_hanger_hour") +
+                                                                min +
+                                                                languageUtil.getResource("clothes_hanger_mine")
+                                                        }
+                                                        jsonData.switchName = languageUtil.getResource("clothes_hanger_Air_dry") +
+                                                            ': ' +
+                                                            timeText
+                                                    }
+                                                } else if (a[5] != '') {
+                                                    if (a[5].substr(0, 1) == '0') {
+                                                        // 烘干关
+                                                        jsonData.switchName = languageUtil.getResource("clothes_hanger_drying") +
+                                                            ': ' +
+                                                            languageUtil.getResource("clothes_hanger_close")
+                                                    } else {
+                                                        // 烘干开
+                                                        var time = parseInt(a[5].substr(1, 3));
+                                                        var hour = parseInt(time / 60);
+                                                        var min = time % 60;
+                                                        var timeText = '';
+                                                        if (time < 60) {
+                                                            timeText = min + languageUtil.getResource("clothes_hanger_mine")
+                                                        } else {
+                                                            timeText = hour +
+                                                                languageUtil.getResource("clothes_hanger_hour") +
+                                                                min +
+                                                                languageUtil.getResource("clothes_hanger_mine")
+                                                        }
+                                                        jsonData.switchName = languageUtil.getResource("clothes_hanger_drying") +
+                                                            ': ' +
+                                                            timeText
+                                                    }
+                                                } else {
+                                                    if (a[6] == '') {
+                                                        // 杀菌关
+                                                        jsonData.switchName = languageUtil.getResource("clothes_hanger_Disinfection") +
+                                                            ': ' +
+                                                            languageUtil.getResource("clothes_hanger_close")
+                                                    } else if (a[6].substr(0, 1) == '0') {
+                                                        // 杀菌关
+                                                        jsonData.switchName = languageUtil.getResource("clothes_hanger_Disinfection") +
+                                                            ': ' +
+                                                            languageUtil.getResource("clothes_hanger_close")
+                                                    } else {
+                                                        // 杀菌开
+                                                        var time = parseInt(a[5].substr(1, 3));
+                                                        jsonData.switchName = languageUtil.getResource("clothes_hanger_Disinfection") +
+                                                            ': ' +
+                                                            time +
+                                                            languageUtil.getResource("clothes_hanger_mine")
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "90") {
+                                                if (list1.epData.length > 0) {
+                                                    var result = list1.epData.split(",");
+                                                    var state = '';
+                                                    for (var l = 0; l < result.length; l++) {
+                                                        if (result[l].substr(0, 1) == "1") {
+                                                            var rgb = result[l].substr(1, result[l].length);
+                                                            var r = parseInt(rgb.substr(0, 3)).toString(16).toUpperCase();
+                                                            var g = parseInt(rgb.substr(3, 3)).toString(16).toUpperCase();
+                                                            var b = parseInt(rgb.substr(6, 3)).toString(16).toUpperCase();
+                                                            state += lang_D7_rgb + "#" + (r.length < 2 ? "0" + r : r) + (g.length < 2 ? "0" + g : g) + (b.length <
+                                                            2 ? "0" + b : b);
+                                                        } else if (result[l].substr(0, 1) == "2") {
+                                                            var light = result[l].substr(1, 3)
+                                                            if (parseInt(light) > 0) {
+                                                                state += " " + lang_D7_light + Math.round(parseInt(result[l].substr(1, 3)) / 255.0 * 100) +
+                                                                    "%";
+                                                            }
+                                                        } else if (result[l].substr(0, 1) == "3") {
+                                                            var ms = parseInt(result[l].substr(1, 5));
+                                                            state += " " + LEDlight_90_Interval + parseInt(ms / 1000) + "s " + parseInt(ms % 1000) + "ms";
+                                                        } else if (result[l].substr(0, 1) == "9") {
+                                                            state += LEDlight_90_Colorful;
+                                                        } else if (result[l].substr(0, 1) == "D") {
+                                                            var light = result[l].substr(1, 3)
+                                                            if (parseInt(light) == 0) {
+                                                                state += "OFF";
+                                                            } else {
+                                                                state += LEDlight_90_sunlight + " " + lang_D7_light + Math.round(parseInt(result[l].substr(1,
+                                                                    3)) /
+                                                                    255.0 * 100) + "%";
+                                                                ;
+                                                            }
+                                                        }
+                                                        jsonData.deviceState = state;
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Ba") {
+                                                if (list1.epData.length > 2) {
+                                                    var result = list1.epData;
+                                                    var switch1 = result.substring(1, 2);
+                                                    var switch2 = result.substring(2, 3);
+                                                    var state = '';
+                                                    if (switch1 == "0") {
+                                                        state += device_Ba_SocketName + "1" + "&nbsp;&nbsp;&nbsp;&nbsp;" + device_Ba_PowerFailure;
+                                                    } else if (switch1 == "1") {
+                                                        state += device_Ba_SocketName + "1" + "&nbsp;&nbsp;&nbsp;&nbsp;" + device_Ba_Electricity;
+                                                    }
+                                                    if (switch2 == "0") {
+                                                        state += device_Ba_SocketName + "2" + "&nbsp;&nbsp;&nbsp;&nbsp;" + device_Ba_PowerFailure;
+                                                    } else if (switch2 == "1") {
+                                                        state += device_Ba_SocketName + "2" + "&nbsp;&nbsp;&nbsp;&nbsp;" + device_Ba_Electricity;
+                                                    }
+                                                    jsonData.deviceState = state;
+                                                }
+                                            } else if (list1.object.split(">")[2] == "22" ||
+                                                list1.object.split(">")[2] == "23" ||
+                                                list1.object.split(">")[2] == "24" ||
+                                                list1.object.split(">")[2] == "A2" ||
+                                                list1.object.split(">")[2] == "Bo") {
+                                                if (list1.description && list1.description.length > 0) {
+                                                    jsonData.deviceState = list1.description;
+                                                    jsonData.description = list1.description;
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Oj") {
+                                                var a = list1.epData.split(',');
+                                                if (a[0] == '0') {
+                                                    jsonData.deviceState = languageUtil.getResource("airsystem_Oj_close");
+                                                } else if (a[1] != '') {
+                                                    var text = "";
+                                                    if (a[1] == '01') {
+                                                        text = languageUtil.getResource("airsystem_Oj_Wind_speed_low");
+                                                    } else if (a[1] == '02') {
+                                                        text = languageUtil.getResource("airsystem_Oj_Wind_speed_medium");
+                                                    } else if (a[1] == '03') {
+                                                        text = languageUtil.getResource("airsystem_Oj_Wind_speed_high");
+                                                    }
+                                                    jsonData.deviceState = languageUtil.getResource("airsystem_Oj_Wind_speed_02") + text;
+                                                    if (a[2] != '') {
+                                                        var text_type = languageUtil.getResource("airsystem_Oj_mode_Ventilation");
+                                                        if (a[2] == '01') {
+                                                            text_type = languageUtil.getResource("airsystem_Oj_mode_Ventilation");
+                                                        } else if (a[2] == '02') {
+                                                            text_type = languageUtil.getResource("airsystem_Oj_mode_Exhaust");
+                                                        }
+                                                        jsonData.deviceState = text_type + " " + languageUtil.getResource("airsystem_Oj_Wind_speed_02") +
+                                                            text;
+                                                    }
+                                                } else if (a[1] == "") {
+                                                    if (a[2] != '') {
+                                                        var text_type = languageUtil.getResource("airsystem_Oj_mode_Ventilation");
+                                                        if (a[2] == '03') {
+                                                            text_type = languageUtil.getResource("airsystem_Oj_mode_smart");
+                                                        } else if (a[2] == '04') {
+                                                            text_type = languageUtil.getResource("airsystem_Oj_mode_strong");
+                                                        } else if (a[2] == '05') {
+                                                            text_type = languageUtil.getResource("airsystem_Oj_mode_Power_saving");
+                                                        }
+                                                        jsonData.deviceState = text_type;
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Be") {
+                                                if (list1.epData.length > 1) {
+                                                    var result = list1.epData;
+                                                    var type = result.substring(0, 2);
+                                                    var state = "";
+                                                    if (type == "40") {
+                                                        state += switch_AoEs_02;
+                                                    } else if (type == "41") {
+                                                        state += switch_AoEs_01;
+                                                    } else if (type == "43") {
+                                                        state += lang_switch_cut;
+                                                    } else {
+                                                        var light = result.substring(1, 4);
+                                                        state += switch_AoEs_01 + "&nbsp;&nbsp;&nbsp;&nbsp;" + lang_D7_brightness + "&nbsp;&nbsp;" +
+                                                            parseInt(light) + "%"
+                                                    }
+                                                    jsonData.deviceState = state;
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Aw") {
+                                                if (list1.epData == "10") {
+                                                    jsonData.deviceState = lang_switch_off
+                                                } else if (list1.epData == "11") {
+                                                    jsonData.deviceState = lang_switch_on
+                                                } else if (list1.epData == "13") {
+                                                    jsonData.deviceState = lang_switch_cut
+                                                } else if (list1.epData == "50") {
+                                                    jsonData.deviceState = aw_bell_short
+                                                } else if (list1.epData == "510") {
+                                                    jsonData.deviceState = aw_bell_stop
+                                                } else if (list1.epData == "511") {
+                                                    jsonData.deviceState = aw_bell_long
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Ax") {
+                                                if (list1.epData == "1022" || list1.epData == "1202" || list1.epData == "1220") {
+                                                    jsonData.deviceState = lang_switch_off
+                                                } else if (list1.epData == "1122" || list1.epData == "1212" || list1.epData == "1221") {
+                                                    jsonData.deviceState = lang_switch_on
+                                                } else {
+                                                    jsonData.deviceState = lang_switch_cut
+                                                }
+                                                jsonData.switchName = device_switch + list1.object.split(">")[1]
+                                            } else if (list1.object.split(">")[2] == "OZ") {
+                                                var modeList = {
+                                                    "01": lang_OZ_Type1,
+                                                    "02": lang_OZ_Type2,
+                                                    "03": lang_OZ_Type3,
+                                                    "04": lang_OZ_Type4,
+                                                    "05": lang_OZ_Type5,
+                                                    "06": lang_OZ_Type6,
+                                                    "07": lang_OZ_Type7,
+                                                    "08": lang_OZ_Type8,
+                                                    "09": lang_OZ_Type9,
+                                                    "10": lang_OZ_Type10,
+                                                    "11": lang_OZ_Type11,
+                                                    "12": lang_OZ_Type12
+                                                };
+                                                if (list1.description && list1.description.length > 0) {
+                                                    jsonData.description = list1.description;
+                                                }
+                                                var nameArr = jsonData.description.split("-");
+                                                var epDataList = list1.epData.split(",");
+                                                console.log(epDataList);
+                                                for (var k = 0; k < epDataList.length; k++) {
+                                                    //510126FF000401FFFF
+                                                    //123:开 制冷 26℃ 4 低,8:开 制冷 26℃ 4 低
+                                                    console.log(epDataList);
+                                                    var onOff = epDataList[k].substr(2, 1) === "0" ? lang_closeSingle : lang_openSingle;
+                                                    if (epDataList[k].substr(2, 1) === "0") {
+                                                        if (k === 0) {
+                                                            jsonData.deviceState = nameArr[k] + ":" + onOff
+                                                        } else {
+                                                            jsonData.deviceState += "," + nameArr[k] + ":" + onOff
+                                                        }
+                                                    } else {
+                                                        var mode1 = " " + modeList[epDataList[k].substr(3, 2)];
+                                                        console.log(mode1);
+                                                        var temp1 = " " + parseInt(epDataList[k].substr(5, 3)) + "℃";
+                                                        console.log(temp1)
+                                                        if (k === 0) {
+                                                            jsonData.deviceState = nameArr[k] + ":" + onOff + mode1 + temp1
+                                                        } else {
+                                                            jsonData.deviceState += "," + nameArr[k] + ":" + onOff + mode1 + temp1
+                                                        }
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "a0") {
+                                                var modeList = {
+                                                    "0": lang_a0_Type1,
+                                                    "1": lang_a0_Type2,
+                                                    "2": lang_a0_Type3,
+                                                    "3": lang_a0_Type4,
+                                                    "7": lang_a0_Type5
+                                                };
+                                                if (list1.description && list1.description.length > 0) {
+                                                    jsonData.description = list1.description;
+                                                }
+                                                var nameArr = jsonData.description.split("-");
+                                                var epDataList = list1.epData.split(",");
+                                                console.log(epDataList);
+                                                for (var k = 0; k < epDataList.length; k++) { //01 1 1 26 1 //1:开  1:制冷  26 温度 1 低风
+                                                    console.log(epDataList);
+                                                    var onOff = epDataList[k].substr(2, 1) === "0" ? lang_closeSingle : lang_openSingle;
+                                                    if (epDataList[k].substr(2, 1) === "0") {
+                                                        if (k === 0) {
+                                                            jsonData.deviceState = nameArr[k] + ":" + onOff
+                                                        } else {
+                                                            jsonData.deviceState += "," + nameArr[k] + ":" + onOff
+                                                        }
+                                                    } else {
+                                                        var mode1 = " " + modeList[epDataList[k].substr(3, 1)];
+                                                        console.log(mode1);
+                                                        var temp1 = " " + parseInt(epDataList[k].substr(4, 2)) + "℃";
+                                                        console.log(temp1)
+                                                        if (k === 0) {
+                                                            jsonData.deviceState = nameArr[k] + ":" + onOff + mode1 + temp1
+                                                        } else {
+                                                            jsonData.deviceState += "," + nameArr[k] +
+                                                                ":" + onOff + mode1 + temp1
+                                                        }
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "28") {
+                                                jsonData.deviceState = device_28_on + " " + list1.epData / 60 + "min" + device_28_close_after;
+                                            } else if (list1.object.split(">")[2] == "A1") {
+                                                if (list1.epData == "0") {
+                                                    jsonData.deviceState = lang_disarming
+                                                } else {
+                                                    jsonData.deviceState = lang_fortify
+                                                }
+                                                if (list1.epName) {
+                                                    jsonData.switchName = list1.epName;
+                                                }
+                                            } else if (list1.object.split(">")[2] == "B9") {
+                                                if (list1.object.split(">")[1] == 1) {
+                                                    if (list1.epData == "0") {
+                                                        jsonData.deviceState = lang_disarming
+                                                    } else {
+                                                        jsonData.deviceState = lang_fortify
+                                                    }
+                                                } else if (list1.object.split(">")[1] == 2) {
+                                                    if (list1.description && list1.description.length > 0) {
+                                                        jsonData.deviceState = list1.description;
+                                                        jsonData.description = list1.description;
+                                                    }
+                                                }
+                                                if (list1.epName) {
+                                                    jsonData.switchName = list1.epName;
+                                                }
+                                            } else if (list1.object.split(">")[2] == "OW" ||
+                                                list1.object.split(">")[2] == "Bc" ||
+                                                list1.object.split(">")[2] == "Bd" ||
+                                                list1.object.split(">")[2] == "Bf" ||
+                                                list1.object.split(">")[2] == "Bg" ||
+                                                list1.object.split(">")[2] == "OP" ||
+                                                list1.object.split(">")[2] == "Bn" ||
+                                                list1.object.split(">")[2] == "Bq") {
+                                                if (list1.description && list1.description.length > 0) {
+                                                    jsonData.deviceState = list1.description;
+                                                    jsonData.description = list1.description;
+                                                }
+                                                if (list1.epName) {
+                                                    jsonData.switchName = list1.epName;
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Ok") {
+                                                var cmds = list1.epData.split(",");
+                                                var onOff;
+                                                var mode = "";
+                                                var temp = "";
+                                                for (var i = 0; i < cmds.length; i++) {
+                                                    var code = cmds[i].substring(0, 4);
+                                                    var value = cmds[i].substring(4, cmds[i].length);
+                                                    if ("0104" == code) {
+                                                        if ("0" == value) {
+                                                            onOff = lang_closeSingle;
+                                                        } else {
+                                                            onOff = lang_openSingle;
+                                                        }
+                                                    } else if ("0103" == code) {
+                                                        if ("0" == value) {
+                                                            mode = lang_OZ_Type3;
+                                                        } else if ("1" == value) {
+                                                            mode = lang_OZ_Type2;
+                                                        } else if ("2" == value) {
+                                                            mode = lang_OZ_Type1;
+                                                        } else if ("3" == value) {
+                                                            mode = lang_OZ_Type4;
+                                                        } else if ("4" == value) {
+                                                            mode = lang_OZ_Type6;
+                                                        }
+                                                    } else if ("0105" == code) {
+                                                        temp = value + "℃";
+                                                    }
+                                                }
+                                                jsonData.deviceState = onOff + " " + mode + " " + temp;
+                                            } else if (list1.object.split(">")[2] == "Ol") {
+                                                var modeList = {
+                                                    "1": device_Ol_mode_cool,
+                                                    "2": device_Ol_mode_heat,
+                                                    "3": device_Ol_mode_fan,
+                                                    "4": device_Ol_mode_warm,
+                                                    "5": device_Ol_mode_warm_heat,
+                                                };
+                                                if (list1.description && list1.description.length > 0) {
+                                                    jsonData.description = list1.description;
+                                                }
+                                                var nameArr = jsonData.description.split("-");
+                                                var epDataList = list1.epData.split(",");
+                                                console.log(epDataList);
+                                                for (var k = 0; k < epDataList.length; k++) {
+                                                    //510126FF000401FFFF
+                                                    //123:开 制冷 26℃ 4 低,8:开 制冷 26℃ 4 低
+                                                    console.log(epDataList);
+                                                    var onOff = epDataList[k].substr(2, 1) === "0" ? lang_closeSingle : lang_openSingle;
+                                                    if (epDataList[k].substr(2, 1) === "0") {
+                                                        if (k === 0) {
+                                                            jsonData.deviceState = nameArr[k] + ":" + onOff
+                                                        } else {
+                                                            jsonData.deviceState += "," + nameArr[k] + ":" + onOff
+                                                        }
+                                                    } else {
+                                                        var mode1 = " " + modeList[epDataList[k].substr(3, 1)];
+                                                        console.log(mode1);
+                                                        var temp1 = " " + parseInt(epDataList[k].substr(4, 3)) / 10.0 + "℃";
+                                                        console.log(temp1)
+                                                        if (k === 0) {
+                                                            jsonData.deviceState = nameArr[k] + ":" + onOff + mode1 + temp1
+                                                        } else {
+                                                            jsonData.deviceState += "," + nameArr[k] + ":" + onOff + mode1 + temp1
+                                                        }
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "On") {
+                                                var cmds = list1.epData.split(",");
+                                                var onOff;
+                                                var fan = "";
+                                                onOff = (cmds[0].substring(0, 1) == "1") ? lang_open : lang_close;
+                                                if (cmds.length > 1 && cmds[1]) {
+                                                    fan = (cmds[1].substring(0, 2) == "01") ? lang_airsystem_Oj_Wind_speed_low :
+                                                        lang_airsystem_Oj_Wind_speed_high;
+                                                }
+                                                jsonData.deviceState = onOff + " " + fan
+                                            } else if (list1.object.split(">")[2] == "Af" || list1.object.split(">")[2] == "Br") {
+                                                // jsonData.name = list1.name.indexOf("#$default$#") != -1 ? lang_name_Af + list1.name.split("#")[2] :
+                                                // 	list1.name
+                                                // deviceIcon = "url(../../source/deviceIcon/device_icon_Af.png)";
+                                                var arr = list1.epData.split(',');
+                                                var deviceState = "";
+                                                var status = "";
+                                                var mode = "";
+                                                var temp = "";
+                                                var fan = "";
+                                                var tempStr = "";
+                                                for (var i = 0; i < arr.length; i++) {
+                                                    switch (i) {
+                                                        case 0: {
+                                                            status = arr[0];
+                                                            deviceState = (status == '0') ? lang_closeSingle : lang_openSingle;
+                                                        }
+                                                            break;
+                                                        case 1: {
+                                                            mode = arr[1];
+                                                            var modeStr = "";
+                                                            if (mode == '1') {
+                                                                modeStr = " " + lang_OZ_Type2;
+                                                            } else if (mode == '2') {
+                                                                modeStr = " " + lang_OZ_Type1;
+                                                            } else if (mode == '3') {
+                                                                modeStr = " " + lang_OZ_Type3;
+                                                            } else if (mode == '4') {
+                                                                modeStr = " " + device_Af_Hot;
+                                                            } else if (mode == '5') {
+                                                                modeStr = " " + device_Af_Cool;
+                                                            }
+                                                            deviceState += modeStr;
+                                                        }
+                                                            break;
+                                                        case 2: {
+                                                            if (arr[2].length == 8 || arr[2].length == 5 || arr[2].length == 3) {
+                                                                if (mode == '1') {
+                                                                    //制热
+                                                                    if (list1.object.split(">")[2] == "Br") {
+                                                                        tempStr = arr[2].substring(1, 5);
+                                                                    } else {
+                                                                        tempStr = arr[2].substring(0, 4);
+                                                                    }
+                                                                    temp = parseFloat(tempStr);
+                                                                    if (temp > 100) {
+                                                                        temp = temp / 100;
+                                                                    }
+                                                                    deviceState = deviceState + " " + temp;
+                                                                } else if (mode == '2') {
+                                                                    //制冷
+                                                                    if (list1.object.split(">")[2] == "Br") {
+                                                                        tempStr = arr[2].substring(1, 5);
+                                                                    } else {
+                                                                        tempStr = arr[2].substring(4, 8);
+                                                                    }
+                                                                    temp = parseFloat(tempStr);
+                                                                    if (temp > 100) {
+                                                                        temp = temp / 100;
+                                                                    }
+                                                                    deviceState = deviceState + " " + temp;
+                                                                }
+                                                            }
+
+                                                        }
+                                                            break;
+                                                        case 3: {
+                                                            if (arr[3] == "1") {
+                                                                // 低
+                                                                fan = " " + lang_OZ_Speed3;
+                                                            } else if (arr[3] == "2") {
+                                                                // 中
+                                                                fan = " " + lang_OZ_Speed2;
+                                                            } else if (arr[3] == "3") {
+                                                                // 高
+                                                                fan = " " + lang_OZ_Speed1;
+                                                            } else if (arr[3] == "4") {
+                                                                // 自动
+                                                                fan = " " + lang_OZ_Speed4;
+                                                            }
+                                                            deviceState += fan;
+                                                        }
+                                                            break;
+                                                    }
+                                                }
+                                                jsonData.deviceState = deviceState;
+                                            } else if (list1.object.split(">")[2] == "Bs") {
+                                                var arr = list1.epData.split(',');
+                                                var deviceState = "";
+                                                var status = "";
+                                                var mode = "";
+                                                var tempStr = "";
+                                                var temp;
+                                                for (var i = 0; i < arr.length; i++) {
+                                                    switch (i) {
+                                                        case 0: {
+                                                            status = arr[0];
+                                                            deviceState = (status == '20') ? lang_closeSingle : lang_openSingle;
+                                                        }
+                                                            break;
+                                                        case 1: {
+                                                            mode = arr[1];
+                                                            var modeStr = "";
+                                                            if (mode == '31') {
+                                                                modeStr = " " + lang_editScene_type1;
+                                                            } else if (mode == '32') {
+                                                                modeStr = " " + lang_editScene_type2;
+                                                            } else if (mode == '33') {
+                                                                modeStr = " " + lang_editScene_type3;
+                                                            } else if (mode == '34') {
+                                                                modeStr = " " + lang_editScene_type4;
+                                                            }
+                                                            deviceState += modeStr;
+                                                        }
+                                                            break;
+                                                        case 2: {
+                                                            if (arr[2].substr(2, 1) == "0") {
+                                                                tempStr = (parseFloat(arr[2].substring(3))) / 10;
+                                                            } else if (arr[2].substr(1, 1) == "0" && arr[2].substr(2, 1) !== "0") {
+                                                                tempStr = (parseFloat(arr[2].substring(2))) / 10;
+                                                            }
+                                                            deviceState = deviceState + " " + tempStr;
+                                                        }
+                                                            break;
+                                                    }
+                                                }
+                                                jsonData.deviceState = deviceState;
+                                            } else if (list1.object.split(">")[2] == "Bp") {
+                                                jsonData.name = list1.name.indexOf("#$default$#") != -1 ? lang_name_Bp + list1.name.split("#")[2] :
+                                                    list1.name
+                                                deviceIcon = "url(../../source/deviceIcon/device_icon_Bp.png)";
+                                                var cmds = list1.epData.substring(14, list1.epData.length);
+                                                var onOff = cmds.substring(0, 2) == "01" ? lang_openSingle : lang_closeSingle;
+                                                ;
+                                                var mode = cmds.substring(2, 4);
+                                                var modeStr = "";
+                                                switch (mode) {
+                                                    case "01":
+                                                        modeStr = lang_OZ_Type1;
+                                                        break;
+                                                    case "02":
+                                                        modeStr = lang_OZ_Type2;
+                                                        break;
+                                                    case "03":
+                                                        modeStr = lang_OZ_Type3;
+                                                        break;
+                                                    case "05":
+                                                        modeStr = lang_OZ_Type4;
+                                                        break;
+                                                }
+                                                var temp = cmds.substring(4, 6) == "ff" ? "" : parseInt(cmds.substring(4, 6), 16) + "℃";
+                                                jsonData.deviceState = onOff + " " + modeStr + " " + temp;
+                                            } else if (list1.object.split(">")[2] == "Bx") {
+                                                var state = list1.epData.substr(0, 4);
+                                                var temp = list1.epData.substr(7, 4);
+                                                if (state == "0100") {
+                                                    jsonData.switchName = lang_closeSingle;
+                                                } else {
+                                                    jsonData.switchName = lang_openSingle;
+                                                    temp = parseInt(temp, 16) / 10;
+                                                    jsonData.deviceState = '' + temp + '℃';
+                                                }
+                                            } else if (list1.object.split(">")[2] == "By") {
+                                                var cmds = list1.epData.substring(14, list1.epData.length);
+                                                var onOff = cmds.substring(0, 2) == "01" ? lang_openSingle : lang_closeSingle;
+                                                ;
+                                                var mode = cmds.substring(2, 4);
+                                                var windDer = cmds.substring(8, 12);
+                                                var wind = cmds.substring(12, 14);
+                                                var modeStr = "";
+                                                var windDerStr = "";
+                                                var windStr = "";
+                                                switch (mode) {
+                                                    case "01":
+                                                        modeStr = lang_OZ_Type1;
+                                                        break;
+                                                    case "02":
+                                                        modeStr = lang_OZ_Type2;
+                                                        break;
+                                                    case "03":
+                                                        modeStr = lang_OZ_Type3;
+                                                        break;
+                                                    case "05":
+                                                        modeStr = lang_OZ_Type4;
+                                                        break;
+                                                }
+                                                var temp = cmds.substring(4, 6) == "ff" ? "" : parseInt(cmds.substring(4, 6), 16) + "℃";
+                                                switch (wind) {
+                                                    case "01":
+                                                        windStr = lang_OZ_Speed3;
+                                                        break;
+                                                    case "02":
+                                                        windStr = lang_OZ_Speed2;
+                                                        break;
+                                                    case "03":
+                                                        windStr = lang_OZ_Speed1;
+                                                        break;
+                                                    case "00":
+                                                        windStr = lang_OZ_Speed4;
+                                                        break;
+                                                }
+                                                switch (windDer) {
+                                                    case "0001":
+                                                        windDerStr = direction_small;
+                                                        break;
+                                                    case "0002":
+                                                        windDerStr = direction_mid;
+                                                        break;
+                                                    case "0004":
+                                                        windDerStr = direction_large;
+                                                        break;
+                                                    case "0007":
+                                                        windDerStr = direction_swing;
+                                                        break;
+                                                }
+                                                jsonData.deviceState = onOff + " " + modeStr + " " + temp + " " + windStr + " " + windDerStr;
+                                            } else if (list1.object.split(">")[2] == "91") {
+                                                var eplist = list1.epData.split(",");
+                                                var light = eplist.pop()
+                                                if (light.indexOf('2') === 0) {
+                                                    if (light.substring(1, 4) == "000") {
+                                                        jsonData.deviceState = switch_AoEs_02
+                                                    } else {
+                                                        jsonData.deviceState = switch_AoEs_01
+                                                    }
+                                                } else {
+                                                    jsonData.deviceState = switch_AoEs_02
+                                                }
+
+                                            } else if (list1.object.split(">")[2] == "Ca") {
+                                                var epData = list1.epData;
+                                                if (epData === "1") {
+                                                    jsonData.deviceState = lang_stopSingle
+                                                } else if (epData === "2") {
+                                                    jsonData.deviceState = lang_openSingle
+                                                } else if (epData === "3") {
+                                                    jsonData.deviceState = lang_closeSingle
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Cb") {
+                                                var epData = list1.epData;
+                                                for (var i = 0; i < epData.length; i++) {
+                                                    var state = epData[i];
+                                                    if (state === "1") {
+                                                        jsonData.deviceState += ((i == 0) ? "1" : " 2") + device_A1_way + lang_stopSingle;
+                                                    } else if (state === "2") {
+                                                        jsonData.deviceState += ((i == 0) ? "1" : " 2") + device_A1_way + lang_openSingle
+                                                    } else if (state === "3") {
+                                                        jsonData.deviceState += ((i == 0) ? "1" : " 2") + device_A1_way + lang_closeSingle
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] === "13") {
+                                                var epData = list1.epData;
+                                                var range1 = Number(epData.substr(0, 3));
+                                                var range2 = Number(epData.substr(3, 3));
+                                                range1 = range1 === 0 ? lang_closeSingle : range1;
+                                                range1 = range1 === 100 ? lang_openSingle : range1;
+                                                range1 = (range1 === lang_openSingle || range1 === lang_closeSingle) ? range1 : range1 + "%";
+                                                range2 = range2 === 0 ? lang_closeSingle : range2;
+                                                range2 = range2 === 100 ? lang_openSingle : range2;
+                                                range2 = (range2 === lang_openSingle || range2 === lang_closeSingle) ? range2 : range2 + "%";
+                                                jsonData.deviceState = "1:" + range1 + " 2:" + range2;
+                                            } else if (list1.object.split(">")[2] === "Op") {
+
+                                                if (list1.description && list1.description.length > 0) {
+                                                    jsonData.description = list1.description;
+                                                }
+                                                var nameArr = jsonData.description.split("-");
+                                                var epDataList = list1.epData.split(",");
+                                                console.log(epDataList);
+                                                var type = epDataList[0].substr(3, 1);
+                                                var categoryName = "空调";
+                                                if (type == "1") {
+                                                    categoryName = "新风";
+                                                } else if (type == "2") {
+                                                    categoryName = "地暖";
+                                                }
+                                                var onOff = epDataList[0].substr(3, 1) === "0" ? lang_closeSingle : lang_openSingle;
+                                                jsonData.deviceState = categoryName + " " + onOff
+                                                for (var k = 0; k < epDataList.length; k++) {
+                                                    if (k == 0) {
+                                                        jsonData.deviceState += " " + nameArr[k];
+                                                    } else {
+                                                        jsonData.deviceState += "," + nameArr[k];
+                                                    }
+                                                }
+                                            } else if (list1.object.split(">")[2] == "Cj") {
+                                                var state = list1.epData.substr(0, 4);
+                                                var temp = list1.epData.substr(7, 2);
+                                                // alert(temp);
+                                                if (state == "0100") {
+                                                    jsonData.deviceState = lang_closeSingle;
+                                                } else {
+                                                    jsonData.deviceState = lang_openSingle;
+                                                    temp = parseInt(temp, 16);
+                                                    jsonData.deviceState = jsonData.deviceState + ' ' + temp + '℃';
+                                                }
+                                            }
+                                            else if (list1.object.split(">")[2] === "Ck") {
+                                                if (list1.description && list1.description.length > 0) {
+                                                    jsonData.description = list1.description;
+                                                }
+                                                var epDataList = list1.epData.split(",");
+                                                console.log(epDataList);
+                                                var onOff = epDataList[0] === "0" ? lang_close : lang_open;
+                                                var speed = epDataList[1];
+                                                if (onOff === lang_close) {
+                                                    jsonData.deviceState = onOff;
+                                                } else if (onOff === lang_open) {
+                                                    switch (speed) {
+                                                        case "1":
+                                                            jsonData.deviceState = onOff + " " + lang_airsystem_Oj_Wind_speed_low;
+                                                            break;
+                                                        case "2":
+                                                            jsonData.deviceState = onOff + " " + lang_airsystem_Oj_Wind_speed_mid;
+                                                            break;
+                                                        case "3":
+                                                            jsonData.deviceState = onOff + " " + lang_airsystem_Oj_Wind_speed_high;
+                                                            break;
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                        jsonData.deviceIcon = deviceIcon;
+                                        jsonData.object = list1.object
+                                        jsonData.delay = list1.delay
+                                        jsonData.epData = list1.epData
+                                        arr1[d] = jsonData
+                                    });
+                                    if (info.getItem("actionArray") == null) {
+                                        info.setItem("actionArray", JSON.stringify(arr1))
+                                        console.log(info.getItem("actionArray"))
+                                    } else {
+                                        var actArr = JSON.parse(info.getItem("actionArray"))
+                                        actArr = actArr.concat(arr1)
+                                        info.setItem("actionArray", JSON.stringify(actArr))
+                                        console.log(info.getItem("actionArray"))
+                                    }
+                                    edit()
+                                } else {
+                                    $(".null").show();
+                                    $("#action_list").hide();
+                                }
+                            })
+                        } else {
+                            $(".saveToast").hide();
+                            clearOvertimeWarn();
+                            $(".null").show();
+                            $("#action_list").hide();
+                        }
+                    })
+                })
+            }
+        }
+
+        //编辑场景中的任务
+        function edit() {
+            var actionArr;
+            if (info.getItem("actionArray") != '' && info.getItem("actionArray") != undefined) {
+                actionArr = JSON.parse(info.getItem("actionArray"))
+            }
+            // 初始化排序字典
+            actionDic = {}
+            if (actionArr == null) {
+                $(".null").show();
+                $("#action_list").hide();
+            } else {
+                $(".null").hide();
+                $("#action_list").show();
+                $(".scene_list").find(".sce_list").remove()
+                actionArr.map(function (list, i) {
+
+                    // 生成用于排序的数据缓存
+                    actionDic[i] = list
+                    var devID = list.object.split('>')[0];
+                    if (list.name == "") {
+                        //加上icon<i style="background:url(../fonts/icon_offline.png) no-repeat center center;background-size:3rem 3rem;"></i>
+                        var str =
+                            '<li class="sce_list" data-devID="' + devID + '" data-url="javascript:;" data-order=' + i +
+                            '><i style="background:url(../fonts/icon_offline.png) no-repeat center center;background-size:3rem 3rem;"></i><div class="left" style="line-height: 7.4rem;">' +
+                            lang_device_delete + '</div><div class="delete">' + lang_delete + '</div></li>';
+                        $("#action_list").append(str)
+                    } else {
+                        var roomName = !list.roomName ? lang_group : list.roomName
+                        var roomStr = "<em class='roomName' data-roomName='" + roomName + "'>[" + roomName + "]</em>"
+                        if (list.object.split(">")[2] == "CMICA2" || list.object.split(">")[2] == "CMICA3" || list.object.split(">")[
+                            2] == "CMICA4" || list.object.split(">")[2] == "CMICA5" || list.object.split(">")[2] == "CMICA6") {
+                            roomStr = "<em class='roomName' data-roomName=''></em>"
+                            list.name = languageUtil.getResource("device_name_" + list.object.split(">")[2]);
+                        }
+                        if (list.object.split(">")[2] == "XW01" || list.object.split(">")[2] == "HS05" || list.object.split(">")[2] ==
+                            "IF02") {
+                            roomStr = "<em class='roomName' data-roomName=''></em>"
+                        }
+                        //加上icon<i style="background:'+ list.deviceIcon +' no-repeat center center;background-size:4rem auto;"></i>
+                        //li中的第一个em为填写分区，第二个em不填写任何东西，只做占位，第三个em做几路开关中的开关名称填写字段，第四个em填写设备设置的状态，第五个为延时
+                        var cssStr = "3%";
+                        if (list.switchName == undefined || list.switchName == null || list.switchName == "") {
+                            list.switchName = '';
+                            cssStr = "0";
+                        }
+                        console.log("list.delay=" + list.delay);
+                        var displayDelay = formatDelayTime(list.delay);
+                        var deviceType = list.object.split('>')[2];
+                        var num = list.object.split('>')[1];
+                        var url = list.editUrl;
+                        var sss = "";
+                        if (deviceType == 'DD' ||
+                            deviceType == '90' ||
+                            deviceType == "OZ" ||
+                            deviceType == "63" ||
+                            deviceType == "62" ||
+                            deviceType == "At" ||
+                            deviceType == "Ao" ||
+                            deviceType == "An" ||
+                            deviceType == "a0" ||
+                            deviceType == "Bv" ||
+                            deviceType == "Bw" ||
+                            deviceType == "By" ||
+                            deviceType == "Cm" ||
+                            deviceType == "Cn") {
+                            sss = 'style="width: 100%;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;"';
+                        } else if (deviceType == "64") {
+                            sss = 'style="width: 90%;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;"';
+                        }
+                        var str = '<li class="sce_list" data-order=' + i + ' ' +
+                            'data-devID="' + devID + '" data-url="' + url + '" data-num="' + num + '" ' +
+                            'data-type="' + deviceType + '">' +
+                            '<i data-icon="' + list.deviceIcon + '" style="background:' + list.deviceIcon +
+                            ' no-repeat center center;background-size:4rem auto;"></i>' +
+                            '<div class="left">' +
+                            '<span>' + list.name + '</span>' +
+                            roomStr +
+                            '<em></em><em style="margin-right:' + cssStr + ';">' + list.switchName + '</em>' +
+                            '<em ' + sss + '>' + list.deviceState + '</em>' +
+                            '<em>' + displayDelay + '</em>' +
+                            '<b class="reorder-icon list-instant"></b>' +
+                            '</div>' +
+                            '<div class="delete">' + lang_delete + '</div>' +
+                            '</li>'
+                        $("#action_list").append(str)
+                        if (list.switchName == undefined || list.switchName == null || list.switchName == "") {
+                            $(".scene_list li.sce_list .left").find("em").eq(4).css("margin-right", "0")
+                        }
+                    }
+
+                })
+                //左滑效果
+
+                $(".scene_list .sce_list").leftDelete({
+                    marginLeft: "-18%"
+                });
+                $(".scene_list .sce_list").on("click", function (e) {
+                    e.stopPropagation();
+                    var devID = $(this).attr("data-devID");
+                    var url = $(this).attr("data-url");
+                    var index = $(this).index();
+                    $(this).css({
+                        "border": 0,
+                        "-webkit-tap-highlight-color": "transparent"
+                    });
+                    info.setItem("sourcePage", "editScene");
+                    var _this = $(this);
+                    plus.gatewayCmd.getDeviceInfo(devID, function (data) {
+                        if (data) {
+                            if (data.type == "At" ||
+                                data.type == "62" ||
+                                data.type == "63" ||
+                                data.type == "64" ||
+                                data.type == "A1" ||
+                                data.type == "B9" ||
+                                data.type == "Aj" ||
+                                data.type == "61" ||
+                                data.type == "Ao" ||
+                                data.type == "An" ||
+                                data.type == "Am" ||
+                                data.type == "Bu" ||
+                                data.type == "Bv" ||
+                                data.type == "Bw" ||
+                                data.type == "Cl" ||
+                                data.type == "Cm" ||
+                                data.type == "Cn"
+                            ) {
+                                var nameList = [];
+                                var translatorNameList = [];
+                                var translatorNumberList = [];
+                                if (data.endpoints) {
+                                    var endpoints = data.endpoints;
+                                    for (var j in endpoints) {
+                                        var endpointName = endpoints[j].endpointName ? endpoints[j].endpointName :
+                                            device_switch + endpoints[j].endpointNumber;
+                                        nameList.push(endpointName);
+                                        translatorNameList.push(endpointName);
+                                        translatorNumberList.push(endpoints[j].endpointNumber);
+                                    }
+                                }
+                                if (data.type == "B9") {
+                                    info.setItem("epNameList" + data.devID, JSON.stringify(translatorNameList));
+                                    info.setItem("numList" + data.devID, JSON.stringify(translatorNumberList));
+                                } else {
+                                    info.setItem("epNameList" + data.devID, JSON.stringify(nameList));
+                                }
+                                if (data.type == "Ao" ||
+                                    data.type == "An" ||
+                                    data.type == "Am" ||
+                                    data.type == "Bw" ||
+                                    data.type == "Bv" ||
+                                    data.type == "Bu" ||
+                                    data.type == "Cl" ||
+                                    data.type == "Cm" ||
+                                    data.type == "Cn") {
+                                    if (data) {
+                                        for (var i in data.endpoints) {
+                                            if (data.endpoints[i].endpointNumber == 1) {
+                                                if (data.endpoints[i].endpointType !== 2) {
+                                                    info.setItem("lockThree" + data.devID, 1 +
+                                                        "非");
+                                                } else {
+                                                    info.setItem("lockThree" + data.devID, 1 +
+                                                        "正");
+                                                }
+                                            } else if (data.endpoints[i].endpointNumber == 2) {
+                                                if (data.endpoints[i].endpointType !== 2) {
+                                                    info.setItem("locktwo" + data.devID, 2 + "非");
+                                                } else {
+                                                    info.setItem("locktwo" + data.devID, 2 + "正");
+                                                }
+                                            } else if (data.endpoints[i].endpointNumber == 3) {
+                                                if (data.endpoints[i].endpointType !== 2) {
+                                                    info.setItem("lockone" + data.devID, 3 + "非");
+                                                } else {
+                                                    info.setItem("lockone" + data.devID, 3 + "正");
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                }
+                            } else if (data.type == "Aw") {
+                                var endpoints = data.endpoints;
+                                endpoints.forEach(function (endpoint) {
+                                    var endpointNum = endpoint.endpointNumber;
+                                    if (endpointNum == 1) {
+                                        var clusters = endpoint.clusters;
+                                        clusters.forEach(function (cluster) {
+                                            var attributes = cluster.attributes;
+                                            attributes.forEach(function (attribute) {
+                                                var attributeId = attribute.attributeId;
+                                                var attributeValue = attribute.attributeValue;
+                                                if (attributeId == 2) {
+                                                    // 1：电铃模式  0：开关模式
+                                                    info.setItem("AwMode" + data.devID,
+                                                        attributeValue);
+                                                }
+                                            })
+                                        })
+                                    }
+                                });
+                            }
+                            info.setItem("deviceName", $(_this).find("span").html());
+                            info.setItem("deviceID", $(_this).attr("data-devID"));
+                            info.setItem("num", $(_this).attr("data-num"));
+                            info.setItem("type", $(_this).attr("data-type"));
+                            info.setItem("deviceIcon", $(_this).find("i").attr("data-icon"));
+                            info.setItem("roomName", $(_this).find(".roomName").attr("data-roomName"));
+                            info.setItem("index", index);
+                            if ($(_this).attr("data-type") == "22" ||
+                                $(_this).attr("data-type") == "23" ||
+                                $(_this).attr("data-type") == "24") {
+                                var param = {
+                                    "deviceId": info.getItem("deviceID"),
+                                    "deviceName": info.getItem("deviceName"),
+                                    "deviceIcon": info.getItem("deviceIcon"),
+                                    "num": info.getItem("num"),
+                                    "type": info.getItem("type"),
+                                    "roomName": info.getItem("roomName")
+                                };
+                                plus.tools.infraredSceneOrHouseKepper(param, function (data) {
+
+                                });
+                            } else {
+                                window.location = url;
+                            }
+                        }
+                    });
+                })
+            }
+
+            setupSlip(document.getElementById("action_list"));
+
+        }
+    })
+
+
+    $(".scene_list .sce_list").leftDelete({
+        marginLeft: "-18%"
+    })
+
+    //删除
+    function deleteDeviceTask(self) {
+        var index = $(self).parent().index()
+        $(self).parent().remove()
+        var data = info.getItem("actionArray")
+        var jsonData = JSON.parse(data)
+        //index-2 表示ul中有两条多余的li
+        jsonData.splice(index, 1)
+        var dataStr = JSON.stringify(jsonData)
+        info.setItem("actionArray", dataStr)
+    }
+
+    //新建场景
+    function addSceneTask() {
+        var param = houserkeeperModel.send_add_507;
+        param.gwID = gwID;
+        param.appID = AppID;
+        param.programID = info.getItem("sceneID")
+        param.programName = info.getItem("sceneName")
+        var arr = {
+            "type": "0",
+            "object": info.getItem("sceneID"),
+            "exp": "on"
+        }
+        param.triggerArray.push(arr)
+        var p;
+        if (info.getItem("actionArray") == null || info.getItem("actionArray") == "[]") {
+            plus.tools.back(function () {
+            })
+        } else {
+            p = JSON.parse(info.getItem("actionArray"))
+            for (var i = 0; i < p.length; i++) {
+                delete p[i].deviceState;
+            }
+            param.actionArray = p
+            plus.gatewayCmd.houserkeep_507(param, function (data) {
+                if (data.triggerArray[0].object == info.getItem("sceneID")) {
+                    $(".saveToast").hide();
+                    clearOvertimeWarn();
+                    // alert(JSON.stringify(data));
+                    if (data.errCode && data.errCode === 1) {
+                        alert(languageUtil.getResource("switch_Aj_At_no_choose_hint"));//"设备不支持在场景或管家中既做触发条件又做执行任务，请检查您的设置"
+                    } else {
+                        info.clear();
+                        plus.tools.back(function () {
+                        });
+                    }
+                }
+            })
+        }
+    }
+
+    //修改场景
+    function changeSceneTask() {
+        var param = houserkeeperModel.send_change_507;
+        param.gwID = gwID;
+        param.appID = AppID;
+        param.programID = info.getItem("programID")
+        var p = JSON.parse(info.getItem("actionArray"))
+        var arr = {
+            "type": "0",
+            "object": info.getItem("sceneID"),
+            "exp": "on"
+        }
+        param.triggerArray.push(arr)
+        if (info.getItem("actionArray") == null || info.getItem("actionArray") == "[]") {
+            param.operType = "D"
+            plus.gatewayCmd.houserkeep_507(param, function (data) {
+                info.clear()
+                plus.tools.back(function () {
+                })
+            })
+        } else {
+            p = JSON.parse(info.getItem("actionArray"))
+            for (var i = 0; i < p.length; i++) {
+                delete p[i].deviceState;
+            }
+            param.actionArray = p
+            plus.gatewayCmd.houserkeep_507(param, function (data) {
+                if (data.triggerArray[0].object == info.getItem("sceneID")) {
+                    $(".saveToast").hide();
+                    clearOvertimeWarn();
+                    // alert(JSON.stringify(data));
+                    if (data.errCode && data.errCode === 1) {
+                        alert(languageUtil.getResource("switch_Aj_At_no_choose_hint"));//"设备不支持在场景或管家中既做触发条件又做执行任务，请检查您的设置"
+                    } else {
+                        info.clear();
+                        plus.tools.back(function () {
+                        });
+                    }
+                }
+            })
+        }
+    }
+
+    $("#finishScene").on("click", function () {
+        $(".saveToast").show();
+        overtimeWarn();
+        if (info.getItem("isChange") != undefined && info.getItem("isChange") == "true") {
+            changeSceneTask()
+        } else {
+            addSceneTask()
+        }
+    })
+
+    /*格式化执行时间*/
+    function formatDelayTime(delayValue) {
+        var displayValue = "";
+        if (delayValue == null || delayValue == undefined || delayValue == "undefined" || delayValue == "") {
+            /*如果为空，则是“立即执行”*/
+            displayValue = lang_immediatelyDo;
+        } else {
+            var intdelayValue = 0;
+            try {
+                intdelayValue = parseInt(delayValue);
+                var minValue = parseInt(intdelayValue / 60);
+                var secValue = parseInt(intdelayValue % 60);
+                if (minValue == 0 && secValue == 0) {
+                    displayValue = lang_immediatelyDo;
+                    /*如果是0，也是立即执行*/
+                } else if (minValue > 0 && secValue == 0) {
+                    displayValue = minValue + lang_afterMinsDo;
+                    /*某分后执行*/
+                } else if (minValue == 0 && secValue > 0) {
+                    displayValue = secValue + lang_afterSecDo;
+                    /*某秒后执行*/
+                } else { /*某分某秒后执行*/
+                    displayValue = minValue + lang_min + secValue + lang_afterSecDo;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        return displayValue;
+    }
+
+    // 排序支持
+    function setupSlip(list) {
+        list.addEventListener('slip:beforereorder', function (e) {
+            // 禁止排序
+            if (e.target.classList.contains('list-no-reorder')) {
+                e.preventDefault();
+            }
+        }, false);
+
+        list.addEventListener('slip:beforeswipe', function (e) {
+            // 禁止左右滑动
+            e.preventDefault();
+        }, false);
+
+        list.addEventListener('slip:beforewait', function (e) {
+            // 立即开始排序
+            if (e.target.classList.contains('list-instant')) e.preventDefault();
+        }, false);
+
+        list.addEventListener('slip:afterswipe', function (e) {
+            // 滑动之后的处理
+            e.target.parentNode.appendChild(e.target);
+        }, false);
+
+        list.addEventListener('slip:reorder', function (e) {
+            // 排序之后的处理
+            e.target.parentNode.insertBefore(e.target, e.detail.insertBefore);
+            // 根据排序生成数据
+            var arr = []
+            $("#action_list").find("li").each(function () {
+                var dataId = $(this).data("order")
+                arr.push(actionDic[dataId])
+            })
+            info.setItem("actionArray", JSON.stringify(arr))
+            return false;
+        }, false);
+        return new Slip(list);
+    }
+
+    function overtimeWarn() {
+        overtime = setTimeout(function () {
+            $(".overTime").show();
+            $(".saveToast").hide();
+            setTimeout(function () {
+                $(".overTime").hide();
+            }, 3000)
+        }, 15000);
+    }
+
+    function clearOvertimeWarn() {
+        clearTimeout(overtime);
+    }
+</script>
+
+</html>

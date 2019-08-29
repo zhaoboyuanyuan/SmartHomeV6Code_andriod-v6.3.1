@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta charset="UTF-8">
+    <title>SW16内嵌式开关</title>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="css/mui.min.css">
+    <link rel="stylesheet" href="css/mui.picker.min.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body style="width:100%;height:100%;background:#f1f4f8;">
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="device_Ai.html"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_Ai_name" href="javascript:;">DIN开关计量版</a>
+            <a class="sure autoSwitchLanguager" key="Selection_time_confirm" href="javascript:;">确定</a>
+        </div>
+    </header>
+    <section class="content">
+        <div class="now-time">
+            <span class="autoSwitchLanguager" id="openOrClose" key="Time_close">关闭时间</span><span id="nowTime">当前时间</span>
+        </div>
+        <ul class="choose-time">
+            <li><span class="autoSwitchLanguager" key="Not_started">不开启</span><i></i></li>
+            <li><span class="autoSwitchLanguager" key="Minutes_30">30分钟</span></li>
+            <li><span class="autoSwitchLanguager" key="Minutes_60">60分钟</span></li>
+            <li><span class="autoSwitchLanguager" key="Minutes_120">120分钟</span></li>
+            <li id="pickDateBtn"><span class="autoSwitchLanguager" key="Minutes_Custom">自定义</span></li>
+        </ul>
+    </section>
+</body>
+    <script src="js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/plus.js"></script>
+    <script type="text/javascript" src="js/gatewayCmd.js"></script>
+    <script type="text/javascript" src="js/tools.js"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/alert.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/more.js"></script>
+    <script type="text/javascript">
+        mui.init();
+        var gwID,dID;
+        var second = 0;
+        initlan()
+        var arr = [];
+        for (var i = 1; i <= 120; i++) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            arr.push(i)
+        }
+//        document.getElementById("pickDateBtn").addEventListener("click", function() {
+//            //初始化PopPicker组件
+//            var picker = new mui.PopPicker({})
+//            picker.setData(arr)
+//            $(".mui-backdrop").css("opacity","0")
+//            $(".mui-poppicker-btn-cancel").html(device_cancel);//"取消"
+//            $(".mui-poppicker-btn-ok").html(device_sure);//"确定"
+//            picker.show(function(item) {
+//                console.log(item)
+//                var itemTime = parseInt(item[0]);
+//                second = itemTime*60;
+//                var time = timeNum(new Date(now+second*1000).getHours())+":"+timeNum(new Date(now+second*1000).getMinutes());
+//                $(".now-time").html("<span>"+$(".now-time").attr("data-str")+"</span><span id='nowTime'>"+time+"</span>")
+//            })
+//        })
+        plus.plusReady(function() {
+            gwID = getUrlParam("gwID");
+            dID = getUrlParam("dID");
+            var state = getUrlParam("state")
+            if (state == "on") {
+                $(".now-time").attr("data-str", device_time_on)//"打开时间"
+                $(".now-time").attr("data-id", 32791)
+                $(".now-time").html(device_no_open)//"未启动延时开启"
+            } else {
+                $(".now-time").attr("data-str",device_time_off)//"关时间"
+                $(".now-time").attr("data-id", 32790)
+                $(".now-time").html(device_no_close)//"未启动延时关闭"
+            }
+            var arr = [];
+            for (var i = 1; i <= 120; i++) {
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                arr.push(i)
+            }
+            var now = new Date().getTime();
+            $(".choose-time li").on("click", function () {
+                $(".choose-time li").find("i").remove()
+                $(this).append("<i></i>").siblings().find("i").remove();
+                if ($(this).index() == 0) {
+                    second = 0;
+                    if (state == "on") {
+                        $(".now-time").html(device_no_open)
+                    }else{
+                        $(".now-time").html(device_no_close)
+                    }
+                } else if ($(this).index() == 1) {
+                    second = 30*60;
+                    var time = timeNum(new Date(now + second * 1000).getHours()) + ":" + timeNum(new Date(now + second * 1000).getMinutes());
+                    $(".now-time").html("<span>" + $(".now-time").attr("data-str") + "</span><span id='nowTime'>" + time + "</span>")
+                } else if ($(this).index() == 2) {
+                    second = 60*60;
+                    var time = timeNum(new Date(now + second * 1000).getHours()) + ":" + timeNum(new Date(now + second * 1000).getMinutes());
+                    $(".now-time").html("<span>" + $(".now-time").attr("data-str") + "</span><span id='nowTime'>" + time + "</span>")
+                } else if ($(this).index() == 3) {
+                    second = 120*60;
+                    var time = timeNum(new Date(now + second * 1000).getHours()) + ":" + timeNum(new Date(now + second * 1000).getMinutes());
+                    $(".now-time").html("<span>" + $(".now-time").attr("data-str") + "</span><span id='nowTime'>" + time + "</span>")
+                }
+            })
+            document.getElementById("pickDateBtn").addEventListener("click", function() {
+                //初始化PopPicker组件
+                var picker = new mui.PopPicker({})
+                picker.setData(arr)
+                $(".mui-backdrop").css("opacity","0")
+                $(".mui-poppicker-btn-cancel").html(device_cancel);//"取消"
+                $(".mui-poppicker-btn-ok").html(device_sure);//"确定"
+                picker.show(function(item) {
+                    console.log(item)
+                    var itemTime = parseInt(item[0]);
+                    second = itemTime*60;
+                    var time = timeNum(new Date(now+second*1000).getHours())+":"+timeNum(new Date(now+second*1000).getMinutes());
+                    $(".now-time").html("<span>"+$(".now-time").attr("data-str")+"</span><span id='nowTime'>"+time+"</span>")
+                })
+            })
+            function timeNum(num){
+                if((num+'').length <= 1){
+                    num = "0"+num;
+                }
+                return num;
+            }
+            $(".sure").on("click",function(){
+                var parameter = second+'';
+                if(second == 0) {
+                    sendCmd(gwID,dID,1,6,0x8019)
+                } else {
+                    sendCmd(gwID,dID,1,6,parseInt($(".now-time").attr("data-id")),parameter)
+                }
+                window.location = "device_Ai.html"
+            });
+            function sendCmd(gwID,dID,endpointNumber,clusterId,commandId,parameter){
+                var jsonData = {}
+                jsonData.cmd = "501";
+                jsonData.gwID = gwID;
+                jsonData.devID = dID;
+                jsonData.endpointNumber = endpointNumber;
+                jsonData.clusterId = clusterId;
+                jsonData.commandType = 1;
+                jsonData.commandId = commandId;
+                if(parameter){
+                    jsonData.parameter = [parameter]
+                }
+                plus.gatewayCmd.controlDevice(jsonData,function(){})
+            }
+//            plus.gatewayCmd.newDataRefresh(function(data){
+//                if(data.cmd == "500" && data.devID == dID){
+//                    window.location = "device_Ai.html"
+//                }
+//            })
+        })
+    </script>
+</html>

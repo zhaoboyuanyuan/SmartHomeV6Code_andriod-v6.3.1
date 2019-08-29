@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#dcdcdc">
+
+        <LinearLayout
+            android:id="@+id/log_linear_ctrl"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_calendar_grey" />
+
+            <TextView
+                android:id="@+id/log_text_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/message_calendar"
+                android:textColor="#575757" />
+
+            <ImageView
+                android:id="@+id/log_image_arrow"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_arrow_down_grey" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/alarm_detail_text_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/message_center_detail_no_result_MarginTop"
+        android:gravity="center_horizontal"
+        android:text="@string/CateEye_Visitor_Record_No_Record"
+        android:textColor="@color/message_center_no_result_text_color" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/alarm_detail_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:background="@color/white"
+        android:divider="@color/v6_line"
+        android:dividerHeight="1dp" />
+</FrameLayout>

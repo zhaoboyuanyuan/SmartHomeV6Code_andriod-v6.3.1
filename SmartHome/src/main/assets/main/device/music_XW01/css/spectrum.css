@@ -1,0 +1,134 @@
+/**********************************************************************
+ *                              音谱
+ **********************************************************************/
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body {
+    background-color: #efefef;
+}
+
+.musicSpectrum {
+    float: right;
+    display: none;
+    width: 3rem;
+    height: 3rem;
+}
+
+.musicSpectrum[song-state=playing] {
+    display: block;
+}
+
+.musicSpectrum .music {
+    width: 3rem;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+}
+
+.musicSpectrum .waves {
+    width: 2rem;
+    height: 2rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: relative;
+    z-index: 103;
+}
+
+.musicSpectrum .waves li {
+    position: relative;
+    float: left;
+    height: 100%;
+    width: 12%;
+    overflow: hidden;
+    margin-right: 4.67%;
+}
+
+.musicSpectrum .waves li span {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    height: 100%;
+    width: 100%;
+    /*background: radial-gradient(transparent 50%, rgba(15, 255, 73, 0.9) 100%);*/
+    background: #8dd652;
+    /*border-radius: 50% 50% 0 0/ 4px 4px 0 0;*/
+}
+
+.musicSpectrum .waves .li1 span {
+    animation: waves 2.8s ease 0s infinite alternate;
+    -webkit-animation: waves 3.8s ease 0s infinite alternate;
+}
+
+.musicSpectrum .waves .li2 span {
+    animation: waves 4.1s ease 0s infinite alternate;
+    -webkit-animation: waves 6.1s ease 0s infinite alternate;
+}
+
+.musicSpectrum .waves .li3 span {
+    animation: waves 3.2s ease 0s infinite alternate;
+    -webkit-animation: waves 3.2s ease 0s infinite alternate;
+}
+
+.musicSpectrum .waves .li4 span {
+    animation: waves 2.0s ease 0s infinite alternate;
+    -webkit-animation: waves 2.0s ease 0s infinite alternate;
+}
+
+.musicSpectrum .waves .li5 span {
+    animation: waves 4.9s ease 0s infinite alternate;
+    -webkit-animation: waves 4.9s ease 0s infinite alternate;
+}
+
+.musicSpectrum .waves .li6 span {
+    animation: waves 2.7s ease 0s infinite alternate;
+    -webkit-animation: waves 2.7s ease 0s infinite alternate;
+}
+
+@-webkit-keyframes waves {
+    10% {
+        height: 20%;
+    }
+
+    20% {
+        height: 60%;
+    }
+
+    40% {
+        height: 40%;
+    }
+
+    50% {
+        height: 100%;
+    }
+
+    100% {
+        height: 50%;
+    }
+}
+
+@keyframes waves {
+    10% {
+        height: 20%;
+    }
+
+    20% {
+        height: 60%;
+    }
+
+    40% {
+        height: 40%;
+    }
+
+    50% {
+        height: 100%;
+    }
+
+    100% {
+        height: 50%;
+    }
+}

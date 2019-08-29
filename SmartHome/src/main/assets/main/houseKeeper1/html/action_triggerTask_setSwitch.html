@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/scene.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/switch.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <a href="javascript:;" onclick="window.history.back(-1);"></a>
+    <a href="javascript:;" class="autoSwitchLanguager" id='setDeviceState_tittle'>设置设备状态</a>
+    <!--<a id="customScene_sure" class="saveSure autoSwitchLanguager" href="javascript:;">确定</a>-->
+</header>
+<section style="padding-top:6.4rem;">
+    <ul class="new_switch_list">
+        <!--<li>-->
+            <!--<p>开关1</p>-->
+            <!--<p><span>按压设备按键一次</span><i data-state="yes"></i></p>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<p>开关2</p>-->
+            <!--<p><span>按压设备按键一次</span><i data-state="no"></i></p>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<p>开关3</p>-->
+            <!--<p><span>按压设备按键一次</span><i data-state="no"></i></p>-->
+        <!--</li>-->
+    </ul>
+</section>
+<!--<section class="switchToast autoSwitchLanguager" id="toast_switch_mode">请设置设备状态</section>-->
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var arr = [];
+    initlan();
+    plus.plusReady(function(){
+        $(".new_switch_list").html("");
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        if( info.getItem("type") == "Bv" ||
+            info.getItem("type") == "Bw" ||
+            info.getItem("type") == "Cm" ||
+            info.getItem("type") == "Cn"){
+            var list = JSON.parse(info.getItem("epNameList"+info.getItem("deviceID")));
+            if(list){
+                for(var i=0;i<list.length;i++){
+                    $(".new_switch_list").append("<li><p>"+list[i]+"</p><p><span>"+lang_PL_01+"</span><i data-state='no'></i></p></li>");
+                }
+            }
+        }else if(info.getItem("type") == "Bu" ||
+                 info.getItem("type") == "Cl"){
+            $(".new_switch_list").append("<li><p><span>"+lang_PL_01+"</span><i data-state='no'></i></p></li>");
+        }
+        $(".new_switch_list li").unbind("click").on("click",function(){
+            $(this).siblings("li").find("i").attr("data-state","no");
+            $(this).find("i").attr("data-state","yes");
+            var num = $(this).index() + 1;
+            var exp = "2";
+            var deviceState = lang_txt_down;
+            var data = {
+                "type": "2",
+                "object": info.getItem("deviceID") + ">" + num + ">" + info.getItem("type"),
+                "name": info.getItem("deviceName"),
+                "deviceIcon": info.getItem("deviceIcon"),
+                "deviceState": deviceState,
+                "exp": "=" + exp,
+                "editUrl":info.getItem("editUrl")
+            };
+            if(info.getItem("type") === "Bv" || info.getItem("type") === "Bw" || info.getItem("type") === "Cm" || info.getItem("type") === "Cn"){
+                data.epName = $(this).find("p").eq(0).html();
+                info.setItem("sceneSwitchName",$(this).find("p").eq(0).html());
+            }
+            if(info.getItem("ldArr") == null) {
+                arr.push(data);
+                info.setItem("ldArr", JSON.stringify(arr))
+            } else {
+                arr = JSON.parse(info.getItem("ldArr"));
+                var exist = false;
+                arr.map(function (list, i) {
+                    if (list.type != 0) {
+                        if (i == parseInt(info.getItem("index"))) {
+                            list.exp = "="+exp;
+                            list.object = info.getItem("deviceID")+">"+num+">"+info.getItem("type");
+                            list.name = info.getItem("deviceName");
+                            list.deviceState = deviceState;
+                            list.deviceIcon = info.getItem("deviceIcon");
+                            if(info.getItem("sceneSwitchName")){
+                                list.epName = info.getItem("sceneSwitchName");
+                            }
+                            exist = true;
+                        }
+                    }
+                });
+                if (exist == false) {
+                    arr.push(data)
+                }
+                info.setItem("ldArr", JSON.stringify(arr))
+            }
+            info.removeItem("deviceName");
+            info.removeItem("deviceIcon");
+            //info.removeItem("deviceState")
+            info.removeItem("sceneSwitchName");
+            info.removeItem("flag");
+            if(info.getItem("epNameList"+info.getItem("deviceID"))){
+                info.removeItem("epNameList"+info.getItem("deviceID"));
+            }
+            window.location = "circumstances.html"
+        });
+    });
+
+</script>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/v5ToV6.css" />
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a href="addDeviceNew.html"></a>
+        <a class="autoSwitchLanguager" key="Device_upgrade_Gateway_upgrade" href="javascript:;">V5网关（升级至V6）</a>
+        <a href="javascript:;"></a>
+    </div>
+</header>
+<section class="gwMain">
+    <ul>
+        <li>
+            <label for="gwAccount" class="autoSwitchLanguager" key="GW15_Gateway_id">网关号</label>
+            <input id="gwAccount" class="autoSwitchLanguager" key="addGateway3_gateway_text" type="text" placeholder="请输入网关账号" />
+            <i id="scan"></i>
+        </li>
+        <li>
+            <label for="gwPassword" class="autoSwitchLanguager" key="addGateway3_gateway_pwd">密码</label>
+            <input id="gwPassword" class="autoSwitchLanguager" key="addGateway3_gateway_pwdtext" type="password" placeholder="请输入网关密码" />
+            <i class="auto">Auto</i>
+        </li>
+    </ul>
+    <div class="gwTips">
+        <p class="autoSwitchLanguager" key="Device_Gateway_upgrade_1">1.请输入V5 的网关账号和密码</p>
+        <p class="autoSwitchLanguager" key="Device_Gateway_upgrade_2">2.请确保网络连接正常</p>
+    </div>
+</section>
+<section class="addSensorBtn">
+    <a href="javascript:;" class="autoSwitchLanguager" id="addDevice_sure">确定</a>
+</section>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    plus.plusReady(function(){
+        $("#scan").unbind("click").bind("click",function(){
+            plus.gatewayCmd.getQRCode(null, function(data) {
+                if(data.length !== 11 && data.length > 12){
+                    var idStr = data.substr(data.length - 12,12);
+                    $("#gwAccount").val(idStr.toUpperCase());
+                }else if(data.length == 11 || data.length == 12){
+                    $("#gwAccount").val(data.toUpperCase())
+                }
+            })
+        });
+        $(".auto").unbind("click").bind("click",function(){
+            var accountVal = $("#gwAccount").val();
+            var autoPassword = "";
+            if(accountVal){
+                autoPassword = accountVal.substr(accountVal.length-6,6);
+            }
+            $("#gwPassword").val(autoPassword);
+        });
+        $("#addDevice_sure").unbind("click").bind("click",function(){
+            var account = $("#gwAccount").val();
+            var password = $("#gwPassword").val();
+            if(account === "" || password === ""){
+                window.showDialog.show(addGateway_empty,3000);
+            }else{
+                var jsonData = {
+                    "deviceId": account,
+                    "password": password
+                };
+                var top = $(".header").offsetTop;
+                window.loadingPrompt.show(languageUtil.getResource("integral_tips_V5_V6"),top,15000,languageUtil.getResource("Device_V5_V6_Details_TIMEOUT"));
+                plus.gatewayCmd.V5ToV6CheckGWPassword(jsonData, function(data) {
+                    window.loadingPrompt.hide();
+                    if(data.resultCode == 0){
+                        if(data.data.status === 0) {
+                            window.location = "gw_v5ToV6_02.html?deviceId="+account;
+                        } else {
+                            switch(data.data.status) {
+                                case 1:
+                                    window.showDialog.show(languageUtil.getResource("V5_V6_password_error"),3000);//网关号或密码错误
+                                    break;
+                                case 2:
+                                    window.showDialog.show(languageUtil.getResource("Device_upgrade_network_anomaly"),3000);//网络连接异常或设备不在线
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }else{
+                        window.showDialog.show(data.resultDesc,3000);
+                    }
+                })
+            }
+        });
+    });
+</script>
+</body>
+</html>

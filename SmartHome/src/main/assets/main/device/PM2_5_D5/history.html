@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>粉尘监测器</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/history.css" />
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+<header class="header">
+    <a href="dust.html"></a>
+    <a href="javascript:;" class="autoSwitchLanguager deviceName" id="device_D5_name">粉尘监测器</a>
+    <a data-id="1" href="javascript:;" style="background:none;"></a>
+</header>
+<section class="content" style="padding-top: 2.4rem;">
+    <section class="title autoSwitchLanguager" id="PM2_5_level_statistics">最近二十四个小时数据记录</section>
+    <section id="line"></section>
+    <section id="level">
+        <section class="level_text autoSwitchLanguager" id="PM2_5_Statistics_grade">等级: </section>
+        <section class="level_text1 autoSwitchLanguager" id="PM2_5_Statistics_grade_1">优：<=75 </section>
+        <section class="level_text2 autoSwitchLanguager" id="PM2_5_Statistics_grade_2">良：75~150 </section>
+        <section class="level_text3 autoSwitchLanguager" id="PM2_5_Statistics_grade_3">差：>=150 </section>
+    </section>
+</section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/echarts.js"></script>
+<script src="js/createLine.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var start = new Date();
+    var endTime = start.getTime();
+    var startTime = (start.getTime() - 86400000);
+    var timeArr = [];
+    var ppmArr = []
+    var devData = {
+        "startTime": startTime + '',
+        "endTime": endTime + ''
+    }
+    plus.plusReady(function() {
+
+        plus.gatewayCmd.getDeviceInfo(function(data){
+
+            var name = data.name.indexOf("#$default$#") != -1 ? title_name +data.name.split("#")[2]:data.name
+            $(".deviceName").html(name)
+        })
+
+        plus.gatewayCmd.getStatistic(devData, function(list) {
+            if(list.resultCode != "0" || list.resultCode != 0) {
+                list.data = new Array();
+            }
+            for(var i = 1; i < 25; i++) {
+                if(list.data[i] == undefined) {
+                    var time = new Date(startTime - (i - 1) * 3600000)
+                    var hour = time.getHours().toString().length == 1 ? ("0" + time.getHours()) : time.getHours()
+                    var min = time.getMinutes().toString().length == 1 ? ("0" + time.getMinutes()) : time.getMinutes()
+                    timeArr[24 - i] = hour + ':' + min;
+                    ppmArr[24 - i] = "-";
+                } else {
+                    var time = new Date(startTime - (i - 1) * 3600000)
+                    var hour = time.getHours().toString().length == 1 ? ("0" + time.getHours()) : time.getHours()
+                    var min = time.getMinutes().toString().length == 1 ? ("0" + time.getMinutes()) : time.getMinutes()
+                    timeArr[24 - i] = hour + ':' + min;
+                    ppmArr[24 - i] = list.data[i];
+                }
+            }
+            editLine(timeArr, ppmArr)
+        })
+
+        var iphoneX = {
+            sysFunc: "getItem:",
+            room: "iphoneX",
+            id: "iphoneX",
+            data: ""
+        };
+        var iStr = '';
+        if (!window.v6sysfunc) {
+            iStr = prompt(JSON.stringify(iphoneX))
+        }
+        if (iStr == "iphoneX") {
+            $(".header")[0].style.paddingTop = "4.8rem";
+        }
+    })
+    window.onload = function(){
+//		            editLine(['11:11','22:22','13:12','14:12','15:17','6:17','7:17','8:17','9:17','10:17','1:17','12:17','14:17','11:17','12:17','13:17','14:17','15:17','16:17','17:17','18:17','19:17','10:17','11:17'],[1,2,3,4,5,6,7,8,9,10,1,12,14],[1,2,3,4,5,6,7,8,9,10,1,12,14])
+    }
+</script>
+
+</html>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/transparent">
+
+    <View
+        android:id="@+id/choose_panel_blank"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/white">
+            <TextView
+                android:id="@+id/choose_panel_text_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textColor="@color/newPrimary"
+                android:textSize="15sp"
+                android:text="@string/Cancel"/>
+
+            <TextView
+                android:id="@+id/choose_panel_text_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/newPrimaryText"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:text="@string/Device_More_Doorwayboard"/>
+
+            <TextView
+                android:id="@+id/choose_panel_text_sure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/Sure"
+                android:textSize="15sp"
+                android:textColor="@color/newPrimary"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/choose_panel_text_true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/newPrimaryLight"
+            android:padding="16dp"
+            android:gravity="center"
+            android:text="@string/Band_Firmware_Version_Update_Permit"
+            android:textSize="20sp"
+            android:textColor="@color/newPrimaryText"/>
+        <TextView
+            android:id="@+id/choose_panel_text_false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:padding="16dp"
+            android:gravity="center"
+            android:text="@string/Band_Firmware_Version_Update_Refuse"
+            android:textSize="20sp"
+            android:textColor="@color/newSecondaryText"/>
+    </LinearLayout>
+</LinearLayout>

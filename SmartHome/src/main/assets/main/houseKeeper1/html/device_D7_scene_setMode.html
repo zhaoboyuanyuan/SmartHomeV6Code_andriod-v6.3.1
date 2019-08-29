@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>设置模式</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header  class="header">
+    			<a href="javascript:window.history.back(-1);"></a>
+    			<a class="deviceName autoSwitchLanguager" key="set_mode" href="javascript:;">设置模式</a>
+    			<!--<a key="customScene_sure" class="complete autoSwitchLanguager" onclick="save()" href="javascript:;">确定</a>-->
+		</header>
+		<section style="margin-top: 6.4rem;">
+			<ul class="set_list">
+				<li><b class="autoSwitchLanguager" key="mode_1">烛光晚餐</b><i></i></li>
+				<li><b class="autoSwitchLanguager" key="mode_2">月色迷人</b><i></i></li>
+				<li><b class="autoSwitchLanguager" key="mode_3">绿色心情</b><i></i></li>
+				<li><b class="autoSwitchLanguager" key="mode_4">蓝色小夜曲</b><i></i></li>
+			</ul>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Housekeeper");
+		initlan()
+		plus.plusReady(function(){
+            plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+            });
+			$(".set_list li").on("click",function(){
+				var index = $(this).index()+2
+				$(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+				info.setItem("epData","AA5505060" + index);
+				info.setItem("deviceState",$(this).text());
+				
+				window.location = "setDelay_sceneTask.html";
+			})
+		})
+		
+	</script>
+</html>

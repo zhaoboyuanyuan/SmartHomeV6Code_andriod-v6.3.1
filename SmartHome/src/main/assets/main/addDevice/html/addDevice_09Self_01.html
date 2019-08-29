@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加设备</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/setState.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a class="back_addScene" href="javascript:history.back(-1)"></a>
+				<a href="javascript:;" class="addDoorC autoSwitchLanguager" id="addDevice_09Self_title">添加独立式可燃气体探测器</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section style="width: 100%;">
+			<section style="width: 100%;text-align: center;">
+				<img style="width: 20rem;margin-top: 8rem;" src="../fonts/add_09self_01.png" />
+			</section>
+			<div style="width: 100%;height: 16rem;margin-top: 2rem;">
+				<div class="addCommon_p addCommon_p_01" style="padding-left:0;margin-left:2rem;">
+					<i class="addCommon_div2" data_name="1" ></i>
+					<span class="autoSwitchLanguager" id="addDevice_09Self_01">上电</span>
+				</div>
+				<div class="addCommon_p addCommon_p_01" style="padding-left:0;margin-left:2rem;">
+					<i class="addCommon_div2" data_name="1" ></i>
+					<span class="autoSwitchLanguager" id="addDevice_step_2">使设备处于网关的有效通信距离内</span><br/>
+				</div>
+			</div>
+		</section>
+
+		<section class="addSensorBtn">
+			<a href="javascript:;" class="autoSwitchLanguager" id="nextStep">下一步</a>
+		</section>
+		
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var isAllowNext=false;
+		function read(ele) {
+			ele.style.backgroundImage = "url(../../skinSource/img/checkbox_" + ele.getAttribute("data_name") + ".png)";
+			var data_name = ele.getAttribute("data_name");
+			data_name = data_name == 1 ? 2 : 1;
+			ele.setAttribute("data_name", data_name);
+			var first = document.getElementsByClassName("addCommon_div")[0].getAttribute("data_name")
+			var second = document.getElementsByClassName("addCommon_div")[1].getAttribute("data_name")
+			var btn = document.getElementsByClassName("addSensorBtn")[0].getElementsByTagName("a")[0];
+			if(second == "2" && first == second) {
+				isAllowNext=true;
+				btn.style.backgroundImage = "url(../../skinSource/img/bigBtnEnable.png)";
+
+			} else {
+				isAllowNext=false;
+				btn.style.backgroundImage = "url(../../skinSource/img/bigBtnDisable.png)";
+			}
+		}
+		initlan()
+		plus.plusReady(function() {
+			
+		})
+		$(".addSensorBtn").on("click", function() {
+				window.location = "addDevice_09Self_02.html";
+		})
+		function cancel() {
+			$(".changeName").hide();
+		}
+
+		function bingGateway() {
+			plus.gatewayCmd.goToBind(function() {})
+		}
+	</script>
+
+</html>

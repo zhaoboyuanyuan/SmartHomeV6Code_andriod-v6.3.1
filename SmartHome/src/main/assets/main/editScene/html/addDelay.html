@@ -1,0 +1,579 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>添加延时</title>
+	<link rel="stylesheet" type="text/css" href="../css/base.css" />
+	<link rel="stylesheet" type="text/css" href="../css/editok.css" />
+	<link rel="stylesheet" type="text/css" href="../css/mobiscroll.custom-2.5.2.min.css" />
+</head>
+
+<body>
+	<header class="header">
+		<div class="header_top">
+			<a href="javascript:window.history.back(-1);"></a>
+			<a href="javascript:;" class="autoSwitchLanguager" key="addDelay">添加延时</a>
+			<a href="javascript:;" id="finishDelay" key="complete" class="autoSwitchLanguager" style="display:inline-block;height: auto;line-height: 2rem;margin-top: 1.2rem;">完成</a>
+		</div>
+	</header>
+	<section>
+		<div class="delay_btn"><span key="addDelay" class="autoSwitchLanguager">添加延时</span>
+			<div class="switch"><i data-state="off" id="on"></i></div>
+		</div>
+	</section>
+	<input type="text" id="demo" readonly="readonly" style="top:7rem;" />
+</body>
+<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/mobiscroll.core-2.5.2.js" type="text/javascript" charset="utf-8"></script>
+<script src="../build/navigator.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../build/addDelay.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var info = window.sysfun;
+	info.init("V6Scene");
+	var arr = new Array();
+	initlan()
+	plus.plusReady(function () {
+		plus.gatewayCmd.androidBack(function () {
+			window.history.back(-1);
+		});
+		//添加延时页点击完成按钮操作
+		$("#finishDelay").on("touchend", function () {
+			var delay = ''
+			var deviceState;
+			//判断延时开关
+			if ($("#on").attr("data-state") == "off") {
+				//延时开关关闭，延时为0
+				info.setItem("deviceDelay", "0")
+			} else {
+				//延时开关打开，存储延时时间
+				delay = $(".dwv").html();
+				var minute = parseInt(delay.substring(0, delay.indexOf(" "))) * 60
+				var scend = parseInt(delay.substring(delay.indexOf(" "), delay.length))
+				info.setItem("deviceDelay", minute + scend)
+			}
+			if (info.getItem("deviceState") == lang_fortify ||
+				info.getItem("deviceState") == lang_open ||
+				info.getItem("deviceState") == lang_normalAlarm ||
+				info.getItem("deviceState") == lang_openSingle) {
+				//部分设备设置的设备状态命令
+				deviceState = "1"
+			} else if (info.getItem("deviceState") == lang_fireAlarm) {
+				deviceState = "2";
+			}
+			//窗帘电机
+			else if (info.getItem("deviceState").indexOf("80_") >= 0) {
+				deviceState = info.getItem("deviceState").split("_")[1];
+				info.setItem("deviceState", deviceState + "%")
+				if (deviceState == "0") {
+					info.setItem("deviceState", lang_closeSingle)
+				} else if (deviceState == "100") {
+					info.setItem("deviceState", lang_openSingle)
+				}
+				if (info.getItem("type") == "80") {
+					if ((deviceState + "").length == 1) {
+						deviceState = "100" + deviceState;
+					} else if ((deviceState + "").length == 2) {
+						deviceState = "10" + deviceState;
+					} else {
+						deviceState = "1" + deviceState;
+					}
+				} else if (info.getItem("type") == "Co") {
+					if ((deviceState + "").length == 1) {
+						deviceState = "00" + deviceState;
+					} else if ((deviceState + "").length == 2) {
+						deviceState = "0" + deviceState;
+					} else {
+						deviceState = "" + deviceState;
+					}
+				}
+
+			} else if (info.getItem("deviceState").indexOf("12_") >= 0) {
+				deviceState = info.getItem("deviceState").split("_")[1];
+				info.setItem("deviceState", deviceState + "%")
+				if ((deviceState + "").length == 1) {
+					deviceState = "00" + deviceState;
+				} else if ((deviceState + "").length == 2) {
+					deviceState = "0" + deviceState;
+				} else {
+					deviceState = "" + deviceState;
+				}
+			} else if (info.getItem("deviceState").indexOf("81_") >= 0) {
+				deviceState = info.getItem("deviceState").split("_")[1];
+				info.setItem("deviceState", deviceState + "%")
+				if ((deviceState + "").length == 1) {
+					deviceState = "00" + deviceState;
+				} else if ((deviceState + "").length == 2) {
+					deviceState = "0" + deviceState;
+				} else {
+					deviceState = "" + deviceState;
+				}
+				if (info.getItem('num') == 1) {
+					//一路
+					if (deviceState == "000") {
+						info.setItem("deviceState", "1:" + lang_closeSingle)
+					} else if (deviceState == "100") {
+						info.setItem("deviceState", "1:" + lang_openSingle)
+					} else {
+						info.setItem("deviceState", "1:" + (parseInt(deviceState) + "%"))
+					}
+					deviceState = "1" + deviceState + '9000';
+				} else if (info.getItem('num') == 2) {
+					//二路
+					if (deviceState == "000") {
+						info.setItem("deviceState", "2:" + lang_closeSingle)
+					} else if (deviceState == "100") {
+						info.setItem("deviceState", "2:" + lang_openSingle)
+					} else {
+						info.setItem("deviceState", "2:" + (parseInt(deviceState) + "%"))
+					}
+					deviceState = "90001" + deviceState;
+				}
+			} else {
+				deviceState = "0";
+			}
+			if (info.getItem("type") == "Ai") {
+				//DIN计量开关 移动计量插座
+				if (info.getItem("deviceState") == lang_switch_on) {
+					deviceState = "11"
+				} else if (info.getItem("deviceState") == lang_switch_off) {
+					deviceState = "10";
+				} else {
+					deviceState = "13";
+				}
+			} else if (info.getItem("type") == "77") {
+				if (info.getItem("deviceState") == lang_switch_on) {
+					deviceState = "11"
+				} else {
+					deviceState = "10";
+				}
+			} else if (info.getItem("type") == "Ar" || info.getItem("type") == "65" || info.getItem("type") == "25" || info.getItem(
+					"type") == "Au") {
+				//窗帘控制器
+				if (info.getItem("deviceState") == lang_openSingle) {
+					deviceState = "2"
+				} else if (info.getItem("deviceState") == lang_closeSingle) {
+					deviceState = "3"
+				} else {
+					deviceState = "1";
+				}
+			} else if (info.getItem("type") == "Bh") {
+				//两路窗帘
+				if (info.getItem("num") == 1) {
+					if (info.getItem("deviceState") == lang_openSingle) {
+						deviceState = "124"
+					} else if (info.getItem("deviceState") == lang_stopSingle) {
+						deviceState = "114";
+					} else if (info.getItem("deviceState") == lang_closeSingle) {
+						deviceState = "134";
+					}
+				} else if (info.getItem("num") == 2) {
+					if (info.getItem("deviceState") == lang_openSingle) {
+						deviceState = "142";
+					} else if (info.getItem("deviceState") == lang_stopSingle) {
+						deviceState = "141";
+					} else if (info.getItem("deviceState") == lang_closeSingle) {
+						deviceState = "143";
+					}
+				}
+			} else if (info.getItem("type") == "A6") {
+				//门铃声光器
+				if (info.getItem("deviceState") == lang_play) {
+					deviceState = "11"
+				}
+			} else if (info.getItem("type") == "D8") {
+				//mini网关声光设备
+				var mode = info.getItem("deviceState").split("_")[0];
+				var D8data = info.getItem("deviceState").split("_")[1];
+				if (mode == lang_D8_voice1) {
+					deviceState = "301" + D8data
+				} else if (mode == lang_D8_voice2) {
+					deviceState = "302" + D8data
+				} else if (mode == lang_D8_voice3) {
+					deviceState = "303" + D8data
+				} else if (mode == lang_D8_voice4) {
+					deviceState = "304" + D8data
+				} else if (mode == lang_D8_voice5) {
+					deviceState = "305" + D8data
+				} else if (mode == lang_D8_voice6) {
+					deviceState = "306" + D8data
+				} else if (mode == lang_D8_voice7) {
+                    deviceState = "307" + D8data
+                } else if (mode == lang_D8_voice8) {
+                    deviceState = "308" + D8data
+                } else if (mode == lang_D8_voice9) {
+                    deviceState = "309" + D8data
+                } else if (mode == lang_D8_voice10) {
+                    deviceState = "310" + D8data
+                } else if (mode == lang_D8_voice11) {
+                    deviceState = "311" + D8data
+                }
+				if (D8data == lang_D8_color1) {
+					deviceState = "101"
+				} else if (D8data == lang_D8_color2) {
+					deviceState = "105"
+				} else if (D8data == lang_D8_color3) {
+					deviceState = "106"
+				} else if (D8data == lang_D8_color4) {
+					deviceState = "103"
+				} else if (D8data == lang_D8_color5) {
+					deviceState = "102"
+				} else if (D8data == lang_D8_color6) {
+					deviceState = "107"
+				}
+				if (mode == lang_D8_mode1) {
+					deviceState = deviceState + "00"
+				} else if (mode == lang_D8_mode2) {
+					deviceState = deviceState + "01"
+				} else if (mode == lang_D8_mode3) {
+					deviceState = deviceState + "02"
+				} else if (mode == lang_D8_mode4) {
+					deviceState = deviceState + "03"
+				} else if (mode == lang_D8_mode5) {
+					deviceState = deviceState + "04"
+				}
+				info.setItem("deviceState", D8Text(deviceState));
+			} else if (info.getItem("type") == "16") {
+				//wulian单路开关
+				if (info.getItem("deviceState") == lang_switch_on) {
+					deviceState = "1"
+				} else {
+					deviceState = "0";
+				}
+			} else if (info.getItem("deviceState").indexOf("Av_") >= 0) {
+				//触摸式调光开关
+				deviceState = info.getItem("deviceState").split("_")[1];
+				info.setItem("deviceState", deviceState + "%");
+				info.setItem("switchName", lang_switch_on);
+				if ((deviceState + "") == 0) {
+					info.setItem("switchName", lang_switch_off);
+					deviceState = "20";
+				} else if ((deviceState + "").length == 1) {
+					deviceState = "100" + deviceState;
+				} else if ((deviceState + "").length == 2) {
+					deviceState = "10" + deviceState;
+				} else {
+					deviceState = "1" + deviceState;
+				}
+			} else if (info.getItem("deviceState").indexOf("Cc_") >= 0) {
+				//触摸式调光开关
+				deviceState = info.getItem("deviceState").split("_")[1];
+				info.setItem("deviceState", deviceState + "%");
+				info.setItem("switchName", lang_switch_on);
+				if ((deviceState + "") == 0) {
+					info.setItem("switchName", lang_switch_off);
+					deviceState = "20";
+				} else if ((deviceState + "").length == 1) {
+					deviceState = "100" + deviceState;
+				} else if ((deviceState + "").length == 2) {
+					deviceState = "10" + deviceState;
+				} else {
+					deviceState = "1" + deviceState;
+				}
+			} else if (info.getItem("type") == "Ap" ||
+				info.getItem("type") == "Bm" ||
+				info.getItem("type") == "Oi" ||
+				info.getItem("type") == "82" ||
+				info.getItem("type") == "DD" ||
+				info.getItem("type") == "OF" ||
+				info.getItem("type") == "Oj" ||
+				info.getItem("type") == "D9" ||
+				info.getItem("type") == "Ba" ||
+				info.getItem("type") == "Be" ||
+				info.getItem("type") == "OZ" ||
+				info.getItem("type") == "Ol" ||
+				info.getItem("type") == "Ok" ||
+				info.getItem("type") == "On" ||
+				info.getItem("type") == "61" ||
+				info.getItem("type") == "62" ||
+				info.getItem("type") == "63" ||
+				info.getItem("type") == "64" ||
+				info.getItem("type") == "Aj" ||
+				info.getItem("type") == "At" ||
+				info.getItem("type") == "Af" ||
+				info.getItem("type") == "Br" ||
+				info.getItem("type") == "Bs" ||
+				info.getItem("type") == "Ao" ||
+				info.getItem("type") == "An" ||
+				info.getItem("type") == "Am" ||
+				info.getItem("type") == "D7" ||
+				info.getItem("type") == "90" ||
+				info.getItem("type") == "22" ||
+				info.getItem("type") == "23" ||
+				info.getItem("type") == "24" ||
+				info.getItem("type") == "A2" ||
+				info.getItem("type") == "Bo" ||
+				info.getItem("type") == "B9" ||
+				info.getItem("type") == "28" ||
+				info.getItem("type") == "OW" ||
+				info.getItem("type") == "Bc" ||
+				info.getItem("type") == "Bd" ||
+				info.getItem("type") == "Bf" ||
+				info.getItem("type") == "Bg" ||
+				info.getItem("type") == "OP" ||
+				info.getItem("type") == "Bn" ||
+				info.getItem("type") == "Bq" ||
+				info.getItem("type") == "Bp" ||
+				info.getItem("type") == "Bu" ||
+				info.getItem("type") == "Bv" ||
+				info.getItem("type") == "a0" ||
+				info.getItem("type") == "Bw" ||
+				info.getItem("type") == "Bx" ||
+                info.getItem("type") == "By" ||
+                info.getItem("type") == "91" ||
+                info.getItem("type") == "Ca" ||
+				info.getItem("type") == "Cb" ||
+                info.getItem("type") == "13" ||
+                info.getItem("type") == "Cj" ||
+				info.getItem("type") == "Op" ||
+				info.getItem("type") == "Cl" ||
+				info.getItem("type") == "Cm" ||
+				info.getItem("type") == "Cn" ||
+                info.getItem("type") == "Ck") {
+				// wulian 地暖 //中央空调 //单路两路三路开关 //内嵌一路二路开关
+				deviceState = info.getItem("epData");
+			} else if (info.getItem("type") == "Aw") {
+				//Aw 1\2模组开关
+				if (info.getItem("deviceState") == lang_switch_on) {
+					deviceState = "11"
+				} else if (info.getItem("deviceState") == lang_switch_off) {
+					deviceState = "10";
+				} else if (info.getItem("deviceState") == lang_switch_cut) {
+					deviceState = "13";
+				} else if (info.getItem("deviceState") == aw_bell_short) {
+					info.setItem("epData", "50")
+					deviceState = "50";
+				} else if (info.getItem("deviceState") == aw_bell_long) {
+					info.setItem("epData", "511")
+					deviceState = "511";
+				} else if (info.getItem("deviceState") == aw_bell_stop) {
+					info.setItem("epData", "510")
+					deviceState = "510";
+				}
+			} else if (info.getItem("type") == "Ax") {
+				//判断wulian三路开关设置的设备状态
+				if (info.getItem("num") == 1) {
+					if (info.getItem("deviceState") == lang_switch_on) {
+						deviceState = "1122"
+					} else if (info.getItem("deviceState") == lang_switch_off) {
+						deviceState = "1022";
+					} else {
+						deviceState = "1322"
+					}
+				} else if (info.getItem("num") == 2) {
+					if (info.getItem("deviceState") == lang_switch_on) {
+						deviceState = "1212"
+					} else if (info.getItem("deviceState") == lang_switch_off) {
+						deviceState = "1202";
+					} else {
+						deviceState = "1232"
+					}
+				} else if (info.getItem("num") == 3) {
+					if (info.getItem("deviceState") == lang_switch_on) {
+						deviceState = "1221"
+					} else if (info.getItem("deviceState") == lang_switch_off) {
+						deviceState = "1220";
+					} else {
+						deviceState = "1223"
+					}
+				}
+			}
+			//延时任务添加设备的actionArray
+			var dataInfo = {
+				"type": '2',
+				"object": info.getItem("deviceID") + '>' + info.getItem("num") + '>' + info.getItem("type"),
+				"epData": deviceState, //设备状态命令
+				"delay": info.getItem("deviceDelay"), //延时
+				"name": info.getItem("deviceName"), //设备名称
+				"epName": info.getItem("switchName"), //设备名称
+				"deviceState": info.getItem("deviceState"), //设置的设备状态
+				"deviceIcon": info.getItem("deviceIcon"), //设备icon
+				"roomName": info.getItem("roomName"), //设备分区
+				"editUrl": info.getItem("editUrl")
+			}
+			//内嵌式二路开关
+			if (info.getItem("type") == "Am" ||
+				info.getItem("type") == "An" ||
+				info.getItem("type") == "Ao" ||
+				info.getItem("type") == "Av" ||
+				info.getItem("type") == "Ap" ||
+				info.getItem("type") == "Bh" ||
+				info.getItem("type") == "Oi" ||
+				info.getItem("type") == "82" ||
+				info.getItem("type") == "OF" ||
+				info.getItem("type") == "Oj" ||
+				info.getItem("type") == "D7" ||
+				info.getItem("type") == "Aw" ||
+				info.getItem("type") == "Ax" ||
+				info.getItem("type") == "A1" ||
+				info.getItem("type") == "81" ||
+					info.getItem("type") == "Cc") {
+				//增加开关名
+
+				if (info.getItem("switchName")) {
+					dataInfo.switchName = info.getItem("switchName");
+					dataInfo.epName = info.getItem("switchName");
+				}
+			}
+			if (info.getItem("type") == "B9") {
+				if (info.getItem("num") == 1) {
+					if (info.getItem("switchName")) {
+						dataInfo.switchName = info.getItem("switchName");
+					}
+				} else if (info.getItem("num") == 2) {
+					dataInfo.description = info.getItem("deviceState");
+				}
+			}
+			if (info.getItem("type") == "OW" ||
+				info.getItem("type") == "Bc" ||
+				info.getItem("type") == "Bd" ||
+				info.getItem("type") == "Bf" ||
+				info.getItem("type") == "Bg" ||
+				info.getItem("type") == "OP" ||
+				info.getItem("type") == "Bn" ||
+				info.getItem("type") == "Bq" ||
+				info.getItem("type") == "22" ||
+				info.getItem("type") == "23" ||
+				info.getItem("type") == "A2" ||
+				info.getItem("type") == "Bo") {
+				dataInfo.description = info.getItem("deviceState");
+			}
+
+			if (info.getItem("type") == "OZ" || info.getItem("type") == "Ol" || info.getItem("type") == "a0" || info.getItem("type") == "Op") {
+				dataInfo.description = info.getItem("description");
+			}
+			if (info.getItem("type") == "CMICA2" || info.getItem("type") == "CMICA3" || info.getItem("type") == "CMICA4" ||
+				info.getItem("type") == "CMICA5" || info.getItem("type") == "CMICA6") {
+				dataInfo.description = info.getItem("description");
+				dataInfo.type = info.getItem("actionType");
+				dataInfo.epData = info.getItem("epData");
+				deviceState = info.getItem("epData");
+			}
+
+			//测试向往背景音乐Type4
+			if (info.getItem("type") == "XW01" || info.getItem("type") == "HS05" || info.getItem("type") == "IF02") {
+				dataInfo.type = "4";
+				dataInfo.epData = info.getItem("epData");
+			}
+
+			if (info.getItem("actionArray") == null) {
+				arr.push(dataInfo);
+				info.setItem("actionArray", JSON.stringify(arr))
+			} else {
+				arr = JSON.parse(info.getItem("actionArray"));
+				var exist = false;
+				arr.map(function (list, i) {
+					if (list.type != 0) {
+						if (i == parseInt(info.getItem("index"))) {
+							list.delay = info.getItem("deviceDelay");
+							list.epData = deviceState;
+							list.object = info.getItem("deviceID") + '>' + info.getItem("num") + '>' + info.getItem("type");
+							list.name = info.getItem("deviceName");
+							list.deviceState = info.getItem("deviceState");
+							list.deviceIcon = info.getItem("deviceIcon");
+							list.roomName = info.getItem("roomName");
+							if (info.getItem("actionType")) {
+								list.type = info.getItem("actionType");
+							} else {
+								list.type = "2";
+							}
+							if (info.getItem("description")) {
+								list.description = info.getItem("description");
+							}
+							if (info.getItem("switchName")) {
+								list.switchName = info.getItem("switchName");
+								list.epName = info.getItem("switchName");
+							}
+							if (info.getItem("type") == "XW01" || info.getItem("type") == "HS05" || info.getItem("type") == "IF02") {
+								list.type = "4";
+								list.epData = info.getItem("epData");
+							}
+							exist = true;
+						}
+					}
+				});
+				if (exist == false) {
+					arr.push(dataInfo)
+				}
+				info.setItem("actionArray", JSON.stringify(arr))
+			}
+			info.removeItem("deviceName");
+			info.removeItem("deviceID");
+			info.removeItem("num");
+			info.removeItem("deviceState");
+			info.removeItem("deviceDelay");
+			info.removeItem("switchName");
+			if(info.getItem("sourcePage") === "recommend"){
+			    window.location = "recommendScene.html?addTask=true"
+			}else{
+                window.location = "editScene.html?addTask=true"
+			}
+		})
+	})
+
+	function D8Text(epData) {
+		var mode = epData.substring(0, 3);
+		var mode_1 = epData.substring(3, 5);
+		var voiceOrLight = epData.substring(0, 1);
+		var State;
+		if (mode == "301") {
+			State = lang_D8_voice1
+		} else if (mode == "302") {
+			State = lang_D8_voice2
+		} else if (mode == "303") {
+			State = lang_D8_voice3
+		} else if (mode == "304") {
+			State = lang_D8_voice4
+		} else if (mode == "305") {
+			State = lang_D8_voice5
+		} else if (mode == "306") {
+			State = lang_D8_voice6
+		} else if (mode == "307") {
+            State = lang_D8_voice7
+        } else if (mode == "308") {
+            State = lang_D8_voice8
+        } else if (mode == "309") {
+            State = lang_D8_voice9
+        } else if (mode == "310") {
+            State = lang_D8_voice10
+        } else if (mode == "311") {
+            State = lang_D8_voice11
+        }
+		if (mode == "101") {
+			State = lang_D8_color1
+		} else if (mode == "105") {
+			State = lang_D8_color2
+		} else if (mode == "106") {
+			State = lang_D8_color3
+		} else if (mode == "103") {
+			State = lang_D8_color4
+		} else if (mode == "102") {
+			State = lang_D8_color5
+		} else if (mode == "107") {
+			State = lang_D8_color6
+		}
+		if(voiceOrLight == "1"){
+            if (mode_1 == "00") {
+                State = lang_D8_mode1;
+            } else if (mode_1 == "01") {
+                State = lang_D8_mode2 + " " + State;
+            } else if (mode_1 == "02") {
+                State = lang_D8_mode3 + " " + State;
+            } else if (mode_1 == "03") {
+                State = lang_D8_mode4 + " " + State;
+            } else if (mode_1 == "04") {
+                State = lang_D8_mode5 + " " + State;
+            }
+		}else if(voiceOrLight == "3"){
+            State = State + " " + parseInt(mode_1) + "%"
+		}
+		return State;
+	}
+</script>
+
+</html>

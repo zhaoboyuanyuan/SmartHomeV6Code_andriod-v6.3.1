@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>创建临时用户</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/mui.picker.min.css">
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/set.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" key="createTemAc" href="javascript:;">创建临时用户</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="content mui-content">
+			<div class="createInput" style="margin-top:2rem">
+				<span style="width:27%" class="autoSwitchLanguager" key="name">用户名</span><input id="userName" style="opacity: 1" disabled="disabled" key="inputName" class="autoSwitchLanguager" maxlength="20" type="text">
+			</div>
+			<div class="createInput">
+				<span style="width:27%" class="autoSwitchLanguager" key="passWord">密码</span><input id="pwd" style="opacity: 1" type="password" disabled="disabled"><i class="look"></i>
+			</div>
+			<strong class="autoSwitchLanguager" key="time">密码有效期</strong>
+			<div class="createInput mui-content-padded">
+				<span class="autoSwitchLanguager" key="begin" style="width:27%">开始</span>
+				<button id="pickDateBtn" type="button" class="btn mui-btn mui-btn-block"></button>
+			</div>
+			<div class="createInput">
+				<span class="autoSwitchLanguager" key="end" style="width:27%">结束</span>
+				<button id="pickDateBtn1" type="button" class="btn mui-btn mui-btn-block"></button>
+			</div>
+		</section>
+	</body>
+	<script src="js/mui.min.js"></script>
+	<script src="js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		initlan()
+		$("#pwd").on("input propertychange", function() {
+			if($(this).val().length >= 6) {
+				$(this).val($(this).val().substr(0, 6))
+				//console.log($(this).val())
+			}
+		})
+		var isClick = true;
+		$(".look").on("click", function() {
+			if(isClick == true) {
+				$(this).css({ "background": "url(fonts/icon_look.png) no-repeat center center", "background-size": "2rem auto" })
+				$(this).siblings("input").attr("type", "text")
+				isClick = false
+			} else {
+				$(this).css({ "background": "url(fonts/icon_close.png) no-repeat center center", "background-size": "2rem auto" })
+				$(this).siblings("input").attr("type", "password")
+				isClick = true
+			}
+		})
+		var PWD, ST, ET, NAME, DEVICEID, GWID;
+		var type = getUrlParam("type");
+		plus.plusReady(function() {
+			PWD = decodeURI(getUrlParam("pwd"));
+			ST = decodeURI(getUrlParam("st"));
+			ET = decodeURI(getUrlParam("et"));
+			NAME = decodeURI(getUrlParam("name"));
+			$("#pickDateBtn").html(time(ST))
+		    $("#pickDateBtn1").html(time(ET))
+		    $("#pwd").val(PWD)
+		    $("#userName").val(NAME)
+            $("#back").on("click",function(){
+                if(type === "Bf"){
+                    window.location = "accountManageForBf.html"
+                }else if(type === "Bg"){
+                    window.location = "accountManageForBg.html"
+                }else if(type === "Bq"){
+                    window.location = "accountManageForBq.html"
+                }else {
+                    window.location = "accountManage.html"
+                }
+            })
+		});
+		function time(t){
+		 return	t.substring(0,4) + "/" + t.substring(4,6) +"/" + t.substring(6,8) +" "+  t.substring(8,10) + ":"+  t.substring(10,12)
+		}
+	</script>
+
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+
+    <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/thermostat.css"/>
+
+    <script src="../../source/mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/mui/js/mui.picker.all.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header" style="box-sizing: content-box;-webkit-box-sizing: content-box;z-index: 105;">
+    <a href="javascript:window.history.back(-1);"></a>
+    <a id="setDeviceState_tittle" class="autoSwitchLanguager" href="javascript:;">设置设备状态</a>
+    <a key="customScene_sure" class="complete autoSwitchLanguager" onclick="save()" href="javascript:;">确定</a>
+</header>
+<section class="mainListView">
+    <ul>
+        <li onclick="clickliAction(this)"><a class="autoSwitchLanguager" key="houseKeeper1_Oi_Open">开关</a><dd><i><em></em></i></dd></li>
+        <li onclick="clickliAction(this)"><a class="autoSwitchLanguager" key="houseKeeper1_Oi_Type">模式</a><a></a><i></i></li>
+        <li onclick="clickliAction(this)"><a class="autoSwitchLanguager" key="houseKeeper1_Oi_Temperature">温度</a><a></a><i></i></li>
+        <li onclick="clickliAction(this)"><a class="autoSwitchLanguager" key="houseKeeper1_82_Speed">风速</a><a></a><i></i></li>
+    </ul>
+</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/thermostat_exChangeForC.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var status = "0";
+    var mode = "FF";//模式
+    var temperature = "FF";//温度
+    var AutoMintemperature = "FF";//温度
+    var AutoMaxtemperature = "FF";//温度
+    var fan = "FF";//"ff"风量
+    initlan();
+
+    var list = $(".mainListView").find("ul").find("li");
+    for(var i = 0;i<list.length;i++){
+        $(".mainListView").find("ul").find("li").get(i).index = i;
+    }
+
+</script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var deviceID = info.getItem("deviceID");
+
+    var temperatureUnit = "00";
+    var temperatureModeType;
+    var systemType;
+    //
+    var deviceSuooortedModes = [];
+    var deviceHeatMinTemperature;
+    var deviceHeatMaxTemperature;
+    var deviceCoolMaxTemperature;
+    var deviceCoolMinTemperature;
+    var deviceSuooortedFans = [];
+    //
+    var devID;
+    var gwID;
+    var ep;
+
+    function sendCmd(gwID,dID,endpointNumber,commandId,parameter){
+        var jsonData = {}
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = dID;
+        jsonData.endpointNumber = endpointNumber;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+        deviceSuooortedFans = [languageUtil.getResource("houseKeeper1_82_Speed1"),languageUtil.getResource("houseKeeper1_82_Speed5")];
+        plus.gatewayCmd.getDeviceInfo(deviceID, function (data) {
+            devID = data.devID;
+            gwID = data.gwID;
+            ep = ~~(data.endpoints[0].endpointNumber)
+            handleData(data);
+            if(!temperatureModeType || !systemType){
+                sendCmd(gwID,devID,ep,0x8010);
+            }
+        })
+        plus.gatewayCmdRush.newDataRefresh(function(data){
+            if(data.cmd == "500" && devID == data.devID){
+                if(!temperatureModeType || !systemType){
+                    handleData(data);
+                }
+            }
+        })
+
+        $(".mainListView").find("ul").find("li").find("i").off("click");
+        $(".mainListView").find("ul").find("li").find("i").on("click", function(){
+            var self = $(this)
+            if($(this).attr("class") == "on") {
+                status = "0"
+            } else {
+                status = "1"
+            }
+            updateStatus();
+        });
+        function updateStatus() {
+            if(status == "0") {
+                $(".mainListView").find("ul").find("li").find("i").removeClass("on")
+//            $(".mainListView ul:first li").hide();
+//            $(".mainListView ul:first li:first").show();
+            } else {
+                $(".mainListView").find("ul").find("li").find("i").addClass("on")
+//            $(".mainListView ul:first li").show();
+            }
+        }
+    })
+
+    function updatelists() {
+        if (mode != "03"){
+            //Auto
+            while($(".mainListView").find("ul").find("li").get(2)){
+                $(".mainListView").find("ul").find("li").get(2).remove();
+            }
+            $(".mainListView").find("ul").append("<li onclick=\"clickliAction(this)\"><a>"+languageUtil.getResource("houseKeeper1_Oi_Temperature")+"</a><a></a><i></i></li>");
+            $(".mainListView").find("ul").append("<li li onclick=\"clickliAction(this)\"><a>"+languageUtil.getResource("houseKeeper1_Oi_Speed")+"</a><a></a><i></i></li>");
+        } else {
+            while($(".mainListView").find("ul").find("li").get(2)){
+                $(".mainListView").find("ul").find("li").get(2).remove();
+            }
+            $(".mainListView").find("ul").append("<li li onclick=\"clickliAction(this)\"><a>"+languageUtil.getResource("houseKeeper1_82_Temperature2")+"</a><a></a><i></i></li>");
+            $(".mainListView").find("ul").append("<li li onclick=\"clickliAction(this)\"><a>"+languageUtil.getResource("houseKeeper1_82_Temperature1")+"</a><a></a><i></i></li>");
+            $(".mainListView").find("ul").append("<li li onclick=\"clickliAction(this)\"><a>"+languageUtil.getResource("houseKeeper1_Oi_Speed")+"</a><a></a><i></i></li>");
+        }
+        var list = $(".mainListView").find("ul").find("li");
+        for(var i = 0;i<list.length;i++){
+            $(".mainListView").find("ul").find("li").get(i).index = i;
+        }
+    }
+
+    function clickliAction(e) {
+        var liIndexNum = e.index;
+        var picker = new mui.PopPicker({});
+        $(".mui-poppicker-btn-cancel").html(languageUtil.getResource("houseKeeper1_Oi_Cancel"));
+        $(".mui-poppicker-btn-ok").html(languageUtil.getResource("houseKeeper1_Oi_Confirm"));
+        switch (liIndexNum){
+            case 1:{
+                picker.setData(deviceSuooortedModes);
+                picker.show(function(item) {
+                    var modeShowStr = item.toString();
+                    var modeShowStrIndex = $.inArray(modeShowStr, deviceSuooortedModes);
+                    if(modeShowStrIndex >= 0){
+                        mode = "0"+(modeShowStrIndex+1);
+                        $(".mainListView ul:first-child li:nth-child(2) a:nth-child(2)").html(modeShowStr);
+                        //刷新列表
+                        updatelists();
+                    }
+                });
+            }
+                break;
+            case 2:{
+                var tempArry = [];
+                if(temperatureUnit == "01"){
+                    for (var i = 50;i <= 90;i++){
+                        tempArry.push(i);
+                    }
+                }else{
+                    for (var i = 10;i <= 32;i+=0.5){
+                        tempArry.push(i);
+                    }
+                }
+                picker.setData(tempArry);
+                picker.show(function(item) {
+                    temperature = item.toString();
+                    AutoMintemperature = item.toString();
+                    $(".mainListView ul:first-child li:nth-child(3) a:nth-child(2)").html(item);
+                });
+            }
+                break;
+            case 3:case 4:{
+            if ((mode != "03" && liIndexNum==3)){
+                picker.setData(deviceSuooortedFans);
+                picker.show(function(item) {
+                    var FanShowStr = item.toString();
+                    var FanShowStrIndex = $.inArray(FanShowStr, deviceSuooortedFans);
+                    if(FanShowStrIndex >= 0){
+                        fan = "0" + FanShowStrIndex;
+                        $(".mainListView ul:first-child li:nth-child(4) a:nth-child(2)").html(FanShowStr);
+                    }
+                });
+            }else if (liIndexNum==4){
+                picker.setData(deviceSuooortedFans);
+                picker.show(function(item) {
+                    var FanShowStr = item.toString();
+                    var FanShowStrIndex = $.inArray(FanShowStr, deviceSuooortedFans);
+                    if(FanShowStrIndex >= 0){
+                        fan = "0" + FanShowStrIndex;
+                        $(".mainListView ul:first-child li:nth-child(5) a:nth-child(2)").html(FanShowStr);
+                    }
+                });
+            }else if(liIndexNum == 3 && mode == "03"){
+                var tempArry = [];
+                if(temperatureUnit == "01"){
+                    for (var i = 50;i <= 90;i++){
+                        tempArry.push(i);
+                    }
+                }else{
+                    for (var i = 10;i <= 32;i+=0.5){
+                        tempArry.push(i);
+                    }
+                }
+                picker.setData(tempArry);
+                picker.show(function(item) {
+                    AutoMaxtemperature = item.toString();
+                    $(".mainListView ul:first-child li:nth-child(4) a:nth-child(2)").html(item);
+                });
+            }
+
+        }
+            break;
+        }
+    }
+
+    function handleData(data){
+        for (var i = 0; i < data.endpoints.length; i++) {
+            var endpoint = data.endpoints[i];
+            var endpointNumber = endpoint.endpointNumber;
+            var endpointName = endpoint.endpointName;
+            var endpointType = endpoint.endpointType;
+            var clusters = endpoint.clusters;
+            for (var k = 0; k < clusters.length; k++) {
+                var attributes = clusters[k].attributes;
+                for (var j = 0;j < attributes.length;j++){
+                    var attributeId = attributes[j].attributeId;
+                    var attributeValue = attributes[j].attributeValue;
+                    dealWithData(attributes[j]);
+                }
+            };
+        }
+    }
+
+    function dealWithData(attributeData){
+        var attributeId = attributeData.attributeId;
+        var attributeValue = attributeData.attributeValue;
+        switch (attributeId){
+            case 0x8001:{
+                if (attributeValue.length == 36){
+                    deviceSuooortedModes.length = 0;
+                    var temperatureUnit = attributeValue.substr(4,2);
+                    var temperatureModeType = attributeValue.substr(7,2);
+                    var systemType = attributeValue.substr(9,2);
+                    if((temperatureModeType == "01" || temperatureModeType == "02") && systemType == "01"){
+                        //普通 + 电热 只制热
+                        deviceSuooortedModes = [lang_houseKeeper1_82_Type2];
+                    }else if((temperatureModeType == "01" || temperatureModeType == "02") && systemType == "02"){
+                        //普通 + 电热 只制leng
+                        deviceSuooortedModes = [lang_houseKeeper1_82_Type1];
+                    }else{
+                        deviceSuooortedModes = [lang_houseKeeper1_82_Type2,lang_houseKeeper1_82_Type1,lang_houseKeeper1_82_Type3];
+                    }
+                }
+            }
+                break;
+        }
+    }
+
+    function save() {
+        var epdataStr;
+        if(status == "0"){
+            //off
+            epdataStr = "20";
+            info.setItem("deviceState", languageUtil.getResource('device_status_close'));
+        }else if(status == "1"){
+            epdataStr = "21";
+            info.setItem("deviceState", languageUtil.getResource('device_status_open'));
+        }
+        if(mode == "01"){
+            epdataStr = epdataStr+",31000000000";
+        }else if(mode == "02"){
+            epdataStr = epdataStr+",31000000000";
+        }else if(mode == "03"){
+            epdataStr = epdataStr+",33000000000";
+        }
+
+        if(mode == "01"){
+            epdataStr = epdataStr+",310" + intTo16(temperature) +"0000";
+        }else if(mode == "02"){
+            epdataStr = epdataStr+",320"+"0000"+intTo16(temperature);
+        }else if(mode == "03"){
+            epdataStr = epdataStr+",330"+intTo16(AutoMintemperature)+intTo16(AutoMaxtemperature);
+        }else{
+
+        }
+        if(fan == "00"){
+            epdataStr = epdataStr+",40";
+        }else if(fan == "01"){
+            epdataStr = epdataStr+",41";
+        }
+        info.setItem("epData", epdataStr);
+        window.location = "setDelay_timeTask.html"
+    }
+    function intTo16(v) {
+        var intNum = parseInt(v);
+        if(temperatureUnit == "01"){
+            intNum = exChange(intNum)*100;
+        }else{
+            intNum = intNum*100;
+        }
+
+        var sendNum = intNum.toString();
+        if(sendNum.length == 3){
+            sendNum = "0"+sendNum;
+        }
+        return sendNum;
+    }
+</script>
+</html>

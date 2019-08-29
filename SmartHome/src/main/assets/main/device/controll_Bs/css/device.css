@@ -1,0 +1,477 @@
+@charset "utf-8";
+*{
+	-webkit-touch-callout:none;  /*系统默认菜单被禁用*/
+	-webkit-user-select:none; /*webkit浏览器*/
+	-khtml-user-select:none; /*早期浏览器*/
+	-moz-user-select:none;/*火狐*/
+	-ms-user-select:none; /*IE10*/
+	user-select:none;
+}
+input,textarea {
+	-webkit-user-select:auto; /*webkit浏览器*/
+	margin: 0px;
+	padding: 0px;
+	outline: none;
+}
+/*底部按钮---start*/
+.bottomcontrl_show{
+	text-align:center;
+	width: 100%;
+	left: 0%;
+	height: 10rem;
+	overflow:hidden;
+	position:absolute;
+	bottom:0;
+	margin-bottom: 1.5rem;
+}
+
+.bottomcontrl_show div{
+	display:block;
+	float: left;
+	width:33.33333%;
+	height:9rem;
+	text-align: center;
+}
+.contrl_mode{
+}
+.contrl_fan{
+
+}
+.contrl_ds{
+}
+
+.bottomcontrl_show i{
+}
+.contrl_mode i:nth-child(1){
+	display:inline-block;
+	width:4.5rem;
+	height:4.6rem;
+	background:url(../img/icon_mode.png) no-repeat center center;
+	background-size: 100% auto;
+}
+.contrl_fan p{
+	display:inline-block;
+	width:7rem;
+	height:5rem;
+	font-size: 3.4rem;
+	line-height:5rem;
+}
+.contrl_fan i{
+	display:inline-block;
+	position:absolute;
+	top: 0px;
+	right: 2.5rem;
+	width:1.5rem;
+	height:1.5rem;
+	background:url(../img/icon_wenbiao.png) no-repeat center center;
+	background-size: 100% auto;
+}
+
+
+.contrl_ds p{
+	display:inline-block;
+	width:7rem;
+	height:5rem;
+	font-size: 3.4rem;
+	line-height:5rem;
+}
+
+.contrl_ds i{
+	display:inline-block;
+	position:absolute;
+	top: 0px;
+	left: 8.5rem;
+	width:1.5rem;
+	height:1.5rem;
+	background:url(../img/icon_wenbiao.png) no-repeat center center;
+	background-size: 100% auto;
+}
+
+.bottomcontrl_show span{
+	display:block;
+	width:100%;
+	height: 4rem;
+	margin-top: 0.5rem;
+	font-size: 1.6rem;
+	/*color: #4D5761;*/
+}
+/*底部按钮---end*/
+/*顶部---start*/
+.topcontrl_show{
+	width: 100%;
+	height: 8rem;
+	/*overflow:hidden;*/
+	/*position:absolute;*/
+	margin-top: 1.5rem;
+}
+.contrl_button{
+	display:inline-block;
+	width: 8rem;
+	height: 8rem;
+	position:absolute;
+	left:4.5rem;
+	text-align: center;
+}
+.contrl_button i{
+	display:inline-block;
+	background:url(../img/icon_closebtn.png) no-repeat center center;
+	width:4.5rem;
+	height:4.5rem;
+	background-size: 100% auto;
+}
+.contrl_button span{
+	display:block;
+	width:100%;
+	height: 4rem;
+	margin-top: 0.5rem;
+	font-size: 1.5rem;
+}
+.contrl_temp{
+	display:inline-block;
+	width: 8rem;
+	height: 8rem;
+	position:absolute;
+	right:4rem;
+	text-align: center;
+}
+
+.contrl_temp div{
+	display:inline-block;
+	background:url(../img/icon_leave.png) no-repeat center center;
+	width:5rem;
+	height:5rem;
+	background-size: 100% auto;
+}
+.contrl_temp span{
+	display:block;
+	width:100%;
+	height: 4rem;
+	font-size: 1.5rem;
+}
+/*顶部---end*/
+/*中部字显---start*/
+.num_show{
+	width: 100%;
+	height: 11rem;
+	text-align: center;
+}
+.num_show div{
+	display:inline-block;
+	position: relative;
+	width: 80%;
+}
+.num_show div p{
+	font-size: 10rem;
+}
+.num_show div i{
+	display:inline-block;
+	position:absolute;
+	top: 0px;
+	right: 3rem;
+	width:4.0rem;
+	height:4.0rem;
+	background:url(../img/icon_wenbiao.png) no-repeat center center;
+	background-size: 100% auto;
+}
+/*中部字显---end*/
+/*中部块---start*/
+.smartsection_show{
+	margin-top: 21.7rem;
+	width: 50%;
+	margin-left: 25%;
+	background: #EEF0F1;
+	border-radius:0.8rem;
+}
+.smartsection_show div{
+	display:inline-block;
+	margin-top: 1.2rem;
+	margin-bottom: 1.2rem;
+	width: 100%;
+	text-align: center;
+}
+.smartsection_show div p{
+	margin-top: 0.5rem;
+	font-size: 1.5rem;
+}
+/*中部块---end*/
+/*中部滑动区域---start*/
+.num_scroll_show{
+	margin-top: -6rem;
+	width: 100%;
+	text-align: center;
+	height: 22rem;
+}
+.num_scroll_show div{
+	margin:0px;
+	text-align:center;
+	height:7rem;
+	display:block;
+	width: 100%;
+	position:absolute
+}
+.num_scroll_show p{
+	display: inline;
+	height:100%;
+	font-size: 8rem;
+	text-align: center;
+	line-height:7rem;
+	overflow:hidden;
+	color: black;
+}
+/*中部滑动区域---end*/
+.num_scroll_Unit{
+	display:inline-block;
+	position:absolute;
+	top: 25rem;
+	right: 6.5rem;
+	width:3.0rem;
+	height:3.0rem;
+	background:url(../img/icon_wenbiao.png) no-repeat center center;
+	background-size: 100% auto;
+}
+
+.preinstall_model{
+	display:inline-block;
+	position:absolute;
+	top: 17rem;
+	/*right: 6.5rem;*/
+	left: 50%;
+	transform: translate(-50%,0%);
+	font-weight: bold;
+}
+
+/*正在保存*/
+.saveToast{
+	position:fixed;
+	left:0;
+	top:6.4rem;
+	width:100%;
+	height:calc(100% - 6.4rem);
+	z-index:555;
+}
+.saveToast div{
+	position:absolute;
+	left:25%;
+	top:50%;
+	width:50%;
+	height:9rem;
+	text-align:center;
+	background:rgba(0,0,0,0.4);
+	border-radius:5px;
+	-webkit-transform:translateY(-50%);
+	transform:translateY(-50%);
+}
+.saveToast div i{
+	display:inline-block;
+	height:6rem;
+	line-height:6rem;
+	font-size:1.4rem;
+	color:#fff;
+}
+.saveToast div p{
+	color:#fff;
+}
+@-webkit-keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+@keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+.saveToast div i em{
+	display:block;
+	float:left;
+	width:2rem;
+	height:6rem;
+	margin-right:1rem;
+	background:url(../img/icon_loading.png) no-repeat center center;
+	background-size: 2rem auto;
+}
+.saveToast div i em.rotate{
+	-webkit-animation: rotate 0.7s linear infinite;
+	animation: rotate 0.7s linear infinite;
+}
+
+/*======================================= 中央空调列表详情页 ========================================*/
+#content{
+	width:100%;
+	height:calc(100% - 10.8rem);
+	overflow:auto;
+	padding-top:6.4rem;
+	margin-bottom:4.4rem;
+}
+.device_list{
+	width:100%;
+	/*overflow:hidden;*/
+}
+.device_list li{
+	box-sizing: border-box;
+	width:100%;
+	height:4.4rem;
+	border-bottom:1px solid #ddd;
+}
+.device_list li a{
+	display:block;
+	width:92%;
+	height:4.4rem;
+	line-height:4.4rem;
+	padding:0 4%;
+}
+.device_list li a span{
+	float:left;
+	display:block;
+	width:50%;
+	height:4.4rem;
+	font-size:1.4rem;
+	color:#333;
+}
+.device_list li a span:first-child{
+	overflow:hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.device_list li a span:last-child{
+	padding:0 6% 0 4%;
+	width:40%;
+	background:url(../img/icon_right.png) no-repeat right center;
+	background-size:0.8rem auto;
+}
+.device_list li a span em{
+	float:right;
+	padding:0 0 0 1rem;
+}
+.mask_btn{
+	position:fixed;
+	left:0;
+	bottom:0;
+	width:100%;
+	height:4.4rem;
+	line-height:4.4rem;
+	border:1px solid #ddd;
+	background:#fff;
+}
+.mask_btn span{
+	box-sizing: border-box;
+	display:block;
+	float:left;
+	width:50%;
+	height:4.4rem;
+	text-align:center;
+	border-right:1px solid #ddd;
+	font-size:1.5rem;
+	color:#333;
+}
+/*---------------------rename重命名-------------------*/
+.mask_rename{
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:99rem;
+	background:rgba(0,0,0,0.4);
+	z-index:999;
+}
+
+.toast{
+	display:none;
+	position:fixed;
+	left:25%;
+	bottom:8rem;
+	width:44%;
+	line-height:2rem;
+	text-align:center;
+	padding:0.8rem 3%;
+	border-radius:5px;
+	background:rgba(0,0,0,.4);
+	font-size: 1.5rem;
+	color:#fff;
+}
+
+.theLast{
+	width:100%;
+	height:3rem;
+	text-align:center;
+	line-height:3rem;
+	/*margin-top:-8rem;*/
+	/*background:#fff;*/
+	color:#535353;
+}
+
+/*重命名弹框*/
+.changeName{
+	display:block;
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0,0.4)
+}
+
+.nameToast{
+	position:absolute;
+	left:12%;
+	top:50%;
+	width:76%;
+	/*height:14rem;*/
+	-webkit-transform:translateY(-50%);
+	-ms-transform:translateY(-50%);
+	-moz-transform:translateY(-50%);
+	transform:translateY(-50%);
+	background:#fff;
+	border-radius:8px;
+	overflow:hidden;
+}
+.nameToast span{
+	display:block;
+	width:100%;
+	margin-top: 2rem;
+	height:5.3rem;
+	line-height:5.3rem;
+	text-align:center;
+	font-size:1.7rem;
+	color:#555;
+}
+.nameToast .name{
+	margin:0 5%;
+	width:90%;
+	background:#f2f2f2;
+	border-radius:5px;
+	overflow:hidden;
+}
+.nameToast .choose_1{
+	margin-top:2rem;
+	border-top:1px solid #d9d9d9;
+}
+.nameToast .choose_1 a{
+	display:block;
+	box-sizing: border-box;
+	float:left;
+	width:50%;
+	height:5.5rem;
+	line-height:5.5rem;
+	text-align:center;
+	border-right:1px solid #d9d9d9;
+	font-size:1.5rem;
+	color:#555;
+}
+.nameToast .choose_1 em:last-child{
+	border-right:0;
+}
+
+.pickerIndex0{
+	z-index: 1000;
+}

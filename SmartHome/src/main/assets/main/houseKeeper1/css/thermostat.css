@@ -1,0 +1,151 @@
+
+body {
+    background-color: #f1f4f8;
+}
+
+header {
+    width: 100%;
+    height: 6.4rem;
+    padding-top: 2rem;
+    background-color: #8dd652;
+}
+.mainListView{
+    margin-top:8.4rem;
+}
+
+.mainListView ul{
+
+}
+
+.mainListView ul li{
+    /*border:1px solid black;*/
+    background: white;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+}
+
+.mainListView ul li a{
+    margin-left: 3rem;
+    font-size: 1.5rem;
+    line-height: 4.5rem;
+}
+
+.mainListView ul li a:nth-child(1){
+}
+
+.mainListView ul li a:nth-child(2){
+    right: 5rem;
+    position:absolute;
+}
+
+.mainListView ul li i{
+    right: 2rem;
+    position:absolute;
+    margin-top: 1.5rem;
+    width: 0.8rem;
+    height: 1.56rem;
+    background: url(../fonts/icon_right.png) no-repeat center center;
+    background-size:100% auto;
+}
+.mainListView ul li:nth-child(1){
+}
+
+/*switch按钮---start*/
+.mainListView ul li dd{
+    width:5rem;
+    height:4.3rem;
+    padding-top:1.7rem;
+    float: right;
+    margin: 0;
+    padding: 0;
+    display: block;
+    -webkit-margin-start: 40px;
+}
+
+.mainListView ul li dd i{
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 2.5rem;
+    border-radius: 2.5rem;
+    background: #ccc;
+}
+.mainListView ul li dd i.on{
+    background: #8dd652;
+}
+
+
+.mainListView ul li dd i.on em{
+    left: 3rem
+}
+
+.mainListView ul li dd i em{
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: #fff;
+}
+/*switch按钮---end*/
+
+/*//////////////////*/
+.middleBtn_section{
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left:2rem;
+    right: 2rem;
+    height:4.5rem;
+    text-align: center;
+}
+.middleBtn{
+    width: 100% !important;
+    height: 4rem !important;
+    font-size: 1.5rem !important;
+    background: #8DD652 !important;
+    border-color: #8DD652 !important;
+    color: white !important;
+}
+.mui-btn{
+    font-size:1.5rem !important;
+    border:0px;
+    color:#8DD652;
+    background-color:rgba(255,255,255,0);
+}
+.mui-btn-blue{
+    /*background-color:#8DD652 !important;*/
+    /*border:1px solid #8DD652 !important;*/
+}
+.mui-poppicker-body{
+    position: relative;
+    width: 100%;
+    height: 20rem;
+    border-top: solid 1px white;
+}
+.mui-pciker-list li{
+    font-size:1.5rem !important;
+}
+.mui-poppicker{
+    -webkit-transform:translateY(25rem);
+}
+.mui-picker{
+    background-color:white;
+}
+.mui-poppicker-header{
+    padding:1rem;
+}
+.mui-pciker-rule
+{
+    height:3rem;
+    line-height:3rem;
+    margin-top:-1.5rem;
+}
+.mui-pciker-list{
+    height:3rem;
+    line-height:3rem;
+    margin-top:-1.5rem;
+}
+/* */

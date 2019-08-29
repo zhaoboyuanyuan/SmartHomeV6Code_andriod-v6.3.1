@@ -1,0 +1,224 @@
+@charset "utf-8";
+
+html,body{
+	width:100%;
+	height:100%;
+	position:fixed;
+	left:0;
+	top:0;
+	background:#fff;
+}
+button{
+	border:0;
+}
+b,strong{
+	font-weight:normal!important;
+}
+/*头部*/
+.header{
+	background:#8dd652;
+}
+.main_con{
+	position:relative;
+	width:100%;
+	height:50%;
+}
+
+.socket_div{
+	width: 50%;
+	height: 100%;
+	float: left;
+	display: inline-block;
+	position: relative;
+}
+
+.main_con .handle{
+	position:absolute;
+	left:50%;
+	top:50%;
+	width:14.8rem;
+	height:14.8rem;
+	text-align:center;
+	-webkit-transform: translate(-50%,-50%);
+	-moz-transform: translate(-50%,-50%);
+	-ms-transform: translate(-50%,-50%);
+	-o-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+	border-radius:50%;
+}
+.main_con .handle .handle_icon{
+	display:block;
+	width:100%;
+	height:100%;
+	background:url(../fonts/icon_load.png) no-repeat center center;
+	background-size:100% auto;
+}
+
+.main_con .handle i{
+	position:absolute;
+	left:50%;
+	top:50%;
+	display:block;
+	width:15rem;
+	height:15rem;
+	-webkit-transform: translate(-50%,-50%);
+	-moz-transform: translate(-50%,-50%);
+	-ms-transform: translate(-50%,-50%);
+	-o-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+
+}
+
+.main_con .handle i[switch_state = on]{
+	background:url(../fonts/icon_socket_on.png) no-repeat center center;
+	background-size:15rem auto;
+}
+
+.main_con .handle i[switch_state = off]{
+	background:url(../fonts/icon_socket_off.png) no-repeat center center;
+	background-size:15rem auto;
+}
+
+@keyframes loading {
+	form{transform: scale(1);-webkit-transform: scale(1);}
+	to{transform: scale(0.9);-webkit-transform: scale(0.9);}
+}
+.main_con .handle .handle_icon.scale{
+	-webkit-animation: loading 0.6s linear infinite alternate;
+	animation: loading 0.6s linear infinite alternate;
+}
+.main_con .handle_btn{
+	position:absolute;
+	left:50%;
+	bottom:0;
+	width:13.5rem;
+	height:4.4rem;
+	-webkit-transform: translateX(-50%);
+	-moz-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
+	-o-transform: translateX(-50%);
+	transform: translateX(-50%);
+	background:#8dd652 url(../fonts/icon_switch.png) no-repeat center center;
+	background-size:2.2rem auto;
+	border-radius:4.4rem;
+}
+.main_con .handle_btn.handle_color{
+	background:#cbd1d9 url(../fonts/icon_switch.png) no-repeat center center;
+	background-size:2.2rem auto;
+}
+
+.bottom_etc{
+	position:fixed;
+	left:0;
+	bottom:0;
+	box-sizing: border-box;
+	width:100%;
+	height:16.5rem;
+	padding:2.1rem 2.9rem;
+	background:#fafafa;
+}
+.handle-data{
+	width:100%;
+	overflow:hidden;
+}
+.handle-data li{
+	width:100%;
+	height:6.1rem;
+	line-height:6.1rem;
+	font-size:1.6rem;
+	color:#333333;
+	border-bottom:1px solid #ebebeb;
+}
+.handle-data li:last-child{
+	border:0;
+}
+.handle-data li span{
+	float:right;
+	width:9rem;
+	height:6.1rem;
+	line-height:6.1rem;
+	font-size:2.2rem;
+}
+.handle-data li span em{
+	font-size:1.6rem;
+}
+#statistics_btn{
+	width: 3.3rem;
+	height: 3.3rem;
+	background: url(../fonts/icon_statistics.png) no-repeat center center;
+	background-size: 3.3rem auto;
+	position: absolute;
+	display: block;
+	left: 100%;
+	top: 5%;
+	transform: translateX(-150%);
+	-webkit-transform: translateX(-150%);
+	-moz-transform: translateX(-150%);
+	-ms-transform: translateX(-150%);
+	-o-transform: translateX(-150%);
+}
+
+/*遮罩层*/
+.overload_mask_layer{
+	display:none;
+	position:fixed;
+	z-index:3000;
+	left:0;
+	top:0rem;
+	width:100%;
+	height:100%;
+	text-align:center;
+	background:rgba(0,0,0,0.4)
+}
+
+.dialog{
+	width: 27rem;
+	position: absolute;
+	left:50%;
+	top:50%;
+	-webkit-transform: translate(-50%,-50%);
+	-moz-transform: translate(-50%,-50%);
+	-ms-transform: translate(-50%,-50%);
+	-o-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+	background:#F2F2F2;
+	border-radius:2.5%;
+}
+
+.dialog div{
+	background: #ccc;
+	line-height: 0.1rem;
+	height: 0.1rem;
+}
+
+.dialog span:nth-child(1){
+	display:block;
+	padding-top: 1.5rem;
+	padding-bottom: 1.5rem;
+	padding-left: 1.2rem;
+	padding-right: 1.2rem;
+	text-align:center;
+	font-size:1.7rem;
+	color: #333333;
+}
+
+.dialog span:nth-child(2){
+	display:block;
+	padding-bottom: 1.5rem;
+	padding-left: 1.2rem;
+	padding-right: 1.2rem;
+	text-align:left;
+	font-size:1.5rem;
+	color: #666666;
+}
+
+.dialog span:nth-child(4){
+	display:block;
+	padding-top: 1.3rem;
+	padding-bottom: 1.3rem;
+	padding-left: 1.2rem;
+	padding-right: 1.2rem;
+	text-align:center;
+	font-size:1.5rem;
+	color: #333333;
+}

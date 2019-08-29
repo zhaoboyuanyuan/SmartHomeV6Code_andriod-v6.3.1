@@ -1,0 +1,170 @@
+/*主题颜色*/
+/*#8dd652*/
+
+
+
+/*公用部分
+ *
+ *  页面背景
+ *  导航栏
+ *  通用长条按钮（纯色-图片）
+ *  通用长条按钮（带边框）---添加设备 下一步
+ * 
+ */
+
+
+/* 私有部分
+ |
+ 添加设备
+    *  开启带加网option选项
+ |
+ 设备详情
+ |
+    *  80窗帘背景
+ 场景
+ |
+    *  创建场景导航栏颜色特殊处理
+    *  场景管家分区及类别筛选颜色换肤
+ 管家
+ |
+ 在线客服
+  
+ * 
+ */
+
+
+/*页面背景*/
+
+html {
+	background: white;
+}
+
+
+/*导航栏*/
+
+.header {
+	/*background:url(../img/bigBtnDisable.png) no-repeat center center;*/
+	background: url(../img/headerBackground.png) no-repeat center center;
+	background-size: 100% 100%
+}
+
+.header_top {
+	padding-top: 2rem;
+	width: 100%;
+	height: 4.4rem;
+}
+
+.header_top a {
+	display: block;
+	float: left;
+	width: 13.7%;
+	height: 4.4rem;
+}
+
+.header_top a:nth-child(2) {
+	width: 72.6%;
+	text-align: center;
+	line-height: 4.4rem;
+	font-size: 1.6rem;
+	color: white;
+	-webkit-tap-highlight-color:transparent;
+}
+header a:nth-child(2){
+	-webkit-tap-highlight-color:transparent;
+}
+.header_top a:first-child {
+	background: url(../img/icon_back.png) no-repeat center center;
+	background-size: 2.2rem auto;
+}
+
+.header_top a:nth-child(3) {
+	text-align: center;
+	line-height: 4.4rem;
+	font-size: 1.4rem;
+	color: #fff;
+}
+
+.header_top a.more {
+	background: url(../img/icon_more.png) no-repeat center center;
+	background-size: 1.8rem auto;
+}
+
+.header_top .complete {
+	font-size: 1.4rem;
+	background: none;
+}
+
+
+/*通用长条按钮*/
+
+.addSensorBtn {
+	overflow: hidden;
+}
+
+.addSensorBtn a {
+	display: block;
+	position: absolute;
+	left: 4%;
+	bottom: 4rem;
+	width: 92%;
+	height: 5rem;
+	line-height: 5rem;
+	text-align: center;
+	font-size: 1.7rem;
+	border-radius: 5px;
+	background: url(../img/bigBtnEnable.png) no-repeat center center;
+	background-size: 100% 100%;
+	color: #fff;
+}
+
+.addSensorBtn .disableBtn {
+	background: url(../img/bigBtnDisable.png) no-repeat center center;
+	background-size: 100% 100%;
+	color: #fff;
+}
+
+
+/* 通用长条按钮（带边框）*/
+
+.step_btn a {
+	background:  #8dd652;
+	color: white;
+	font-size: 1.7rem;
+	border-radius: 5px;
+}
+
+.step_btn a:last-child {
+	background: none;
+	border: 1px solid  #8dd652;
+	color:  #8dd652;
+}
+
+
+/*开启带加网option选项*/
+
+.addCommon_div {
+	background: url(../img/checkbox_1.png) no-repeat;
+	margin-left: 5%;
+	float: left;
+	left: 0px;
+	width: 2.5rem;
+	background-size: 100%;
+	height: 2.5rem;
+}
+
+.addCommon_p {
+	display: block;
+	font-size: 1.5rem;
+	padding-left: 5%;
+	color: #333333;
+	margin-left: 4rem;
+	width: 80%;
+}
+
+/*分区及类别换肤*/
+.zoneMain{
+	background: url(../img/headerBackground.png) no-repeat center center;
+	background-size:100% 100%;
+}
+
+

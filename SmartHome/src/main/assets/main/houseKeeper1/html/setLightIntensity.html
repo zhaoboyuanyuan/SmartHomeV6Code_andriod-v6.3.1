@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/editok.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <a href="javascript:window.history.back(-1);"></a>
+    <a id="setDeviceState_tittle" class="autoSwitchLanguager" href="javascript:;">设置设备状态</a>
+    <a style="display:none;" class="complete autoSwitchLanguager" onclick="save()" href="javascript:;" key="customScene_sure"></a>
+</header>
+<section style="margin-top:6.4rem;">
+    <ul class="set_list">
+        <li><b key="device_LX_Above" class="autoSwitchLanguager"></b><i></i></li>
+        <li><b key="device_LX_Below" class="autoSwitchLanguager"></b><i></i></li>
+        <!--<li ><b key="houseKeeper1_19_suit" class="autoSwitchLanguager"></b><i></i></li>-->
+    </ul>
+</section>
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    var arr = new Array();
+    var lx;
+    initlan();
+    plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            // window.location = "triggerDeviceList.html"
+            window.history.back(-1);
+        });
+        $(".set_list li").on("click", function () {
+            $(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+            var deviceStateData = $(this).find("b").html();
+            info.setItem("deviceState",deviceStateData);
+            if ($(this).index() == 0) {
+                info.setItem("morethan", ">")
+            } else if ($(this).index() == 1) {
+                info.setItem("morethan", "<")
+            }
+            window.location = "carbonDioxide_trigger_19.html";
+//            else if ($(this).index() == 2) {
+//                info.setItem("morethan", ">=500<=1000")
+//            }
+        })
+    });
+</script>
+</html>

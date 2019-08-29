@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>墙面插座</title>
+    <link rel="stylesheet" type="text/css" href="css/device.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" href="javascript:;" id="device_64_name">四路开关</a>
+            <a class="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section class="main" style="display:block;">
+        <div class="switchView">
+            <dl>
+                <dt>
+                    <div class="clickSwitch">
+                        <img src="fonts/icon_close.png" alt=""><i></i>
+                    </div>
+                </dt>
+                <dd>
+                    <span class="rename">
+                        <em id="name_1">客厅灯1</em><i id="1"></i>
+                    </span>
+                    <b class="switchState" data-switch="off">已关闭</b>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    <div class="clickSwitch">
+                        <img src="fonts/icon_close.png" alt=""><i></i>
+                    </div>
+                </dt>
+                <dd>
+                    <span class="rename">
+                        <em id="name_2">客厅灯2</em><i id="2"></i>
+                    </span>
+                    <b class="switchState" data-switch="off">已关闭</b>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    <div class="clickSwitch">
+                        <img src="fonts/icon_close.png" alt=""><i></i>
+                    </div>
+                </dt>
+                <dd>
+                    <span class="rename">
+                        <em id="name_3">客厅灯3</em><i id="3"></i>
+                    </span>
+                    <b class="switchState" data-switch="off">已关闭</b>
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    <div class="clickSwitch">
+                        <img src="fonts/icon_close.png" alt=""><i></i>
+                    </div>
+                </dt>
+                <dd>
+                    <span class="rename">
+                        <em id="name_4">客厅灯4</em><i id="4"></i>
+                    </span>
+                    <b class="switchState" data-switch="off">已关闭</b>
+                </dd>
+            </dl>
+        </div>
+    </section>
+    <section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" id="offLine">设备已离线</span></section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/alert1.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var gwID,devID,appID;
+    var moreConfig;
+    initlan();
+    plus.plusReady(function(){
+        plus.gatewayCmd.getDeviceInfo(null,function(data){
+            gwID = data.gwID;
+            devID = data.devID;
+            appID = data.appID;
+            //更多页配置
+            moreConfig = getMoreConfig(devID);
+            analysisData(data);
+            send_501(0,	0x02);
+        });
+        plus.gatewayCmd.getCurrentAppID(function(data){
+            appID = data;
+        });
+        plus.gatewayCmd.newDataRefresh(function(data){
+            if(data.cmd === "500" && data.devID === devID){
+                //收到500的返回 消失开关加载动画
+                $(".clickSwitch i").hide();
+                //取消请求超时定时器
+                clearOverTime();
+                //解析收到的500返回
+                analysisData(data);
+            }else if(data.cmd === "502" && data.devID === devID){
+                //判断修改昵称是否重命名 0为未重命名
+                if(data.retCode === 0 || !data.retCode){
+                    if (!isNull(data.name)) {
+                        $(".deviceName").html(data.name)
+                    }
+                    var name = data.endpointName;
+                    if (isNull(name)) {
+                        name = device_switch + data.endpointNumber;
+                    }
+                    $("#name_"+data.endpointNumber).html(name);
+                }else if(data.retCode === 1){
+                    //1为重命名，弹出重命名提示
+                    if(data.endpointName){
+                        //languageUtil.getResource("Device_More_Rename_Error")
+                        window.showDialog.show(languageUtil.getResource("Device_More_Rename_Error"),3000);
+                    }
+                }
+            }
+        });
+        $(".rename i").on("click", function () {
+            var $this = $(this);
+            editPopup({
+                "num": 5,
+                "titTxt": languageUtil.getResource("device_Bw_Rename"),//重命名
+                "placeTxt": languageUtil.getResource("device_Bw_enter_name"),//请输入名称
+                "isClick": 2,
+                "aTxt1": languageUtil.getResource("device_Bw_Cancel"),//"取消"
+                "aTxt2": languageUtil.getResource("device_Cb_ok")//"确定"
+            });
+            var oldName = $this.siblings("em").html();
+            $(".popup input").val(oldName);
+            $(".inputDiv i").on("click", function () {
+                $(this).siblings("input").val("");
+                $(this).siblings("input").attr("placeholder",languageUtil.getResource("device_Bw_enter_name"))//device_input_name
+            });
+            $(".popup input").on("blur",function(){
+                var value = $(this).val();
+                var valueFace = noFace(value);
+                console.log(valueFace);
+                $(this).val(valueFace);
+            });
+            $(".alertBtn a").on("click", function () {
+                var index = $(this).index();
+                if (index === 0) {
+                    cancel()
+                } else {
+                    var renameInput = $(".popup input");
+                    if($(renameInput).val().trim() !== "") {
+                        send_502(parseInt($this.attr("id")), $(renameInput).val());
+                        cancel();
+                    }
+                }
+            })
+        });
+        $(".more").unbind("click").bind("click",function(){
+            plus.tools.more(moreConfig, function () {})
+        });
+        $("#back").unbind("click").bind("click",function(){
+            plus.tools.back(function () {})
+        });
+        $(".clickSwitch").unbind("click").bind("click",function(){
+            var state = $(this).parents("dl").find(".switchState").attr("data-switch");
+            var num = $(this).parents("dl").index() + 1;
+            $(this).find("i").show();
+            state = state === "on" ? 0x00 : 0x01;
+            //开关发送命令
+            send_501(num,state);
+            //请求超时提醒
+            overTime();
+        });
+    });
+    $(".clickSwitch").unbind("click").bind("click",function(){
+        var num  = $(this).parents("dl").index() + 1;
+        $(this).find("i").show();
+        send_501(num,3);
+        overTime();
+    })
+    function analysisData(data){
+        if(data.mode === 2){
+            if(data.name){
+                $(".deviceName").html(data.name);
+            }else{
+                $(".deviceName").html(languageUtil.getResource("device_64_name"));
+            }
+            $(".mask_layer").show();
+        }else if(data.mode !== 3){
+            $(".mask_layer").hide();
+            //判断设备是否为被分享设备
+            if(data.isShared == true){
+                $(".rename i").hide();
+            }else{
+                $(".rename i").show();
+            }
+            //设备在线，并绘制设备状态
+            drawUi(data);
+        }
+    }
+    // var json500 = {
+    //     "cmd":500,
+    //     "endpoints":[{
+    //         "endpointName":"开关1",
+    //         "endpointNumber":1,
+    //         "clusters":[{
+    //             "attributes":[{
+    //                 "attributeId":0,
+    //                 "attributeValue":"1"
+    //             }]
+    //         }]
+    //     },{
+    //         "endpointName":"开关2",
+    //         "endpointNumber":2,
+    //         "clusters":[{
+    //             "attributes":[{
+    //                 "attributeId":0,
+    //                 "attributeValue":"1"
+    //             }]
+    //         }]
+    //     },{
+    //         "endpointName":"开关3",
+    //         "endpointNumber":3,
+    //         "clusters":[{
+    //             "attributes":[{
+    //                 "attributeId":0,
+    //                 "attributeValue":"1"
+    //             }]
+    //         }]
+    //     },{
+    //         "endpointName":"开关4",
+    //         "endpointNumber":4,
+    //         "clusters":[{
+    //             "attributes":[{
+    //                 "attributeId":0,
+    //                 "attributeValue":"1"
+    //             }]
+    //         }]
+    //     }]
+    // };
+    // drawUi(json500);
+    function drawUi(data){
+        if(data){
+            if(data.name){
+                $(".deviceName").html(data.name);
+            }else{
+                $(".deviceName").html(languageUtil.getResource("device_64_name"));
+            }
+            if(data.endpoints){
+                var endpoints = data.endpoints;
+                for(var i in endpoints){
+                    var name = endpoints[i].endpointName;
+                    if(isNull(name)){
+                        name = device_switch + endpoints[i].endpointNumber;
+                    }
+                    $("#name_"+endpoints[i].endpointNumber).html(name);
+                    if(endpoints[i].clusters){
+                        var attributeId = endpoints[i].clusters[0].attributes[0].attributeId;
+                        var attributeValue = endpoints[i].clusters[0].attributes[0].attributeValue;
+                        if(attributeId === 0){
+                            var dl = $(".switchView dl").eq(endpoints[i].endpointNumber-1);
+                            if(attributeValue == "1"){
+                                //开关状态:开
+                                dl.find("img").attr("src","fonts/icon_open.png");
+                                dl.find(".switchState").html(languageUtil.getResource("device_Bw_on"));
+                                dl.find(".switchState").attr("data-switch","on");
+                            }else{
+                                //开关状态:关
+                                dl.find("img").attr("src","fonts/icon_close.png");
+                                dl.find(".switchState").html(languageUtil.getResource("device_Bw_off"));
+                                dl.find(".switchState").attr("data-switch","off");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    function send_501(num,commandId){
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        jsonData.endpointNumber = num;
+        jsonData.clusterId = 0x0006;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+    function send_502(endpointNumber,endpointName){
+        var jsonData = {
+            "cmd":"502",
+            "appID":appID,
+            "gwID":gwID,
+            "mode":2,
+            "devID":devID,
+            "endpointNumber":endpointNumber,
+            "endpointName":endpointName
+        };
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+    function isNull(arg) {
+        var isnull = arg == null || arg == undefined || arg == "undefined" || arg == "";
+        return isnull;
+    }
+    function cancel() {
+        var sectCon = $(".sect_content");
+        if ($(sectCon)) {
+            $(sectCon).remove();
+        }
+    }
+    //请求超时监听
+    var timer;
+    function overTime(){
+        timer = setTimeout(function(){
+            $(".clickSwitch i").hide();
+            window.showDialog.show(languageUtil.getResource("device_Cb_time_out"),3000);
+        },15000)
+    }
+    function clearOverTime(){
+        clearTimeout(timer);
+    }
+</script>
+</html>

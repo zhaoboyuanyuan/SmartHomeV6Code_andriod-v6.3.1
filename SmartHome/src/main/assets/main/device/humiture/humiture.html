@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>温湿度检测器</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css"/>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<a class="back" href="javascript:;"></a>
+			<a href="javascript:;" class="autoSwitchLanguager deviceName" id="addDevice_17_name">温湿度检测器</a>
+			<a class="more" href="javascript:;"></a>
+		</header>
+		<section class="tooltip">
+			<a id="gateway" href="javascript:;"></a>
+			<div class="img_bg autoSwitchLanguager" id="humiture_title_07">干燥</div>
+			<span class="autoSwitchLanguager" id="humiture_txt_06">注意补充水分</span>
+		</section>
+		<section class="humiture">
+			<div class="ht_data">
+				<dl class="temp">
+					<dt>26<em>℃ </em></dt>
+					<dd class="autoSwitchLanguager" id="humiture_nowTemp"></dd>
+				</dl>
+				<dl class="hum">
+					<dt>50<em>%</em></dt>
+					<dd class="autoSwitchLanguager" id="humiture_nowHum"></dd>
+				</dl>
+			</div>
+		</section>
+		<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" id="offLine">设备已离线</span></section>
+		<section class="gw_toast autoSwitchLanguager" id="humiture_toast">通过账号登录后才可查看</section>
+	</body>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var dId = '';
+        initlan();
+		//温湿度感应器
+		plus.plusReady(function(){
+			plus.gatewayCmd.getDeviceInfo(function(data){
+				if(data.mode == 2){
+					$(".mask_layer").show()
+				}else{
+					$(".mask_layer").hide()
+					editHtml(data)
+				}
+                var name = data.name.indexOf("#$default$#") != -1 ? addDevice_17_name +data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+				dId = data.devID;
+				getMoreConfig(dId)
+			})
+
+			plus.gatewayCmd.newDataRefresh(function(data){
+				if(data.cmd == "502"){
+					if(data.name != undefined || data.name != ''){
+						$(".deviceName").html(data.name)
+					}
+				}else if(data.cmd == "500" && dId == data.devID){
+					if(data.mode == 2){
+						$(".mask_layer").show()
+					}else{
+						$(".mask_layer").hide()
+						editHtml(data)
+					}
+                    var name = data.name.indexOf("#$default$#") != -1 ? addDevice_17_name+data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+				}
+			})
+		})
+		$(".back").on("click",function(){
+			plus.tools.back(function(){})
+		})
+		$(".more").on("click",function(){
+			plus.tools.more(moreConfig, function(){})
+		})
+		function editHtml(data){
+			//var name = data.name.indexOf("#$default$#") != -1 ? lang_name_17+data.name.split("#")[2]:data.name
+			var temp;
+			var hum;
+			//$(".deviceName").html(name)
+			if(data.endpoints[0].endpointNumber == 1){
+				temp = data.endpoints[0].clusters[0].attributes[0].attributeValue
+			}else{
+				hum = data.endpoints[0].clusters[0].attributes[0].attributeValue
+			}
+			if(data.endpoints[1].endpointNumber == 1){
+				temp = data.endpoints[1].clusters[0].attributes[0].attributeValue
+			}else{
+				hum = data.endpoints[1].clusters[0].attributes[0].attributeValue
+			}
+			$(".temp").find("dt").html(temp + '<em>℃ </em>')
+			$(".hum").find("dt").html(hum + '<em>%</em>')
+			judge(hum,temp)
+		}
+		//温湿度值判断
+		function judge(hum,temp){
+			if(hum >= 80 && hum <= 100 && temp <= 18){
+				cold(lang_title_01,lang_txt_01)
+			}else if(hum >= 30 && hum < 80 && temp >= 0 && temp <= 18){
+				cold(lang_title_02,lang_txt_02)
+			}else if(hum >= 30 && hum < 80 && temp < 0){
+				cold(lang_title_03,lang_txt_03)
+			}else if(hum >= 0 && hum < 30 && temp <= 18){
+				cold(lang_title_04,lang_txt_04)
+			}else if(hum >= 80 && hum <= 100 && temp > 18 && temp <= 27){
+				cold(lang_title_05,lang_txt_05)
+			}else if(hum >= 30 && hum < 80 && temp > 18 && temp <= 27){
+				$(".tooltip .img_bg").html(lang_title_06)
+				$(".tooltip .img_bg").addClass("img_bg_02")
+				$(".humiture").addClass("humiture_02")
+				$(".tooltip span").html(" ")
+			}else if(hum >= 0 && hum < 30 && temp > 18 && temp <= 27){
+				hot(lang_title_07,lang_txt_06)
+			}else if(hum >= 80 && hum <= 100 && temp > 27 && temp <= 60){
+				hot(lang_title_08,lang_txt_07)
+			}else if(hum >= 30 && hum < 80 && temp > 27 && temp <= 40){
+				hot(lang_title_09,lang_txt_08)
+			}else if(hum >= 30 && hum < 80 && temp > 40 && temp <= 60){
+				hot(lang_title_10,lang_txt_09)
+			}else if(hum >= 0 && hum < 30 && temp > 27){
+				hot(lang_title_11,lang_txt_10)
+			}
+		}
+		//橙色背景
+		function hot(title,tip){
+			$(".tooltip .img_bg").html(title)
+			$(".tooltip .img_bg").removeClass("img_bg_01")
+			$(".tooltip .img_bg").removeClass("img_bg_02")
+			$(".humiture").removeClass("humiture_01")
+			$(".humiture").removeClass("humiture_02")
+			$(".tooltip span").html(tip)
+		}
+		//蓝色背景
+		function cold(title,tip){
+			$(".tooltip .img_bg").html(title)
+			$(".tooltip .img_bg").addClass("img_bg_01")
+			$(".humiture").addClass("humiture_01")
+			$(".tooltip span").html(tip)
+		}
+//		console.log(document.body.clientWidth)
+		//判断网关登录还是云登录
+		$("#gateway").on("click", function() {
+			plus.tools.getLoginType(function(data) {
+				if(data == "100") {
+					window.location = "history.html"
+				} else {
+					$(".gw_toast").show()
+					setTimeout(function() {
+						$(".gw_toast").hide()
+					}, 3000)
+				}
+			})
+		})
+	</script>
+</html>

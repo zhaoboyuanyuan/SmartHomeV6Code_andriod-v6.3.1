@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/device.css" />
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a href="javascript:;" class="deviceName"></a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<view class="mainview">
+			<section class="statusview">
+				<img class="curtainImg" src="../../source/deviceImg/curtain_close_2.png" />
+			</section>
+			<section  class="bottomview bottom_Ar">
+				<div id="openBtn">
+					<img src="fonts/open_nor.png"/>
+				</div>
+				<div id="stopBtn">
+					<img src="fonts/stop_nor.png"/>
+				</div>
+				<div id="closeBtn">
+					<img src="fonts/close_nor.png"/>
+				</div>
+			</section>
+		</view>
+		<section class="mask_layer" style="display:none;">
+				<i></i>
+				<span class="autoSwitchLanguager" key="offLine">设备已离线</span>
+		</section>
+	</body>
+	<script>
+		initlan()
+		var info = window.sysfun;
+		info.init("MetalCurtainControl");
+        var iconId = "";
+        var socketState = "";
+		
+		var GWID;
+		var DEVICEID;
+		var deviceInfo;
+		var endpointNumber;
+		var clusterId;
+
+		var deviceName = document.getElementsByClassName("deviceName")[0];
+		var shadow = document.getElementsByClassName("mask_layer")[0];
+		
+		var openbtn = document.getElementById("openBtn");
+		openbtn.ontouchstart=function(){  
+            this.getElementsByTagName("img")[0].src = "fonts/open_pre.png";  
+        }  
+        openbtn.ontouchend=function(){  
+            this.getElementsByTagName("img")[0].src = "fonts/open_nor.png";
+        }  
+        var stopbtn = document.getElementById("stopBtn");
+		stopbtn.ontouchstart=function(){  
+            this.getElementsByTagName("img")[0].src = "fonts/stop_pre.png";  
+        }  
+        stopbtn.ontouchend=function(){  
+            this.getElementsByTagName("img")[0].src = "fonts/stop_nor.png";
+        }
+        var closebtn = document.getElementById("closeBtn");
+		closebtn.ontouchstart=function(){  
+            this.getElementsByTagName("img")[0].src = "fonts/close_pre.png";  
+        }  
+        closebtn.ontouchend=function(){  
+            this.getElementsByTagName("img")[0].src = "fonts/close_nor.png";
+        }
+		
+		function isNull(arg) {
+			var isnull = arg == null || arg == undefined || arg == "undefined" || arg == "";
+			return isnull;
+		}
+
+			
+		plus.plusReady(function(){
+            //获取是否设置显示icon
+            plus.gatewayCmd.getDeviceIconByType(function(data){
+                if(data){
+                    iconId = data
+                }
+            });
+			document.getElementById("back").addEventListener("click", function() {
+				plus.tools.back(function() {});
+			});
+			document.getElementsByClassName("more")[0].addEventListener("click", function() {
+				plus.tools.more(moreConfig, function(){});
+			});
+			openbtn.addEventListener("click", function() {
+				var jsonData = {
+					"cmd": "501",
+					"gwID": GWID,
+					"devID": DEVICEID,
+					"endpointNumber": 1,
+					"clusterId": 258,
+					"commandType": 01,
+					"commandId": 0,
+				};
+				plus.gatewayCmd.controlDevice(jsonData, function(result) {
+					console.log("result" + result);
+				})
+			});
+			stopbtn.addEventListener("click", function() {
+				var jsonData = {
+					"cmd": "501",
+					"gwID": GWID,
+					"devID": DEVICEID,
+					"endpointNumber": 1,
+					"clusterId": 258,
+					"commandType": 01,
+					"commandId": 2,
+				};
+				plus.gatewayCmd.controlDevice(jsonData, function(result) {
+					console.log("result" + result);
+				})
+			});
+			closebtn.addEventListener("click", function() {
+				var jsonData = {
+					"cmd": "501",
+					"gwID": GWID,
+					"devID": DEVICEID,
+					"endpointNumber": 1,
+					"clusterId": 258,
+					"commandType": 01,
+					"commandId": 1,
+				};
+				plus.gatewayCmd.controlDevice(jsonData, function(result) {
+					console.log("result" + result);
+				})
+			});
+			plus.gatewayCmd.getDeviceInfo(function(result) {
+				deviceInfo = result;
+				endpointNumber = result.endpoints[0].endpointNumber;
+				clusterId = result.endpoints[0].clusterId;
+				DEVICEID = result.devID;
+				getMoreConfig(DEVICEID);
+				GWID = result.gwID;
+				
+				if(result.mode == 2) {
+					shadow.style.display = "block";
+				} else {
+					shadow.style.display = "none";
+				}
+				var name = "";
+				if(!isNull(result.name)) {
+					name = result.name.indexOf("#$default$#") != -1 ? device_title_ar + result.name.split("#")[2] : result.name;
+				}
+				deviceName.textContent = name;
+
+				//上一次的状态
+                var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+                var attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+                if (attributeValue == 0) {
+                    $(".curtainImg").attr("src","../../source/deviceImg/curtain_close_2.png");
+                    socketState = "close";
+                } else if (attributeValue == 100) {
+                    $(".curtainImg").attr("src","../../source/deviceImg/curtain_open_"+iconId+".png");
+                    socketState = "open";
+                } else if (attributeValue == 255) {
+                    $(".curtainImg").attr("src","../../source/deviceImg/curtain_stop_"+iconId+".png");
+                    socketState = "stop";
+                }
+
+			});
+			plus.gatewayCmd.newDataRefresh(function(result) {
+					if(result.cmd == "500" && deviceInfo.devID == result.devID) {
+						var name = "";
+						if(!isNull(result.name)) {
+							name = result.name.indexOf("#$default$#") != -1 ? device_title_ar + result.name.split("#")[2] : result.name;
+						}
+						deviceName.textContent = name;
+						if(result.mode == 2) {
+							shadow.style.display = "block";
+						} else if(result.mode == 1) {
+							shadow.style.display = "none";
+						} else {
+							shadow.style.display = "none";
+						}
+					} else if(result.cmd == "502") {
+                        plus.gatewayCmd.getDeviceIconByType(function(data){
+                            if(data){
+                                iconId = data;
+                                if(socketState === "open"){
+                                    $(".curtainImg").attr("src","../../source/deviceImg/curtain_open_"+iconId+".png");
+                                }else if(socketState === "close"){
+                                    $(".curtainImg").attr("src","../../source/deviceImg/curtain_close_"+iconId+".png");
+                                }else if(socketState === "stop"){
+                                    $(".curtainImg").attr("src","../../source/deviceImg/curtain_stop_"+iconId+".png");
+                                }
+                            }
+                        });
+						if(!isNull(result.name)) {
+							var name = "";
+							name = result.name;
+							deviceName.textContent = name;
+						}
+					}
+					if(DEVICEID == result.devID && GWID == result.gwID && result.cmd == "500") {
+						switch(parseInt(result.mode)) {
+							case 0:
+								{
+									//设备状态变化
+									shadow.style.display = "none";
+									var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+									var attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+									if (attributeValue == 0) {
+                                        $(".curtainImg").attr("src","../../source/deviceImg/curtain_close_"+iconId+".png");
+                                        socketState = "close";
+									} else if (attributeValue == 100) {
+                                        $(".curtainImg").attr("src","../../source/deviceImg/curtain_open_"+iconId+".png");
+                                        socketState = "open";
+									} else if (attributeValue == 255) {
+                                        $(".curtainImg").attr("src","../../source/deviceImg/curtain_stop_"+iconId+".png");
+                                        socketState = "stop";
+									}
+								}
+								break;
+							case 1:
+								{
+									//设备上线
+									shadow.style.display = "none";
+									var attributeId = result.endpoints[0].clusters[0].attributes[0].attributeId;
+									var attributeValue = result.endpoints[0].clusters[0].attributes[0].attributeValue;
+									if (attributeValue == 0) {
+                                        $(".curtainImg").attr("src","../../source/deviceImg/curtain_close_"+iconId+".png");
+                                        socketState = "close";
+									} else if (attributeValue == 100) {
+                                        $(".curtainImg").attr("src","../../source/deviceImg/curtain_open_"+iconId+".png");
+                                        socketState = "open";
+									} else if (attributeValue == 255) {
+                                        $(".curtainImg").attr("src","../../source/deviceImg/curtain_stop_"+iconId+".png");
+                                        socketState = "stop";
+									}
+								}
+								break;
+							case 2:
+								{
+									//设备离线
+									shadow.style.display = "block";
+								}
+								break;
+							case 3:
+								{
+									//设备主动退网
+									shadow.style.display = "block";
+								}
+								break;
+							case 4:
+								{
+									//设备第一次上线
+									shadow.style.display = "none";
+								}
+								break;
+							default:
+								{
+
+								}
+								break;
+						}
+					}
+				});
+		})
+		
+	</script>
+	
+</html>

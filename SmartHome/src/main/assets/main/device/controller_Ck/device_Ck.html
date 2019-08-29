@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <meta charset="UTF-8">
+    <title>智敬新风控制器</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/device.css">
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <link rel="stylesheet" href="css/mui.min.css">
+    <link rel="stylesheet" href="css/mui.picker.min.css">
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header" style="position:fixed;left:0;top:0;z-index:100;">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="device_Ck_name" href="javascript:;">智敬新风控制器</a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<section class="content">
+    <p class="autoSwitchLanguager " key="Device_Ck_temperature" style="text-align: center;color: black">室温</p>
+    <div id="temp_block" style="text-align: center;width: 100%;display: none;margin-top: 5rem">
+        <span id="temp" style="font-size: 7.5rem"></span>
+        <span style="font-size: 3.3rem">℃</span></div>
+    <div id="exception_block" style="width: 100% ;height: 6.5rem;text-align: center;margin-top: 5rem;display: none">
+        <div class="device_exception">
+        </div>
+        <br>
+        <span style="color: #fd7f7c;font-size:1.5rem " key="device_Ck_Alarm_01">温度传感器故障</span>
+    </div>
+
+</section>
+
+<section class="middle">
+    <div class="info">
+        <div><span class="autoSwitchLanguager info_title" key="device_Ck_Wind_speed">风速</span><span>：</span><span
+                id="speed" class="autoSwitchLanguager info_value"></span></div>
+        <br/>
+    </div>
+</section>
+
+<section class="timer_info">
+    <span id="hour"></span> &nbsp;<span id="minute"></span> &nbsp;<span id="timer_status"></span> &nbsp;<span
+        id="cancel"
+        class="autoSwitchLanguager"
+        style="color: #8DD652;" key="Device_Ck_Cancel">取消</span>
+</section>
+
+<section class="bottom_on">
+    <ul>
+        <li id="open" class="switch_on">
+            <i></i>
+            <span class="autoSwitchLanguager" key="device_Ck_on">已打开</span>
+        </li>
+    </ul>
+    <ul>
+        <li class="wind_speed">
+            <i></i>
+            <span class="autoSwitchLanguager" key="device_Ck_Wind_speed">风速</span>
+        </li>
+        <li class="timing time">
+            <i></i>
+            <span class="autoSwitchLanguager" key="Device_Ck_Details_Time">定时</span>
+        </li>
+    </ul>
+</section>
+
+<section class="bottom_off">
+    <div id="close" class="switch_off ">
+        <span class="autoSwitchLanguager " key="device_Ck_off"> 已关机，点击开机</span>
+        <br/>
+    </div>
+    <div class="timing2">
+        <div class="time">
+
+        </div>
+        <span class="autoSwitchLanguager" key="Device_Ck_Details_Time">定时</span>
+    </div>
+
+</section>
+<section class="alert" style="display:none;">
+    <div class="nameToast">
+        <div class="msg autoSwitchLanguager" key="device_Ck_Sure_to_cancel">确定取消倒计时？</div>
+        <div class="choose_1">
+            <a class="autoSwitchLanguager cancel_click" key="Device_Ck_Cancel" href="javascript:;">取消</a>
+            <a class="autoSwitchLanguager sure_click" key="Device_Ck_OK" href="javascript:;">确定</a>
+        </div>
+    </div>
+</section>
+<section class="mask_layer" style="display:none;"><i></i><span id="offLine" class="autoSwitchLanguager"
+                                                               key="offLine"></span></section>
+</body>
+<script src="js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="../../source/js/rem.js"></script>
+<script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="lang/lang.js"></script>
+<script type="text/javascript" src="js/more.js"></script>
+<script type="text/javascript">
+    /**********************************************************************
+     *                              变量区域
+     **********************************************************************/
+    /**
+     * 开关状态：
+     * @type {number}
+     * 0 关
+     * 1 开
+     */
+    var switchState = 0;
+    /**
+     * 风量控制：
+     * @type {number}
+     * 1 低风
+     * 2 中风
+     * 3 高风
+     */
+    var speed = 1;
+
+    /**
+     * 0：关闭状态
+
+     1：定时开
+
+     2：定时关
+     */
+    var timerSet = "--"
+
+    var timerData = "--"
+
+    var timePicker;
+
+    /**
+     * 常规需要参数
+     */
+    var deviceID, gwID, appID;
+    /**********************************************************************
+     *                              初始化
+     **********************************************************************/
+    var info = window.sysfun;
+    info.init("DeviceInfo");
+    initlan();
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(function (result) {
+            deviceID = result.devID;
+            gwID = result.gwID;
+            getMoreConfig(deviceID);
+            modeState(result);
+            // 查询设备所有状态
+            sendCmd(0x8010, []);
+            var name = result.name.indexOf("#$default$#") != -1 ? device_Ck_name + result.name.split("#")[2] : result.name;
+            $(".deviceName").html(name);
+        });
+        rush_500();
+    });
+
+    function rush_500() {
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            if (data.cmd == "500" && data.devID == deviceID) {
+                var name = data.name.indexOf("#$default$#") != -1 ? device_Ck_name + data.name.split("#")[2] : data.name;
+                $(".deviceName").html(name);
+                modeState(data);
+            } else if (data.cmd == "502" && data.devID == deviceID) {
+                if (data.name != undefined || data.name != '') {
+                    $(".deviceName").html(data.name)
+                }
+            }
+        });
+    }
+
+    function modeState(result) {
+        if (result.mode === 2) {
+            $(".mask_layer").show();
+        } else if (result.mode === 3) {
+            //原生做的操作
+        } else {
+            $(".mask_layer").hide();
+            handleEp(result.endpoints);
+        }
+    }
+
+    // 处理 endpoints
+    // 遍历解析
+    function handleEp(endpoints) {
+        endpoints.forEach(function (endpoint) {
+            var clusters = endpoint.clusters;
+            clusters.forEach(function (cluster) {
+                var attributes = cluster.attributes;
+                attributes.forEach(function (attribute) {
+                    var attributeId = attribute.attributeId;
+                    var attributeValue = attribute.attributeValue;
+                    reloadUI(attributeId, attributeValue);
+                })
+            })
+        });
+    }
+
+    function reloadUI(id, value) {
+        switch (id) {
+            case 0x8001:
+                // 开关状态:0关闭 1打开
+                switchState = parseInt(value);
+                //更新 控制器页面变化
+                updateCtrlBtn(switchState);
+                break;
+            case 0x8002:
+                //风量上报:1:低档 2:中档 3:高档
+                speed = parseInt(value);
+                //更新风量状态
+                updateWindState(speed);
+                break;
+            case 0x8003:
+                updateTemp(value)
+                break;
+            case 0x8004:
+                updateTimerStatus(value)
+                break
+            case 0x8005:
+                updateTimerData(value)
+                break
+            default:
+                break;
+        }
+    }
+
+
+    // 更新控制器
+    function updateCtrlBtn(value) {
+        // 关机
+        if (value === 0) {
+            //关
+            $('.bottom_on').hide()
+            $('.bottom_off').show()
+        } else if (value === 1) {
+            //开
+            $('.bottom_off').hide()
+            $('.bottom_on').show()
+        }
+    }
+
+    //更新风量
+    function updateWindState(value) {
+        switch (value) {
+            case 1://低
+                $('#speed').html(airsystem_Ck_Wind_speed_low)
+                break
+            case 2://中
+                $('#speed').html(airsystem_Ck_Wind_speed_medium)
+                break;
+            case 3://高
+                $('#speed').html(airsystem_Ck_Wind_speed_high)
+                break;
+            default:
+                $('#speed').html("--")
+                break
+        }
+    }
+
+    //更新温度
+    function updateTemp(value) {
+        if (value !== '03E8') {
+            $('#exception_block').hide()
+            $('#temp_block').show()
+            $('#temp').html(value)
+        } else {
+            $('#temp_block').hide()
+            $('#exception_block').show()
+        }
+
+    }
+
+    //更新定时器状态
+    function updateTimerStatus(value) {
+        switch (value) {
+            case '0':
+                $('.timer_info').hide();
+                break
+            case '1':
+                $('.timer_info').show();
+                $('#timer_status').html(device_Ck_open_after);
+                break
+            case '2':
+                $('.timer_info').show();
+                $('#timer_status').html(device_Ck_Countdown_closed);
+                break
+        }
+
+    }
+
+    //更新定时器时间
+    function updateTimerData(value) {
+        var t = parseFloat(value / 2.0) + "";
+        var h = t.split(".")[0];
+        if (h.length === 1) {
+            h = "0" + h;
+        }
+        var m = t.split(".")[1] == undefined ? "00" : "" + (parseInt(t.split(".")[1]) * 6);
+        $('#hour').html(h + Device_Ck_Details_Time7);
+        $('#minute').html(m + Device_Ck_Details_Time8);
+    }
+
+
+    function getArr(start, end) {
+        var arr = [];
+        for (var i = start; i <= end; i++) {
+            var obj = {
+                text: "",
+                children: []
+            };
+            var h;
+            if (i < 10) {
+                h = "0" + i;
+            } else {
+                h = "" + i;
+            }
+            obj.text = h;
+            if (i == 0) {
+                obj.children = ["30"]
+            } else if (i > 0 && i < 24) {
+                obj.children = ["00", "30"]
+            } else {
+                obj.children = ["00"]
+            }
+            arr.push(obj)
+        }
+        return arr;
+    }
+
+    // 隐藏弹框
+    function hideAlert() {
+        $('.alert').hide();
+    }
+
+    /**********************************************************************
+     *                              事件绑定
+     **********************************************************************/
+    $('#back').on('click', function () {
+        plus.tools.back();
+    });
+    $('.more').on('click', function () {
+        plus.tools.more(moreConfig, function () {
+        })
+    });
+
+    //开机键
+    $('#open').on('click', function () {
+        sendCmd(0, []);
+    });
+    //关机键
+    $('#close').on('click', function () {
+        sendCmd(1, []);
+    });
+    //取消定时
+    $('#cancel').on('click', function () {
+        $('.alert').show();
+    });
+    // 弹框取消
+    $('.cancel_click').on('click', function () {
+        hideAlert();
+    });
+
+    // 弹框确定
+    $('.sure_click').on('click', function () {
+        sendCmd(0x8012, ["0000"]);
+        hideAlert();
+    });
+
+    $('.wind_speed').on('click', function () {
+        switch (speed) {
+            case 1:
+                sendCmd(0x8011, ['2']);
+                break
+            case 2:
+                sendCmd(0x8011, ['3']);
+                break
+            case 3:
+                sendCmd(0x8011, ['1']);
+                break
+        }
+
+    });
+
+    $(".time").on("click", function () {
+        if (timePicker == null || timePicker == undefined) {
+            timePicker = new mui.PopPicker({layer: 2});
+            timePicker.body.setAttribute('id', 'timePicker');
+            timePicker.setData(getArr(0, 24));
+            $(".mui-backdrop").css("opacity", "0");
+            $(".mui-poppicker").css("z-index", "1001");
+            $(".mui-poppicker-btn-cancel").html(Device_Ck_Cancel);//device_cancel
+            $(".mui-poppicker-btn-ok").html(Device_Ck_OK);//device_sure
+            var left = $("#timePicker .mui-picker").eq(0).find(".mui-pciker-rule-ft");
+            var right = $("#timePicker .mui-picker").eq(1).find(".mui-pciker-rule-ft");
+            $(left).html(Device_Ck_Details_Time7);
+            $(right).html(Device_Ck_Details_Time8);
+            var width = $("#timePicker .mui-pciker-rule-ft").width();
+            $(left).css({
+                "text-indent": width * 3 / 5 + "px"
+            });
+            $(right).css({
+                "text-indent": width * 3 / 5 + "px"
+            });
+        }
+        $(".mui-poppicker-clear").html(Device_Ck_Details_Time);
+        timePicker.pickers[0].setSelectedIndex(12);
+        timePicker.pickers[1].setSelectedIndex(0);
+        timePicker.show(function (item) {
+            var h = parseInt(item[0].text);
+            var m = parseInt(item[1]);
+            var time = h * 2 + m / 30;
+            if (time < 10) {
+                time = "0" + time
+            }
+            var p = [];
+            var time2 = time.toString(16);
+            if (time2.length === 1) {
+                time2 = "0" + time2;
+            }
+            if (switchState === 0) {
+                param = "01" + time2
+            } else {
+                param = "02" + time2
+            }
+            p.push(param);
+            sendCmd(0x8012, p);
+        })
+    })
+
+
+    /**********************************************************************
+     *                              公共方法
+     **********************************************************************/
+
+
+    // 发送命令
+    function sendCmd(commandId, parameter) {
+        console.log('sendCmd: ' + commandId.toString(16) + ', ' + parameter);
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = deviceID;
+        jsonData.endpointNumber = 1;
+        jsonData.commandType = 1;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandId = commandId;
+        if (parameter) {
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData, function () {
+        })
+    }
+</script>
+</html>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/newBackground"
+    android:padding="4dp"
+    android:orientation="vertical"
+    tools:context="cc.wulian.smarthomev6.main.mine.FeedbackActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="8dp"
+        android:background="@drawable/shape_feedback_msg">
+        <EditText
+            android:id="@+id/feedback_edit_msg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:background="@null"
+            android:hint="@string/Feedback_Content"
+            android:maxLength="300"
+            android:textSize="14sp"
+            tools:text=""/>
+        <TextView
+            android:id="@+id/feedback_text_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:text="300"/>
+    </FrameLayout>
+
+    <EditText
+        android:id="@+id/feedback_edit_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_feedback_msg"
+        android:layout_marginTop="4dp"
+        android:padding="8dp"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:maxLines="2"
+        android:inputType="textEmailAddress"
+        android:hint="@string/Feedback_Email"
+        android:textSize="14sp"
+        tools:text=""/>
+
+    <Button
+        android:id="@+id/feedback_button_submit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="64dp"
+        android:layout_gravity="center"
+        android:enabled="false"
+        android:background="@drawable/selector_feedback_submit"
+        android:textColor="@color/white"
+        android:text="@string/Feedback_Putin"/>
+</LinearLayout>

@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加设备</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/setState.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="javascript:history.back(-1)"></a>
+				<a href="javascript:;" class="autoSwitchLanguager" key="addDevice_DD_title">添加全宅背景音乐</a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section style="width: 100%;">
+			<section style="width: 100%;text-align: center;">
+				<img class="addImg" src="../../source/addDevicePic/device_DD.png" style="width: auto;height: auto;max-height:18rem ;max-width:90% ;margin-top: 8rem;"  />
+			</section>
+			<div id="type1" style="width: 100%;height: 15rem;margin-top: 4rem;display: block;">
+				<div class="addCommon_div2" data_name="1" ></div>
+				<p class="addCommon_p">
+					<span class="autoSwitchLanguager" key="addDevice_DD_step_1">确保音乐主机与网关连接在同一路由下，并能正常工作</span><br/>
+				</p>
+			</div>
+		</section>
+
+		<section class="addSensorBtn">
+			<a href="javascript:;" class="autoSwitchLanguager" id="addDevice_01_01_add">开始添加</a>
+		</section>
+		<section id="succeed" class="toast" style="display:none;">
+			<i class="rotate"></i>
+			<p class="autoSwitchLanguager" id="addDoorContack2_starting">正在启动加网模式，请稍后...</p>
+		</section>
+		<section id="fail" class="toast" style="display:none;">
+			<p class="autoSwitchLanguager" id="addDevice_failing">加网模式启动失败，请重试</p>
+		</section>
+		<!--编辑弹框-->
+		<section class="changeName" style="display: none;">
+			<div class="nameToast giveUp">
+				<span class="autoSwitchLanguager" id="addDevice_DD_add_failed" style="display:block;text-align: center; height: 6rem;padding-top: 2rem;padding-bottom: 0px;line-height: 2rem;word-wrap:break-word;word-break:break-all;overflow: auto;">
+					启动失败, 请重试
+				</span>
+				<div class="choose_1" style="width: 100%;">
+					<a href="javascript:;" style="width: 100%;" onclick="cancel()" class="autoSwitchLanguager" id="addDevice_sure">确定</a>
+				</div>
+			</div>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/commonModel.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		function read(ele) {
+			ele.style.backgroundImage = "url(../../skinSource/img/checkbox_" + ele.getAttribute("data_name") + ".png)";
+			var data_name = ele.getAttribute("data_name");
+			data_name = data_name == 1 ? 2 : 1;
+			ele.setAttribute("data_name", data_name);
+			var first = document.getElementsByClassName("addCommon_div")[0].getAttribute("data_name");
+			var btn = document.getElementsByClassName("addSensorBtn")[0].getElementsByTagName("a")[0];
+			// if(first == '2') {
+			// 	btn.style.backgroundImage = "url(../../skinSource/img/bigBtnEnable.png)";
+			// } else {
+			// 	btn.style.backgroundImage = "url(../../skinSource/img/bigBtnDisable.png)";
+			// }
+		}
+		initlan();
+		plus.plusReady(function() {
+			plus.gatewayCmd.newDataRefresh(function(data) {
+				if(data.cmd == "511") {
+					clearTimeout(window.timer);
+					$("#succeed").hide()
+					window.location = "addDevice_DD_02.html";
+				}
+			});
+			$(".addSensorBtn").unbind("click").on("click", function() {
+				plus.gatewayCmd.isBindGw(function(result) {
+					if(result == "NO") {
+						//						$(".changeName").show();
+						//						return;
+					} else {
+						plus.gatewayCmd.gatewayAddDeviceByType("DD", function() {
+							$("#succeed").show();
+							window.timer = setTimeout(function() {
+								$("#succeed").hide();
+								$(".changeName").show();
+							}, 10000)
+						});
+					}
+				})
+			})
+		})
+
+		function cancel() {
+			$(".changeName").hide();
+		}
+
+		function bingGateway() {
+			plus.gatewayCmd.goToBind(function() {})
+		}
+	</script>
+
+</html>

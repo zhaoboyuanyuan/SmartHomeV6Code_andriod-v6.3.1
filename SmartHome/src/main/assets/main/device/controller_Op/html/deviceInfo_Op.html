@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../../../source/js/rem.js"></script>
+    <script type="text/javascript" src="../../../source/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="../../../source/swiper/swiper.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../source/swiper/swiper.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/list.css"/>
+</head>
+<body style="width:100%;">
+    <header class="header" style="position:fixed;left:0;top:0;z-index:10000;padding-top: 0.1rem">
+        <div class="header_top">
+            <a id="back" href="javascript:;window.history.back(-1)"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_Op_name" href="javascript:;">空调新风地暖集控器</a>
+            <a class="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section id="content">
+        <ul class="categoryBg" style="position: fixed">
+            <li class="category category1 category1_selected"></li>
+            <li class="category category2"></li>
+            <li class="category category3"></li>
+        </ul>
+        <section class="list">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <!--<div class="swiper-slide">-->
+                        <!--<ul class="device_list">-->
+                            <!--<li>-->
+                                <!--<p>空调1空调1空调1空调1空调1空调1空调1</p>-->
+                                <!--<p>-->
+                                    <!--<span>制冷</span>-->
+                                    <!--<span>28℃</span>-->
+                                    <!--<span>中风</span>-->
+                                <!--</p>-->
+                                <!--<img src="../fonts/icon_openbtn.png">-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                    <!--<div class="swiper-slide">-->
+                        <!--<ul class="device_list">-->
+                            <!--<li>-->
+                                <!--<p>新风1</p>-->
+                                <!--<p>-->
+                                    <!--<span>制冷</span>-->
+                                    <!--<span>28℃</span>-->
+                                    <!--<span>中风</span>-->
+                                <!--</p>-->
+                                <!--<img src="../fonts/icon_openbtn.png">-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                    <!--<div class="swiper-slide">-->
+                        <!--<ul class="device_list">-->
+                            <!--<li>-->
+                                <!--<p>地暖2</p>-->
+                                <!--<p>-->
+                                    <!--<span>制冷</span>-->
+                                    <!--<span>28℃</span>-->
+                                    <!--<span>中风</span>-->
+                                <!--</p>-->
+                                <!--<img src="../fonts/icon_openbtn.png">-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section class="mask_btn">
+        <span id="refreshList" key="Device_Op_Refresh" class="autoSwitchLanguager">刷新列表</span>
+        <span id="allClick" key="device_Op_all_closed" class="autoSwitchLanguager" data-onOff="off">全部关闭</span>
+    </section>
+    <section class="mask_layer" style="display:none;">
+        <i></i>
+        <span class="autoSwitchLanguager" key="offLine">设备已离线</span>
+    </section>
+    <section class="mask_loading">
+        <div class="loading_main">
+            <img src="../../../source/commonImg/loading_house.png" alt=""><br />
+            <img src="../../../source/commonImg/loading.gif" alt="" />
+            <span key="device_Op_ing" class="autoSwitchLanguager">设备准备中，请稍后...</span>
+        </div>
+    </section>
+    <section class="saveToast" style="display:none;">
+        <div>
+            <i><em class="rotate"></em></i>
+            <p key="device_Op_ing" class="autoSwitchLanguager">正在加载...</p>
+        </div>
+    </section>
+
+    <section class="mask_name" id="mask_changeClick">
+        <div class="device_rename">
+            <h5 style="padding: 2rem 0 1rem;" id="confirmSecond" key="Device_OZ_Details_CloseAlltips" class="autoSwitchLanguager"></h5>
+            <div class="device_btn">
+                <span id="cancel" key="Device_Op_Cancel" class="autoSwitchLanguager">取消</span>
+                <span id="ok" key="Device_Op_OK" class="autoSwitchLanguager">确认</span>
+            </div>
+        </div>
+    </section>
+</body>
+    <link rel="stylesheet" type="text/css" href="../../../skinSource/css/skin.css"/>
+    <script type="text/javascript" src="../js/plus.js"></script>
+    <script type="text/javascript" src="../js/gatewayCmd.js"></script>
+    <script type="text/javascript" src="../js/tools.js"></script>
+    <script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/more.js"></script>
+    <script type="text/javascript" src="../../../source/mui/js/mui.min.js"></script>
+    <script type="text/javascript">
+        initlan();
+        var info = window.sysfun;
+        info.init("device_Op");
+
+        var endpointsAir = [];
+        var endpointsFreshAir = [];
+        var endpointsFloorHeat = [];
+
+        var airModeList = [];
+        var freshAirModeList = [];
+        var windList = [];
+
+        var airCount = 0;
+        var freshAirCount = 0;
+        var floorHeatCount = 0;
+
+        var installPlusReady = false;
+
+        var mySwiper = new Swiper('.swiper-container', {
+            autoplay: false,//可选选项，自动滑动
+            observer:true,  //修改swiper自己或子元素时，自动初始化swiper
+            observeParents:true,  //修改swiper的父元素时，自动初始化swiper
+            on:{
+                slideChangeTransitionEnd: function(){
+                    var index = this.activeIndex;
+                    var type = $(".categoryBg li").eq(index).attr("id");
+                    loadCategoryUI(index, type);
+                },
+            },
+        })
+
+        // $(".mask_loading").show();
+        //返回到设备详情页
+        $("#back").on("click",function(){
+            plus.tools.back(function() {})
+        });
+        //跳转到更多页面
+        $(".more").on("click",function(){
+            plus.tools.more(moreConfig, function() {})
+        });
+        var devID;
+        var gwID;
+        var appID;
+        plus.plusReady(function(){
+
+            airModeList = {
+                "1": device_Op_mode_cool,//"制冷";
+                "8": device_Op_mode_heat,// "制热";
+                "4": device_Op_mode_fan,//"送风";
+                "2": houseKeeper1_Op_Type4,//"除湿";
+                "0": Device_Op_Details_Type5,//"预热";
+                "0": device_Op_mode_auto,//"自动";
+                "0": Device_Op_Details_Type7,//"干燥";
+                "0": Device_Op_Details_Type8,//"清爽";
+                "0": Device_Op_Details_Type9,//"睡眠";
+                "0": Device_Op_Details_Type10,//"杀菌";
+                "0": Device_Op_Details_Type11,//"干爽除湿";
+                "0": Device_Op_Details_Type12//"强力除湿";
+            };
+            freshAirModeList = {
+                "0": device_Op_mode_auto,//"自动";
+                "1":device_Op_mode_Ventilation,//"换气";
+                "2":device_Op_mode_Exhaust,//"排风";
+                "3":device_Op_mode_smart,//"智能";
+                "4":device_Op_mode_strong,//"强劲";
+                "5":device_Op_mode_Power_saving//"省电";
+            };
+            windList = {
+                "0": device_Op_mode_auto,//"自动";
+                "1":airsystem_Op_Wind_speed_high,//"高风";
+                "2":window.airsystem_Op_Wind_speed_medium,//"中风";
+                "3":window.airsystem_Op_Wind_speed_low,//"低风";
+                "4":device_Op_fan_Bias_High,//"中高风";
+                "5":window.device_Op_fan_Bias_Low//"中低风";
+            };
+
+            plus.gatewayCmd.getCurrentAppID(function(result){
+                appID = result;
+            });
+            plus.gatewayCmd.getDeviceInfo("", function(data){
+                if(data.mode == 2){
+                    $(".mask_loading").hide();
+                    $(".mask_layer").show();
+                }else{
+                    $(".mask_layer").hide();
+                }
+                var name = data.name.indexOf("#$default$#") != -1 ? device_Op_name + data.name.split("#")[2]:data.name
+                $(".deviceName").html(name);
+                console.log(data);
+                devID = data.devID;
+                gwID = data.gwID;
+                drawCategoryList(data)
+                getMoreConfig(devID);
+            });
+            plus.gatewayCmdRush.newDataRefresh(function(data){
+
+                if(data.cmd == "500" && devID == data.devID){
+
+                    // plus.gatewayCmd.getDeviceInfo(null,function(data){
+                    //     console.log(data);
+                    //     if(data.mode == 2){
+                    //         $(".mask_layer").show();
+                    //     }else{
+                    //         $(".mask_layer").hide();
+                    //     }
+                    //     $(".mask_loading").hide();
+                    //     drawCategoryList(data);
+                    // });
+                    $(".saveToast").hide();
+                    if(data.mode == 2){
+                        $(".mask_layer").show();
+                    }else{
+                        $(".mask_layer").hide();
+                    }
+                    var name = data.name.indexOf("#$default$#") != -1 ? device_Op_name+data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+                }else if(data.cmd == "502" && devID == data.devID){
+                    $(".saveToast").hide();
+                    if(data.name){
+                        if((data.name != undefined || data.name != '') && data.name.indexOf("#$default$#") == -1){
+                            $(".deviceName").html(data.name)
+                        }else{
+                            var name = data.name.indexOf("#$default$#") != -1 ? device_Op_name+data.name.split("#")[2]:data.name
+                            $(".deviceName").html(name)
+                        }
+                    }
+                }
+            });
+            $("#refreshList").on("click",function(){
+                $(".saveToast").show();
+                sendCmd(gwID, devID, 0, 0x800B);
+            })
+            $("#allClick").on("click",function(){
+                $("#mask_changeClick").show();
+            });
+            $("#cancel").on("click",function(){
+                $("#mask_changeClick").hide();
+            });
+            $("#ok").on("click",function(){
+                var index = mySwiper.activeIndex;
+                if($("#allClick").attr("data-onOff") === "on"){
+                    $(".saveToast").show();
+                    sendCmd(gwID,devID,0,0x8001,[index + '1']);
+                    // alert(index + '1')
+                    $("#allClick").html(device_Op_all_closed)
+                    $("#confirmSecond").html("确定全部关闭？");
+                }else{
+                    $(".saveToast").show();
+                    sendCmd(gwID,devID,0,0x8001,[index +  '0']);
+                    // alert(index + '0')
+                    $("#allClick").html("全部开启")
+                    $("#confirmSecond").html("确定全部开启？")
+                }
+                $("#mask_changeClick").hide();
+            })
+
+            var iphoneX = {
+                sysFunc: "getItem:",
+                room: "iphoneX",
+                id: "iphoneX",
+                data: ""
+            };
+            var iStr = '';
+            if (!window.v6sysfunc) {
+                iStr = prompt(JSON.stringify(iphoneX))
+            }
+            if (iStr == "iphoneX") {
+                $(".header")[0].style.paddingTop = "2.4rem";
+                $("#content")[0].style.paddingTop = "8.6rem";
+            }
+
+        });
+
+        function drawCategoryList(data) {
+            var endpointsAirArr = [];
+            var endpointsFreshAirArr = [];
+            var endpointsFloorHeatArr = [];
+
+            for(var i = 0;i < data.endpoints.length;i++) {
+                var endpoint = data.endpoints[i];
+                if(endpoint.endpointNumber > 0 && endpoint.endpointNumber <= 320) {
+                    endpointsAirArr.push(endpoint);
+                } else if(endpoint.endpointNumber > 320 && endpoint.endpointNumber <= 384) {
+                    endpointsFreshAirArr.push(endpoint);
+                } else if(endpoint.endpointNumber > 384 && endpoint.endpointNumber <= 448) {
+                    endpointsFloorHeatArr.push(endpoint);
+                }
+            }
+            endpointsAir = endpointsAirArr.sort(compare);
+            endpointsFreshAir = endpointsFreshAirArr.sort(compare);
+            endpointsFloorHeat = endpointsFloorHeatArr.sort(compare);
+
+            var categoryList = [];
+
+            if(endpointsAir.length > 0) {
+                var categoryData = {};
+                categoryData.type = "0";
+                categoryList.push(categoryData);
+            }
+            if(endpointsFreshAir.length > 0) {
+                var categoryData = {};
+                categoryData.type = "1";
+                categoryList.push(categoryData);
+            }
+            if(endpointsFloorHeat.length > 0) {
+                var categoryData = {};
+                categoryData.type = "2";
+                categoryList.push(categoryData);
+            }
+
+            if(categoryList.length > 1) {
+                $(".categoryBg").show();
+                $(".categoryBg").html("");
+                var widthClass = (categoryList.length == 2) ? " category_width2" : " ";
+                for(var i = 0;i < categoryList.length;i++) {
+                    var category = categoryList[i];
+                    var categoryType = ' category' + category.type;
+                    var str = '<li id="'+category.type+'" class="category' + categoryType + ' ' + widthClass + '"></li>'
+                    if(i == 0) {
+                        str = '<li id="'+category.type+'" class="category category_selected' + categoryType + ' ' + widthClass + '"></li>'
+                    }
+                    $('.categoryBg').append(str);
+                }
+
+                loadCategoryUI(0,$(".categoryBg li").eq(0).attr("id"))
+                $(".categoryBg li").on("click", function () {
+                    event.stopPropagation();
+                    var index = $(this).index();
+                    var type = $(this).attr("id");
+                    loadCategoryUI(index, type);
+                    mySwiper.slideTo(index, 1000, false);
+                })
+            } else {
+                $(".categoryBg").hide();
+                $(".list").addClass("list_one")
+            }
+
+            drawDeviceList();
+        }
+
+        function drawDeviceList(){
+
+            airCount = 0;
+            freshAirCount = 0;
+            floorHeatCount = 0;
+
+            $(".saveToast").hide();
+            $(".swiper-wrapper").html("");
+            var count = 0;
+            var swiperStr = '<div class="' + 'swiper-slide' + '">' +
+                '<ul class="' + 'device_list' + '">';
+            var endStr = '</ul></div>';
+            if(endpointsAir.length > 0) {
+                var liStr  = swiperStr;
+                for (var i = 0; i < endpointsAir.length; i++) {
+                    var endpoint = endpointsAir[i];
+                    var param = listData(endpoint);
+                    var mode = param.mode;
+                    var wind = param.windspeed;
+                    var name = (endpoint.endpointName != "") ? endpoint.endpointName : "空调" + endpoint.endpointNumber;
+                    var imgstr = param.onOff == "0" ? "../fonts/icon_closebtn.png" : "../fonts/icon_openbtn.png"
+                    var str = '<li id="'+endpoint.endpointNumber+'" data-onOff="'+ param.onOff + '" data-type="0">' +
+                        '<p>'+ name +'</p>' +
+                        '<p><span>'+ airModeList[mode] +'</span>' +
+                        '<span>'+ param.temp +'</span>' +
+                        '<span>'+ windList[wind] +'</span></p>' +
+                        '<img src="'+ imgstr +'">' +
+                        '</li>'
+                    liStr += str;
+                    if(param.onOff == "1") {
+                        airCount ++;
+                    }
+                }
+                liStr += endStr;
+                $(".swiper-wrapper").append(liStr);
+            }
+
+            if(endpointsFreshAir.length > 0) {
+                var liStr  = swiperStr;
+                for (var i = 0; i < endpointsFreshAir.length; i++) {
+                    var endpoint = endpointsFreshAir[i];
+                    var param = listData(endpoint);
+                    var mode = param.mode;
+                    var wind = param.windspeed;
+                    var name = (endpoint.endpointName != "") ? endpoint.endpointName : "新风" + endpoint.endpointNumber - 320;
+                    var imgstr = param.onOff == "0" ? "../fonts/icon_closebtn.png" : "../fonts/icon_openbtn.png"
+                    var str = '<li id="'+endpoint.endpointNumber+'" data-onOff="' + param.onOff + '" data-type="1">' +
+                        '<p>'+ name +'</p>' +
+                        '<p><span>'+ freshAirModeList[mode] +'</span>' +
+                        '<span>'+ param.temp +'</span>' +
+                        '<span>'+ windList[wind] +'</span></p>' +
+                        '<img src="'+ imgstr +'">' +
+                        '</li>'
+                    liStr += str;
+                    if(param.onOff == "1") {
+                        freshAirCount ++;
+                    }
+                }
+                liStr += endStr;
+                $(".swiper-wrapper").append(liStr);
+            }
+
+            if(endpointsFloorHeat.length > 0) {
+                var liStr  = swiperStr;
+                for (var i = 0; i < endpointsFloorHeat.length; i++) {
+                    var endpoint = endpointsFloorHeat[i];
+                    var param = listData(endpoint);
+                    var name = (endpoint.endpointName != "") ? endpoint.endpointName : "地暖" + endpoint.endpointNumber - 384;
+                    var imgstr = param.onOff == "0" ? "../fonts/icon_closebtn.png" : "../fonts/icon_openbtn.png"
+                    var str = '<li id="'+endpoint.endpointNumber+'" data-onOff="'+ param.onOff +'" data-type="2">' +
+                        '<p>'+ name +'</p>' +
+                        '<p>'+ '室温' + param.temp +'</p>' +
+                        '<img src="'+ imgstr +'">' +
+                        '</li>'
+                    liStr += str;
+                    if(param.onOff == "1") {
+                        floorHeatCount ++;
+                    }
+                }
+                liStr += endStr;
+                $(".swiper-wrapper").append(liStr);
+            }
+
+            $(".device_list li").on("click", function () {
+                event.stopPropagation();
+                var endpointNumber = $(this).attr("id");
+                var name = $(this).find("a").find("span:first-child").attr("data-name");
+                info.setItem("name",name);
+                if(endpointNumber <= 320) {
+                    window.location = "condition_Op.html?endpointNumber=" + endpointNumber
+                } else if(endpointNumber > 320 && endpointNumber <= 384) {
+                    window.location = "freshAir_Op.html?endpointNumber=" + endpointNumber
+                } else {
+                    window.location = "floorHeat_Op.html?endpointNumber=" + endpointNumber
+                }
+
+            })
+            $(".device_list li img").on("click", function () {
+                event.stopPropagation();
+                var endpointNumber = $(this).parents('li').attr("id");
+                var type = $(this).parents('li').attr("data-type");
+                var state = $(this).parents('li').attr("data-onOff");
+                var stateParam = (state == 0) ? "1" : "0";
+
+                sendCmd(gwID, devID, parseInt(endpointNumber), 0x8001, [type + stateParam]);
+            })
+        }
+        function listData(list){
+            var param = {
+                "onOff":"0",
+                "mode":"1",
+                "temp":"16",
+                "windspeed":"1",
+                "floorTemp":"16"
+            };
+            if(list.clusters[0].attributes){
+                console.log("endpointNumber:",list.endpointNumber)
+                for (var k = 0; k < list.clusters[0].attributes.length; k++) {
+                    var attributes = list.clusters[0].attributes[k];
+                    switch (attributes.attributeId) {
+                        case 0x0001:
+                            $(".mask_loading").hide();
+                            param.onOff = attributes.attributeValue;
+                            break;
+                        case 0x0002:
+                            if(attributes.attributeValue.length == 2) {
+                                param.mode = attributes.attributeValue.substring(1,2);
+                            } else {
+                                param.mode = attributes.attributeValue;
+                            }
+                            break;
+                        case 0x0003:
+                            param.temp = attributes.attributeValue;
+                            break;
+                        case 0x0004:
+                            param.windspeed = attributes.attributeValue;
+                            break;
+                        case 0x0007:
+                            param.floorTemp = attributes.attributeValue;
+                            break;
+                    }
+                    // console.log("attributeId:",attributes.attributeId,"attributeValue:",attributes.attributeValue)
+                }
+            }
+            // console.log("onOff:" + param.onOff,"mode:" + param.mode, "wind:" + param.windspeed ,"temp:" + param.temp, "floorTemp:" + param.floorTemp)
+            return param;
+        }
+        //发送设备控制命令
+        function sendCmd(gwID,dID,endpointNumber,commandId,parameter){
+            var jsonData = {}
+            jsonData.cmd = "501";
+            jsonData.gwID = gwID;
+            jsonData.devID = dID;
+            jsonData.endpointNumber = endpointNumber;
+            jsonData.clusterId = 0x0201;
+            jsonData.commandType = 1;
+            jsonData.commandId = commandId;
+            if(parameter){
+                jsonData.parameter = parameter;
+            }
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+        }
+        //请求设备详情列表
+        function sendCmd_510(gwID,devID,appID){
+            var jsonData = {}
+            jsonData.cmd = "510";
+            jsonData.gwID = gwID;
+            jsonData.devID = devID;
+            jsonData.appID = appID;
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+        }
+
+        function loadCategoryUI(index, type) {
+            $(".categoryBg li").removeClass("category_selected");
+            $(".categoryBg li").eq(index).addClass("category_selected");
+            var selectedClass = "category" + type + "_selected";
+            $(".categoryBg li").removeClass("category0_selected");
+            $(".categoryBg li").removeClass("category1_selected");
+            $(".categoryBg li").removeClass("category2_selected");
+            $(".categoryBg li").eq(index).addClass(selectedClass);
+
+            var actionIndex = index;
+            var isAllOpen = false;
+            if(actionIndex == 0) {
+                if(airCount == endpointsAir.length) {
+                    isAllOpen = true;
+                } else {
+                    isAllOpen = false;
+                }
+            } else if(actionIndex == 1) {
+                if(freshAirCount == endpointsFreshAir.length) {
+                    isAllOpen = true;
+                } else {
+                    isAllOpen = false;
+                }
+            } else {
+                if(floorHeatCount == endpointsFloorHeat.length) {
+                    isAllOpen = true;
+                } else {
+                    isAllOpen = false;
+                }
+            }
+
+            if(isAllOpen == true) {
+                $("#allClick").attr("data-onOff","on");
+                $("#allClick").html("全部开启");
+                $("#confirmSecond").html("确定全部开启？")
+            } else {
+                $("#allClick").attr("data-onOff", "off");
+                $("#allClick").html("全部关闭");
+                $("#confirmSecond").html("确定全部关闭？");
+            }
+        }
+
+        var compare = function(obj1,obj2){
+            var val1 = obj1.endpointNumber;
+            var val2 = obj2.endpointNumber;
+            if(val1 < val2){
+                return -1;
+            }else if(val1 > val2){
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+    </script>
+</html>

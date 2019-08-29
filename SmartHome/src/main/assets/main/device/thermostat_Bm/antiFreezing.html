@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="UTF-8">
+    <title>防冻保护</title>
+    <link rel="stylesheet" href="mui/css/mui.min.css">
+    <link rel="stylesheet" href="mui/css/mui.picker.min.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/antiFreezing.css" />
+    <script src="mui/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="mui/js/mui.picker.all.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+
+<body>
+    <header class="header" style="overflow: hidden; height: auto;">
+        <a class="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="Device_Bm_Details_Low_Protect" href="javascript:;">防冻保护</a>
+    </header>
+    <section>
+        <div class="mainTop">
+            <em class="autoSwitchLanguager" key="Device_Bm_Details_Low_Protect">防冻保护</em>
+            <div class="switch" id="open"><i data-state="off" class="on"></i></div>
+        </div>
+    </section>
+    <section>
+        <div class="mainBottom" onclick="showPop()">
+            <em class="autoSwitchLanguager" key="Device_Bm_Details_High_Protect_Value">温度选值</em>
+            <span class="currentTemp">5℃</span>
+            <i class="iconRight"></i>
+        </div>
+    </section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    initlan();
+    turnOffSwitch();
+    var devID, gwID;
+    var TEMP_ARR = [];
+    var tempScale = '℃';
+    var state = 0; // 开关状态
+    var temp = 5; // 温度
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(function (data) {
+            gwID = data.gwID;
+            devID = data.devID;
+            handleEp(data.endpoints);
+            sendCmd(0x8010, []);
+        });
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            handleEp(data.endpoints);
+        })
+    });
+
+    // 处理 endpoints
+    // 遍历解析
+    function handleEp(endpoints) {
+        endpoints.forEach(function (endpoint) {
+            var clusters = endpoint.clusters;
+            clusters.forEach(function (cluster) {
+                var attributes = cluster.attributes;
+                attributes.forEach(function (attribute) {
+                    var attributeId = attribute.attributeId;
+                    var attributeValue = attribute.attributeValue;
+                    handleAttribute(attributeId, attributeValue)
+                })
+            })
+        });
+    }
+
+    // 处理 attribute
+    function handleAttribute(attributeId, attributeValue) {
+        console.log("attributeId:\t\t" + attributeId.toString(16));
+        console.log("attributeValue:\t\t" + attributeValue);
+
+        if (attributeId == 0x8001) {
+            handleAttribute8001(attributeValue)
+        }
+    }
+
+    function handleAttribute8001(value) {
+        var ee = parseInt(value.substr(6, 2), 16); // ee:          防冻保护开关
+        var d1 = parseInt(value.substr(8, 2), 16); // dd:           防冻保护温度
+
+        showAnti(666, ee, d1);
+    }
+
+    function showAnti(ff, ee, dd) {
+        if (ff == 0) {
+            if (ee == 0) {
+                turnOffSwitch()
+            } else {
+                turnOnSwitch()
+            }
+        } else if (ff == 1) {
+            var t = dd;
+            showTemp(t)
+        } else {
+            if (ee == 0) {
+                turnOffSwitch()
+            } else {
+                turnOnSwitch()
+            }
+            var t = dd;
+            showTemp(t)
+        }
+    }
+
+    function showTemp(t) {
+        temp = t;
+        $(".currentTemp").html(t + tempScale);
+    }
+
+    function setState(s) {
+        state = s;
+        var ss = temp.toString();
+        var p = '0' + state + '0' + ss;
+        sendCmd(0x8012, [p])
+    }
+
+    function setTemp(t) {
+        temp = t;
+        var s = temp.toString();
+        var p = '0' + state + '0' + s;
+        sendCmd(0x8012, [p])
+    }
+
+    $("#open").on("click", toggleSwitch);
+    $(".back").on("click", function () {
+        plus.tools.back(function () {});
+    });
+
+    /**
+     * 切换开关
+     */
+    function toggleSwitch() {
+        var state = $("#open .on").attr("data-state");
+        if (state == "off") {
+            setState(1);
+            turnOnSwitch()
+        } else {
+            setState(0);
+            turnOffSwitch()
+        }
+    }
+
+    function turnOnSwitch() {
+        state = 1;
+        $("#open .on").attr("data-state", "on");
+        $("#open").css("background", "#8dd652");
+        $("#open i").animate({
+            left: '60%'
+        }, 200)
+    }
+
+    function turnOffSwitch() {
+        state = 0;
+        $("#open .on").attr("data-state", "off");
+        $("#open").css("background", "#aaa");
+        $("#open i").animate({
+            left: '10%'
+        }, 200)
+    }
+
+    function showPop() {
+        //初始化PopPicker组件
+        var picker = new mui.PopPicker({});
+        var arr = [];
+        for (var i = 5; i <= 9; i++) {
+            arr.push(i + tempScale)
+        }
+        TEMP_ARR = arr;
+        picker.setData(TEMP_ARR);
+        $(".mui-backdrop").css("opacity", "0");
+        $(".mui-poppicker-btn-cancel").html(langCancel); //"取消"
+        $(".mui-poppicker-btn-ok").html(langConfirm); //"确定"
+        picker.show(function (item) {
+            var st = item.toString();
+            setTemp(st.substring(0, st.length - 1))
+        });
+        picker.listen(function (item) {
+            //            $(".currentTemp").html(item);
+            console.log("listen: " + item);
+        })
+    }
+
+    function sendCmd(commandId, parameter) {
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.endpointNumber = 1;
+        jsonData.commandType = 1;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandId = commandId;
+        if (parameter) {
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData, function () {})
+    }
+</script>
+
+</html>

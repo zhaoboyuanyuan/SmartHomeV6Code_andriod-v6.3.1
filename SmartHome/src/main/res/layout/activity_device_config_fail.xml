@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/iv_config_fail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/default_margin_normal"
+        android:layout_marginTop="120dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon_config_wifi_fail" />
+
+    <TextView
+        android:id="@+id/add_fail_tips"
+        style="@style/config_wifi_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_config_fail"
+        android:layout_marginLeft="@dimen/default_padding_small"
+        android:layout_marginRight="@dimen/default_padding_small"
+        android:gravity="center_horizontal"
+        android:text="@string/Add_Fail_Tips"
+        android:textColor="@color/device_config_wifi_tips_color" />
+
+    <TextView
+
+        android:id="@+id/tv_config_wifi_fail_tip"
+        style="@style/config_wifi_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_fail_tips"
+        android:layout_marginBottom="@dimen/default_padding_small"
+        android:layout_marginLeft="@dimen/default_padding_small"
+        android:layout_marginRight="@dimen/default_padding_small"
+        android:layout_marginTop="@dimen/default_padding_small"
+        android:gravity="center_horizontal"
+        android:text="@string/Config_Wifi_Fail_Tips"
+        android:textColor="@color/device_config_wifi_tips_color" />
+
+
+    <TextView
+        android:id="@+id/tv_more_solutions"
+        style="@style/config_wifi_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_retry"
+        android:gravity="center_horizontal"
+        android:text="@string/Config_More_solutions"
+        android:textColor="#474549"
+        android:visibility="visible" />
+
+
+    <Button
+        android:id="@+id/btn_retry"
+        style="@style/config_next_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:text="@string/Cateyemini_Adddevice_Readd" />
+
+
+</RelativeLayout>

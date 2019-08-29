@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cc.wulian.smarthomev6.main.device.device_23.AirConditioning.AirConditioningMainActivity">
+
+    <View
+        android:id="@+id/air_title_image"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="@drawable/special_nav_background" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v4.widget.Space
+            android:id="@+id/air_place_match"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"/>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="212dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="4dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RelativeLayout
+                android:id="@+id/air_state_relate_off"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_air_state_off"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="40dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center_vertical|end">
+                    <ImageView
+                        android:id="@+id/air_image_circle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_air_circle"
+                        android:layout_marginEnd="8dp"/>
+                    <TextView
+                        android:id="@+id/air_state_text_off"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/Infraredtransponder_Airconditioner_Notopen"
+                        android:textColor="#393C59"
+                        android:textSize="16sp"/>
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/air_state_relate_on"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/air_num_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/air_num_second"
+                    android:layout_toStartOf="@+id/air_num_second"
+                    android:src="@drawable/num_2"/>
+
+                <ImageView
+                    android:id="@+id/air_num_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/num_6"/>
+
+                <ImageView
+                    android:id="@+id/air_state_image_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/air_num_second"
+                    android:layout_toEndOf="@+id/air_num_second"
+                    android:src="@drawable/icon_tem_c"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true">
+                    <LinearLayout
+                        android:id="@+id/air_state_linear_l"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/air_state_image_swing"
+                            android:layout_width="match_parent"
+                            android:layout_height="24dp"
+                            android:scaleType="center"
+                            android:src="@drawable/icon_air_state_swing_n"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:lines="1"
+                            android:ellipsize="end"
+                            android:text="@string/Infraredtransponder_Airconditioner_Windswept"
+                            android:textColor="#393C59"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/air_state_linear_m"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/air_state_image_mode"
+                            android:layout_width="match_parent"
+                            android:layout_height="24dp"
+                            android:scaleType="center"
+                            android:src="@drawable/icon_air_mode_cold"/>
+
+                        <TextView
+                            android:id="@+id/air_state_text_mode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:lines="1"
+                            android:ellipsize="end"
+                            android:text="@string/Infraredtransponder_Airconditioner_Refrigeration"
+                            android:textColor="#393C59"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/air_state_linear_r"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/air_state_image_speed"
+                            android:layout_width="match_parent"
+                            android:layout_height="24dp"
+                            android:scaleType="center"
+                            android:src="@drawable/icon_cloud_auto"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:lines="1"
+                            android:ellipsize="end"
+                            android:text="@string/Infraredtransponder_Airconditioner_Speed"
+                            android:textColor="#393C59"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingBottom="8dp"
+            android:paddingEnd="36dp"
+            android:paddingStart="36dp">
+
+            <ImageView
+                android:id="@+id/air_image_close"
+                android:layout_width="@dimen/air_conditioning_image_size"
+                android:layout_height="@dimen/air_conditioning_image_size"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/selector_air_close"
+                android:tag="4"/>
+
+            <ImageView
+                android:id="@+id/air_image_refresh"
+                android:layout_width="@dimen/air_conditioning_image_size"
+                android:layout_height="@dimen/air_conditioning_image_size"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/selector_air_refresh"
+                android:tag="1"/>
+
+            <ImageView
+                android:id="@+id/air_image_swing_h"
+                android:layout_width="@dimen/air_conditioning_image_size"
+                android:layout_height="@dimen/air_conditioning_image_size"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/selector_air_swing_h"
+                android:tag="7"/>
+
+            <ImageView
+                android:id="@+id/air_image_speed"
+                android:layout_width="@dimen/air_conditioning_image_size"
+                android:layout_height="@dimen/air_conditioning_image_size"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/selector_air_speed"
+                android:tag="5"/>
+
+            <ImageView
+                android:id="@+id/air_image_swing_v"
+                android:layout_width="@dimen/air_conditioning_image_size"
+                android:layout_height="@dimen/air_conditioning_image_size"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/selector_air_swing_v"
+                android:tag="30"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_above="@+id/air_image_swing_v"
+                android:layout_centerHorizontal="true">
+
+                <ImageView
+                    android:id="@+id/air_image_tem_up"
+                    android:layout_width="@dimen/air_conditioning_image_size"
+                    android:layout_height="73dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/selector_air_tem_up"
+                    android:tag="2"/>
+
+                <ImageView
+                    android:id="@+id/air_image_tem_down"
+                    android:layout_width="@dimen/air_conditioning_image_size"
+                    android:layout_height="73dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/air_image_tem_up"
+                    android:src="@drawable/selector_air_tem_down"
+                    android:tag="3"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/air_image_tem_up"
+                    android:layout_marginTop="-6dp"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:text="@string/Infraredtransponder_Airconditioner_Temperature"
+                    android:textSize="12sp"
+                    android:textColor="#393C59"/>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <ViewStub
+            android:id="@+id/device_23_stub_match"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout="@layout/activity_air_conditioning_main_match"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+        <ImageView
+            android:id="@+id/air_image_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="center"
+            android:clickable="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_back"/>
+        <TextView
+            android:id="@+id/air_text_title"
+            style="@style/TextView.normal_a"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="19sp"
+            android:lines="1"
+            android:gravity="center"
+            tools:text="@string/Infraredtransponder_Airconditioner_Name"/>
+
+        <ImageView
+            android:id="@+id/air_image_more"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="center"
+            android:clickable="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_more"/>
+
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/air_text_instructions"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:lines="1"
+            android:ellipsize="end"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:text="@string/Infraredtransponder_Airconditioner_Instructions"/>
+    </RelativeLayout>
+
+
+</FrameLayout>

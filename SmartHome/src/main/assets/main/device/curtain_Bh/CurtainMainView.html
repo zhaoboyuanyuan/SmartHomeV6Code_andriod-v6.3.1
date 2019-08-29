@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>设备操作</title>
+	<link rel="stylesheet" type="text/css" href="css/base.css" />
+	<link rel="stylesheet" type="text/css" href="css/device.css" />
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a href="javascript:;" class="deviceName autoSwitchLanguager" key="device_Bh_name">二位智能窗帘开关</a>
+				<a class="more" href="javascript:;"></a>
+			</div>
+		</header>
+		<view class="mainview">
+			<div class="tab_content">
+				<ul class="tab_ui">
+					<li class="on autoSwitchLanguager" key="device_Bh_Details_One">窗帘一</li>
+					<li class="autoSwitchLanguager" key="device_Bh_Details_Two">窗帘二</li>
+				</ul>
+			</div>
+			<div class="con_main">
+				<div class="content" id="content0">
+					<section class="statusview">
+						<div class="statePopup"></div>
+						<canvas id="animationview"></canvas>
+					</section>
+					<section  class="bottomview bottom_Ar">
+						<div class="openBtn" data-id="1">
+							<img src="fonts/open_nor.png"/>
+						</div>
+						<div class="stopBtn" data-id="1">
+							<img src="fonts/stop_nor.png"/>
+						</div>
+						<div class="closeBtn" data-id="1">
+							<img src="fonts/close_nor.png"/>
+						</div>
+					</section>
+				</div>
+				<div class="content" style="display:none" id="content1">
+					<section class="statusview">
+						<canvas id="animationview1"></canvas>
+					</section>
+					<section  class="bottomview bottom_Ar">
+						<div class="openBtn" data-id="2">
+							<img src="fonts/open_nor.png"/>
+						</div>
+						<div class="stopBtn" data-id="2">
+							<img src="fonts/stop_nor.png"/>
+						</div>
+						<div class="closeBtn" data-id="2">
+							<img src="fonts/close_nor.png"/>
+						</div>
+					</section>
+				</div>
+			</div>
+		</view>
+		<section class="mask_layer" style="display:none;">
+				<i></i>
+				<span class="autoSwitchLanguager" key="offLine">设备已离线</span>
+		</section>
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/canvas.js" type="text/javascript" charset="UTF-8"></script>
+		<script>
+            initlan()
+            var info = window.sysfun;
+            info.init("MetalCurtainControl");
+            //stopAnimation(document.getElementById("animationview"));
+            var GWID;
+            var DEVICEID;
+            var deviceInfo;
+            var endpointNumber;
+            var clusterId;
+
+            var ani1 = new Animation(document.getElementById("animationview"))
+            var ani2 = new Animation(document.getElementById("animationview1"))
+            ani1.stopAnimation();
+            /*切换窗帘*/
+            $(".tab_ui li").on("click",function(){
+                var index = $(this).index();
+                $(this).addClass("on").siblings("li").removeClass("on")
+                $(".con_main").find(".content").eq(index).show().siblings(".content").hide();
+                if(index == 1){
+					ani2.stopAnimation();
+                }else{
+                    ani1.stopAnimation();
+				}
+			})
+
+            function isNull(arg) {
+                var isnull = arg == null || arg == undefined || arg == "undefined" || arg == "";
+                return isnull;
+            }
+
+            plus.plusReady(function(){
+                $("#back").on("click", function() {
+                    plus.tools.back(function() {});
+                });
+                $(".more").on("click", function() {
+                    plus.tools.more("", function(){});
+                });
+				/*点击按钮切换*/
+                $(".openBtn").on("touchstart",function(){
+                    $(this).find("img").attr("src","fonts/open_pre.png")
+                    var num = parseInt($(this).attr("data-id"));
+                    control(num,0)
+                });
+                $(".openBtn").on("touchend",function(){
+                    $(this).find("img").attr("src","fonts/open_nor.png")
+                });
+
+                $(".stopBtn").on("touchstart",function(){
+                    $(this).find("img").attr("src","fonts/stop_pre.png")
+                    var num = parseInt($(this).attr("data-id"));
+                    control(num,2)
+                });
+                $(".stopBtn").on("touchend",function(){
+                    $(this).find("img").attr("src","fonts/stop_nor.png")
+                });
+
+                $(".closeBtn").on("touchstart",function(){
+                    $(this).find("img").attr("src","fonts/close_pre.png")
+                    var num = parseInt($(this).attr("data-id"));
+                    control(num,1)
+                });
+                $(".closeBtn").on("touchend",function(){
+                    $(this).find("img").attr("src","fonts/close_nor.png")
+                });
+                plus.gatewayCmd.getDeviceInfo(function(result) {
+                    deviceInfo = result;
+                    endpointNumber = result.endpoints[0].endpointNumber;
+                    clusterId = result.endpoints[0].clusterId;
+                    DEVICEID = result.devID;
+                    getMoreConfig(DEVICEID);
+                    GWID = result.gwID;
+
+                    if(result.mode == 2) {
+                        $(".mask_layer").show();
+                    } else {
+                        $(".mask_layer").hide();
+                    }
+                    var name = "";
+                    if(!isNull(result.name)) {
+                        name = result.name.indexOf("#$default$#") != -1 ? device_Bh_name + result.name.split("#")[2] : result.name;
+                    }
+                    $(".deviceName").html(name);
+                });
+                plus.gatewayCmd.newDataRefresh(function(result) {
+                    if(result.cmd == "500" && deviceInfo.devID == result.devID) {
+                        var name = "";
+                        if(!isNull(result.name)) {
+                            name = result.name.indexOf("#$default$#") != -1 ? device_Bh_name + result.name.split("#")[2] : result.name;
+                        }
+                        $(".deviceName").html(name);
+                        if(result.mode == 2) {
+                            $(".mask_layer").show();
+                        } else if(result.mode == 1) {
+                            $(".mask_layer").hide();
+                        } else {
+                            $(".mask_layer").hide();
+                        }
+                    } else if(result.cmd == "502") {
+                        if(!isNull(result.name)) {
+                            var name = "";
+                            name = result.name;
+                            $(".deviceName").html(name);
+                        }
+                    }
+                    if(DEVICEID == result.devID && GWID == result.gwID && result.cmd == "500") {
+                        switch(parseInt(result.mode)) {
+                            case 0:
+                            {
+                                //设备状态变化
+                                $(".mask_layer").hide();
+                                drawUi(result);
+                            }
+                                break;
+                            case 1:
+                            {
+                                //设备上线
+                                $(".mask_layer").hide();
+                                drawUi(result);
+                            }
+                                break;
+                            case 2:
+                            {
+                                //设备离线
+                                $(".mask_layer").show();
+                            }
+                                break;
+                            case 3:
+                            {
+                                //设备主动退网
+                                $(".mask_layer").show();
+                            }
+                                break;
+                            case 4:
+                            {
+                                //设备第一次上线
+                                $(".mask_layer").hide();
+                            }
+                                break;
+                            default:
+                            {
+
+                            }
+                                break;
+                        }
+                    }
+                });
+            });
+			function control(num,commandId){
+                var jsonData = {
+                    "cmd": "501",
+                    "gwID": GWID,
+                    "devID": DEVICEID,
+                    "endpointNumber": num,
+                    "clusterId": 258,
+                    "commandType": 01,
+                    "commandId": commandId,
+                };
+                plus.gatewayCmd.controlDevice(jsonData, function(result) {
+                    console.log("result" + result);
+                })
+			}
+			function drawUi(result){
+                for(var i = 0;i<result.endpoints.length;i++){
+                    var num = result.endpoints[i].endpointNumber;
+                    var attributeValue = result.endpoints[i].clusters[0].attributes[0].attributeValue;
+                    reloadUi(num,attributeValue)
+                }
+			}
+//			setTimeout(function(){
+//                reloadUi(0,100)
+//			},2000)
+
+			function reloadUi(num,value){
+                var ani;
+			    if(num == 1){
+					ani = ani1;
+				}else{
+                    ani = ani2;
+				}
+                if (value == 3) {
+                    ani.closeAnimation();
+                } else if (value == 2) {
+                    ani.openAnimation();
+                } else if (value == 1) {
+                    ani.stopAnimation();
+                }
+			}
+		</script>
+	</body>
+</html>

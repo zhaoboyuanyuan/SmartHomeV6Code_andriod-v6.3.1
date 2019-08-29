@@ -1,0 +1,365 @@
+.power {
+    margin: 2rem 2rem;
+    top: 10rem;
+    height: 10rem;
+    width: 8rem;
+    text-align: center;
+}
+
+.power div {
+    left: 10%;
+    width: 80%;
+    height: 10rem;
+    text-align: center;
+}
+
+.power i {
+    display: inline-block;
+    width: 5.5rem;
+    height: 5.5rem;
+    background: url(../fonts/icon_power_1.png) no-repeat center center;
+    background-size: 100% auto;
+}
+
+.power span {
+    display: block;
+    width: 100%;
+    height: 4rem;
+    margin-top: 0.5rem;
+    font-size: 1.4rem;
+}
+
+.bottomView {
+    text-align: center;
+    width: 100%;
+    height: 11rem;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+}
+
+.bottomLeft {
+    display: inline-block;
+    width: 33.3%;
+    height: 8rem;
+    padding-top: 1rem;
+    left: 3rem;
+    text-align: center;
+    float: left;
+}
+
+.bottomLeft .tempLeft {
+    display: inline-block;
+    height: 3rem;
+    font-size: 2.5rem;
+    color: #000;
+}
+
+.bottomLeft .tempScale {
+    display: inline-block;
+    top: 0;
+    right: 0.25rem;
+    width: 2rem;
+    height: 2rem;
+    font-size: 2rem;
+    background-size: 100% auto;
+}
+
+.bottomLeft span {
+    display: block;
+    width: 100%;
+    height: 4rem;
+    margin-top: 1rem;
+    font-size: 1.5rem;
+}
+
+.errorLeft {
+    display: none;
+    width: 3rem;
+    height: 3rem;
+    background: url(../fonts/icon_error.png) no-repeat center center;
+    background-size: 100% auto;
+}
+
+.bottomRight {
+    display: inline-block;
+    width: 33.3%;
+    height: 8rem;
+    padding-top: 1rem;
+    right: 3rem;
+    text-align: center;
+    float: right;
+}
+
+.bottomRight .tempRight {
+    display: inline-block;
+    height: 3rem;
+    font-size: 2.5rem;
+}
+
+.bottomRight .tempScale {
+    display: inline-block;
+    top: 0;
+    right: 0.25rem;
+    width: 2rem;
+    height: 2rem;
+    font-size: 2rem;
+    background-size: 100% auto;
+}
+
+.bottomRight span {
+    display: block;
+    width: 100%;
+    height: 4rem;
+    margin-top: 1rem;
+    font-size: 1.5rem;
+}
+
+.errorRight {
+    display: none;
+    width: 3rem;
+    height: 3rem;
+    background: url(../fonts/icon_error.png) no-repeat center center;
+    background-size: 100% auto;
+}
+
+.bottomView .timer {
+    display: inline-block;
+    width: 33.3%;
+    float: left;
+    height: 8rem;
+    text-align: center;
+}
+
+.bottomView .timer i {
+    display: inline-block;
+    width: 5rem;
+    height: 5rem;
+    text-align: center;
+    background: url(../fonts/icon_time.png) no-repeat center center;
+    background-size: 80% auto;
+}
+
+.timer span {
+    display: block;
+    width: 100%;
+    height: 4rem;
+    margin-top: 0.2rem;
+    font-size: 1.5rem;
+}
+
+.greenView {
+    display: none;
+    position: absolute;
+    width: 100%;
+    margin-top: 5rem;
+    text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.greenView i {
+    display: inline-block;
+    height: 2rem;
+    width: auto;
+    background: rgba(231, 231, 231, 1);
+    padding: 1rem 2rem;
+    line-height: 2rem;
+    font-size: 1.5rem;
+    color: #000;
+    border-radius: 4px;
+}
+
+.countDownView {
+    display: none;
+    position: absolute;
+    width: 100%;
+    margin-top: 9rem;
+    padding: 1rem 0;
+    text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.countDownView i {
+    display: inline-block;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: 1.5rem;
+    color: #000;
+}
+
+.countDownView .cancelTime {
+    display: inline-block;
+    margin-left: 1rem;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: 1.5rem;
+    color: #8DD652;
+}
+
+.bottomView {
+    text-align: center;
+    width: 80%;
+    left: 10%;
+    height: 11rem;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+}
+
+.powerOff {
+    background: url(../fonts/icon_power_2.png) no-repeat center center;
+    background-size: 100% auto;
+}
+
+.powerOn {
+    background: url(../fonts/icon_power_1.png) no-repeat center center;
+    background-size: 100% auto;
+}
+
+.btnRight i {
+    background: url(../fonts/icon_energy.png) no-repeat center center;
+    background-size: 80% auto;
+}
+
+/*************************************************************************
+ *                             设备离线遮罩层                            *
+ *************************************************************************/
+.mask_layer {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 6.4rem;
+    width: 100%;
+    height: 94%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7)
+}
+
+.mask_layer i {
+    display: inline-block;
+    width: 8rem;
+    height: 8rem;
+    margin-top: 15rem;
+    background: url(../fonts/icon_new.png) no-repeat center center;
+    background-size: 8rem auto;
+}
+
+.mask_layer span {
+    display: block;
+    width: 100%;
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #fff;
+}
+
+/*************************************************************************
+ *                              中部温度选择器                           *
+ *************************************************************************/
+.num_scroll_show {
+    margin-top: -6rem;
+    width: 100%;
+    text-align: center;
+    height: 22rem;
+}
+
+.num_scroll_show div {
+    margin: 0px;
+    text-align: center;
+    height: 7rem;
+    display: block;
+    width: 100%;
+    position: absolute
+}
+
+.num_scroll_show p {
+    display: inline;
+    height: 100%;
+    font-size: 8rem;
+    text-align: center;
+    line-height: 7rem;
+    overflow: hidden;
+}
+
+.num_scroll_Unit {
+    display: inline-block;
+    position: absolute;
+    top: 22rem;
+    right: 6rem;
+    width: 4.0rem;
+    height: 4.0rem;
+
+    font-size: 3rem;
+    /*background:url(../img/sensor_doorbell_normal.png) no-repeat center center;*/
+    /*background-size: 100% auto;*/
+}
+
+/*取消定时器弹框*/
+.cancelTimeAlert {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4)
+}
+
+.nameToast {
+    position: absolute;
+    left: 12%;
+    top: 50%;
+    width: 76%;
+    /* height: 14rem; */
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    transform: translateY(-50%);
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.nameToast span {
+    display: block;
+    width: 100%;
+    margin-top: 2.5rem;
+    text-align: center;
+    font-size: 1.7rem;
+    color: #555;
+}
+
+.nameToast .name {
+    margin: 0 5%;
+    width: 90%;
+    background: #f2f2f2;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.nameToast .choose_1 {
+    margin-top: 2.5rem;
+    border-top: 1px solid #d9d9d9;
+}
+
+.nameToast .choose_1 a {
+    display: block;
+    box-sizing: border-box;
+    float: left;
+    width: 50%;
+    height: 5.5rem;
+    line-height: 5.5rem;
+    text-align: center;
+    border-right: 1px solid #d9d9d9;
+    font-size: 1.5rem;
+    color: #555;
+}
+
+.nameToast .choose_1 em:last-child {
+    border-right: 0;
+}

@@ -1,0 +1,387 @@
+@charset "utf-8";
+
+html{
+	background:#8dd652;
+}
+html,body{
+	height:100%;
+}
+/*头部*/
+.header{
+	background:#8dd652;
+}
+/*添加步骤*/
+.step_img{
+	margin-top:2.5rem;
+	width:100%;
+	height:4.2rem;
+	text-align:center;
+}
+.step_img img{
+	display:inline-block;
+	width:72%;
+	height:auto;
+}
+.step_switch img{
+	display:inline-block;
+	width:50.5%;
+	height:auto;
+}
+.step_main{
+	width:100%;
+	margin-top:1rem;
+	text-align:center;
+	overflow:hidden;
+}
+.step_main p{
+	width:100%;
+	/*height:2.5rem;*/
+	text-align:center;
+	line-height:2.5rem;
+	font-size:1.8rem;
+	color:#fff;
+}
+.step_main img{
+	display:inline-block;
+	width:70%;
+	height:auto;
+}
+.main_switch img{
+	display:inline-block;
+	width:19%;
+	height:auto;
+}
+.main_switch2{
+	margin-top:5rem;
+}
+.main_switch2 img{
+	display:inline-block;
+	width:35%;
+	height:auto;
+}
+.main_switch3{
+	margin-top:5rem;
+}
+.main_switch3 img{
+	display:inline-block;
+	width:48%;
+	height:auto;
+}
+.step_main .explain{
+	width:100%;
+	/*height:1.9rem;*/
+	line-height:1.9rem;
+	text-align:center;
+	font-size:1.2rem;
+}
+.step_btn{
+	overflow:hidden;
+}
+.step_btn a{
+	display:block;
+	position:fixed;
+	left:4%;
+	bottom:10%;
+	width:92%;
+	height:5rem;
+	line-height:5rem;
+	text-align: center;
+	background:#fff;
+	color:#64c31b;
+	font-size:1.7rem;
+	border-radius: 5px;
+}
+/*第二步*/
+.step_main2{
+	margin-top:3.5rem;
+}
+.step_main2 img{
+	margin:3.5rem 0 1rem;
+}
+/*返回上一步*/
+.step_btn2 a{
+	bottom:11%;
+}
+.step_btn2 a:nth-child(2){
+	box-sizing: border-box;
+	bottom:2%;
+	background:none;
+	color:#fff;
+	border:1px solid #fff;
+}
+/*第三步*/
+.step_main3{
+	margin-top:3rem!important;
+}
+.step_main p em{
+	display:inline-block;
+	margin:0 0.3rem;
+	font-size:2.2rem;
+}
+/*设备状态*/
+.state{
+	width:100%;
+	text-align:center;
+	overflow:hidden;
+}
+.state a{
+	display:inline-block;
+	width:64%;
+	height:24rem;
+	padding:4.3rem 0;
+	background:url(../fonts/icon_circle_01.png) no-repeat center center;
+	background-size:15rem auto;
+}
+.state a img{
+	display:none;
+	width:100%;
+	height:auto;
+}
+@-ms-keyframes scale{
+	from{transform: scale(1);}
+	to{transform: scale(1.2);}
+}
+@-moz-keyframes scale{
+	from{transform: scale(1);}
+	to{transform: scale(1.2);}
+}
+@-webkit-keyframes scale{
+	from{transform: scale(1);}
+	to{transform: scale(1.2);}
+}
+@keyframes scale{
+	from{transform: scale(1);}
+	to{transform: scale(1.2);}
+}
+.scale{
+	-moz-animation: scale 0.5s infinite alternate;
+	-webkit-animation: scale 0.5s infinite alternate;
+	-ms-animation: scale 0.5s infinite alternate;
+	animation: scale 0.5s infinite alternate;
+}
+.state p{
+	font-size:2.4rem;
+	color:#fff;
+}
+/*操作失败提示toast*/
+.toast_state{
+	display:none;
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0,.1)
+}
+.toast_state span{
+	display:block;
+	position:fixed;
+	left:15%;
+	bottom:10%;
+	width:70%;
+	height:3rem;
+	line-height:3rem;
+	text-align:center;
+	background:rgba(0,0,0,.4);
+	font-size:1.4rem;
+	color:#fff;
+	border-radius:5px;
+}
+
+/*二键单零火开关*/
+.switch_state{
+	width:100%;
+	padding-top:5rem;
+	text-align: center;
+	overflow:hidden;
+}
+.switch_state img.add_scene{
+	display:inline-block;
+	width:15rem;
+	height:auto;
+}
+.switch_state span{
+	display:block;
+	width:100%;
+	height:2.6rem;
+	line-height:2.6rem;
+	margin-top:2.5rem;
+	margin-bottom:4.3rem;
+	font-size:2.4rem;
+	color:#fff;
+}
+.switch_popup{
+	position:relative;
+	display:inline-block;
+	text-align:center;
+	width:16rem;
+	height:16rem;
+}
+.switch_popup i{
+	display:none;
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+}
+.switch_popup em{
+	position:absolute;
+	left:0;
+	top:0;
+	display:none;
+	width:100%;
+	height:16rem;
+	margin:0;
+	background:url(../fonts/loading.png) no-repeat center center;
+}
+.switch_state .switch_handle{
+	display:inline-block;
+	margin-top:0.5rem;
+	width:15rem;
+	height:auto;
+}
+@-webkit-keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		-moz-transform: rotateZ(360deg);
+		-o-transform: rotateZ(360deg);
+		-ms-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		-moz-transform: rotateZ(0);
+		-o-transform: rotateZ(0);
+		-ms-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+@-moz-keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		-moz-transform: rotateZ(360deg);
+		-o-transform: rotateZ(360deg);
+		-ms-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		-moz-transform: rotateZ(0);
+		-o-transform: rotateZ(0);
+		-ms-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+@-ms-keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		-moz-transform: rotateZ(360deg);
+		-o-transform: rotateZ(360deg);
+		-ms-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		-moz-transform: rotateZ(0);
+		-o-transform: rotateZ(0);
+		-ms-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+@-o-keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		-moz-transform: rotateZ(360deg);
+		-o-transform: rotateZ(360deg);
+		-ms-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		-moz-transform: rotateZ(0);
+		-o-transform: rotateZ(0);
+		-ms-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+@keyframes rotate{
+	from{
+		-webkit-transform: rotateZ(360deg);
+		-moz-transform: rotateZ(360deg);
+		-o-transform: rotateZ(360deg);
+		-ms-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+	}
+	to{
+		-webkit-transform: rotateZ(0);
+		-moz-transform: rotateZ(0);
+		-o-transform: rotateZ(0);
+		-ms-transform: rotateZ(0);
+		transform: rotateZ(0);
+	}
+}
+.switch_state .switch_popup em.rotate{
+	-webkit-animation: rotate 2s linear infinite;
+	-moz-animation: rotate 2s linear infinite;
+	-o-animation: rotate 2s linear infinite;
+	-ms-animation: rotate 2s linear infinite;
+	animation: rotate 2s linear infinite;
+}
+/*遮罩层*/
+.mask_layer{
+	display:none;
+	position:absolute;
+	left:0;
+	top:6.4rem;
+	width:100%;
+	height:calc(100% - 6.4rem);
+	text-align:center;
+	background:rgba(0,0,0,0.5)
+}
+.mask_layer i{
+	display:inline-block;
+	width:8rem;
+	height:8rem;
+	margin-top:15rem;
+	background:url(../fonts/icon_new.png) no-repeat center center;
+	background-size:8rem auto;
+}
+.mask_layer span{
+	display:block;
+	width:100%;
+	height:5rem;
+	line-height:5rem;
+	text-align:center;
+	font-size:1.6rem;
+	color:#fff;
+}
+/*遮罩层*/
+.mask_layer{
+	display:none;
+	position:absolute;
+	z-index:1000;
+	left:0;
+	top:6.4rem;
+	width:100%;
+	height:calc(100% - 6.4rem);
+	text-align:center;
+	background:rgba(0,0,0,0.5)
+}
+.mask_layer i{
+	display:inline-block;
+	width:8rem;
+	height:8rem;
+	margin-top:15rem;
+	background:url(../fonts/icon_new.png) no-repeat center center;
+	background-size:8rem auto;
+}
+.mask_layer span{
+	display:block;
+	width:100%;
+	height:5rem;
+	line-height:5rem;
+	text-align:center;
+	font-size:1.6rem;
+	color:#fff;
+}

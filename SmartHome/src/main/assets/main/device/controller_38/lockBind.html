@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>门锁设置</title>
+	<link rel="stylesheet" href="css/base.css">
+	<link rel="stylesheet" href="css/device.css">
+	<link rel="stylesheet" href="css/sceneRelate.css">
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+<header class="header">
+	<div class="header_top">
+		<a id="back" href="javascript:;"></a>
+		<a class="deviceName autoSwitchLanguager" key="device_39_Select_houseKeeper1" href="javascript:;">选择设备</a>
+	</div>
+</header>
+<section class="content" id="sceneView">
+	<div class="passwordVerifiers">
+		<input id="lockPassword" type="password" class="autoSwitchLanguager" key="device_38_enter_password" placeholder="请输入正确的开门密码" />
+		<span class="del"></span>
+		<span class="eyes" data-state="hidden"></span>
+	</div>
+	<div class="bindBtn gray autoSwitchLanguager" key="device_38_ok">确定</div>
+</section>
+<section class="toast autoSwitchLanguager" key="lang_txt_24" style="display:none;">请求超时，请重试</section>
+<section class="saveToast" style="display:none;">
+	<div><i><em class="rotate"></em><span class="autoSwitchLanguager" key="lock_Scenes_bind_binding">正在绑定</span></i></div>
+</section>
+<script type="text/javascript" src="../../source/js/rem.js"></script>
+<script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="lang/lang.js"></script>
+<script type="text/javascript">
+    initlan();
+	var endNum = parseInt(decodeURI(getUrlParam("num")));
+	var bindDevID = decodeURI(getUrlParam("id"));
+	var devID = decodeURI(getUrlParam("devID"));
+	var gwID = decodeURI(getUrlParam("gwID"));
+	var appID;
+	var timeOut;
+	$("#back").on("click",function(){
+		window.location = "deviceLockList.html?bindDevID="+bindDevID+"&num="+endNum+"&gwID="+gwID+"&devID="+devID;
+	});
+    plus.plusReady(function(){
+        // plus.getCurrentAppID(function(result){
+        //     appID = result;
+        // });
+        plus.gatewayCmd.newDataRefresh(function(data){
+            if(data.cmd == "500" && data.devID == devID){
+                $(".saveToast").hide();
+                clearTimeOut();
+                if(data.extData){
+                    var extData = JSON.parse(atob(data.extData));
+                    var bindList = extData.bindArray;
+                    for(var i in bindList){
+                        if(bindList[i].key == endNum && bindDevID === bindList[i].id){
+                            window.showDialog.show(languageUtil.getResource("device_38_success"),1000);
+                            setTimeout(function(){
+                                window.location = "remoteControl.html";
+							},1000);
+                        }
+                    }
+                }
+            }
+        })
+    });
+    $("#lockPassword").on("input propertychange",function(){
+		if($(this).val() !== ""){
+            $(".bindBtn").removeClass("gray");
+            $(".bindBtn").addClass("green");
+		    $(".passwordVerifiers span.del").show();
+		}else{
+            $(".bindBtn").removeClass("green");
+            $(".bindBtn").addClass("gray");
+            $(".passwordVerifiers span.del").hide();
+		}
+	});
+    $(".del").on("click",function(){
+        $("#lockPassword").val("");
+        $(".passwordVerifiers span.del").hide();
+	});
+    $(".eyes").on("click",function(){
+        if($(this).attr("data-state") === "hidden"){
+            $("#lockPassword").attr("type","text");
+            $(this).attr("data-state","visible")
+		}else{
+            $("#lockPassword").attr("type","password");
+            $(this).attr("data-state","hidden")
+		}
+	});
+    $(".bindBtn").on("click",function(){
+        if($(this).attr("class").indexOf("green") !== -1){
+            var password = $("#lockPassword").val().trim();
+            var parameter = bindDevID+':'+password;
+            send_501(0x8012,endNum,parameter);
+            $(".saveToast").show();
+            RequestTimeout();
+		}
+	});
+    function send_501(commandId,num,parameter){
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.appID = appID;
+        jsonData.endpointNumber = num;
+        jsonData.clusterId = 5;
+        jsonData.commandType = 1;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = [parameter]
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+	//请求超时
+	function RequestTimeout(){
+        timeOut = setTimeout(function(){
+            $(".saveToast").hide();
+            showToast(device_overtime);//请求超时
+		},60000)
+	}
+	function clearTimeOut(){
+		clearTimeout(timeOut);
+	}
+	function showToast(txt){
+        window.showDialog.show(txt,3000);
+	}
+</script>
+</body>
+</html>

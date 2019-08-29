@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 彩球 -->
+    <declare-styleable name="ColorView">
+        <attr name="colorColor" format="color"/>
+        <attr name="colorRadiusSmall" format="dimension"/>
+        <attr name="colorRadiusLarge" format="dimension"/>
+        <attr name="colorSpeed" >
+            <enum name="fast" value="400" />
+            <enum name="normal" value="700" />
+            <enum name="slow" value="1000" />
+        </attr>
+    </declare-styleable>
+</resources>

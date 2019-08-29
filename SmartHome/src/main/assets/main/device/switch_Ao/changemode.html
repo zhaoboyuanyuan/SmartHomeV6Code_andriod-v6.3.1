@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>切换模式界面</title>
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<link rel="stylesheet" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/device.css" />
+		<script src="js/mui.min.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>		
+		<script src="js/constant.js" type="text/javascript" charset="UTF-8"></script>		
+		<script src="js/devbase.js" type="text/javascript" charset="UTF-8"></script>		
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	</head>
+	<style type="text/css">
+		.divMode{
+			background-color: #FFFFFF;
+			width:100%;
+			height: 50px;
+		}
+		.divMode img{
+			width: 20px;
+			margin-top: 14px;
+			margin-left: 5%;
+			float: left;
+		}
+		.divMode .img_choose{
+			float: right;
+			margin-left: 0px;
+			margin-right: 5%;
+			margin-top: 17px;
+			display: none;
+		}
+		.divMode .p1{
+			margin-left: 10px;
+			float: left;
+			font-size: 14px;
+			margin-top: 14px;
+			color: #000000;
+		}
+		.divMode .p2{
+			margin-left: 10px;
+			float: right;
+			font-size: 14px;
+			margin-top: 14px;
+			margin-right: 5%;
+			color: #000000;
+		}
+		.p_msg{
+			color: #3D3D3D;
+			margin-left:5%;
+			margin-top: 10px;
+			margin-bottom: 20px;
+			height: 10px;
+		}
+		.splitLine{
+			height: 1px;
+			width: 100%;
+			background-color: #E2E2E2;
+		}
+	</style>
+	<body style="background-color: #F1F4F8">
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="autoSwitchLanguager" key="switch_Ao_ChangeMode01" 
+					href="javascript:;" style="width: 70%;">切换模式</a>
+				<a id="submit" 
+					href="javascript:;"
+					class="autoSwitchLanguager" key="switch_Ao_14"
+					 onclick="submit();"
+					 style="display: none;">确定</a>
+			</div>
+		</header>
+		<div style="margin-top: 20px;"></div>
+		<div class="splitLine"></div>
+		<div id="divCurMode" class="divMode">
+			<img id="divCurMode_img" src="fonts/icon_modebinding.png"/>
+			<p id="divCurMode_p1" class="autoSwitchLanguager p1" key="switch_mode_02">绑定模式</p>
+			<p id="divCurMode_p2" class="autoSwitchLanguager p2" key="switch_Ao_ChangeMode04">当前</p>
+		</div>
+		<div class="splitLine"></div>
+		<p id="p_msg" class="p_msg"></p>
+		<div class="splitLine"></div>
+		<div id="divMode_Switch" class="divMode">
+			<img src="fonts/icon_modeswitch.png"/>
+			<p class="autoSwitchLanguager p1" key="switch_mode_01">开关模式</p>
+			<img id="divMode_Switch_check" class="img_choose" src="fonts/choose.png" />
+		</div>
+		<div id="line1" class="splitLine"></div>
+		<div id="divMode_binding" class="divMode">
+			<img src="fonts/icon_modebinding.png"/>
+			<p class="autoSwitchLanguager p1" key="switch_mode_02">绑定模式</p>
+			<img id="divMode_binding_check" class="img_choose" src="fonts/choose.png" />
+		</div>
+		<div id="line2" class="splitLine"></div>
+		<div id="divMode_secne" class="divMode">
+			<img src="fonts/icon_modescene.png"/>
+			<p class="autoSwitchLanguager p1" key="switch_mode_03">场景模式</p>
+			<img id="divMode_scene_check" class="img_choose" src="fonts/choose.png" />
+		</div>
+		<div id="line3" class="splitLine"></div>
+		<section id="fail" class="toast" style="display:none;">
+			<p class="autoSwitchLanguager" id="toastText"></p>
+		</section>
+		<!--<input type="button" value="testmytest" onclick="testMytest();"/>-->
+	</body>
+	
+	<script src="js/changemode.js" type="text/javascript" charset="UTF-8"></script>
+	<script>
+		var epNum,epMode,devID,gwID;
+		var isBinding=false;
+		var epbindType="";
+		var appID="";
+		var isCompating=false;
+//		initUIDev();
+//		initModeList(con_mode_switch);
+		initlan(function(){
+			isCompating=false;
+			initUIDev();
+			initUiByMode();
+		});
+		
+		plus.plusReady(function(){		
+			var iphoneX = { sysFunc: "getItem:", room: "iphoneX", id: "iphoneX", data: "" };
+			var iStr = '';
+			if(!window.v6sysfunc) {
+				iStr = prompt(JSON.stringify(iphoneX))
+			}
+			if(iStr == "iphoneX") {
+				var body = document.getElementsByClassName("header")[0];
+				body.style.paddingTop = "1.4rem"
+			}
+			plus.gatewayCmd.getCurrentAppID(function(result) {
+				appID = result;
+			})
+			plus.gatewayCmd.getDeviceInfo(function(result) {
+				rush_500();
+				devID = result.devID;
+				gwID = result.gwID;
+			});
+		});
+		function initUiByMode(){
+			epNum=decodeURI(getUrlParam("epNum"));
+			epMode=decodeURI(getUrlParam("epMode"));
+			epbindType=decodeURI(getUrlParam("epbindType"));
+			if(isNull(epMode)){
+				epMode=con_mode_bind;//默认是开关模式
+			}
+			initModeList(epMode);
+			if(epMode==con_mode_switch){
+				document.getElementById("p_msg").innerHTML=" ";
+			}else if(epMode==con_mode_bind){
+				document.getElementById("p_msg").innerHTML=switch_Ao_ChangeMode02;//"切换后原有已绑定设备将解除绑定";
+			}else if(epMode==con_mode_scene){
+				document.getElementById("p_msg").innerHTML=switch_Ao_ChangeMode03;//"切换后原有已绑定设备将解除绑定";
+			}
+		}
+		
+		document.getElementById("back").addEventListener("click", function() {
+			javascript:history.go(-1);
+		});
+		function rush_500(){
+				plus.gatewayCmd.newDataRefresh(function(result) {
+					var isright = result != null &&
+						result != undefined &&
+						result.cmd == "500" &&
+						result.devID == devID;
+					showLog("isright="+isright+" isBinding="+isBinding);
+					if(isright&&isBinding) {
+						isBinding=false;
+//						closeToast();
+						//保存成功
+						showLog("saveSuc="+switch_Ao_saveSuc);
+						showSucToast(switch_Ao_saveSuc,function(){
+							javascript:history.go(-1);
+						});
+					}
+				});
+			}
+	function submit(){
+		if(isCompating==false){
+			isCompating=true;
+			createToast(switch_Ao_Saving);
+			showTimeOutCallBack(switch_Ao_timeout,function(){
+	    		isCompating=false;
+	    	});
+			clearTheBindData();//先清空
+			setTimeout(function() {
+				submit_completeBind();//再绑定		
+			},1000);
+		}		
+	}
+	/***********************************访问接口*******************************/
+	
+	/*
+	 * 设备控制
+	 */
+	function sendCmd(jsonData) {
+		plus.gatewayCmd.controlDevice(jsonData, function(result) {
+			console.log("result " + result);
+		})
+	}
+	/*向三键金属开关发送命令
+	 * endpointNumber：0表示对所有按键都有作用
+	 * commandId：表示执行不同的操作
+	 * param:参数,注意，这个是数组
+	 * */
+	function sendCmdForAo(endpointNumber,commandId,param){
+		var jsonData;
+		if(param!=null){
+			jsonData = {
+				"cmd": "501",
+				"gwID": gwID,
+				"devID": devID,
+				"endpointNumber": endpointNumber,
+				"commandType": 1,
+				"commandId": commandId,
+				"parameter": param
+			};
+		}else{
+			jsonData = {
+				"cmd": "501",
+				"gwID": gwID,
+				"devID": devID,
+				"endpointNumber": endpointNumber,
+				"commandType": 1,
+				"commandId": commandId
+			};	
+		}	
+		
+		sendCmd(jsonData);
+	}
+	/*改变绑定模式：改变为开关模式*/
+	function changeModeToSwitch(endpointNumber){
+		sendCmdForAo(endpointNumber,0x8010,["1"]);
+	}
+	/*改变绑定模式：改变为绑定模式*/
+	function changeModeToBind(endpointNumber){
+		sendCmdForAo(endpointNumber,0x8010,["2"]);
+	}
+	/*改变绑定模式：改变为场景模式*/
+	function changeModeToScene(endpointNumber){
+		sendCmdForAo(endpointNumber,0x8010,["3"]);
+	}
+	
+
+	/*解绑，ep=0表示清除所有的绑定关系*/
+	function UnBindingDev(ep){
+		sendCmdForAo(ep,0x8012,[ep+""]);
+	}
+	function unBindingScene(epNum){
+		showLog("appID="+appID);
+		var jsonData = {
+			"cmd": "513",
+			"gwID": gwID,
+			"devID":devID,
+			"appID":appID,
+			"mode": 3,
+			"data":[{ "endpointNumber":epNum+""}]
+		};
+		sendCmd(jsonData);
+	}
+	function clearTheBindData(){
+		
+		var logtxt="清空";
+		if(epMode==con_mode_scene){
+			logtxt+="场景 按键"+epNum;
+			unBindingScene(parseInt(epNum));
+		}else if(epMode==con_mode_bind){
+			logtxt+="设备";
+			if(epbindType!=null&&epbindType!=undefined&&epbindType!="Ar"){
+				logtxt+="设备 按键"+epNum;
+				UnBindingDev(parseInt(epNum));
+			}else{
+				logtxt+="设备 全部按键";
+				UnBindingDev(0);
+			}
+		}
+		console.log(logtxt);
+	}
+	</script>	
+</html>

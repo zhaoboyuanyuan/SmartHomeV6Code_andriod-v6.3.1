@@ -1,0 +1,34 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Br_name = "行温度コントローラ";
+$lang.On = "オン";
+$lang.Off = "オフ";
+$lang.Temperature = "室温";
+$lang.Remind = "フィルタが%1$s間交換されてません";
+$lang.Pattern_01 = "モード：%1$s";
+$lang.Windspeed_01 = "風速：%1$s";
+$lang.Pattern_02 = "モード";
+$lang.Timing = "定期";
+$lang.Windspeed_02 = "風速";
+$lang.Cancel = "取消";
+$lang.Complete = "完了";
+$lang.Hour = "時間";
+$lang.Minute = "分";
+$lang.Count_down_01 = "カウントダウン終了";
+$lang.Count_down_02 = "カウントダウン開始";
+$lang.Count_down_03 = "後オン";
+$lang.Count_down_04 = "後オフ";
+$lang.Mode_Switch_01 = "暖房";
+$lang.Mode_Switch_02 = "冷房";
+$lang.Mode_Switch_03 = "送風";
+$lang.Mode_Switch_04 = "低い";
+$lang.Mode_Switch_05 = "中";
+$lang.Mode_Switch_06 = "高い";
+$lang.Mode_Switch_07 = "自動";
+$lang.Mode_Switch_08 = "デバイスのオフライン";
+$lang.Mode_Switch_09 = "確認";
+$lang.Device_Br_Details_Loading = "いるノード…";
+$lang.Mode_Cancle_08 = "カウントダウンをキャンセルしてもよろしいですか？";

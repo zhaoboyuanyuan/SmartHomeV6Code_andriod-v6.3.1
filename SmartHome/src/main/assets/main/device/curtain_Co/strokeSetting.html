@@ -1,0 +1,567 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html style="background:#f3f3f3;">
+<head>
+    <meta charset="UTF-8">
+    <title>行程设置</title>
+</head>
+<link rel="stylesheet" type="text/css" href="css/base.css"/>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<style type="text/css">
+    * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    @-webkit-keyframes slideOutLeft {
+        from {
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+
+        to {
+            visibility: hidden;
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-100%, 0, 0);
+        }
+    }
+
+    @keyframes slideOutLeft {
+        from {
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+
+        to {
+            visibility: hidden;
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-100%, 0, 0);
+        }
+    }
+
+    .slideOutLeft {
+        -webkit-animation-name: slideOutLeft;
+        animation-name: slideOutLeft;
+        animation-iteration-count: infinite;
+        animation-duration: 6s;
+        animation-timing-function: linear;
+    }
+
+    @-webkit-keyframes slideInLeft {
+        from {
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-100%, 0, 0);
+            visibility: visible;
+        }
+
+        to {
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    @keyframes slideInLeft {
+        from {
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-100%, 0, 0);
+            visibility: visible;
+        }
+
+        to {
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    .slideInLeft {
+        -webkit-animation-name: slideInLeft;
+        animation-name: slideInLeft;
+        animation-iteration-count: infinite;
+        animation-duration: 6s;
+        animation-timing-function: linear;
+    }
+
+    /* switch button start */
+    .testswitch {
+        position: relative;
+        float: left;
+        width: 5.2rem;
+        margin: 0;
+    }
+
+    .testswitch-checkbox {
+        display: none;
+    }
+
+    .testswitch-label {
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        border: 0.1rem solid rgba(0, 0, 0, 0);
+        height: 2.2rem;
+        border-radius: 1.3rem;
+    }
+
+    .testswitch-inner {
+        display: block;
+        width: 200%;
+        margin-left: -100%;
+        transition: margin 0.3s ease-in 0s;
+    }
+
+    .testswitch-inner::before, .testswitch-inner::after {
+        display: block;
+        float: right;
+        width: 50%;
+        height: 2.2rem;
+        padding: 0;
+        line-height: 2.2rem;
+        font-size: 1.4rem;
+        color: white;
+        font-family: Trebuchet, Arial, sans-serif;
+        font-weight: bold;
+        box-sizing: border-box;
+    }
+
+    .testswitch-inner::after {
+        content: attr(data-on);
+        padding-left: 0.2rem;
+        background-color: #8cd451;
+        color: #FFFFFF;
+        text-align: left;
+    }
+
+    .testswitch-inner::before {
+        float: left;
+        content: attr(data-off);
+        padding-right: 0.2rem;
+        background-color: #EEEEEE;
+        color: #999999;
+        text-align: right;
+    }
+
+    .testswitch-switch {
+        position: absolute;
+        display: block;
+        width: 1.5rem;
+        height: 1.5rem;
+        margin: 0.1rem;
+        background: #FFFFFF;
+        top: 0.23rem;
+        bottom: 0;
+        right: 0.25rem;
+        border: 0.1rem solid #ffffff;
+        border-radius: 0.85rem;
+        transition: all 0.3s ease-in 0s;
+    }
+
+    .testswitch-checkbox:checked + .testswitch-label .testswitch-inner {
+        margin-left: 0;
+    }
+
+    .testswitch-checkbox:checked + .testswitch-label .testswitch-switch {
+        right: 3rem;
+    }
+
+    /* switch button end */
+
+    #settinglist p {
+        max-width: 75%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+</style>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" id="device_Co_stroke" href="javascript:;"></a>
+        <a href="javascript:;"></a>
+    </div>
+</header>
+
+<section style="width: 100%;height: 5rem;margin-top: -1rem;padding-top: 7rem;padding-bottom: 2.5rem;">
+    <div id="bar1" style="auto;width: 100%;background-color: none;height: 2rem;padding-top: 1rem;">
+        <div id="bar3"
+             style="border-radius: 1rem;margin-left: 10%;width: 80%;height: 1rem;background-color: gainsboro;">
+            <div id="bar2" style=" width: 0%;float: left;background-color: #F9D92C;height: 1rem;border-radius: 3rem;">
+                <div id="Btn"
+                     style="box-shadow: 0rem 0rem 0.4rem 0.4rem gainsboro;position: absolute;width: 3rem;border-radius: 3rem;background-color: white;height: 3rem;margin-top: -1rem;margin-right: -1rem;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="barProgress" style="auto;width: 100%;background-color: none;height: 2rem;padding-top: 1rem;display: none;">
+        <div id="barProgress_bar"
+             style="border-radius: 1rem;margin-left: 10%;width: 80%;height: 1rem;background-color: gainsboro;">
+            <div id="barProgress_color"
+                 style=" width: 100%;float: left;background-color: #F9D92C;height: 1rem;border-radius: 3rem;overflow: hidden;">
+                <div id="barProgress_text" class=""
+                     style="width: 100%;border-radius: 1rem;text-align: center;line-height: 0.8rem;color: white;">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="settinglist" style="width: 100%;margin-top: 1rem;">
+    <div style="width: 100%;height: 3.6rem;background-color: white;margin-top: 0.1rem;text-align: center;">
+        <p class="autoSwitchLanguager" id="device_Co_stroke_open"
+           style="float: left;font-size: 1.6rem;margin: 0.5rem 0 0 0.5rem;"></p>
+        <div class="testswitch" style="float: right;margin: 0.5rem 0.5rem 0 0;">
+            <input class="testswitch-checkbox" id="onoffswitch1" type="checkbox" checked="true">
+            <label class="testswitch-label" for="onoffswitch1">
+                <span class="testswitch-inner" data-on="" data-off=""></span>
+                <span class="testswitch-switch"></span>
+            </label>
+        </div>
+    </div>
+
+    <div style="width: 100%;height: 3.6rem;background-color: white;margin-top: 0.1rem;text-align: center;">
+        <p class="autoSwitchLanguager" id="device_Co_stroke_close"
+           style="float: left;font-size: 1.6rem;margin: 0.5rem 0 0 0.5rem;"></p>
+        <div class="testswitch" style="float: right;margin: 0.5rem 0.5rem 0 0;">
+            <input class="testswitch-checkbox" id="onoffswitch2" type="checkbox" checked="true">
+            <label class="testswitch-label" for="onoffswitch2">
+                <span class="testswitch-inner" data-on="" data-off=""></span>
+                <span class="testswitch-switch"></span>
+            </label>
+        </div>
+    </div>
+
+</section>
+
+<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager"
+                                                               id="device_Co_Offline">设备已离线</span></section>
+</body>
+<script>
+    initlan();
+    var shadow = document.getElementsByClassName("mask_layer")[0];
+    // var deviceName = document.getElementsByClassName("deviceName")[0];
+    var bar = document.getElementById("Btn");
+    var DEVICEID, GWID, CLUSTERID, ENDPOINTTYPE, ENDPOINTTYPE;
+    var canSetting = false;
+    var isGetDeviceInfoData = true;
+    plus.plusReady(function () {
+
+        plus.gatewayCmd.getDeviceInfo(function (result) {
+            deviceInfo = result;
+            ENDPIONTNUMBER = result.endpoints[0].endpointNumber;
+            ENDPOINTTYPE = result.endpoints[0].endpointType;
+            CLUSTERID = result.endpoints[0].clusterId;
+            DEVICEID = result.devID;
+            GWID = result.gwID;
+            getMoreConfig(DEVICEID)
+            var name = result.name;
+            if (!isNull(result.name)) {
+                name = result.name.indexOf("#$default$#") != -1 ? device_Co_name + result.name.split("#")[2] : result.name;
+            }
+            // deviceName.textContent = name;
+
+            dealDeviceModel(result);
+            isGetDeviceInfoData = false;
+
+            if (result.mode == 2 || result.mode == 3) {
+                shadow.style.display = "block";
+            } else {
+                shadow.style.display = "none";
+            }
+            rush_500(DEVICEID, GWID);
+
+            loadingPrompt.show("Loading...",10,10000,"request timeout");
+            //获取当前的百分比
+            sendCmd(0x0305);
+            sendCmd(0x0306);
+
+        });
+        document.getElementById("back").addEventListener("click", function () {
+            plus.tools.back(function () {
+            });
+        });
+
+        //switch
+        $("#onoffswitch1").on('click', function () {
+            if (canSetting == false) {
+                var isOn = $("#onoffswitch1").is(':checked');
+                // 选中才是off
+                $("#onoffswitch1").prop("checked", !isOn);
+                return;
+            }
+            clickSwitch()
+        });
+
+        var clickSwitch = function () {
+            if ($("#onoffswitch1").is(':checked')) {
+                console.log("onoffswitch1在OFF的状态下");
+                sendCmd(0x0305, "0");
+            } else {
+                console.log("onoffswitch1在ON的状态下");
+                sendCmd(0x0305, "1");
+            }
+        };
+
+        $("#onoffswitch2").on('click', function () {
+            if (canSetting == false) {
+                var isOn = $("#onoffswitch2").is(':checked');
+                // 选中才是off
+                $("#onoffswitch2").prop("checked", !isOn);
+                return;
+            }
+            clickSwitch2()
+        });
+
+        var clickSwitch2 = function () {
+            if ($("#onoffswitch2").is(':checked')) {
+                console.log("onoffswitch2在OFF的状态下");
+                sendCmd(0x0306, "0");
+            } else {
+                console.log("onoffswitch2在ON的状态下");
+                sendCmd(0x0306, "1");
+            }
+        };
+
+    });
+
+
+    /*
+     * 设备控制
+     */
+    function sendCmd(commandId, parameter) {
+        var jsonData = {
+            "cmd": "501",
+            "gwID": GWID,
+            "devID": DEVICEID,
+            "endpointNumber": 1,
+            "clusterId": 0x0102,
+            "commandType": 01,
+            "commandId": commandId,
+        };
+
+        if (!isNull(parameter)) {
+            jsonData.parameter = [parseInt(parameter) + ''];
+        }
+        plus.gatewayCmd.controlDevice(jsonData, function (result) {
+            console.log("result" + result);
+        })
+    }
+
+    function rush_500(dID, gID) {
+        plus.gatewayCmd.newDataRefresh(function (result) {
+            if (result.cmd == "502") {
+                var name = "";
+                if (!isNull(result.name)) {
+                    name = result.name;
+                }
+                // deviceName.textContent = name;
+            }
+            if (dID == result.devID && gID == result.gwID && result.cmd == "500") {
+                var name = "";
+                if (!isNull(result.name)) {
+                    name = result.name.indexOf("#$default$#") != -1 ? device_Co_name + result.name.split("#")[2] : result.name;
+                }
+                // deviceName.textContent = name;
+                switch (parseInt(result.mode)) {
+                    case 0: {
+                        //设备状态变化
+                        shadow.style.display = "none";
+                        dealDeviceModel(result);
+
+                    }
+                        break;
+                    case 1: {
+                        //设备上线
+                        shadow.style.display = "none";
+                    }
+                        break;
+                    case 2: {
+                        //设备离线
+                        shadow.style.display = "block";
+                    }
+                        break;
+                    case 3: {
+                        //设备主动退网
+                        shadow.style.display = "block";
+                    }
+                        break;
+                    case 4: {
+                        //设备第一次上线
+                        shadow.style.display = "none";
+                    }
+                        break;
+                }
+            }
+        })
+    }
+
+    function dealDeviceModel(model) {
+        var attrValue8005, attrValue8008, attrValue8009, attrValue8010, attrValue8011;
+        for (var i = 0; i < model.endpoints[0].clusters[0].attributes.length; i++) {
+            var attribute = model.endpoints[0].clusters[0].attributes[i];
+            if (attribute.attributeId == 0x8005) {
+                /*
+                * 位置
+                * 0：完全关闭
+                * 100：完全打开
+                * 255：当设备没有设置行程时，返回255
+                */
+                attrValue8005 = attribute.attributeValue;
+            }
+            if (attribute.attributeId == 0x8008) {
+                /*
+                * 电机状态
+                * 0：电机停止
+                * 1：电机打开
+                * 2：电机关闭
+                * 3：电机处于设置状态
+                * 4：电机堵转
+                */
+                attrValue8008 = attribute.attributeValue;
+            }
+            if (attribute.attributeId == 0x8009) {
+                /*
+                * 电机总行程是否已经被设置
+                * 0：没有设置总行程
+                * 1：总行程已被设置
+                */
+                attrValue8009 = attribute.attributeValue;
+            }
+            if (attribute.attributeId == 0x8010) {
+                attrValue8010 = attribute.attributeValue;
+            }
+            if (attribute.attributeId == 0x8011) {
+                attrValue8011 = attribute.attributeValue;
+            }
+        }
+        if (!isNull(attrValue8008)) {
+            if (Number(attrValue8008) == 0) {
+                canSetting = true;
+                if (Number(attrValue8009) == 0) {
+                    canSetting = false;
+                }
+                reloadUI(0x8008, Number(attrValue8008));
+                reloadUI(0x8005, Number(attrValue8005));
+            } else {
+                canSetting = false;
+                reloadUI(0x8008, Number(attrValue8008));
+            }
+        }
+        if (!isGetDeviceInfoData) {
+            loadingPrompt.hide();
+            reloadUI(0x8010, attrValue8010);
+            reloadUI(0x8011, attrValue8011);
+        }
+
+    }
+
+    function reloadUI(attributeId, attributeValue) {
+        console.log("reloadUI ================================== ")
+        console.log("attributeId --- " + attributeId)
+        console.log("attributeValue --- " + attributeValue)
+        console.log("reloadUI ================================== \n")
+        if (attributeId == 0x8005) {
+            var bar = document.getElementById("Btn");
+            var bar2 = document.getElementById("bar2");
+            var bar3 = document.getElementById("bar3");
+            var openX = Number(bar3.offsetLeft);
+            var closeX = Number(bar3.offsetLeft + bar3.offsetWidth);
+            console.log((Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2));
+            console.log(Number(bar2.offsetWidth))
+            console.log(Number(bar3.offsetWidth))
+            if (attributeValue != 255) {
+                var ratio = (attributeValue / 100);
+                bar2.style.width = Number(bar3.offsetWidth - 20) * ratio + "px"
+                bar.style.left = Number(bar2.offsetWidth) + openX + "px"
+            }
+        }
+        if (attributeId == 0x8008) {
+            var bar1 = document.getElementById("bar1");
+            var barProgress = document.getElementById("barProgress");
+            var barProgress_text = document.getElementById("barProgress_text");
+            if (attributeValue == 0) {
+                bar1.style.display = "block";
+                barProgress.style.display = "none";
+                barProgress_text.className = "";
+            } else if (attributeValue == 2) { //关闭
+                bar1.style.display = "none";
+                barProgress_text.textContent = "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+                barProgress_text.className = "slideOutLeft";
+                barProgress.style.display = "block";
+            } else if (attributeValue == 1) { //打开
+                bar1.style.display = "none";
+                barProgress_text.textContent = ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+                barProgress_text.className = "slideInLeft";
+                barProgress.style.display = "block";
+            } else {
+                bar1.style.display = "block";
+                barProgress.style.display = "none";
+                barProgress_text.className = "";
+            }
+        }
+        if (attributeId == 0x8010) {
+            if (isNull(attributeValue)) {
+                // 选中才是off
+                $("#onoffswitch1").prop("checked", true);
+            } else {
+                $("#onoffswitch1").prop("checked", false);
+            }
+        }
+        if (attributeId == 0x8011) {
+            if (isNull(attributeValue)) {
+                // 选中才是off
+                $("#onoffswitch2").prop("checked", true);
+            } else {
+                $("#onoffswitch2").prop("checked", false);
+            }
+        }
+    }
+
+
+    bar.addEventListener("touchend", function (evt) {
+        var bar2 = document.getElementById("bar2");
+        var bar3 = document.getElementById("bar3");
+        console.log((Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2));
+        sendCmd(0x0304, (Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2) * 100);
+    })
+    bar.addEventListener("touchstart", function (evt) {
+        var bar1 = document.getElementById("bar1");
+        var bar2 = document.getElementById("bar2");
+        var bar3 = document.getElementById("bar3");
+        var openX = Number(bar3.offsetLeft);
+        var closeX = Number(bar3.offsetLeft + bar3.offsetWidth - 20);
+        var touch = evt.touches[0];
+        var x = Number(touch.pageX)
+        var y = Number(touch.pageY)
+        bar1.addEventListener("touchmove", function (e) {
+            var touch1 = e.touches[0];
+            var xx = Number(touch1.pageX)
+            var yy = Number(touch1.pageY)
+            if (Math.abs(Number(bar.offsetLeft) - Number(touch1.pageX)) > 20) {
+                if (openX >= Number(touch1.pageX)) {
+                    bar.style.left = openX + "px";
+                    bar2.style.width = 0 + "px"
+                    return;
+                }
+                if (closeX <= Number(touch1.pageX)) {
+                    bar.style.left = closeX + "px";
+                    bar2.style.width = bar3.offsetWidth + "px"
+                    return;
+                }
+                bar.style.left = touch1.pageX + "px";
+                bar2.style.width = bar.offsetLeft - bar3.offsetLeft + "px";
+            }
+        })
+    })
+</script>
+
+</html>

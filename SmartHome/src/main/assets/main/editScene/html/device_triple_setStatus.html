@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/editok.css" />
+
+</head>
+
+<body>
+<header class="header">
+    <div class="header_top">
+        <a href="javascript:window.history.back(-1);"></a>
+        <a href="javascript:;" class="autoSwitchLanguager" key="setDeviceStatus">设置设备状态</a>
+        <a href="javascript:;" id="finishDelay"></a>
+    </div>
+</header>
+<section>
+    <ul class="set_list" id="set_list">
+        <li class="autoSwitchLanguager" key="airsystem_Oj_open">开启<i></i></li>
+        <li class="autoSwitchLanguager" key="airsystem_Oj_close">关闭<i></i></li>
+    </ul>
+</section>
+</body>
+<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    var info = window.sysfun;
+    info.init("V6Scene");
+    var deviceID = info.getItem("deviceID");
+    var devType = "";
+    var devName = "";
+    var type = decodeURI(getUrlParam("type"))
+    var numArr = getUrlParam("num").split("-");
+    var nameArr = info.getItem("description").split("-");
+
+    plus.plusReady(function() {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+
+        $(".set_list li").on("click", function() {
+            var index = $(this).index();
+            var name = '';
+            var str1 = index == 0 ? lang_openSingle : lang_closeSingle;
+            var state = index == 0 ? "1" : "0";
+            var epData;
+            var categoryName = "空调";
+            if(type == "1") {
+                categoryName = "新风";
+            } else if(type == "2"){
+                categoryName = "地暖";
+            }
+            for(var m=0;m<numArr.length;m++){
+                var str = formatStr(numArr[m]) + type + state;
+                if(m === 0){
+                    name = nameArr[m];
+                    epData = str;
+                }else{
+                    name += "," + nameArr[m];
+                    epData += "," + str;
+                }
+            }
+            console.log(name);
+            info.setItem("deviceState", categoryName + " " + str1 + " " + name);
+            info.setItem("epData", epData);
+            window.location = "addDelay.html";
+        })
+    })
+
+    function formatStr(num) {
+        y='00000000000000000000000000000'+num;
+        return y.substr(y.length-3);
+    }
+</script>
+
+</html>

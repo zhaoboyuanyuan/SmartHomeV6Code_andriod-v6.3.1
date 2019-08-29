@@ -1,0 +1,49 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_B9_name = "2-way translator (input & output)";
+$lang.device_B9_way_in = "Way (input)";
+$lang.device_B9_way_out = "Way (output)";
+$lang.device_B9_Rename_hint = "Note: long press to rename";
+$lang.device_B9_Alarm = "Alarm Message";
+$lang.device_B9_more = "More";
+$lang.device_B9_out_of_time = "Connection timeout";
+$lang.device_B9_know = "Get it";
+$lang.device_B9_Rename = "Rename";
+$lang.device_B9_cancel = "Cancel";
+$lang.device_B9_ok = "Confirm";
+$lang.device_B9_fortify = "Arm";
+$lang.device_B9_disarming = "Disarm";
+$lang.device_B9_fortifying = "Armed";
+$lang.device_B9_disarmed = "Disarmed";
+$lang.device_B9_normal = "Normal";
+$lang.device_B9_abnormal = "Alarm";
+$lang.device_B9_add_button = "Add control button";
+$lang.device_B9_button_name_status = "Button name and status";
+$lang.device_B9_name_1 = "Name";
+$lang.device_B9_enter_name = "Enter name";
+$lang.device_B9_status = "Status";
+$lang.device_B9_action = "Action";
+$lang.device_B9_action_close = "Close";
+$lang.device_B9_action_open = "Break";
+$lang.device_B9_action_close_open = "Close and then break";
+$lang.device_B9_action_open_close = "Break and then close";
+$lang.device_B9_close_time = "Close time";
+$lang.device_B9_open_time = "Break time";
+$lang.device_B9_s = "Second";
+$lang.device_B9_save = "Save";
+$lang.device_B9_re_edit = "Re-edit";
+$lang.device_B9_delete = "Delete ";
+$lang.device_B9_delete_sure = "Confirm to delete?";
+$lang.device_B9_sent = "Command sent";
+$lang.device_B9_Offline = "Device is offline ";
+$lang.device_B9_set = "Setting";
+$lang.device_B9_normal_set_hint = "Note: no alarm under this status";
+$lang.Device_B9_Details_Loading2 = "Loading…";
+$lang.device_B9_normal_set = "Input end normal status setting";
+$lang.device_B9_initial_action = "Output end initial action setting";
+$lang.device_B9_initial_action_hint = "Note: when action set for button contradicts with responsive action from device， user can adjust initial action to keep them consistent";
+$lang.device_B9_noData = "No data";
+$lang.device_B9_1_way = "One Gang";

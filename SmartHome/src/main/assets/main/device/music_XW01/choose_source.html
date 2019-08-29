@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>系统选择</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/sc.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header_top" style="padding-top:2rem!important">
+            <a class="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="Music_source_choose" href="javascript:;">选择音源</a>
+        </div>
+    </header>
+    <!-- <header  class="header">
+            <a class="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="Music_source_choose" href="javascript:;">选择音源</a>
+        </header> -->
+    <section class="itemContent">
+        <section class="item">
+            <div onclick="chooseMe(1)">
+                <em class="sourceText autoSwitchLanguager" key="Music_source_local">本地音源</em>
+                <i class="iconRight iconSource1" style="display: block"></i>
+            </div>
+        </section>
+        <section class="item">
+            <div onclick="chooseMe(2)">
+                <em class="sourceText autoSwitchLanguager" key="Music_source_out">外部音源</em>
+                <i class="iconRight iconSource2"></i>
+            </div>
+        </section>
+        <section class="item">
+            <div onclick="chooseMe(3)">
+                <em class="sourceText autoSwitchLanguager" key="Music_source_Bluetooth">蓝牙模式</em>
+                <i class="iconRight iconSource3"></i>
+            </div>
+        </section>
+    </section>
+    <section class="saveToast" style="display:none;">
+        <div>
+            <i><em class="rotate"></em></i>
+            <p key="Device_OZ_Details_Loading2" class="autoSwitchLanguager">正在加载...</p>
+        </div>
+    </section>
+    <section class="overTime autoSwitchLanguager" key="">请求超时，请重试</section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    initlan();
+    var devID, gwID;
+    var mMusicSource = 3;
+    var overtime;
+    $(".back").on("click", function () {
+        plus.tools.back(function () {});
+    });
+
+    plus.plusReady(function () {
+
+        showSys(mMusicSource);
+
+        plus.gatewayCmd.getDeviceInfo(null, function (data) {
+            if (data.gwID != undefined && data.gwID.length > 0) {
+                gwID = data.gwID;
+            } else {
+                gwID = data.devID;
+            }
+            devID = data.devID;
+            // 获取音源
+            requestRadioCurrentMusic();
+        });
+    });
+
+    plus.gatewayCmd.newDataRefresh(function (data) {
+        if (data.cmd == "500" && data.extData != undefined) {
+            hideLoading();
+            var extData = JSON.parse(data.extData);
+            if (extData.source) {
+                mMusicSource = extData.source;
+                updateVoiceSource(mMusicSource);
+            }
+        }
+    });
+    //请求当前音乐
+    function requestRadioCurrentMusic() {
+
+        var paramToNative = {};
+        var urlStr = "/ent/music/get/playMode";
+        var paramToCilent = {};
+        paramToCilent.deviceId = devID;
+        paramToCilent.platformId = 2;
+        paramToNative.url = urlStr;
+        paramToNative.param = paramToCilent;
+
+        plus.gatewayCmd.WLHttpGetBase(paramToNative, function (result) {
+            console.log(result);
+            if (result.data) {
+                if (result.data.entContent) {
+                    mMusicSource = result.data.source;
+                    updateVoiceSource(mMusicSource);
+                }
+            }
+        });
+    }
+    //设置音源
+    function setRadioSource(source) {
+        var paramToNative = {};
+        var urlStr = "/ent/music/set/playMode";
+        var paramToCilent = {};
+        // paramToCilent.childDeviceId = devID;
+        paramToCilent.deviceId = gwID;
+        paramToCilent.soundSource = source;
+        paramToNative.url = urlStr;
+        paramToNative.param = paramToCilent;
+
+        plus.gatewayCmd.WLHttpPostBase(paramToNative, function (result) {
+            console.log(result);
+            if (result.resultCode === "0") {
+                saveLoading();
+            }else{
+                hideLoading();
+                window.showDialog.show(result.resultDesc,3000)
+            }
+        });
+    }
+    function updateVoiceSource(value) {
+        var zz = value;
+        showSys(zz);
+    }
+
+    // show选择的系统
+    function showSys(t) {
+        $('.iconRight').hide();
+        $('.iconSource' + t).show();
+    }
+
+    function chooseMe(source) {
+        setRadioSource(source);
+    }
+    function saveLoading(){
+        $(".saveToast").show();
+        overtimeWarn();
+    }
+    function hideLoading(){
+        $(".saveToast").hide();
+        clearOvertimeWarn();
+    }
+    function overtimeWarn() {
+        overtime = setTimeout(function () {
+            $(".overTime").show();
+            $(".saveToast").hide();
+            setTimeout(function () {
+                $(".overTime").hide();
+            }, 3000)
+        }, 15000);
+    }
+
+    function clearOvertimeWarn() {
+        clearTimeout(overtime);
+    }
+</script>
+
+</html>

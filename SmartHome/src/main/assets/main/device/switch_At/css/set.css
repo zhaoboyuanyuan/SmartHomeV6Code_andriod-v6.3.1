@@ -1,0 +1,35 @@
+@charset "utf-8";
+
+html,body{
+    width:100%;
+    height:100%;
+    background:#f1f4f8;
+}
+h1,h2,h3,h4,h5{
+    font-weight:normal!important;
+    margin:0;
+}
+.choose{
+    width:100%;
+    margin-top:1rem;
+    overflow:hidden;
+}
+.choose ul{
+    width:100%;
+    overflow:hidden;
+}
+.choose ul li{
+    width:100%;
+    height:4rem;
+    line-height:4rem;
+    text-indent:1rem;
+    color:#535353;
+    font-size:1.5rem;
+    background:#fff;
+    border-bottom:1px solid #ddd;
+}
+.toast{
+    display:none;
+    color:#fff;
+}
+

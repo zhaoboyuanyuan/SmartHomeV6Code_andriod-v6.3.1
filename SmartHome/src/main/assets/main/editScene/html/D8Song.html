@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>设置设备状态</title>
+	<link rel="stylesheet" type="text/css" href="../css/base.css" />
+	<link rel="stylesheet" type="text/css" href="../css/editok.css" />
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+	<!--<section id="header_one">
+			<nav>
+				<li class="back">
+					<a href="javascript:;" onClick="javascript:history.back(-1);"></a>
+				</li>
+				<li class="text">
+					<a href="javascript:;" key="minigateway_Soundrepertoire" class="autoSwitchLanguager"></a>
+				</li>
+				<li class="finish" onclick="save()">
+					<a key="confirm" class="autoSwitchLanguager" href="javascript:;">确定</a>
+				</li>
+			</nav>
+		</section>-->
+	<header class="header">
+		<div class="header_top">
+			<a href="javascript:;" onClick="javascript:history.back(-1);"></a>
+			<a href="javascript:;" class="autoSwitchLanguager" key="minigateway_Soundrepertoire"></a>
+			<a href="javascript:;" onclick="save()" key="confirm" class="autoSwitchLanguager"></a>
+		</div>
+	</header>
+	<section style="width: 100%;height: 5rem;background-color: white;padding-top: 1rem;">
+		<p key="minigateway_Sound_volume" class="autoSwitchLanguager" style="width: 40%;float: left;padding-left: 1rem;font-size:1.5rem;">音量</p>
+	</section>
+	<section style="width: 100%;height: 5rem;background-color: white;margin-top: -1rem;">
+		<div id="bar1" style="width: 100%;background-color: none;height: 2rem;padding-top: 1rem;">
+			<div id="bar3" style="border-radius: 1rem;margin-left: 10%;width: 80%;height: 1rem;background-color: gainsboro;">
+				<div id="bar2" style=" width: 0%;float: left;background-color: #F9D92C;height: 1rem;border-radius: 3rem;">
+					<div id="Btn" style="box-shadow: 0rem 0rem 0.4rem 0.4rem gainsboro;position: absolute;width: 3rem;border-radius: 3rem;background-color: white;height: 3rem;margin-top: -1rem;margin-right: -1rem;">
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section>
+		<ul class="set_list">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</section>
+</body>
+<script src="../homeV6/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../homeV6/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var bar = document.getElementById("Btn");
+	var info = window.sysfun;
+	info.init("V6Scene");
+	initlan()
+	var deviceStateMode;
+	var deviceStateDB = "00";
+	plus.plusReady(function () {
+		plus.gatewayCmd.androidBack(function () {
+			window.history.back(-1);
+		});
+		deviceStateMode = lang_D8_voice1;
+		if (info.getItem("type") == "D8") {
+			$(".set_list li").eq(0).html(lang_D8_voice1 + "<i class='icon'></i>")
+			$(".set_list li").eq(1).html(lang_D8_voice2 + "<i></i>")
+			$(".set_list li").eq(2).html(lang_D8_voice3 + "<i></i>")
+			$(".set_list li").eq(3).html(lang_D8_voice4 + "<i></i>")
+			$(".set_list li").eq(4).html(lang_D8_voice5 + "<i></i>")
+			$(".set_list li").eq(5).html(lang_D8_voice6 + "<i></i>")
+			$(".set_list li").eq(6).html(lang_D8_voice7 + "<i></i>")
+			$(".set_list li").eq(7).html(lang_D8_voice8 + "<i></i>")
+			$(".set_list li").eq(8).html(lang_D8_voice9 + "<i></i>")
+			$(".set_list li").eq(9).html(lang_D8_voice10 + "<i></i>")
+			$(".set_list li").eq(10).html(lang_D8_voice11 + "<i></i>")
+		}
+		$(".set_list li").on("click", function () {
+			$(this).find("i").addClass("icon").parent().siblings().find("i").removeClass("icon")
+			deviceStateMode = $(this).text();
+		})
+
+	})
+
+	function save() {
+		info.setItem("deviceState", deviceStateMode + "_" + deviceStateDB);
+		window.location = "addDelay.html";
+	}
+	bar.addEventListener("touchend", function (evt) {
+		var bar2 = document.getElementById("bar2");
+		var bar3 = document.getElementById("bar3");
+		var range = (Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2);
+		deviceStateDB = parseInt(range * 100)
+		if (deviceStateDB == 100) {
+			deviceStateDB = 99;
+		}
+		deviceStateDB = deviceStateDB + '';
+		if (deviceStateDB.length == 1) {
+			deviceStateDB = '0' + deviceStateDB
+		}
+	})
+	bar.addEventListener("touchstart", function (evt) {
+		var bar1 = document.getElementById("bar1");
+		var bar2 = document.getElementById("bar2");
+		var bar3 = document.getElementById("bar3");
+		var openX = Number(bar3.offsetLeft);
+		var closeX = Number(bar3.offsetLeft + bar3.offsetWidth);
+		var touch = evt.touches[0];
+		var x = Number(touch.pageX)
+		var y = Number(touch.pageY)
+		bar1.addEventListener("touchmove", function (e) {
+			var touch1 = e.touches[0];
+			var xx = Number(touch1.pageX)
+			var yy = Number(touch1.pageY)
+			if (Math.abs(Number(bar.offsetLeft) - Number(touch1.pageX)) > 20) {
+				if (openX >= Number(touch1.pageX)) {
+					bar.style.left = openX + "px";
+					bar2.style.width = 0 + "px"
+					return;
+				}
+				if (closeX <= Number(touch1.pageX)) {
+					bar.style.left = closeX + "px";
+					bar2.style.width = bar3.offsetWidth + "px"
+					return;
+				}
+				bar.style.left = touch1.pageX + "px";
+				bar2.style.width = bar.offsetLeft - bar3.offsetLeft + "px";
+			}
+		})
+	})
+</script>
+
+</html>

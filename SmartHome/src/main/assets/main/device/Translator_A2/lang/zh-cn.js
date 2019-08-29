@@ -1,0 +1,31 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.device_A2_name = "二路输出型翻译器";
+$lang.device_A2_add_button = "添加控制按键";
+$lang.device_A2_button_name_status = "按键名称与状态";
+$lang.device_A2_name_1 = "名称";
+$lang.device_A2_enter_name = "请输入名称";
+$lang.device_A2_status = "状态";
+$lang.device_A2_way = "路";
+$lang.device_A2_action = "动作";
+$lang.device_A2_action_close = "闭合";
+$lang.device_A2_action_open = "断开";
+$lang.device_A2_action_close_open = "先闭合后断开";
+$lang.device_A2_action_open_close = "先断开后闭合";
+$lang.device_A2_cancel = "取消";
+$lang.device_A2_ok = "确定";
+$lang.device_A2_close_time = "闭合时间";
+$lang.device_A2_open_time = "断开时间";
+$lang.device_A2_s = "秒";
+$lang.device_A2_save = "保存";
+$lang.device_A2_re_edit = "重新编辑";
+$lang.device_A2_delete = "删除";
+$lang.device_A2_delete_sure = "确定要删除吗？";
+$lang.device_A2_sent = "指令已发送";
+$lang.device_A2_Offline = "设备已离线";
+$lang.device_A2_set = "设置";
+$lang.device_A2_initial_action = "初始动作设置";
+$lang.device_A2_initial_action_hint = "注：当设置的按钮动作与实际设备响应相反时，可通过调整初始动作使之保持一致";

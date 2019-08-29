@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css?v=1" />
+    <link rel="stylesheet" type="text/css" href="../source/mui/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../skinSource/css/skin.css" />
+    <link rel="stylesheet" type="text/css" href="css/backupsRecovery.css?v=1" />
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a href="javascript:;" class="autoSwitchLanguager" key="Backup_and_recovery">备份与恢复</a>
+        <!--<a class="more" href="javascript:;"></a>-->
+    </div>
+</header>
+<div class="content_top">
+    <img src="./img/first.png">
+</div>
+<p class="content_describe autoSwitchLanguager" key="Backup_and_recovery_hint">
+    系统会自动将网关内的设备、场景、管家等数据备份至云端（也可手动备份），当网关故障或需要更换新网关时，使用恢复功能可帮您快速恢复数据至新网关。
+</p>
+<div class="content_bottom">
+    <button class="autoSwitchLanguager" key="Backup_recovery" onclick="window.location.href='recovery_detail.html'">恢复至本网关</button>
+    <h5 id="manual_backup" class="autoSwitchLanguager" key="Backup_Manual" onclick="window.location.href='backups_detail.html'">手动备份</h5>
+</div>
+<script src="../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../source/js/alertControl.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    initlan();
+    $("#back").on("click",function(){
+        plus.tools.back(function(){});
+    })
+</script>
+</body>
+</html>

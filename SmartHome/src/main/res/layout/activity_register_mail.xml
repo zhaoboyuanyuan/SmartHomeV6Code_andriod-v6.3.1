@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView_finish"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/icon_del"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/imageView_finish"
+            android:layout_below="@id/imageView_finish"
+            android:layout_marginTop="@dimen/register_margin_1"
+            android:text="@string/login_tips8"
+            android:textColor="@color/black"
+            android:textSize="@dimen/register_tittle"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <cc.wulian.smarthomev6.support.customview.material.MaterialEditText
+        android:id="@+id/et_account"
+        app:met_clearButton="true"
+        app:met_floatingLabel="none"
+        app:met_primaryColor="@color/v6_text_gray"
+        app:met_singleLineEllipsis="true"
+        app:met_textColor="@color/v6_text_dark"
+        app:met_textColorHint="@color/v6_text_gray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="@dimen/register_margin_2"
+        android:ellipsize="end"
+        android:inputType="text"
+        android:lines="1"
+        android:maxLines="1"
+        android:textSize="@dimen/register_pwd" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_read"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="30dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@string/login_tips5"
+            android:textSize="@dimen/read_agreement_text_size" />
+
+        <TextView
+            android:id="@+id/tv_terms_of_use"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@string/Login_Agree_Message"
+            android:textColor="@color/terms_of_use_text_color"
+            android:textSize="@dimen/read_agreement_text_size" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_get_verification"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="@dimen/register_margin_3"
+        android:background="@drawable/shape_register_btn_no_bg"
+        android:gravity="center"
+        android:text="@string/Config_Next_Step"
+        android:textColor="@color/white"
+        android:textSize="@dimen/default_text_size" />
+</LinearLayout>

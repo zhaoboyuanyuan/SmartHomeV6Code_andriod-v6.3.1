@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>添加延时</title>
+	<link rel="stylesheet" type="text/css" href="../css/mobiscroll.custom-2.5.2.min.css" />
+	<link rel="stylesheet" type="text/css" href="../css/base.css" />
+	<link rel="stylesheet" type="text/css" href="../css/circumstances.css" />
+	<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+	<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+	<header class="header">
+		<a class="back" href="javascript:;"></a>
+		<a id="addDelay_tittle" class="autoSwitchLanguager" href="javascript:;">添加延时</a>
+		<a class="complete autoSwitchLanguager" href="javascript:;" id="finishDelay" style="display:inline-block;height: auto;line-height: 2rem;margin-top: 1.2rem;">完成</a>
+	</header>
+	<!--情景任务延时页-->
+	<section style="margin-top:6.4rem;">
+		<div class="delay_btn"><span key="addDelay_tittle" class="autoSwitchLanguager">添加延时</span>
+			<div class="switch switch_01" id="switchContorl"><i data-state="off" class="on"></i></div>
+		</div>
+	</section>
+	<section class="slideDown" style="display:none;">
+		<div class="delay_btn reagain"><em id="addTimeDelay_hint_1" class="autoSwitchLanguager">延时中可再次触发延时任务</em>
+			<div class="switch" id="open"><i data-state="off" class="on"></i></div>
+		</div>
+		<span id="addTimeDelay_hint_2" class="autoSwitchLanguager">打开后，延时中若再次有触发事件发生，将重新执行延时任务</span>
+	</section>
+	<input type="text" readonly="readonly" id="demo" style="top:7rem" />
+</body>
+<script src="../js/mobiscroll.core-2.5.2.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/navigator.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/addDelay2.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var info = window.sysfun;
+	info.init("V6Housekeeper");
+	var arr = new Array();
+	initlan();
+	plus.plusReady(function () {
+        plus.gatewayCmd.androidBack(function () {
+            if (info.getItem("info") == 0) {
+                window.location = "chooseScene1.html"
+            } else {
+                window.history.go(-1);
+            }
+        });
+		$('#demo').on("focus", function () {
+			$(this).blur();
+		})
+	})
+	//延时中再次触发延时点击开启关闭按钮
+	$("#open").on("click", function () {
+		var state = $("#open .on").attr("data-state")
+		if (state == "off") {
+			$("#open .on").attr("data-state", "on")
+			$("#open").css("background", "#8dd652")
+			$("#open i").animate({
+				left: '60%'
+			}, 200)
+		} else {
+			$("#open .on").attr("data-state", "off")
+			$("#open").css("background", "#aaa")
+			$("#open i").animate({
+				left: '10%'
+			}, 200)
+		}
+	})
+	//back返回上级页面
+	$(".back").click(function () {
+		if (info.getItem("info") == 0) {
+			window.location = "chooseScene1.html"
+		} else {
+			window.history.go(-1);
+		}
+	})
+	//点击完成
+	$("#finishDelay").on("click", function () {
+		var delay = ''
+		//延时
+		if ($("#switchContorl .on").attr("data-state") == "off") {
+			info.setItem("deviceDelay", "0")
+		} else {
+			delay = $(".dwv").html();
+			var minute = parseInt(delay.substring(0, delay.indexOf(" "))) * 60
+			var scend = parseInt(delay.substring(delay.indexOf(" "), delay.length))
+			info.setItem("deviceDelay", minute + scend)
+		}
+		if (info.getItem("flag") == "0") {
+			//场景
+			if ($("#open .on").attr("data-state") == "on") {
+				var dataInfo = {
+					"type": '0',
+					"object": info.getItem("SceneID"), //info.getItem("SceneID")
+					"epData": "2",
+					"delay": info.getItem("deviceDelay"),
+					"name": info.getItem("SceneName"),
+					"icon": info.getItem("icon"),
+					"SceneState": info.getItem("SceneState"),
+					"cancelDelay": "1"
+				}
+			} else {
+				//未开启再次触发延时按钮
+				var dataInfo = {
+					"type": '0',
+					"object": info.getItem("SceneID"), //info.getItem("SceneID")
+					"epData": "2",
+					"delay": info.getItem("deviceDelay"),
+					"name": info.getItem("SceneName"),
+					"icon": info.getItem("icon"),
+					"SceneState": info.getItem("SceneState")
+				}
+			}
+
+		} else {
+			//设备
+			//wifi设备做为执行任务，type为3
+			var type;
+			if (info.getItem("type") == "CMICA2" || info.getItem("type") == "CMICA3" || info.getItem("type") == "CMICA4" ||
+				info.getItem("type") == "CMICA5" || info.getItem("type") == "CMICA6") {
+				type = info.getItem("actionType");
+			} else if (info.getItem("type") == "XW01" || info.getItem("type") == "HS05" || info.getItem("type") == "IF02") {
+				type = '4';
+			} else {
+				type = '2';
+			}
+			if ($("#open .on").attr("data-state") == "on") {
+				var dataInfo = {
+					"type": type,
+					"object": info.getItem("deviceID") + '>' + info.getItem("num") + ">" + info.getItem("type"), //info.getItem("deviceID") + '>' + info.getItem("num")
+					"epData": info.getItem("epData"),
+					"delay": info.getItem("deviceDelay"),
+					"name": info.getItem("deviceName"),
+					"deviceState": info.getItem("deviceState"),
+					"roomName": info.getItem("roomName"),
+					"deviceIcon": info.getItem("deviceIcon"),
+					"cancelDelay": "1"
+				}
+			} else {
+				//未开启再次触发延时按钮
+				var dataInfo = {
+					"type": type,
+					"object": info.getItem("deviceID") + '>' + info.getItem("num") + ">" + info.getItem("type"),
+					"epData": info.getItem("epData"),
+					"delay": info.getItem("deviceDelay"),
+					"name": info.getItem("deviceName"),
+					"deviceIcon": info.getItem("deviceIcon"),
+					"roomName": info.getItem("roomName"),
+					"deviceState": info.getItem("deviceState"),
+					"editUrl": info.getItem("editUrl")
+				}
+			}
+			if (info.getItem("type") == "Bu" ||
+                info.getItem("type") == "Bv" ||
+                info.getItem("type") == "Bw" ||
+			    info.getItem("type") == "Am" ||
+				info.getItem("type") == "An" ||
+				info.getItem("type") == "Ao" ||
+				info.getItem("type") == "81" ||
+				info.getItem("type") == "Ap" ||
+				info.getItem("type") == "Bm" ||
+				info.getItem("type") == "Av" ||
+				info.getItem("type") == "Bh" ||
+				info.getItem("type") == "OF" ||
+				info.getItem("type") == "Oj" ||
+				info.getItem("type") == "D7" ||
+				info.getItem("type") == "Aw" ||
+				info.getItem("type") == "Ax" ||
+				info.getItem("type") == "A1" ||
+				info.getItem("type") == "Bx" ||
+				info.getItem("type") == "Cc" ||
+                info.getItem("type") == "Cj" ||
+				info.getItem("type") == "Cl" ||
+			    info.getItem("type") == "Cm" ||
+			    info.getItem("type") == "Cn" ) {
+				if (info.getItem("switchName")) {
+					dataInfo.switchName = info.getItem("switchName");
+					dataInfo.epName = info.getItem("switchName");
+				}
+
+			}
+			if (info.getItem("type") == "B9") {
+				if (info.getItem("num") == 1) {
+					if (info.getItem("switchName")) {
+						dataInfo.switchName = info.getItem("switchName");
+					}
+				} else if (info.getItem("num") == 2) {
+					dataInfo.description = info.getItem("deviceState");
+				}
+			}
+			if (info.getItem("type") == "Ao" ||
+					info.getItem("type") == "An" ||
+					info.getItem("type") == "Am" ||
+					info.getItem("type") == "Bu" ||
+					info.getItem("type") == "Bv" ||
+					info.getItem("type") == "Bw" ||
+					info.getItem("type") == "Cl" ||
+					info.getItem("type") == "Cm" ||
+					info.getItem("type") == "Cn") {
+				dataInfo.description = info.getItem("deviceState");
+			}
+			if (info.getItem("type") == "22" || info.getItem("type") == "23" || info.getItem("type") == "24" || info.getItem(
+					"type") == "A2" || info.getItem("type") == "Bo") {
+				dataInfo.description = info.getItem("deviceState");
+			} else if (info.getItem("type") == "OZ" || info.getItem("type") == "Ol" || info.getItem("type") == "a0" || info.getItem("type") == "Op") {
+				dataInfo.description = info.getItem("description");
+				dataInfo.epData = info.getItem("epData")
+			} else if (info.getItem("type") == "28") {
+				// dataInfo.description = info.getItem("description");
+				// dataInfo.epData = info.getItem("epData")
+			} else if (info.getItem("type") == "CMICA4") {
+				dataInfo.description = info.getItem("description");
+			}
+		}
+		if (info.getItem("actionArray") == null) {
+			arr.push(dataInfo)
+			info.setItem("actionArray", JSON.stringify(arr))
+		} else {
+			arr = JSON.parse(info.getItem("actionArray"));
+			var exist = false;
+			arr.map(function (list, i) {
+				if (list.type != 0) {
+					if (i == parseInt(info.getItem("index"))) {
+						list.delay = info.getItem("deviceDelay")
+						list.epData = info.getItem("epData");
+						list.object = info.getItem("deviceID") + '>' + info.getItem("num") + ">" + info.getItem("type");
+						list.name = info.getItem("deviceName");
+						list.deviceState = info.getItem("deviceState");
+						list.deviceIcon = info.getItem("deviceIcon");
+						list.roomName = info.getItem("roomName");
+						if (info.getItem("actionType")) {
+							list.type = info.getItem("actionType");
+						} else {
+							list.type = "2";
+						}
+						if (info.getItem("switchName")) {
+							list.switchName = info.getItem("switchName");
+							list.epName = info.getItem("switchName");
+						}
+						if (info.getItem("description")) {
+							list.description = info.getItem("description");
+						}
+						if (info.getItem("type") == "XW01" || info.getItem("type") == "HS05" || info.getItem("type") == "IF02") {
+							list.type = "4";
+						}
+						exist = true;
+					}
+				}
+			});
+			if (exist == false) {
+				arr.push(dataInfo)
+			}
+			info.setItem("actionArray", JSON.stringify(arr))
+		}
+		info.removeItem("SceneName")
+		info.removeItem("SceneIcon")
+		info.removeItem("deviceState")
+		info.removeItem("deviceName")
+		info.removeItem("deviceIcon")
+		info.removeItem("roomName")
+		info.removeItem("deviceDelay")
+		info.removeItem("epData")
+		info.removeItem("sceneEpData")
+		info.removeItem("switchName")
+
+		//            info.removeItem("zoneName");
+		//            info.removeItem("categoryName");
+		//            info.removeItem("roomID");
+		//            info.removeItem("categoryID");
+		if (info.getItem("epNameList" + info.getItem("deviceID"))) {
+			info.removeItem("epNameList" + info.getItem("deviceID"));
+		}
+		window.location = "circumstances.html";
+	})
+</script>
+
+</html>

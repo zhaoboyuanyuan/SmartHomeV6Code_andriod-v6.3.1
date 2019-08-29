@@ -1,0 +1,54 @@
+@charset "utf-8";
+
+.content{
+    position: absolute;
+    width:100%;
+    height:calc(100% - 6.4rem);
+    overflow:hidden;
+	display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+}
+/*场景*/
+.theTwo{
+    margin-top: 5rem;
+}
+.theScene div{
+    width:13rem;
+    height:13rem;
+}
+.theScene i{
+    width:13rem;
+    height:13rem;
+}
+.theScene span{
+    display:block;
+    text-align:center;
+    line-height:4.2rem;
+    color:#999;
+    font-size:1.8rem;
+}
+.emptyView{
+    position: absolute;
+    top: 30%;
+    width: 100%;
+    text-align: center;
+    display: none;
+}
+
+.emptyView span{
+    margin-top: 2rem;
+    display:block;
+    width: auto;
+    /*text-align:center;*/
+    line-height:4.2rem;
+    color:#999;
+    font-size:1.4rem;
+}
+
+.emptyView img{
+    display:inline-block;
+    width:9rem;
+    height:auto;
+}
+

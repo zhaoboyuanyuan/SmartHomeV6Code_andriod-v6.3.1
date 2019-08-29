@@ -1,0 +1,384 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			  content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+		<meta name="format-detection" content="telephone=no">
+		<title>PM2.5监测仪</title>
+		<link rel="stylesheet" type="text/css" href="css/history.css" />
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="hum_header header">
+			<a href="device_Og.html"></a>
+			<a href="javascript:;" class="autoSwitchLanguager" key="dataRecord"></a>
+			<a data-id="1" href="javascript:;" style="background:none;"></a>
+		</header>
+		<section class="content">
+			<div style="position: absolute;width: 100%;right: 1%;">
+				<span id="degree_statements" class="autoSwitchLanguager" key="Degree_Statement"></span>
+			</div>
+			<div style="margin-top: 2rem;">
+				<section id="pm_line"></section>
+			</div>
+			<div>
+				<section id="th_line"></section>
+			</div>
+		</section>
+		<section class="mask_layer">
+		<div class="dialog">
+			<span class="autoSwitchLanguager" key="Degree_Statement"></span>
+			<span class="autoSwitchLanguager" key="PM25_Degree"></span>
+			<span class="autoSwitchLanguager" key="excellent_grade"></span>
+			<span class="autoSwitchLanguager" key="fine_grade"></span>
+			<span class="autoSwitchLanguager" key="mild_contamination"></span>
+			<span class="autoSwitchLanguager" key="middle_level_pollution"></span>
+			<span class="autoSwitchLanguager" key="serious_contamination"></span>
+			<span class="autoSwitchLanguager" key="severe_contamination"></span>
+			<div></div>
+			<span id="Iknow" class="autoSwitchLanguager" key="Iknow"></span>
+		</div>
+		</section>
+	</body>
+	<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/echarts.common.min.js"></script>
+	<script type="text/javascript">
+		initlan();
+		var start = new Date();
+		var endTime = start.getTime();
+		var startTime = (start.getTime() - 86400000);
+		var timeArr = [];
+		var pmArr = [];
+		var temArr = []
+		var humArr = []
+		var devData = {
+			"startTime": startTime + '',
+			"endTime": endTime + ''
+		}
+		plus.plusReady(function() {
+//            var x = document.getElementsByClassName("time_unit");
+//            var i;
+//            for (i = 0; i < x.length; i++) {
+//                if(browser.versions.android) {
+//                    x[i].style.marginTop = -(40 * 0.135) + "rem";
+//                    x[i].style.marginRight = (40 * 0.18) + "rem";
+//                } else if(browser.versions.ios) {
+//                    x[i].style.marginTop = -(40 * 0.07) + "rem";
+//                    x[i].style.marginRight = (40 * 0.07) + "rem";
+//                }
+//            }
+			plus.gatewayCmd.getStatistic(devData, function(list) {
+				for(var i = 1; i < 25; i++) {
+					if(list.data[i] == undefined) {
+						var time = new Date(startTime - (i - 1) * 3600000)
+						var hour = time.getHours().toString().length == 1 ? ("0" + time.getHours()) : time.getHours()
+						var min = time.getMinutes().toString().length == 1 ? ("0" + time.getMinutes()) : time.getMinutes()
+						timeArr[24 - i] = hour + ':' + min;
+                        pmArr[24 - i] = "-";
+						temArr[24 - i] = "-";
+						humArr[24 - i] = "-";
+					} else {
+						var time = new Date(startTime - (i - 1) * 3600000)
+						var hour = time.getHours().toString().length == 1 ? ("0" + time.getHours()) : time.getHours()
+						var min = time.getMinutes().toString().length == 1 ? ("0" + time.getMinutes()) : time.getMinutes()
+						timeArr[24 - i] = hour + ':' + min;
+                        pmArr[24 - i] = list.data[i].pm;
+						temArr[24 - i] = list.data[i].tem;
+						humArr[24 - i] = list.data[i].hum;
+					}
+				}
+				editLine(timeArr, pmArr, temArr, humArr)
+			})
+
+			$("#degree_statements").on("click",function(){
+                $(".mask_layer").show();
+            })
+            $("#Iknow").on("click",function(){
+                $(".mask_layer").hide();
+            })
+
+            var iphoneX = {
+                sysFunc: "getItem:",
+                room: "iphoneX",
+                id: "iphoneX",
+                data: ""
+            };
+            var iStr = '';
+            if (!window.v6sysfunc) {
+                iStr = prompt(JSON.stringify(iphoneX))
+            }
+            if (iStr == "iphoneX") {
+                $(".header")[0].style.paddingTop = "4.8rem";
+                $(".content")[0].style.paddingTop = "10rem";
+            }
+		})
+		//		window.onload = function(){
+		//            editLine(['11:11','22:22','13:12','14:12','15:17','6:17','7:17','8:17','9:17','10:17','1:17','12:17','14:17','11:17','12:17','13:17','14:17','15:17','16:17','17:17','18:17','19:17','10:17','11:17'],[1,2,3,4,5,6,7,8,9,10,1,12,14],[1,2,3,4,5,6,7,8,9,10,1,12,14])
+		//		}
+        function editLine(timeArr, pmArr, temArr, humArr) {
+            // 基于准备好的dom，初始化echarts图表
+            var myChart = echarts.init(document.getElementById('th_line'));
+            var option = {
+                //点击提示的线条和文字
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        show: true,
+                        lineStyle: {
+                            color: 'pink',
+                            type: 'dashed',
+                            width: 1
+                        }
+                    }
+                },
+                //右上角温湿度提示
+                legend: {
+                    orient: 'horizontal',
+                    x: 'right',
+                    itemGap:20,
+                    data:[temperature,humidity],
+                    textStyle:{
+                        fontSize:20/640*document.body.clientWidth
+                    }
+                },
+                calculable: false,
+                //x轴
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: false,
+                    name:hour,
+                    splitLine: {show: true},
+                    nameTextStyle:{
+                        padding:[26,0,0,-15],
+                        fontSize: 18/640*document.body.clientWidth
+                    },
+                    axisLabel: {
+                        interval:5,
+                        textStyle: {
+                            color: '#aaa',
+                            fontSize:20/640*document.body.clientWidth
+                        }
+                    },
+                    //0刻度轴线
+                    axisLine: {
+                        onZero:true,
+                        lineStyle: {
+                            width: 0,
+                            color: '#aaa'
+                        }
+                    },
+                    //x轴刻度线
+                    axisTick:{
+                        show:false
+                    },
+                    data: timeArr
+                }],
+                //y轴：1：湿度y轴，2：温度y轴
+                yAxis: [{
+                    type: 'value',
+                    name:"%",
+                    nameTextStyle:{
+                        fontSize: 20/640*document.body.clientWidth
+                    },
+                    splitLine: {show: true},
+                    axisLabel: {
+                        formatter: '{value}',
+                        textStyle: {
+                            color: '#aaa',
+                            fontSize:18/640*document.body.clientWidth
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            width: 0,
+                            color: '#aaa'
+                        }
+                    },
+                    //x轴刻度线
+                    axisTick:{
+                        show:false
+                    },
+                    interval:20,
+                    min: 0,
+                    max: 100
+                }, {
+                    type: 'value',
+                    name:"℃",
+                    nameTextStyle:{
+                        fontSize: 20/640*document.body.clientWidth
+                    },
+                    axisLabel: {
+                        formatter: '{value}',
+                        textStyle: {
+                            color: '#aaa',
+                            fontSize:18/640*document.body.clientWidth
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            width: 0,
+                            color: '#aaa'
+                        }
+                    },
+                    //刻度线
+                    axisTick:{
+                        show:false
+                    },
+                    interval:16,
+                    min: -20,
+                    max: 60
+                }],
+                grid:{show:true, left: '12%',right:'12%'},
+                //折线数据
+                series: [{
+                    name: humidity,
+                    smooth: true,
+                    symbol: 'none',
+                    type: 'line',
+                    data: humArr,
+                    draggable:false,
+                    itemStyle: {
+                        normal: {
+                            color: '#54c9e8',
+                            lineStyle: {
+                                color: '#54c9e8'
+                            }
+                        }
+                    }
+                }, {
+                    name: temperature,
+                    smooth: true,
+                    yAxisIndex: 1,
+                    symbol: 'none',
+                    type: 'line',
+                    itemStyle: {
+                        normal: {
+                            color: '#f5ae33',
+                            lineStyle: {
+                                color: '#f5ae33'
+                            }
+                        }
+                    },
+                    data: temArr,
+                    draggable:false
+                }]
+            };
+            // 基于准备好的dom，初始化echarts图表
+            var pmChart = echarts.init(document.getElementById('pm_line'));
+            var pmOption = {
+                //点击提示的线条和文字
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        lineStyle: {
+                            color: 'pink',
+                            type: 'dashed',
+                            width: 1
+                        }
+                    }
+                },
+                //右上角温湿度提示
+                legend: {
+                    orient: 'horizontal',
+                    x: 'right',
+                    itemGap:20,
+                    data: [PM25],
+                    textStyle:{
+                        fontSize:20/640*document.body.clientWidth
+                    }
+                },
+                calculable: false,
+                //x轴
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: false,
+                    name:hour,
+                    splitLine: {show: true},
+                    nameTextStyle:{
+                        padding:[26,0,0,-15],
+                        fontSize: 18/640*document.body.clientWidth
+                    },
+                    axisLabel: {
+                        interval:5,
+                        textStyle: {
+                            color: '#aaa',
+                            fontSize:20/640*document.body.clientWidth
+                        }
+                    },
+                    //0刻度轴线
+                    axisLine: {
+                        lineStyle: {
+                            width: 0,
+                            color: '#aaa'
+                        }
+                    },
+                    //x轴刻度线
+                    axisTick:{
+                        show:false
+                    },
+                    data: timeArr
+                }],
+                //y轴
+                yAxis: [{
+                    type: 'value',
+                    name:"μg/m3",
+                    nameTextStyle:{
+                        fontSize: 20/640*document.body.clientWidth
+                    },
+                    axisLabel: {
+                        formatter: '{value}',
+                        textStyle: {
+                            color: '#aaa',
+                            fontSize:16/640*document.body.clientWidth
+                        }
+                    },
+                    //刻度线
+                    axisTick:{
+                        show:false
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            width: 0,
+                            color: '#aaa'
+                        }
+                    },
+                    interval:60,
+                    min: 0,
+                    max: 300
+                }],
+                grid:{show:true, left: '12%',right:'12%'},
+                //折线数据
+                series: [{
+                    name: PM25,
+                    smooth: true,
+                    symbol: 'none',
+                    type: 'line',
+                    data: pmArr,
+                    draggable:false,
+                    itemStyle: {
+                        normal: {
+                            color: '#8DD652',
+                            lineStyle: {
+                                color: '#8DD652'
+                            }
+                        }
+                    }
+                }]
+            };
+            // 为echarts对象加载数据
+            myChart.setOption(option);
+            pmChart.setOption(pmOption);
+            window.onresize = pmChart.resize;
+            window.onresize = myChart.resize;
+        }
+	</script>
+
+</html>

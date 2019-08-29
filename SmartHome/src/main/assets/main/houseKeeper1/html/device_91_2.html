@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>设置设备状态</title>
+    <link rel="stylesheet" type="text/css" href="../css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../css/editok.css" />
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+<header class="header">
+    <a href="javascript:window.history.back(-1);"></a>
+    <a href="javascript:;" class="autoSwitchLanguager" key="setDeviceState_tittle"></a>
+    <a href="javascript:;" onclick="save()" key="LEDlight_90_ok" class="complete autoSwitchLanguager"></a>
+</header>
+
+<section style="width: 100%;height: 5rem;background-color: white;padding-top: 1rem;margin-top: 15rem;">
+    <p id="range_text_1" key="device_91_02" class="autoSwitchLanguager" style="width: 51%;float: left;padding-left: 1rem;font-size:1.5rem;text-align: right;"></p>
+    <p id="range_1" style="width: 20%;float: left;text-align: left;padding-right: 1rem;font-size:1.5rem;margin-top:0;">0%</p>
+</section>
+<section style="width: 100%;height: 5rem;background-color: white;margin-top: -1rem;">
+    <div id="bar1_1" style="auto;width: 100%;background-color: none;height: 2rem;padding-top: 1rem;">
+        <div id="bar3_1" style="border-radius: 1rem;margin-left: 10%;width: 80%;height: 1rem;background-color: gainsboro;">
+            <div id="bar2_1" style=" width: 0%;float: left;background-color: #F9D92C;height: 1rem;border-radius: 3rem;">
+                <div id="Btn_1" style="box-shadow: 0rem 0rem 0.4rem 0.4rem gainsboro;position: absolute;width: 3rem;border-radius: 3rem;background-color: white;height: 3rem;margin-top: -1rem;margin-right: -1rem;">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section style="width: 100%;height: 5rem;background-color: white;padding-top: 1rem;margin-top: 3rem;">
+    <p id="range_text_2" key="device_91_04" class="autoSwitchLanguager" style="width: 51%;float: left;padding-left: 1rem;font-size:1.5rem;text-align: right;"></p>
+    <p id="range_2" style="width: 20%;float: left;text-align: left;padding-right: 1rem;font-size:1.5rem;margin-top:0;">1%</p>
+</section>
+<section style="width: 100%;height: 5rem;background-color: white;margin-top: -1rem;">
+    <div id="bar1_2" style="auto;width: 100%;background-color: none;height: 2rem;padding-top: 1rem;">
+        <div id="bar3_2" style="border-radius: 1rem;margin-left: 10%;width: 80%;height: 1rem;background-color: gainsboro;">
+            <div id="bar2_2" style=" width: 0%;float: left;background-color: #F9D92C;height: 1rem;border-radius: 3rem;">
+                <div id="Btn_2" style="box-shadow: 0rem 0rem 0.4rem 0.4rem gainsboro;position: absolute;width: 3rem;border-radius: 3rem;background-color: white;height: 3rem;margin-top: -1rem;margin-right: -1rem;">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<style>
+    body{
+        background-color: white;
+    }
+</style>
+<script type="text/javascript">
+
+    var info = window.sysfun;
+    info.init("V6Housekeeper");
+    initlan()
+    var data1 = 0,data2 = 1;
+
+    plus.plusReady(function() {
+        plus.gatewayCmd.androidBack(function () {
+            window.history.back(-1);
+        });
+    })
+
+    function num2sting(num, n) {
+        var len = num.toString().length;
+        while(len < n) {
+            num = "0" + num;
+            len++;
+        }
+        return num;
+    }
+
+    function save() {
+        info.setItem("deviceState", switch_on)
+
+        var colortemp = Math.round(data1/100.0*510);
+        var light = Math.round(data2/100.0*255);
+        var epData = "1"+num2sting(colortemp,3)+",2"+num2sting(light,3)
+
+        info.setItem("epData", epData)
+        info.setItem("description", switch_on)
+
+        var taskType = info.getItem('taskType')
+        if (taskType === 'sceneTask') {
+            window.location = "setDelay_sceneTask.html"
+        } else {
+            window.location = "setDelay_timeTask.html"
+        }
+    }
+
+    /* ======== 色温 ======== */
+    var bar = document.getElementById("Btn_1");
+    bar.addEventListener("touchend", function(evt) {
+        var bar2 = document.getElementById("bar2_1");
+        var bar3 = document.getElementById("bar3_1");
+        var range = (Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2);
+        data1 = parseInt(range * 100)
+
+        document.getElementById("range_1").innerHTML = parseInt(range * 100) + "%"
+
+        if (parseInt(range * 100) == 50) {
+            document.getElementById("range_text_1").innerHTML = device_91_01
+            document.getElementById("range_1").innerHTML = "："+parseInt(range * 100) + "%"
+        } else if (parseInt(range * 100) > 50) {
+            document.getElementById("range_text_1").innerHTML = device_91_03
+        } else if (parseInt(range * 100) < 50) {
+            document.getElementById("range_text_1").innerHTML = device_91_02
+        }
+
+
+    })
+    bar.addEventListener("touchstart", function(evt) {
+        var bar1 = document.getElementById("bar1_1");
+        var bar2 = document.getElementById("bar2_1");
+        var bar3 = document.getElementById("bar3_1");
+        var openX = Number(bar3.offsetLeft);
+        var closeX = Number(bar3.offsetLeft + bar3.offsetWidth);
+        var touch = evt.touches[0];
+        var x = Number(touch.pageX)
+        var y = Number(touch.pageY)
+        bar1.addEventListener("touchmove", function(e) {
+            var touch1 = e.touches[0];
+            var xx = Number(touch1.pageX)
+            var yy = Number(touch1.pageY)
+            if(Math.abs(Number(bar.offsetLeft) - Number(touch1.pageX)) > 20) {
+                if(openX >= Number(touch1.pageX)) {
+                    bar.style.left = openX + "px";
+                    bar2.style.width = 0 + "px"
+                    return;
+                }
+                if(closeX <= Number(touch1.pageX)) {
+                    bar.style.left = closeX + "px";
+                    bar2.style.width = bar3.offsetWidth + "px"
+                    return;
+                }
+                bar.style.left = touch1.pageX + "px";
+                bar2.style.width = bar.offsetLeft - bar3.offsetLeft + "px";
+            }
+        })
+    });
+
+
+    /* ======== 亮度 ======== */
+    var bar_2 = document.getElementById("Btn_2");
+    bar_2.addEventListener("touchend", function(evt) {
+        var bar2 = document.getElementById("bar2_2");
+        var bar3 = document.getElementById("bar3_2");
+        var range = (Number(bar2.offsetWidth) / Number(bar3.offsetWidth)).toFixed(2);
+        data2 = parseInt(range * 99)+1
+        document.getElementById("range_2").innerHTML = data2 + "%"
+    })
+    bar_2.addEventListener("touchstart", function(evt) {
+        var bar1 = document.getElementById("bar1_2");
+        var bar2 = document.getElementById("bar2_2");
+        var bar3 = document.getElementById("bar3_2");
+        var openX = Number(bar3.offsetLeft);
+        var closeX = Number(bar3.offsetLeft + bar3.offsetWidth);
+        var touch = evt.touches[0];
+        var x = Number(touch.pageX)
+        var y = Number(touch.pageY)
+        bar1.addEventListener("touchmove", function(e) {
+            var touch1 = e.touches[0];
+            var xx = Number(touch1.pageX)
+            var yy = Number(touch1.pageY)
+            if(Math.abs(Number(bar.offsetLeft) - Number(touch1.pageX)) > 20) {
+                if(openX >= Number(touch1.pageX)) {
+                    bar_2.style.left = openX + "px";
+                    bar2.style.width = 0 + "px"
+                    return;
+                }
+                if(closeX <= Number(touch1.pageX)) {
+                    bar_2.style.left = closeX + "px";
+                    bar2.style.width = bar3.offsetWidth + "px"
+                    return;
+                }
+                bar_2.style.left = touch1.pageX + "px";
+                bar2.style.width = bar_2.offsetLeft - bar3.offsetLeft + "px";
+            }
+        })
+    })
+
+</script>
+
+</html>

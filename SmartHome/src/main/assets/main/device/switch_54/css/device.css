@@ -1,0 +1,48 @@
+@charset "utf-8";
+html{
+	background:white;
+}
+html,body{
+	height:100%;
+}
+.socket{
+	position:absolute;
+	left:10%;
+	top:22rem;
+	display:block;
+	width:80%;
+	height:22.5rem;
+	background-color: white;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+.socket span{
+	display:block;
+	width:100%;
+	height:3.5rem;	
+	line-height:3.5rem;
+	color:#000000;
+}
+.socket span.title{
+	text-align:center;
+	font-size:1.6rem;	
+	color:#000000;
+	font-weight: bold;
+	margin-bottom: 3rem;
+}
+
+.socket span.titleDesc{
+	font-size:1.5rem;
+}
+
+.socket div.contentDesc{
+	font-size:1.5rem;
+	line-height:3rem;
+	color: black;
+}
+.socket div em{
+	color: #8DD652;
+}

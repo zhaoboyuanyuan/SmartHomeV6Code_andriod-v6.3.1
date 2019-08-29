@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>海信洗衣机</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <link rel="stylesheet" href="../../source/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../source/mui/css/mui.picker.min.css">
+</head>
+<body>
+<header class="header" style="position:fixed;left:0;top:0;">
+    <div class="header_top">
+        <a id="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="hs_washer_name" href="javascript:;">海信洗衣机</a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<div class="washer_show">
+    <div class="show_time">35<em>min</em></div>
+    <div style="margin-top: 2rem">
+        <span class="show_mode_1">洗涤</span>
+        <span class="show_mode_2">漂洗</span>
+        <span class="show_mode_3">脱水</span>
+    </div>
+</div>
+<div class="washer_ctrl">
+    <section>
+        <div class="ctrl_mode" enable="false"></div>
+        <span id="mode_txt">标准洗</span>
+    </section>
+    <section>
+        <div class="ctrl_start" enable="false"></div>
+        <span id="start_txt">启动</span>
+    </section>
+    <section>
+        <div class="ctrl_time" enable="false"></div>
+        <span id="time_txt">19:00开始洗衣</span>
+    </section>
+    <section>
+        <div class="ctrl_power" enable="false"></div>
+        <span>电源</span>
+    </section>
+</div>
+<section class="mask_layer" style="display: none">
+    <i></i>
+    <span class="autoSwitchLanguager" key="offline">设备已离线</span>
+</section>
+</body>
+<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../source/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../../source/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    mui.init();
+    initlan();
+
+    var info = window.sysfun;
+    info.init("Hs06");
+    var currentTime = info.getItem('currentTime');
+    var current_mode = getEncodeURIParam("current_mode");
+    var mode_name = getEncodeURIParam("mode_name");
+    var picker = new mui.PopPicker({
+        layer: 2
+    });
+
+    plus.plusReady(function () {
+        if (current_mode == "") {
+            //http 更新页面、更新变量currentTime current_mode mode_name
+        } else {
+            loadData();
+        }
+    });
+
+    $(".ctrl_mode").on("click", function () {
+        window.location = "choose_mode.html";
+    });
+    $(".ctrl_time").on("click", function () {
+        //初始化PopPicker组件
+        picker.setData([{
+            value: "00",
+            text: "00",
+            children: getArr(1, 59)
+        }, {
+            value: "01",
+            text: "01",
+            children: getArr(0, 59)
+        }, {
+            value: "02",
+            text: "02",
+            children: getArr(0, 59)
+        }, {
+            value: "03",
+            text: "03",
+            children: getArr(0, 59)
+        }, {
+            value: "04",
+            text: "04",
+            children: getArr(0, 59)
+        }, {
+            value: "05",
+            text: "05",
+            children: getArr(0, 59)
+        }, {
+            value: "06",
+            text: "06",
+            children: getArr(0, 59)
+        }, {
+            value: "07",
+            text: "07",
+            children: getArr(0, 59)
+        }, {
+            value: "08",
+            text: "08",
+            children: getArr(0, 59)
+        }, {
+            value: "09",
+            text: "09",
+            children: getArr(0, 59)
+        }, {
+            value: "10",
+            text: "10",
+            children: getArr(0, 59)
+        }, {
+            value: "11",
+            text: "11",
+            children: getArr(0, 59)
+        }, {
+            value: "12",
+            text: "12",
+            children: getArr(0, 59)
+        },]);
+        $(".mui-backdrop").css("opacity", "0");
+        $(".mui-poppicker-btn-cancel").html("取消");//device_cancel
+        $(".mui-poppicker-btn-ok").html("确定");//device_sure
+        var left = $(".mui-poppicker-body .mui-picker").eq(0).find(".mui-pciker-rule-ft");
+        var right = $(".mui-poppicker-body .mui-picker").eq(1).find(".mui-pciker-rule-ft");
+        $(left).html("小时");
+        $(right).html("分");
+        var width = $(".mui-pciker-rule-ft").width();
+        $(left).css({
+            "text-indent": width / 2 + 20 + "px"
+        });
+        $(right).css({
+            "text-indent": width / 2 + 20 + "px"
+        });
+        picker.show(function (items) {
+            $("#time_txt").html(items[0].text + ":" + items[1] + "开始洗衣");
+            info.setItem('currentTime', items[0].text + ":" + items[1]);
+        })
+    })
+    $("#back").on("click", function () {
+        plus.tools.back(function () {
+        })
+    });
+    $(".more").on("click", function () {
+        plus.tools.more(moreConfig, function () {
+        })
+    });
+    $(".ctrl_power").on("click", function () {
+        $(".ctrl_power").attr("enable", $(".ctrl_power").attr("enable")=="true"?"false":"true");
+
+        if ($(".ctrl_power").attr("enable") == "false"){
+            $(".ctrl_start").attr("enable", "false")
+            $(".ctrl_time").attr("enable", "false")
+            $(".ctrl_mode").attr("enable", "false")
+        }else {
+            $(".ctrl_start").attr("enable", "true")
+            $(".ctrl_time").attr("enable", "true")
+            $(".ctrl_mode").attr("enable", "true")
+        }
+    });
+
+    function loadData() {
+        var mode_text = document.getElementById("mode_txt")
+        var time_text = document.getElementById("time_txt")
+        //模式
+        if (mode_name == "") {
+            mode_text.innerHTML = "标准洗";
+        } else {
+            mode_text.innerHTML = mode_name;
+        }
+        //时间
+        time_text.innerHTML = currentTime + "开始洗衣";
+    }
+
+    function getArr(start, end) {
+        var arr = [];
+        for (var i = start; i <= end; i++) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            arr.push(i)
+        }
+        return arr;
+    }
+</script>
+</html>

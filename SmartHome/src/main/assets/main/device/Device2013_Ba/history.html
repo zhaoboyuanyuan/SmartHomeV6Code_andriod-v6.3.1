@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <title>用电数据统计</title>
+    <link rel="stylesheet" type="text/css" href="css/history.css"/>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+<header class="hum_header header">
+    <a href="device_Ba.html"></a>
+    <a href="javascript:;" class="autoSwitchLanguager" id="device_Ba_DataStatistics">用电数据统计</a>
+    <a data-id="1" href="javascript:;" style="background:none;"></a>
+</header>
+<section class="content">
+    <div class="switch">
+        <span catagory_selected="true"  class="autoSwitchLanguager" key="device_Ba_hour">时</span>
+        <span catagory_selected="false" class="autoSwitchLanguager" key="device_Ba_day">天</span>
+        <span catagory_selected="false" class="autoSwitchLanguager" key="device_Ba_week" >周</span>
+        <span catagory_selected="false" class="autoSwitchLanguager" key="device_Ba_month">日</span>
+    </div>
+    <div>
+        <section id="bar"></section>
+        <div id="noData" class="autoSwitchLanguager" key="device_noData">暂无数据</div>
+    </div>
+    <div id="unit" style="font-size: 0;margin-left: 10%;display: none">
+        <span style="font-size: 1.5rem;color:#1C1C1C" class="autoSwitchLanguager" key="device_Ba_unit"></span>
+        <span style="font-size: 1.6rem;color:#1C1C1C">w.h</span>
+    </div>
+</section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/echarts.common.min.js"></script>
+<script type="text/javascript">
+    initlan();
+    var startTime,endTime;
+    var newTime = new Date();
+    endTime = newTime.getTime() - (newTime.getMinutes())*60*1000 - (newTime.getSeconds())*1000;
+    var myChart;
+    $(".switch span").each(function(i){
+        $(this).click(function(){
+            switch(i)
+            {
+                case 0:
+                    startTime = endTime - 24*60*60*1000
+                    getStatistic1(startTime,i)
+                    break;
+                case 1:
+                    startTime = endTime - 30*24*60*60*1000
+                    getStatistic1(startTime,i)
+                    break;
+                case 2:
+                    startTime = endTime - (new Date(endTime).getDay() - 1)*24*60*60*1000 - 11*7*24*60*60*1000
+                    getStatistic1(startTime,i)
+                    break;
+                case 3:
+                    startTime = endTime - 365*24*60*60*1000
+                    getStatistic1(startTime,i)
+                    break;
+            }
+            $(this).attr("catagory_selected", "true");
+            $(this).siblings().attr("catagory_selected", "false");
+        })
+    });
+
+    function getStatistic1(startTime,index){
+        var devData = {
+            "startTime":startTime,
+            "endTime":endTime,
+            "dataType":(index +1)+'',
+        }
+        plus.gatewayCmd.getStatistic(devData, function(list) {
+            if(list.resultCode == 0){
+                barData(list.data,index);
+            }
+        })
+    }
+
+    function barData(data,index){
+        var timeArr = []
+        var dataArr = []
+        if(index == 0){
+            for(var i = startTime;i<=endTime;i+=60*60*1000){
+                var year = new Date(i).getFullYear()
+                var month = (new Date(i).getMonth() + 1 +"").length == 1 ? "0" + (new Date(i).getMonth() + 1) : (new Date(i).getMonth() + 1)
+                var date = (new Date(i).getDate()+"").length == 1 ? "0" + new Date(i).getDate() : new Date(i).getDate()
+                var hour = (new Date(i).getHours()+"").length == 1 ? "0" + new Date(i).getHours() : new Date(i).getHours()
+                var min = (new Date(i).getMinutes() +"").length == 1 ? "0" + new Date(i).getMinutes() : new Date(i).getMinutes()
+                var time = year+"-"+month+"-"+date+" "+hour
+                if(data[time]){
+                    dataArr.push(data[time])
+                }else{
+                    dataArr.push(0)
+                }
+                timeArr.push(hour+":"+min)
+            }
+            editBar(timeArr,dataArr)
+        }else if(index == 2){
+            for(var i = startTime;i<=endTime;i+=7*24*60*60*1000){
+                var year = new Date(i).getFullYear()
+                var month = (new Date(i).getMonth() + 1 +"").length == 1 ? "0" + (new Date(i).getMonth() + 1) : (new Date(i).getMonth() + 1)
+                var date = (new Date(i).getDate()+"").length == 1 ? "0" + new Date(i).getDate() : new Date(i).getDate()
+                var nextI = i + 6*24*60*60*1000
+                var nextYear,nextMonth,nextDate;
+                if(nextI > endTime){
+                    nextYear = new Date(endTime).getFullYear()
+                    nextMonth = (new Date(endTime).getMonth() + 1 +"").length == 1 ? "0" + (new Date(endTime).getMonth() + 1) : (new Date(endTime).getMonth() + 1)
+                    nextDate = (new Date(endTime).getDate()+"").length == 1 ? "0" + new Date(endTime).getDate() : new Date(endTime).getDate()
+                }else{
+                    nextYear = new Date(nextI).getFullYear()
+                    nextMonth = (new Date(nextI).getMonth() + 1 +"").length == 1 ? "0" + (new Date(nextI).getMonth() + 1) : (new Date(nextI).getMonth() + 1)
+                    nextDate = (new Date(nextI).getDate()+"").length == 1 ? "0" + new Date(nextI).getDate() : new Date(nextI).getDate()
+                }
+                var time = year+"-"+month+"-"+date+" "+nextYear+"-"+nextMonth+"-"+nextDate
+                if(data[time]){
+                    dataArr.push(data[time])
+                }else{
+                    dataArr.push(0)
+                }
+                timeArr.push(month+"/"+date + "-"+nextMonth+"/"+nextDate)
+                editBar(timeArr,dataArr)
+            }
+        }else if(index == 1){
+            for(var i = startTime;i<=endTime;i+=24*60*60*1000){
+                var year = new Date(i).getFullYear()
+                var month = (new Date(i).getMonth() + 1 +"").length == 1 ? "0" + (new Date(i).getMonth() + 1) : (new Date(i).getMonth() + 1)
+                var date = (new Date(i).getDate()+"").length == 1 ? "0" + new Date(i).getDate() : new Date(i).getDate()
+                var time = year+"-"+month+"-"+date
+                if(data[time]){
+                    dataArr.push(data[time])
+                }else{
+                    dataArr.push(0)
+                }
+                timeArr.push(month+"/"+date)
+            }
+            editBar(timeArr,dataArr)
+        }else if(index == 3){
+            for(var i = startTime;i<=endTime;i+=days(startTime)*24*60*60*1000){
+                var year = new Date(i).getFullYear()
+                var month = (new Date(i).getMonth() + 1 +"").length == 1 ? "0" + (new Date(i).getMonth() + 1) : (new Date(i).getMonth() + 1)
+                var time = year+"-"+month
+                if(data[time]){
+                    dataArr.push(data[time])
+                }else{
+                    dataArr.push(0)
+                }
+                timeArr.push(month+device_Ba_month)
+                console.log(timeArr)
+            }
+            editBar(timeArr,dataArr)
+        }
+    }
+    function days(time){
+        var month = new Date(time).getMonth() + 1
+        if(month == 2 || month == 4 || month == 6 || month == 9 || month == 10){
+            return 30;
+        }else{
+            return 31;
+        }
+    }
+
+    plus.plusReady(function () {
+        startTime = endTime - 24*60*60*1000;
+        getStatistic1(startTime,0)
+    })
+    function editBar(timeArr, arr) {
+        // 基于准备好的dom，初始化echarts图表
+        if(myChart == undefined){
+            myChart = echarts.init(document.getElementById('bar'));
+        }
+        var option = {
+            //点击提示的线条和文字
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    lineStyle: {
+                        color: 'pink',
+                        type: 'dashed',
+                        width: 1
+                    }
+                }
+            },
+            calculable: false,
+            //x轴
+            xAxis: [{
+                type: 'category',
+                boundaryGap:true,
+                splitLine: {show: false},
+                axisLabel  : {
+                    textStyle: {
+                        color: '#1C1C1C',
+                        fontSize: 22 / 640 * document.body.clientWidth
+                    }
+                },
+                //0刻度轴线
+                axisLine: {
+                    lineStyle: {
+                        width: 1,
+                        color: '#D1D1D1'
+                    }
+                },
+                //x轴刻度线
+                axisTick: {
+                    show: true
+                },
+                data: timeArr
+            }],
+            //y轴
+            yAxis: [{
+                type: 'value',
+                splitLine: {show: false},
+                nameTextStyle: {
+                    fontSize: 22 / 640 * document.body.clientWidth
+                },
+                axisLabel: {
+                    formatter: '{value}',
+                    textStyle: {
+                        color: '#1C1C1C',
+                        fontSize: 22 / 640 * document.body.clientWidth
+                    }
+                },
+                //刻度线
+                axisTick: {
+                    show: false
+                },
+                axisLine: {
+                    lineStyle: {
+                        width: 1,
+                        color: '#D1D1D1'
+                    }
+                }
+            }],
+            //柱状图数据
+            series: [{
+                name:device_Ba_Electric,
+                smooth: true,
+                barCategoryGap:4,
+                symbol: 'none',
+                type: 'bar',
+                data: arr,
+                draggable: false,
+                itemStyle: {
+                    normal: {
+                        color: '#C6EAA8',
+                    }
+                }
+            }]
+        };
+        // 为echarts对象加载数据
+        myChart.setOption(option);
+        window.onresize = myChart.resize;
+        $("#unit").show();
+    }
+</script>
+
+</html>

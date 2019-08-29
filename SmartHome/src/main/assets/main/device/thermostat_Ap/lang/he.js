@@ -1,0 +1,53 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Device_Ap_Details_Name = "בקר חימום";
+$lang.Device_Ap_Details_Temperature1 = "חדר";
+$lang.Device_Ap_Details_Temperature2 = "משטח";
+$lang.Device_Ap_Details_Time = "תזמונים";
+$lang.Device_Ap_Details_Open = "הספק";
+$lang.Device_Ap_Details_Save = "חסכוני";
+$lang.Device_Ap_Details_Save1 = "חסכוני";
+$lang.Device_Ap_Details_Time1 = "דלוק";
+$lang.Device_Ap_Details_Time2 = "כבוי";
+$lang.Device_Ap_Details_Time3 = "הגדר";
+$lang.Device_Ap_Details_Time4 = "התחלה";
+$lang.Device_Ap_Details_Time5 = "סגור";
+$lang.Device_Ap_Details_Time6 = "הספירה לאחורה חייבת להיות יותר מ 0";
+$lang.Device_Ap_Details_Time7 = "שעה";
+$lang.Device_Ap_Details_Time8 = "דקה";
+$lang.Device_Ap_Details_Abnormal1 = "בעיה פנימית קיימת אנא צור קשר עם התמיכה";
+$lang.Device_Ap_Details_Abnormal2 = "בעיה חיצונית קיימת אנא צור קשר עם התמיכה";
+$lang.Device_Ap_Details_Abnormal2_tips1 = "1. אם לא נדרש חיישנים חיצוניים אנא כבה הגנת טמפרטורה";
+$lang.Device_Ap_Details_Abnormal2_tips2 = "2. בדוק אם החיישנים החיצוניים מחוברים";
+$lang.Device_Ap_Details_Abnormal2_tips3 = "3. אם חשיינים חיצוניים מחוברים ויש בעיה עדיין， אנא צור קשר עם התמיכה";
+$lang.Device_Ap_Details_Abnormal3 = "בעיית חיישנים צור קשר עם התמיכה";
+$lang.Device_Ap_Details_Prompt = "הודעה";
+$lang.Device_Ap_Details_Confirm = "אשר";
+$lang.Device_Ap_Details_Offline = "בקר מנותק";
+$lang.Device_Ap_Details_System = "מערכת";
+$lang.Device_Ap_Details_System1 = "חשמל";
+$lang.Device_Ap_Details_System2 = "מים";
+$lang.Device_Ap_Details_System3 = "שנה לחשמל";
+$lang.Device_Ap_Details_System4 = "שנה למים";
+$lang.Device_Ap_Details_Return = "הגדרות יחסיות";
+$lang.Device_Ap_Details_Cancel = "בטל";
+$lang.Device_Ap_Details_Scale = "פורמט טמפרטורה";
+$lang.Device_Ap_Details_Scale1 = "צלסיוס";
+$lang.Device_Ap_Details_Scale2 = "פרנהייט";
+$lang.Device_Ap_Details_Sound = "קול קליק";
+$lang.Device_Ap_Details_Shock = "רעידה";
+$lang.Device_Ap_Details_Save = "מצב חיסכון";
+$lang.Device_Ap_Details_High_Protect = "הגנת טמפרטורת יתר";
+$lang.Device_Ap_Details_High_Protect_tips1 = "ניתוק אחרי הגנת טמפרטורה， סיכון טמפ' יתר， החלט לנתק?";
+$lang.Device_Ap_Details_High_Protect_Value = "טמפרטורה";
+$lang.Device_Ap_Details_Low_Protect = "הגנת קירור";
+$lang.Device_Ap_Details_Restore = "איפוס לנתוני יצרן";
+$lang.Device_Ap_Details_Restore_tips = "בטוח לחזור להגדרות יצרן?";
+$lang.moreSettingLog          = "היסטוריה";
+$lang.moreSettingAlarm        = "הודעת אתראה";
+$lang.Device_Ap_Details_Time_TIPS1 = "לא ניתן לערוך כאשר במצב פתוח";
+$lang.Device_Ap_Details_Jiaozhun1 = "כיול טמפרטורה פנימית";
+$lang.Device_Ap_Details_Jiaozhun2 = "כיול טמפרטורת פני השטח";

@@ -1,0 +1,109 @@
+/*上部分状态显示*/
+.doorbell_show{
+	position:relative;
+	width:100%;
+	margin-top:0.5rem;
+	text-align:center;
+}
+
+.doorbell_show .doorbell_img{
+	position:relative;
+	display:inline-block;
+	margin-top:7.5rem;
+	width:21.3rem;
+	height:21.3rem;
+	text-align:center;
+	background:url(../img/icon_pic_bell_nor.png) no-repeat center center;
+	background-size:20.8rem auto;
+}
+
+.doorbellbutton_show{
+	left:0;
+	margin-top:5rem;
+	z-index:300;
+	width:100%;
+	height:10.5rem;
+}
+.doorbellbutton_show .doorbellbutton_btn{
+	width:100%;
+	height:11.5rem;
+	margin-top:1rem;
+}
+
+.doorbellbutton_show .doorbellbutton_btn .ringState{
+	display:block;
+	box-sizing: border-box;
+	width:70%;
+	height:5rem;
+	margin:0 15%;
+	text-align:center;
+	line-height:5rem;
+	/*border:1px solid #8DD652;*/
+	border-radius:5px;
+	font-size:1.7rem;
+	color:#FFFFFF;
+	background: #8DD652;
+}
+
+.doorbellcontrl_show{
+	text-align:center;
+	padding-top: 1rem;
+	width: 100%;
+	height: 11rem;
+	overflow:hidden;
+	margin: 0 auto;
+}
+.doorbellcontrl_show i{
+	display:inline-block;
+	margin-right: 1rem;
+	margin-left: 1rem;
+}
+.doorbellcontrl_show i:nth-child(1){
+	background:url(../img/icon_btn_music.png) no-repeat center center;
+	width:8rem;
+	height:8rem;
+	margin-bottom: 0.5rem;
+	background-size:8rem auto;
+}
+.doorbellcontrl_show i:nth-child(2){
+	background:url(../img/icon_btn_play.png) no-repeat center center;
+	width:9rem;
+	height:9rem;
+	background-size:9rem auto;
+}
+.doorbellcontrl_show i:nth-child(3){
+	background:url(../img/icon_btn_sound_3.png) no-repeat center center;
+	width:8rem;
+	height:8rem;
+	background-size:8rem auto;
+	margin-bottom: 0.5rem;
+}
+/*遮罩层*/
+.mask_layer{
+	display:none;
+	position:absolute;
+	z-index:3000;
+	left:0;
+	top:6rem;
+	width:100%;
+	height:94%;
+	text-align:center;
+	background:rgba(0,0,0,0.7)
+}
+.mask_layer i{
+	display:inline-block;
+	width:8rem;
+	height:8rem;
+	margin-top:15rem;
+	background:url(../img/icon_new.png) no-repeat center center;
+	background-size:8rem auto;
+}
+.mask_layer span{
+	display:block;
+	width:100%;
+	height:5rem;
+	line-height:5rem;
+	text-align:center;
+	font-size:1.6rem;
+	color:#fff;
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/more.css" />
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+		<link rel="stylesheet" type="text/css" href="../css/fail.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a href="addDeviceNew.html"></a>
+				<a href="javascript:;" class="addDoorC"></a>
+				<a href="javascript:;"></a>
+			</div>
+		</header>
+		<section class="add_fail" style=";">
+			<img src="../fonts/icon_success.png" alt="" />
+			<span class="autoSwitchLanguager" id="addDevice_succ_succ">添加设备成功</span>
+		</section>
+		<section class="more_list">
+			<ul>
+				<li onclick="rename()"><b class="autoSwitchLanguager" id="addDevice_succ_name">名称</b><i></i><span id="name" class="nameAndGroup"></span></li>
+				<li>
+					<a style="color: #000" onclick="setGroup()" href="javascript:;"><b class="autoSwitchLanguager" id="addDevice_succ_group">分区</b><i></i><span id="addDevice_group_text" class="nameAndGroup autoSwitchLanguager">未分区</span></a>
+				</li>
+			</ul>
+		</section>
+		<section id="addDeviceToast" class="addDeviceToast">
+
+		</section>
+		<section class="addSensorBtn">
+			<a href="javascript:;" class="autoSwitchLanguager" id="addDoorContack4_finish" style="opacity:1">完成</a>
+		</section>
+		<section class="changeName" style="display:none;" id="rename">
+			<div class="nameToast">
+				<span id="addDevice_succ_rename" class="nameSpan autoSwitchLanguager">重命名</span>
+				<div class="name"><input id="renameInput" class="autoSwitchLanguager" maxlength="20" type="text" placeholder="请重新命名" /><i class="remove"></i></div>
+				<div class="choose_1">
+					<a class="autoSwitchLanguager" id="searchScene_cancal" href="javascript:;" onclick="cancel()">取消</a>
+					<a id="addDevice_sure" href="javascript:;" onclick="surename()" class="sure_click autoSwitchLanguager">确定</a>
+				</div>
+			</div>
+		</section>
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6addDevice");
+		initlan()
+		var decInfo = JSON.parse(info.getItem("decInfo"));
+		var roomID = info.getItem("roomID");
+		var name = info.getItem("roomName");
+		var type = decInfo.type;
+		if (type == "DD") {
+		    $('.more_list').hide()
+		}
+
+		plus.plusReady(function() {
+			setTitle();
+			$(".addSensorBtn a").click(function() {
+                if (type == "DD") {
+                    plus.tools.back(function() {});
+                    return
+                }
+				var param = {};
+				param.cmd = "502";
+				param.gwID = decInfo.gwID;
+				param.devID = decInfo.devID;
+				param.mode = 2;
+				var flag = false
+				if(roomID && roomID != "" && roomID != null) {
+					param.roomID = roomID;
+					flag = true;
+				}
+				DeviceName = info.getItem("DeviceName");
+				if(DeviceName && DeviceName != "" && DeviceName != null) {
+					param.name = DeviceName;
+					flag = true;
+				} else {
+				    // 名字为空
+					// toast
+				}
+				if(flag) {
+					plus.gatewayCmd.setDeviceInfo(param, function(result) {
+						console.log(result);
+						if (JSON.parse(result).retCode == 1) {
+						    toast(addDevice_name_repetition)
+						} else {
+                            plus.tools.back(function() {});
+						}
+//						plus.tools.back(function() {});
+					});
+				} else {
+					plus.tools.back(function() {});
+				}
+			});
+		})
+
+		function setTitle() {
+			try {
+				$(".addDoorC").html(addDevice_add + info.getItem("name"))
+			} catch(e) {
+				//TODO handle the exception
+			}
+			if(roomID && roomID != "" && roomID != null) {
+				if(name && name != "" && name != null) {
+					$("#addDevice_group_text").html(name);
+				}
+			} else {
+				$("#addDevice_group_text").html(lang_txtContent);
+			}
+			var DeviceName = info.getItem("DeviceName");
+			if(DeviceName && DeviceName != "" && DeviceName != null) {
+				$("#name").html(DeviceName);
+			} else {
+                if( type === "Bu_01" || type === "Bv_01" || type === "Bw_01" ||
+                    type === "Bu" || type === "Bv" || type === "Bw") {
+                    type = type.substr(0,2);
+                    $("#name").html(languageUtil.getResource("device_" + type + "_02_name"));
+                }else{
+                    $("#name").html(info.getItem("name"));
+				}
+			}
+		}
+
+		function rename() {
+			$("#rename").show();
+		}
+
+		function surename() {
+			var value = document.getElementById("renameInput").value;
+			if (value == undefined || value == "" || value == null) {
+                toast(addDevice_name_empty)
+			} else {
+			    value = noFace(value);
+                info.setItem("DeviceName", value);
+                $("#name").html(value);
+            }
+			cancel()
+		}
+        function noFace(param){
+            var regRule = /\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g;
+            param = param.replace(/(^\s*)|(\s*$)/g, "");
+            if(param.match(regRule)) {
+                param = param.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, "");
+                return param;
+            }else{
+                return param;
+            }
+        }
+		function cancel() {
+			$(".changeName").hide();
+		}
+
+		function setGroup() {
+			window.location = "addDevice_group.html?name=" + decodeURI(getUrlParam("name"));
+		}
+
+		function toast(msg) {
+            $("#addDeviceToast").html(msg);
+            $(".addDeviceToast").fadeIn()
+            setTimeout(function() {
+                $(".addDeviceToast").fadeOut()
+            }, 3000);
+        }
+	</script>
+
+</html>

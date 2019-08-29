@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>幕帘探测器</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<header class="header">
+    <div class="header_top">
+        <a class="back" href="javascript:;"></a>
+        <a class="deviceName autoSwitchLanguager" key="device_safety_a1_name" href="javascript:;">幕帘探测器</a>
+        <a class="more" href="javascript:;"></a>
+    </div>
+</header>
+<div class="content">
+    <div class="top">
+        <div class="top_state autoSwitchLanguager" t-state="off" key="disarmed"></div>
+    </div>
+    <div class="middle">
+        <div class="icon" m-state="disarm"></div>
+        <span class="icon_tip"></span>
+        <img class="middle_people_right" src="./fonts/icon_people.png">
+        <img class="middle_people_left" src="./fonts/icon_people.png">
+        <span class="middle_info"></span>
+    </div>
+    <div class="bottom">
+        <div class="bottom_state autoSwitchLanguager"  b-state="off" key="fortify"></div>
+    </div>
+</div>
+<section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="offLine">设备已离线</span>
+</section>
+<script type="text/javascript" src="../../source/js/rem.js"></script>
+<script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="js/plus.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
+<script type="text/javascript" src="js/gatewayCmd.js"></script>
+<script type="text/javascript" src="js/more.js"></script>
+<script type="text/javascript" src="lang/lang.js"></script>
+<script type="text/javascript">
+    var deviceId = '';
+    var gwID = 0;
+    var state = 0;
+    var leftLastTime = "";
+    var rightLastTime = "";
+    initlan();
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(function (data) {
+            if (data.mode == 2) {
+                $(".mask_layer").show();
+            } else {
+                $(".mask_layer").hide();
+                refereshUI(data)
+            }
+            gwID = data.gwID;
+            deviceId = data.devID;
+            getMoreConfig(deviceId);
+            var name = data.name.indexOf("#$default$#") != -1 ? device_name_A1 + data.name.split("#")[2] : data.name;
+            $(".deviceName").html(name);
+            getLastOpen();
+            control(gwID, deviceId, data.endpoints[0].endpointNumber);
+        });
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            if (data.cmd == "500" && deviceId == data.devID) {
+                if (data.mode == 2) {
+                    $(".mask_layer").show();
+                } else {
+                    $(".mask_layer").hide();
+                    refereshUI(data)
+                }
+                var name = data.name.indexOf("#$default$#") != -1 ? device_name_A1 + data.name.split("#")[2] : data.name;
+                $(".deviceName").html(name)
+            } else if (data.cmd == "502" && deviceId == data.devID) {
+                if (data.name != undefined || data.name != "") {
+                    var name = data.name.indexOf("#$default$#") != -1 ? device_name_A1 + data.name.split("#")[2] : data.name;
+                    $(".deviceName").html(name)
+                }
+                if (data.endpointStatus == 0) {
+                    state = 0;
+                    $(".top_state").attr("t-state", "off");
+                    $(".top_state").html(top_disarm);
+                    $(".icon").attr("m-state", "disarm");
+                    $(".icon_tip").html('');
+                    $(".bottom_state").attr("b-state", "off");
+                    $(".bottom_state").html(bottom_fortify);
+                    $(".middle_people_left").hide();
+                    $(".middle_people_right").hide();
+                } else {
+                    state = 1;
+                    $(".top_state").attr("t-state", "on");
+                    $(".top_state").html(top_fortify);
+                    $(".icon").attr("m-state", "fortify");
+                    $(".icon_tip").html(alarm_normal);
+                    $(".bottom_state").attr("b-state", "on");
+                    $(".bottom_state").html(bottom_disarm);
+                    $(".middle_people_left").hide();
+                    $(".middle_people_right").hide();
+                }
+            }
+        })
+    });
+
+    $(".back").on("click", function () {
+        plus.tools.back(function () {
+        })
+    });
+    $(".more").on("click", function () {
+        plus.tools.more(moreConfig, function () {
+        })
+    });
+
+    function refereshUI(data) {
+        //endpointStatus:0.撤防，1.设防
+        if(data.endpoints[0].endpointStatus == 0){
+            state = 0;
+            $(".top_state").attr("t-state", "off");
+            $(".top_state").html(top_disarm);
+            $(".icon").attr("m-state", "disarm");
+            $(".icon_tip").html('');
+            $(".bottom_state").attr("b-state", "off");
+            $(".bottom_state").html(bottom_fortify);
+            $(".middle_people_left").hide();
+            $(".middle_people_right").hide();
+        }else if(data.endpoints[0].endpointStatus == 1){
+            state = 1;
+            var attribute = data.endpoints[0].clusters[0].attributes[0];
+            //设防状态下 0：正常 2：左边有人 3：右边有人
+            if(attribute.attributeValue == 0){
+                $(".top_state").attr("t-state", "on");
+                $(".top_state").html(top_fortify);
+                $(".icon").attr("m-state", "fortify");
+                $(".icon_tip").html(alarm_normal);
+                $(".bottom_state").attr("b-state", "on");
+                $(".bottom_state").html(bottom_disarm);
+                $(".middle_people_left").hide();
+                $(".middle_people_right").hide();
+            }else if(attribute.attributeValue == 2){
+                $(".top_state").attr("t-state", "on");
+                $(".top_state").html(top_fortify);
+                $(".icon").attr("m-state", "alarm");
+                $(".icon_tip").html(alarm);
+                $(".middle_info").show();
+                var time = getTime(data.time);
+                $(".middle_info").html(time + alarm_left);
+                $(".bottom_state").attr("b-state", "on");
+                $(".bottom_state").html(bottom_disarm);
+                $(".middle_people_left").show();
+                $(".middle_people_right").hide();
+            }else if(attribute.attributeValue == 3){
+                $(".top_state").attr("t-state", "on");
+                $(".top_state").html(top_fortify);
+                $(".icon").attr("m-state", "alarm");
+                $(".icon_tip").html(alarm);
+                $(".middle_info").show();
+                var time = getTime(data.time);
+                $(".middle_info").html(time + alarm_right);
+                $(".bottom_state").attr("b-state", "on");
+                $(".bottom_state").html(bottom_disarm);
+                $(".middle_people_left").hide();
+                $(".middle_people_right").show();
+            }
+        }
+    }
+
+    function control(gwID, devID, endpointNumber) {
+        $(".bottom_state").on("click", function () {
+            if (state == 0) {
+                var deviceInfo = contorlInfo(gwID, devID, endpointNumber, '1');
+                plus.gatewayCmd.controlDevice(deviceInfo, function () {
+                })
+            } else {
+                var deviceInfo = contorlInfo(gwID, devID, endpointNumber, '0');
+                plus.gatewayCmd.controlDevice(deviceInfo, function () {
+                })
+            }
+        });
+    }
+
+    //设备设防撤防控制502
+    function contorlInfo(gwID, devID, endpointNumber, state) {
+        var data = {
+            "cmd": "502",
+            "gwID": gwID,
+            "mode": 0,
+            "devID": devID,
+            "endpointNumber": endpointNumber,
+            "endpointStatus": state
+        }
+        return data;
+    }
+
+    function getTime(data) {
+        if (data === undefined) {
+            return '';
+        }
+        var time = parseInt(data);
+        var date = new Date(time);
+        var year1 = date.getFullYear();
+        var month1 = date.getMonth() + 1;
+        var day1 = date.getDate();
+        var hour1 = date.getHours();
+        var min1 = date.getMinutes();
+
+        var nowDate = new Date();
+        var year2 = nowDate.getFullYear();
+        var month2 = nowDate.getMonth();
+        var day2 = nowDate.getDate();
+
+        var nowDateZero = new Date(year2, month2, day2, 0,0,0,0);
+        var nowTimeLong = nowDateZero.getTime();
+
+        if (min1 < 10) {
+            min1 = '0' + min1;
+        }
+        if (hour1 < 10) {
+            hour1 = '0' + hour1;
+        }
+        if (day1 < 10) {
+            day1 = '0' + day1;
+        }
+        if (month1 < 10) {
+            month1 = '0' + month1;
+        }
+
+        if (time - nowTimeLong < 24 * 60 * 60 * 1000 && time - nowTimeLong > 0) {
+            return hour1 + ':' + min1 + ' ';
+        } else if (nowTimeLong - time < 24 * 60 * 60 * 1000 && nowTimeLong - time > 0) {
+            return yesterday + ' ' + hour1 + ':' + min1 + ' ';
+        } else {
+            return year1 + '.' + month1 + '.' + day1 + ' ' + hour1 + ':' + min1 + ' ';
+        }
+    }
+
+    // 调用云接口查询最近一次打开
+    function getLastOpen(){
+        var parm = {
+            "deviceId":deviceId,
+            "deviceType":"a1",
+            "messageCode":"0102081"
+        }
+        plus.gatewayCmd.getLastAlarmTime(parm, function(data){
+            if(!data || data == ''){
+                leftLastTime = 0;
+            }else {
+                leftLastTime = getTime(data);
+            }
+            getLastOpenRight(data);
+        })
+    }
+
+
+    // 调用云接口查询最近一次打开
+    function getLastOpenRight(lefrTime){
+        var parm = {
+            "deviceId":deviceId,
+            "deviceType":"a1",
+            "messageCode":"0102091"
+        }
+        plus.gatewayCmd.getLastAlarmTime(parm, function(data){
+            if(!data || data == ''){
+                rightLastTime = 0;
+            }else {
+                rightLastTime = getTime(data);
+            }
+            if (leftLastTime == 0 && rightLastTime == 0){
+                $(".middle_info").hide();
+            } else if (lefrTime < data){
+                $(".middle_info").show();
+                $(".middle_info").html(rightLastTime + alarm_right);
+            }else {
+                $(".middle_info").show();
+                $(".middle_info").html(leftLastTime + alarm_left);
+            }
+        })
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+@charset "utf-8";
+
+html,body{
+	width:100%;
+	height:100%;
+	position:fixed;
+	left:0;
+	top:0;
+	background:#fff;
+}
+button{
+	border:0;
+}
+b,strong{
+	font-weight:normal!important;
+}
+/*头部*/
+.header{
+	background:#8dd652;
+}
+/*.mui-dtpicker-header{*/
+	/*text-align:center;*/
+/*}*/
+.header-title{
+	display:inline-block;
+	width:60%;
+	text-align:center;
+	line-height:28px;
+}
+.mui-btn-blue, .mui-btn-primary, input[type=submit]{
+	background: #fff;
+	border: 1px solid #fff;
+	color: #8dd652;
+}
+.mui-poppicker-header .mui-btn{
+	border:0;
+}
+.mui-picker{
+	background:#fff;
+}
+.mui-dtpicker, .mui-poppicker{
+	background:#fff;
+}
+.mui-dtpicker-title h5{
+	background:#fff;
+}
+/*toast提示*/
+.gw_toast{
+	display:none;
+	position:fixed;
+	left:20%;
+	top:50%;
+	z-index:1000;
+	width:60%;
+	height:3rem;
+	line-height:3rem;
+	text-align:center;
+	background:rgba(0,0,0,.3);
+	font-size:1.4rem;
+	color:#fff;
+	border-radius: 4rem;
+}
+.mui-dtpicker-header button{
+	box-sizing:border-box;
+	width:20%;
+}
+
+/*device_77详情页*/
+.content{
+	width:100%;
+	height:88.4%;
+}
+/*操作滑块*/
+.content .handle{
+	position:relative;
+	width:100%;
+	height:60%;
+	overflow:hidden;
+}
+.handle .doing-handle{
+	position:relative;
+	top:50%;
+	left:50%;
+	width:9rem;
+	height:18rem;
+	padding:0.9rem 0.7rem;
+	background:#8dd652;
+	-webkit-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+	border-radius:18px;
+}
+.handle .doing-handle li{
+	width:100%;
+	height:9rem;
+	text-align:center;
+	line-height:9rem;
+	font-size:3rem;
+	color:#fff;
+}
+.handle .doing-handle li.slideBlock{
+	position:absolute;
+	left:0.7rem;
+	top:0.9rem;
+	width:9rem;
+	height:9rem;
+	background:url(../fonts/icon_slide.png) no-repeat center center;
+	background-size:100% auto;
+}
+/*@-webkit-keyframes slideDown{*/
+	/*form{top: 0.9rem}*/
+	/*to{top:9.9rem}*/
+/*}*/
+/*@keyframes slideDown{*/
+	/*form{top: 0.9rem}*/
+	/*to{top:9.9rem}*/
+/*}*/
+/*@-webkit-keyframes slideUp{*/
+	/*form{top: 9.9rem}*/
+	/*to{top:0.9rem}*/
+/*}*/
+/*@keyframes slideUp{*/
+	/*form{top: 9.9rem}*/
+	/*to{top:0.9rem}*/
+/*}*/
+/*.handle .doing-handle li.slideBlock.slide{*/
+	/*animation: slideDown 0.5s linear both;*/
+	/*-webkit-animation: slideDown 0.5s linear both;*/
+/*}*/
+/*.handle .doing-handle li.slideBlock.slideToUp{*/
+	/*animation: slideUp 0.5s linear both;*/
+	/*-webkit-animation: slideUp 0.5s linear both;*/
+/*}*/
+.content .handle span{
+	display:block;
+	position:absolute;
+	left:0;
+	bottom:8%;
+	width:100%;
+	height:4rem;
+	line-height:4rem;
+	text-align:center;
+	color:#8dd652;
+}
+.content .handle-btn{
+	box-sizing: border-box;
+	width:100%;
+	height:14%;
+	padding:0 6%;
+}
+.content .handle-btn a{
+	box-sizing: border-box;
+	display:block;
+	float:left;
+	width:14rem;
+	height:4.4rem;
+	text-align: center;
+	border:1px solid #8dd652;
+	border-radius:5px;
+}
+.content .handle-btn a i{
+	display:inline-block;
+	padding-left:2.9rem;
+	height:4.1rem;
+	line-height:4.1rem;
+	color:#8dd652;
+	font-size:1.7rem;
+}
+.content .handle-btn a:first-child i{
+	background:url(../fonts/icon_delay.png) no-repeat left center;
+	background-size:1.75rem auto;
+}
+.content .handle-btn a:last-child i{
+	background:url(../fonts/icon_count.png) no-repeat left center;
+	background-size:1.75rem auto;
+}
+.content .handle-btn a:last-child{
+	float:right;
+}
+
+/*数据*/
+.content .handle-data{
+	position:fixed;
+	left:0;
+	bottom:0;
+	box-sizing: border-box;
+	width:100%;
+	height:14.3rem;
+	padding:1rem 2.2rem;
+	background:#fafafa;
+	border-radius: 8px;
+}
+.content .handle-data li{
+	width:100%;
+	height:6.1rem;
+	line-height:6.1rem;
+	font-size:1.6rem;
+	color:#333;
+	border-bottom:1px solid #ebebeb;
+}
+.content .handle-data li:last-child{
+	border:0;
+}
+.content .handle-data li span{
+	float:right;
+	width:9rem;
+	height:6.1rem;
+	line-height:6.1rem;
+	font-size:2.2rem;
+}
+.content .handle-data li em{
+	font-size:1.6rem;
+}
+
+/*添加延时*/
+.now-time{
+	width:100%;
+	height:3.2rem;
+	line-height:3.2rem;
+	padding-left:4%;
+	font-size:1.2rem;
+	color:#8dd652;
+}
+.now-time #nowTime{
+	margin-left:1rem;
+}
+.choose-time{
+	width:100%;
+	overflow:hidden;
+}
+.choose-time li{
+	width:100%;
+	height:4rem;
+	line-height:4rem;
+	padding:0 4%;
+	background:#fff;
+	border-top:1px solid #d9d9d9;
+	font-size:1.6rem;
+	color:#000000;
+}
+.choose-time li:last-child{
+	border-bottom:1px solid #d9d9d9;
+}
+.choose-time li i{
+	display:block;
+	float:right;
+	width:2.1rem;
+	height:4rem;
+	background:url(../fonts/icon_choose.png) no-repeat center center;
+	background-size:2rem auto;
+}
+
+.mui-poppicker-body{
+	height:120px;
+}
+
+.mui-backdrop{
+	background-color:transparent;
+}
+
+

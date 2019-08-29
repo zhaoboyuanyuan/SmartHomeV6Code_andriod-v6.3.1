@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_cateye_ring">
+
+    <ImageView
+        android:id="@+id/iv_call_waiting"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginEnd="@dimen/default_padding_large"
+        android:layout_marginStart="@dimen/default_padding_large"
+        android:layout_marginTop="@dimen/default_padding_large"
+        android:background="@drawable/bg_recommend_go_home" />
+
+    <TextView
+
+        android:id="@+id/tv_tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_call_waiting"
+        android:layout_marginTop="@dimen/default_padding_normal"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:text="测试小区：6-1102门口来电" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/layoutCallHangUp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_hang_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_cateye_ring_hangup1" />
+
+            <TextView
+                android:id="@+id/txtHangUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_hang_up"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@string/CateEye_Ring_Hangup"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layoutCallAnswer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_call_answer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_cateye_ring_connect" />
+
+            <TextView
+                android:id="@+id/txtAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_call_answer"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@string/CateEye_Ring_Connect"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

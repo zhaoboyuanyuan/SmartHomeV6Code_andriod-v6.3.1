@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_province" />
+
+        <TextView
+            android:id="@+id/tv_province"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_choose" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_city" />
+
+        <TextView
+            android:id="@+id/tv_city"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_choose" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_zone" />
+
+        <TextView
+            android:id="@+id/tv_city_strict"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_choose"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="@dimen/default_padding_small"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_Community" />
+
+        <TextView
+            android:id="@+id/tv_community"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_choose" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_Area" />
+
+        <TextView
+            android:id="@+id/tv_community_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_choose" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_Building_number" />
+
+        <TextView
+            android:id="@+id/tv_building_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_choose" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_unit_number" />
+
+        <TextView
+            android:id="@+id/tv_unit_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_choose"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_Floor_number" />
+
+        <TextView
+            android:id="@+id/tv_unit_floor"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_choose" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_room_number" />
+
+        <TextView
+            android:id="@+id/tv_room_number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/addDevice_CG27_choose" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginTop="@dimen/default_padding_small"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_verify_code"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/Login_GetToken_Hint" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/default_padding_small"
+            android:layout_toEndOf="@+id/tv_verify_code"
+            android:background="@null"
+            android:hint="@string/Forgot_Require_AuthCode"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_code"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:paddingEnd="@dimen/default_padding_small"
+            android:paddingStart="@dimen/default_padding_small"
+            android:text="@string/Login_GetToken" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/btn_next_step"
+            style="@style/config_next_button"
+            android:layout_alignParentBottom="true"
+            android:text="@string/Config_Next_Step" />
+    </RelativeLayout>
+
+</LinearLayout>

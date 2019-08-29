@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/v6_line" />
+
+    <EditText
+        android:id="@+id/mailbox_editBox"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:ellipsize="end"
+        android:hint="@string/AccountSecurity_EmailAddress"
+        android:lines="1"
+        android:maxLines="1"
+        android:inputType="text"
+        android:paddingLeft="10dp"
+        android:paddingRight="15dp"
+        android:textSize="@dimen/default_editText_size" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/v6_line" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/AccountSecurity_EmailTip2"
+        android:padding="10dp"
+        android:textSize="@dimen/mine_wl_text_size"/>
+    <Button
+        android:id="@+id/confirm_mailbox"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_singin_btn_bg"
+        android:gravity="center"
+        android:lines="1"
+        android:ellipsize="end"
+        android:text="@string/AccountSecurity_EmailTip3"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+</LinearLayout>

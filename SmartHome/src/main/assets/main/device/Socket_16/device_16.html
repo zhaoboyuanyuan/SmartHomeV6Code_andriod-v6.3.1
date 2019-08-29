@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="../../source/js/rem.js"></script>
+    <script type="text/javascript" src="../../source/js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/device.css"/>
+</head>
+<body style="width:100%;height:100%;">
+    <header class="header">
+        <div class="header_top">
+            <a id="back" href="javascript:;"></a>
+            <a class="deviceName autoSwitchLanguager" key="device_16_name" href="javascript:;">移动插座</a>
+            <a class="more" href="javascript:;"></a>
+        </div>
+    </header>
+    <section class="main_con">
+        <div class="handle">
+            <div class="handle_icon"></div>
+            <i></i>
+        </div>
+        <span class="state"></span>
+        <div class="handle_btn handle_color" data-id="0"></div>
+    </section>
+    <section class="mask_layer" style="display:none;"><i></i><span class="autoSwitchLanguager" key="device_16_Offline">设备已离线</span></section>
+</body>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css"/>
+    <script type="text/javascript" src="js/plus.js"></script>
+    <script type="text/javascript" src="js/gatewayCmd.js"></script>
+    <script type="text/javascript" src="js/tools.js"></script>
+    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="js/more.js"></script>
+    <script type="text/javascript">
+        var gwID,dID;
+        initlan()
+        plus.plusReady(function(){
+            $(".state").html(device_16_close);
+            $("#back").click(function(){
+                plus.tools.back(function(){})
+            })
+            plus.gatewayCmd.getDeviceInfo(function(data){
+                gwID = data.gwID;
+                dID = data.devID;
+                var name = data.name.indexOf("#$default$#") != -1 ? device_16_name + data.name.split("#")[2]:data.name
+                $(".deviceName").html(name)
+                modeState(data);
+                if(data.mode === 2){
+                    $(".mask_layer").show()
+                }else if(data.mode === 3){
+                    //原生做的操作
+                }else{
+                    $(".mask_layer").hide()
+                }
+                control(gwID,dID)
+                $(".more").on("click",function(){
+                    var moreData = getMoreConfig(dID,gwID)
+                    plus.tools.more(moreData,function(){})
+                })
+            })
+
+            plus.gatewayCmd.newDataRefresh(function(data){
+                if(data.cmd == "500" && data.devID == dID){
+                    var name = data.name.indexOf("#$default$#") != -1 ? device_16_name + data.name.split("#")[2]:data.name
+                    $(".deviceName").html(name)
+                    modeState(data)
+                    isSendCmd = false;
+                }else if(data.cmd == "502" && data.devID == dID){
+                    if(data.name != undefined || data.name != ''){
+                        $(".deviceName").html(data.name)
+                    }
+                }
+                gwID = data.gwID;
+                dID = data.devID;
+            })
+        })
+
+        function control(gwID,dID){
+            $(".handle_btn").on("click",function(){
+                $(".handle_icon").addClass("scale")
+                if($(this).attr("data-id") == 1){
+                    sendCmd(gwID,dID,1,6,0)
+                }else if($(this).attr("data-id") == 0){
+                    sendCmd(gwID,dID,1,6,1)
+                }
+            })
+        }
+
+        function sendCmd(gwID,dID,endpointNumber,clusterId,commandId){
+            var jsonData = {}
+            jsonData.cmd = "501";
+            jsonData.gwID = gwID;
+            jsonData.devID = dID;
+            jsonData.endpointNumber = endpointNumber;
+            jsonData.clusterId = clusterId;
+            jsonData.commandType = 1;
+            jsonData.commandId = commandId;
+            plus.gatewayCmd.controlDevice(jsonData,function(){})
+        }
+
+        function modeState(result){
+            if(result.mode === 2){
+                $(".mask_layer").show()
+            }else if(result.mode === 3){
+                //原生做的操作
+            }else{
+                $(".mask_layer").hide()
+                for(var i = 0;i<result.endpoints[0].clusters.length;i++){
+                    var attributeId = result.endpoints[0].clusters[i].attributes[0].attributeId;
+                    var attributeValue = result.endpoints[0].clusters[i].attributes[0].attributeValue
+                    reloadUI(attributeId,attributeValue)
+//                  reloadUI(attributeId,attributeValue,result.extData[0])
+                }
+            }
+        }
+//        window.onload = function(){
+//            setTimeout(function(){
+//                reloadUI(0,1)
+//            },5000)
+//        };
+        function reloadUI(id,value){
+            switch (id){
+                case 0:{
+                    $(".handle_icon").removeClass("scale")
+                    if(value == "0"){
+                        $(".handle_icon").hide()
+                        $(".handle_btn").addClass("handle_color")
+                        $(".handle_btn").attr("data-id","0")
+                        $(".state").html(device_16_close);
+                    }else if(value == "1"){
+                        $(".handle_icon").show()
+                        $(".handle_btn").removeClass("handle_color")
+                        $(".handle_btn").attr("data-id","1")
+                        $(".state").html(device_16_open);
+                    }else{
+                        $(".handle_icon").hide()
+                        $(".handle_btn").addClass("handle_color")
+                        $(".handle_btn").attr("data-id","0")
+                        $(".state").html(device_16_close);
+                    }
+                }
+                    break;
+            }
+        }
+    </script>
+</html>

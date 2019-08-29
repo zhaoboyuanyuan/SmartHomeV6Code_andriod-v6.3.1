@@ -1,0 +1,52 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Backup_and_recovery = "백업 및 복구";
+$lang.Backup_and_recovery_hint = "시스템은 자동으로 게이트웨이의 장비， 장면， 스마트맨 등의 데이터를 클라우드에 (또는 수동으로) 백업합니다. 게이트웨이가 실패하거나 새 게이트웨이를 교체해야하는 경우 복구 기능을 사용하여 데이터를 새 게이트웨이로 신속하게 복원 할 수 있습니다";
+$lang.Backup_recovery = "이 게이트웨이로 복원";
+$lang.Backup_Manual = "백업 매뉴얼";
+$lang.Backup_recording = "백업 저장";
+$lang.Backup_no_recording = "게이트웨이 백업 레코드를 찾을 수 없습니다.";
+$lang.Backup_add = "새로운 백업 저장";
+$lang.Backup_automatic = "자동 백업";
+$lang.Backup_Manual_3 = "시스템은 마지막 3 개의 수동 백업 데이터를 보관하며， 계속하면 이전의 데이터를 덮어 씁니다.";
+$lang.Backup_Backuping = "백업 중…";
+$lang.Backup_Backup_device = "장비 백업 중…";
+$lang.Backup_Backup_editScene = "장비，스마트맨 백업 중…";
+$lang.Backup_time = "1-2 분이 걸릴 것으로 예상 됨";
+$lang.Backup_Manual_hint = "백업 프로세스 중에는 장비를 끄거나 연결을 끊지 마십시오";
+$lang.Backup_success = "백업 매뉴얼 완료";
+$lang.Backup_failure = "백업 매뉴얼 실패";
+$lang.Backup_failure_hint = "네트워크가 정상적으로 연결되어 있는지 확인하십시오.";
+$lang.Recovery_Account_password = "게이트웨이의 데이터를 복원하려면 게이트웨이의 계정과 비밀번호를 입력하십시오";
+$lang.Recovery_account = "계정  ";
+$lang.Recovery_enter_account = "비밀번호를 입력하십시오";
+$lang.Recovery_password = "비밀번호 ";
+$lang.Recovery_enter_password = "비밀번호를 입력하십시오";
+$lang.Recovery_password_error = "계정 또는 비밀번호가 틀림니다， 다시 입력하십시오";
+$lang.Recovery_Different_models = "게이트웨이의 계정과 비밀번호를 복원 하시겠습니까?";
+$lang.Recovery_choose_data = "백업 시간에 따라 복원 할 데이터를 선택하십시오";
+$lang.Recovery_no_data_reason = "복구 이유 없음 :";
+$lang.Recovery_no_data_reason_1 = "1. 새 게이트웨이， 백업 데이터 없음";
+$lang.Recovery_no_data_reason_2 = "2.이 게이트웨이는 백업을 지원하지 않습니다.";
+$lang.Recovery_no_data_reason_3 = "3.이 게이트웨이 데이터가 다른 게이트웨이로 복원되었는지 확인하십시오.";
+$lang.Recovery_Start = "복원 시작";
+$lang.Recovery_Start_hint = "계속 되면 백업 데이터가 게이트웨이로 이동되고 게이트웨이의 원래 데이터가 지워 지거나 덮어 쓰게됩니다";
+$lang.Recovery_recoverying = "복구 중…";
+$lang.Recovery_recovery_device = "장비 복구 중…";
+$lang.Recovery_recovery_editScene = "스마트맨， 장면 복구 중…";
+$lang.Recovery_recoverying_hint = "복구 프로세스 중에는 장치를 끄거나 연결을 끊지 마십시오.";
+$lang.Recovery_success = "데이터 백업 완료";
+$lang.Recovery_failure = "데이터 백업 실패";
+$lang.Recovery_Tips = "꿀팁:";
+$lang.Recovery_success_hint = "원래 게이트웨이를 계속 사용하려면 먼저 공장 초기화 설정으로 복원하십시오. 그렇지 않으면 게이트웨이 데이터가 비정상 일 수 있습니다.";
+$lang.device_Backup_Cancel = "취소";
+$lang.device_Backup_ok = "결정";
+$lang.Complete = "완료";
+$lang.Music_Scan_Retry = "재시도";
+$lang.addGateway3_toast_00 = "계정 또는 비밀번호는 비워 둘 수 없습니다.";
+$lang.addDevice_sure = "확인";
+$lang.Backup_note_this = "현재 등록 된 게이트웨이 계정을 입력하지 마십시오.";
+$lang.Backup_is_online = "입력 한 게이트웨이는 정상적인 온라인 상태입니다. 계속하려면 전원을 끄거나 초기 설정으로 복원하십시오.";

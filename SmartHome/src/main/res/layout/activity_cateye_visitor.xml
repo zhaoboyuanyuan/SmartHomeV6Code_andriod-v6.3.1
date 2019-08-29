@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/alarm_detail_text_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/message_center_detail_no_result_MarginTop"
+        android:gravity="center_horizontal"
+        android:text="@string/CateEye_Visitor_Record_No_Record"
+        android:textColor="@color/message_center_no_result_text_color" />
+
+    <ListView
+        android:layout_marginTop="20dp"
+        android:id="@+id/alarm_detail_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:divider="@color/v6_line"
+        android:dividerHeight="1dp"/>
+</FrameLayout>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!--更多——>离家按钮——>选择场景模式-->
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0 , maximum-scale=1.0, user-scalable=0">
+		<meta name="format-detection" content="telephone=no">
+		<meta charset="UTF-8">
+		<title key="chooseScene_js_01"></title>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/mui.min.css" />
+		<script type="text/javascript" src="js/mui.min.js"></script>
+		<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/leaveHomeForChooseScene.js" type="text/javascript" charset="UTF-8"></script>
+	    <script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="header">
+			<div class="header_top">
+				<a id="back" href="javascript:;"></a>
+				<a class="deviceName autoSwitchLanguager" href="javascript:;" key="chooseScene_js_01">选择场景</a>
+				<a id="bindingScene" class="autoSwitchLanguager" style="display: none;" key="chooseScene_js_02">绑定</a>
+			</div>
+			<div style="background: #f1f4f8;width: 100%;height: 15px;float: left;"></div>
+			<div id="divSceneList" style="width: 100%;float: left;background-color: #F1F4F8;height: 100%;">
+				
+			</div>
+			<!--<section id="fail" class="toast" style="display:none;">-->
+				<!--<p class="autoSwitchLanguager" id="toastText"></p>-->
+			<!--</section>-->
+			<!--<input type="button" value="测试" onclick="resetItem();" />-->
+		</header>
+	</body>
+	<script type="text/javascript">
+		initlan();
+		var endpointNumber;
+		var gwID;
+		var devID;
+		var appID;
+		var isSaving=false;
+		var isSearch=false;		
+		plus.plusReady(function() {			
+			plus.gatewayCmd.getDeviceInfo(function(result) {
+				appID = result.appID;
+				deviceInfo = result;
+				endpointNumber = result.endpoints[0].endpointNumber;
+				devID = result.devID;
+				gwID = result.gwID;
+				//注册
+				rush_500(devID, gwID);
+				plus.gatewayCmd.getSceneList(function(result){
+					createSceneList(result);
+					//查询
+					check();
+					bindClick();
+				})				
+			});
+		});
+		document.getElementById("back").addEventListener("click", function() {
+				plus.tools.back(function() {});
+			});
+		function bindClick() {			
+			document.getElementById("bindingScene").addEventListener("click", function() {
+				if(chooseSceneid != null && chooseSceneid != undefined && chooseSceneid != "") {
+					if(chooseSceneid==bindingSceneid){
+						unbind();
+					}else{
+						bind(chooseSceneid);
+					}
+					
+				}
+			});
+		}
+
+		/*
+		 * 绑定场景
+		 */
+		function bind(chooseSceneid) {
+			createToast(chooseScene_js_04);//"正在绑定"
+			isSaving=true;
+			var jsonData = {
+				"cmd": "513",
+				"gwID": gwID,
+				"devID": devID,
+				"appID": appID,
+				"mode": 1,
+				"data": [{ "endpointNumber": "1", "sceneID": chooseSceneid }]
+			};
+			sendCmd(jsonData);
+			shaoshi();
+		}
+
+		/*
+		 * 解除绑定
+		 */
+		function unbind(chooseSceneid) {
+			createToast(chooseScene_js_05);
+			isSaving=true;
+			var jsonData = {
+				"cmd": "513",
+				"gwID": gwID,
+				"devID": devID,
+				"appID": appID,
+				"mode": 3,
+				"data": [{ "endpointNumber": "1", "sceneID": chooseSceneid }]
+			};
+			sendCmd(jsonData);
+			shaoshi();
+		}
+
+		/*
+		 * 查询绑定
+		 */
+		function check() {
+			isSearch=true;
+			var jsonData = {
+				"cmd": "514",
+				"gwID": gwID,
+				"devID": devID
+			};
+			sendCmd(jsonData);
+		}
+
+		/*
+		 * 设备控制
+		 */
+		function sendCmd(jsonData) {
+			plus.gatewayCmd.controlDevice(jsonData, function(result) {
+				console.log("result" + result);
+			})
+		}
+
+		function rush_500(dID, gID) {
+			plus.gatewayCmd.newDataRefresh(function(result) {
+				console.log("newDataRefresh result=####"+result.cmd);
+				var isright=result!=null
+							&&result!=undefined
+							&&result.devID==devID;
+				if(isright){
+					isright=result.data!=null
+									&&result.data!=undefined
+									&&result.data.length>0;
+					if(result.cmd == "513") {/*设置*/
+						if(isright&&isSaving){
+							$(".comToast").hide();
+							isSaving=false;
+							if(result.mode==1){
+								toastShow(chooseSecne_js_07);//绑定成功
+							}else if(result.mode==3){
+								bindingSceneid="";
+								bindingSceneid="";
+								toastShow(chooseSecne_js_06);//解绑成功
+							}
+							plus.gatewayCmd.getSceneList(function(result){
+								createSceneList(result);
+								//查询
+								check();
+								bindClick();
+							})							
+						}
+					}
+					else if(result.cmd == "514") {/*查询*/
+						console.log("result.data="+result.data.length);
+						if(isright&&isSearch){
+							isSearch=false;
+							bindingSceneid=	result.data[0].sceneID;
+							console.log("bindingSceneid="+bindingSceneid);
+							chooseSceneid=bindingSceneid;
+							selectItem(bindingSceneid);
+						}else{
+							chooseSceneid="";
+						}
+					}
+				}
+				
+			})
+		}
+		function toastShow(msg){
+		    window.showDialog.show(msg,2000);
+		}
+		function shaoshi(){
+			setTimeout(function() {
+				isSaving=false;
+				$(".comToast").hide();
+                window.showDialog.show(alarmSet_js_16,2000);
+			}, 60000)
+		}
+	</script>
+
+</html>

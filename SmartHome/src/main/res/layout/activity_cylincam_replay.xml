@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_camera_history"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <!-- 最新控件布局 -->
+
+    <FrameLayout
+        android:id="@+id/frame_history_play"
+        android:layout_width="match_parent"
+        android:layout_height="230dp">
+        <!-- 横屏控制布局 -->
+
+
+        <RelativeLayout
+            android:id="@+id/rela_history_monitor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <cc.wulian.smarthomev6.main.device.cylincam.gl.GLFrameSurface
+                android:id="@+id/glsurfacehistory"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:visibility="visible" />
+
+
+            <ImageView
+                android:id="@+id/button_full_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/icon_fullscreen" />
+
+            <ImageView
+                android:id="@+id/titlebar_back_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/icon_back"
+
+                />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_control_landscape_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/btn_control_landscape_to_portrait"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="@dimen/default_margin_normal"
+                android:layout_marginRight="@dimen/default_margin_normal"
+                android:layout_marginTop="@dimen/default_margin_normal"
+                android:src="@drawable/btn_fullscreen_exit" />
+
+
+            <ImageView
+                android:id="@+id/btn_control_snapshot_landscape"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/btn_control_landscape_to_portrait"
+                android:layout_marginEnd="@dimen/default_padding_normal"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="25dp"
+                android:src="@drawable/icon_cateye_snapshot" />
+
+            <ImageView
+                android:id="@+id/btn_control_record_landscape"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/btn_control_snapshot_landscape"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="25dp"
+                android:src="@drawable/icon_air_saofeng" />
+
+
+            <cc.wulian.smarthomev6.support.customview.CameraHistorySeekBar
+                android:id="@+id/replay_historyseek_land"
+                android:layout_width="match_parent"
+                android:layout_height="120dip"
+                android:layout_alignParentBottom="true"
+                android:background="#292c31" />
+
+
+        </RelativeLayout>
+
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/tv_history_seek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/frame_history_play"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+
+
+        <cc.wulian.smarthomev6.support.customview.CylincamHistorySeekBar
+            android:id="@+id/replay_historyseek"
+            android:layout_width="match_parent"
+            android:layout_height="120dip"
+            android:background="#ffffff" />
+
+
+        <TextView
+            android:id="@+id/tv_seekbar_date"
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:background="@color/transparent"
+            android:gravity="center"
+            android:text="今天"
+            android:textColor="@color/v6_green" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/line_foot_history"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_alignParentBottom="true"
+        android:background="#fefefe"
+        android:divider="@drawable/spacer_medium"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <ImageView
+            android:id="@+id/tv_history_playsnap"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/icon_cateye_snapshot" />
+
+        <ImageView
+            android:id="@+id/tv_history_playvideo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/icon_air_saofeng" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,36 @@
+/*
+*generate by csv2html5_1.0.py
+*run by WuLian
+*/
+$lang = {};
+$lang.Af_name = "風機盤管溫度控制器";
+$lang.On = "開機";
+$lang.Off = "關機";
+$lang.Energy = "節能";
+$lang.Temperature = "室溫";
+$lang.Remind = "過濾器%1$s個月沒換了";
+$lang.Pattern_01 = "模式：%1$s";
+$lang.Windspeed_01 = "風速：%1$s";
+$lang.Pattern_02 = "模式";
+$lang.Timing = "定時";
+$lang.Windspeed_02 = "風速";
+$lang.Cancel = "取消";
+$lang.Complete = "完成";
+$lang.Hour = "小時";
+$lang.Minute = "分鐘";
+$lang.Count_down_01 = "倒計時關閉";
+$lang.Count_down_02 = "倒計時開啟";
+$lang.Count_down_03 = "後開啟";
+$lang.Count_down_04 = "後關閉";
+$lang.Mode_Cool = "製冷節能模式";
+$lang.Mode_Hot = "制熱節能模式";
+$lang.Mode_Switch_01 = "制熱";
+$lang.Mode_Switch_02 = "製冷";
+$lang.Mode_Switch_03 = "送風";
+$lang.Mode_Switch_04 = "低";
+$lang.Mode_Switch_05 = "中";
+$lang.Mode_Switch_06 = "高";
+$lang.Mode_Switch_07 = "自動";
+$lang.Mode_Switch_08 = "設備已離線";
+$lang.Mode_Switch_09 = "確認";
+$lang.Device_Af_Details_Loading = "正在加載…";

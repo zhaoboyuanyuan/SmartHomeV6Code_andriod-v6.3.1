@@ -1,0 +1,93 @@
+@charset "utf-8";
+body,html{
+    width:100%;
+    height:100%;
+    background:#f3f3f3;
+}
+.gwMain{
+    width:100%;
+    overflow:hidden;
+    margin-top:2rem;
+}
+.gwMain ul{
+    width:100%;
+    background:#fff;
+    overflow:hidden;
+}
+.gwMain ul li{
+    width:92%;
+    height:4.4rem;
+    line-height:4.4rem;
+    padding:0 4%;
+    background:#fff;
+    border-bottom:1px solid #ddd;
+}
+.gwMain ul li label,.gwMain ul li input,.gwMain ul li i{
+    display:block;
+    float:left;
+    height:4.4rem;
+}
+.gwMain ul li label{
+    width:25%;
+    font-size:1.5rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.gwMain ul li input{
+    width:65%;
+    border:0;
+    font-size:1.5rem;
+}
+.gwMain ul li i{
+    width:10%;
+    background:url(../fonts/icon_scan.png) no-repeat center center;
+    background-size:2.4rem auto;
+}
+.gwMain ul li i.auto{
+    width:10%;
+    height:2.4rem;
+    line-height:2.4rem;
+    text-align:center;
+    margin-top:1rem;
+    background:#8dd652;
+    border-radius:5px;
+    color:#fff;
+}
+.gwTips{
+    width:92%;
+    overflow:hidden;
+    margin-top:2rem;
+    padding:0 4%;
+}
+.gwTips p{
+    display:block;
+    width:100%;
+    line-height:2rem;
+    font-size:1.3rem;
+}
+.addSensorBtn a{
+    margin-left:4%;
+    position:static!important;
+    margin-top:6rem;
+}
+.gwMain ul li span{
+    font-size:1.5rem;
+}
+.editionTips{
+    width:92%;
+    padding:0 4%;
+    line-height:2rem;
+    margin-top:1rem;
+    font-size:1.3rem;
+    color:red;
+}
+.otherTips{
+    width:96%;
+    padding:0 2%;
+    line-height:2rem;
+    margin-top:2rem;
+    font-size:1.3rem;
+    COLOR:#666;
+}
+

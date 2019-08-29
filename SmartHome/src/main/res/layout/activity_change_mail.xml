@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/transparent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"
+                android:lines="1"
+                android:ellipsize="end"
+                android:text="@string/Login_Account"
+                android:textColor="@color/black"
+                android:textSize="@dimen/default_text_size" />
+
+            <cc.wulian.smarthomev6.support.customview.ClearEditText
+                android:id="@+id/et_register_phone_number"
+                android:layout_width="0dp"
+                android:layout_weight="5"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:inputType="text"
+                android:lines="1"
+                android:ellipsize="end"
+                android:textSize="@dimen/default_editText_size"
+                android:paddingRight="20dp"
+                android:focusable="true"
+                android:hint="@string/AccountSecurity_Email_Hint" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="@string/Login_GetToken_Hint"
+                android:lines="1"
+                android:ellipsize="end"
+                android:textColor="@color/black"
+                android:textSize="@dimen/default_text_size"
+                android:id="@+id/textView" />
+
+            <EditText
+                android:id="@+id/et_verification"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:inputType="number"
+                android:textSize="@dimen/default_editText_size"
+                android:lines="1"
+                android:ellipsize="end"
+                android:maxLength="6"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="@string/Forgot_Require_AuthCode" />
+
+            <TextView
+                android:id="@+id/tv_get_verification"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="2"
+                android:lines="1"
+                android:ellipsize="end"
+                android:background="@drawable/shape_get_verification_code_btn_bg"
+                android:gravity="center"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/Login_GetToken"
+                android:textColor="@color/white"
+                android:textSize="@dimen/mine_wl_text_size" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_register_button"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="85dp"
+        android:text="@string/Done"
+        android:lines="1"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:textSize="@dimen/default_text_size"
+        android:textColor="@color/white"
+        android:background="@drawable/shape_btn_negative_bg"/>
+
+</LinearLayout>

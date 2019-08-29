@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v6_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginTop="@dimen/default_padding_normal"
+            android:background="@color/v6_line" />
+
+        <RelativeLayout
+            android:id="@+id/ll_device_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Device_Rename" />
+
+            <TextView
+                android:id="@+id/tv_device_name"
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/default_padding_small"
+                android:layout_toLeftOf="@+id/iv_arrows"
+                android:gravity="center_vertical"
+                android:text="@string/Cateyemini_Adddevice_Cateyemini"
+                android:textColor="@color/v6_text_gray" />
+
+            <ImageView
+                android:id="@+id/iv_arrows"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/default_padding_normal"
+                android:background="@drawable/system_intent_right" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <RelativeLayout
+            android:id="@+id/ll_device_information"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:background="@color/white">
+
+            <TextView
+                style="@style/device_setting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/default_padding_normal"
+                android:text="@string/Device_Info" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:background="@color/white">
+
+            <RelativeLayout
+                android:id="@+id/ll_device_detection"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/device_setting_textview_height"
+                android:background="@color/white">
+
+                <TextView
+                    style="@style/device_setting_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/default_padding_normal"
+                    android:text="@string/Cateyemini_Setup_Humandetection" />
+
+                <TextView
+                    android:id="@+id/tv_device_detection"
+                    style="@style/device_setting_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/default_padding_small"
+                    android:layout_toLeftOf="@+id/iv_arrows_detection"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/v6_text_gray" />
+
+                <ImageView
+                    android:id="@+id/iv_arrows_detection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="@dimen/default_padding_normal"
+                    android:background="@drawable/system_intent_right" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view_device_detection_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#80FFFFFF"
+                android:clickable="true" />
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:background="@color/white">
+
+            <RelativeLayout
+                android:id="@+id/ll_device_light"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/device_setting_textview_height"
+                android:background="@color/white">
+
+                <TextView
+                    style="@style/device_setting_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/default_padding_normal"
+                    android:text="@string/Cateyemini_Setup_Lampswitch" />
+
+                <ToggleButton
+                    android:id="@+id/tb_device_light"
+                    android:layout_width="55dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@android:color/transparent"
+                    android:button="@drawable/button_toggle_switch"
+                    android:checked="true"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn="" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view_device_light_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#80FFFFFF"
+                android:clickable="true" />
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:background="@color/white">
+
+            <RelativeLayout
+                android:id="@+id/ll_bind_lock"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/device_setting_textview_height"
+                android:background="@color/white">
+
+                <TextView
+                    style="@style/device_setting_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/default_padding_normal"
+                    android:text="@string/Bind_Lock" />
+
+                <ImageView
+                    android:id="@+id/iv_arrows_bind_lock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="@dimen/default_padding_normal"
+                    android:background="@drawable/system_intent_right" />
+
+            </RelativeLayout>
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/device_setting_textview_height">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/device_setting_textview_height"
+                android:background="@color/white">
+
+                <Button
+                    android:id="@+id/btn_device_reboot"
+                    style="@style/device_setting_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/device_setting_textview_height"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/default_padding_normal"
+                    android:text="@string/Cateyemini_Setup_RemoteReboot" />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view_device_reboot_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#80FFFFFF"
+                android:clickable="true" />
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/v6_line" />
+
+        <Button
+            android:id="@+id/btn_device_unbind"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/device_setting_textview_height"
+            android:layout_marginTop="@dimen/default_padding_normal"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="@string/Delete_Camera"
+            android:textColor="@color/red"
+            android:textSize="@dimen/default_text_size" />
+    </LinearLayout>
+</RelativeLayout>

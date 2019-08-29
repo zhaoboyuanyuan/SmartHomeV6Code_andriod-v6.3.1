@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>管家首页</title>
+		<link rel="stylesheet" type="text/css" href="../css/base.css" />
+        <link rel="stylesheet" type="text/css" href="../css/mobiscroll.custom-2.5.2.min.css" />
+		<link rel="stylesheet" href="../css/circumstances.css" />
+		<link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+		<script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			html {
+				background: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="header">
+			<a href="javascript:window.history.back(-1);"></a>
+			<a href="javascript:;" id="effectiveDate_time" class="autoSwitchLanguager">生效时段</a>
+			<a id="customScene_sure" class="complete autoSwitchLanguager" href="javascript:;">确定</a>
+			<!--circumstances.html-->
+		</header>
+		<section class="choose_date" style="margin-top:6.4rem;">
+			<!--<span style="padding:0 4%;line-height:3rem;font-size:1.2rem;">生效时段中的结束时间设置该大于开始时间</span>-->
+			<ul>
+				<li><b id="effectiveDate_txt01" class="autoSwitchLanguager">从</b><span>09:00</span><input id="start" type="text" /></li>
+				<li><b id="effectiveDate_txt02" class="autoSwitchLanguager">至</b><span>22:00</span><em id="timeTitle" style="display:none;"> ( +1Day )</em><input id="end" type="text" /></li>
+			</ul>
+		</section>
+		<section class="choose_week">
+			<span id="effectiveDate_txt03" class="autoSwitchLanguager">重复</span>
+			<ul>
+				<li class="">Sun</li>
+				<li class="">Mon</li>
+				<li class="">Tue</li>
+				<li class="">Wed</li>
+				<li class="">Thu</li>
+				<li class="">Fri</li>
+				<li class="">Sat</li>
+			</ul>
+		</section>
+		<!--<section class="toast autoSwitchLanguager" id="effectiveDate_txt04">-->
+			<!--请至少选择一天！-->
+		<!--</section>-->
+	</body>
+	<script src="../js/plus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/tools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/mobiscroll.custom-2.5.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/navigator.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/addDelay3.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/getCondition.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../lang/lang.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var info = window.sysfun;
+		info.init("V6Housekeeper");
+		initlan();
+		plus.plusReady(function(){
+            plus.gatewayCmd.androidBack(function () {
+                window.history.back(-1);
+            });
+		});
+		//点击显示或隐藏高亮
+		$(".choose_week ul li").on("click", function() {
+			if($(this).attr("class") == "on") {
+				$(this).removeClass("on")
+			} else {
+				$(this).addClass("on")
+			}
+		})
+		var data = {};
+		var arr = [];
+		$(".complete").on("click", function() {
+			var weekStr = "";
+			var start = $(".choose_date li").eq(0).find("span").text()
+			var end = $(".choose_date li").eq(1).find("span").text()
+			info.setItem("startTime", start)
+			info.setItem("endTime", end)
+			if($(".choose_week ul .on").length == 0){
+			    window.showDialog.show(languageUtil.getResource("effectiveDate_txt04"),3000);
+			}else{
+				for(var i = 0; i < $(".choose_week ul .on").length; i++) {
+					if(i == $(".choose_week ul .on").length - 1) {
+						weekStr += $(".choose_week ul .on").eq(i).html()
+					} else {
+						weekStr += $(".choose_week ul .on").eq(i).html() + ','
+					}
+				}
+				info.setItem("weekStr1", weekStr)
+				var time = addTime(info.getItem("startTime"), info.getItem("endTime"), info.getItem("weekStr1").split(","))
+                data.exp = ("1.CURTIME in " + time);
+                data.startTime = info.getItem("startTime");
+                data.endTime = info.getItem("endTime");
+                data.weekStr = info.getItem("weekStr1");
+                if(info.getItem("conditionArray") == null){
+                    arr.push(data)
+                    info.setItem("conditionArray",JSON.stringify(arr))
+                }else{
+                    var exist = false;
+                    arr = JSON.parse(info.getItem("conditionArray"));
+                    arr.map(function (list, i) {
+                        if (info.getItem("type") === "1") {
+                            if(i === parseInt(info.getItem("index"))){
+                                list.exp = ("1.CURTIME in " + time);
+                                list.startTime = info.getItem("startTime");
+                                list.endTime = info.getItem("endTime");
+                                list.weekStr = info.getItem("weekStr1");
+                                exist = true;
+							}
+						}
+                    });
+                    if(exist === false){
+                        if(!info.getItem("timeCount")){
+                            info.setItem("timeCount",1)
+                        }else{
+                            var num = JSON.parse(info.getItem("timeCount"))+1;
+                            info.setItem("timeCount",num);
+                        }
+                        arr.push(data);
+					}
+                    info.setItem("conditionArray",JSON.stringify(arr))
+                }
+				window.location = "circumstances.html"
+			}
+			//console.log(weekStr)
+		})
+	</script>
+
+</html>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/newBackground"
+    tools:context="cc.wulian.smarthomev6.main.message.alarm.MessageAlarmListActivity">
+
+    <TextView
+        android:id="@+id/alarm_text_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/message_center_detail_no_result_MarginTop"
+        android:gravity="center_horizontal"
+        android:text="@string/Message_Center_NoAlarm"
+        android:textColor="@color/message_center_no_result_text_color"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <cc.wulian.smarthomev6.support.customview.SwipeRefreshLayout
+            android:id="@+id/alarm_swipe"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/alarm_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layoutManager="LinearLayoutManager" />
+        </cc.wulian.smarthomev6.support.customview.SwipeRefreshLayout>
+
+        <FrameLayout
+            android:id="@+id/loading_container"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/loading_view"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/icon_loading_up" />
+        </FrameLayout>
+    </LinearLayout>
+</FrameLayout>

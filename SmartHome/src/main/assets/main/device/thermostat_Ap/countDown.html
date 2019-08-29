@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>倒计时</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="css/countDown.css"/>
+    <script src="../../source/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../source/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../skinSource/css/skin.css" />
+</head>
+<body>
+<header  class="header">
+    <a id="back" class="back" href="javascript:;"></a>
+    <a class="deviceName autoSwitchLanguager" key="Device_Ap_Details_Time" href="javascript:;">定时</a>
+</header>
+<section class="num_scroll_show">
+    <div class="panel1" style="top: 10rem;opacity: 0"><p>-2</p></div>
+    <div class="panel2" style="top: 17rem;"><p>-1</p></div>
+    <div class="panel3" style="top: 24rem;"><p>03:00</p></div>
+    <div class="panel4" style="top: 31rem;"><p>1</p></div>
+    <div class="panel5" style="top: 38rem;opacity: 0"><p>2</p></div>
+</section>
+<section class="mainView">
+    <div class="mainTime">
+        <p class="timeText">00:30</p>
+    </div>
+    <div class="tips">
+        <p class="tipsText autoSwitchLanguager" key="Device_Ap_Details_Time2">后开机</p>
+    </div>
+</section>
+<!--<section class="toast">-->
+    <!--<p class="autoSwitchLanguager toastText" key="Device_Bm_Details_Time6">倒计时时间不能为0</p>-->
+<!--</section>-->
+<section class="bottomView">
+    <div class="btnLeft">
+        <i class="bottomButtonState2 autoSwitchLanguager" key="Device_Ap_Details_Time3">编辑</i>
+    </div>
+    <div></div>
+    <div class="btnRight">
+        <i class="bottomButtonState1 autoSwitchLanguager" key="Device_Ap_Details_Time4">启动</i>
+    </div>
+</section>
+</body>
+<script src="js/plus.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/gatewayCmd.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/more.js" type="text/javascript" charset="utf-8"></script>
+<script src="lang/lang.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/scrollPanel.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    initlan();
+    var devID, gwID;
+    var info = window.sysfun;
+    info.init("deviceAp");
+    var deviceState = "01";
+    var timerState = "00";
+    // 编辑状态 0 未编辑, 1 正在编辑
+    var editState = 0;
+
+    // 选择的下标
+    // 默认是 3 小时
+    var ApDefaultIndex = info.getItem('ApDefaultIndex');
+    var defaultIndex = (ApDefaultIndex == undefined || ApDefaultIndex == null || ApDefaultIndex == '') ? 1 : parseInt(ApDefaultIndex);
+    console.log('getItem---> ' + defaultIndex);
+    var selectIndex = defaultIndex;
+    // 时间数组
+    var countDownTimeArr = [];
+    for (var i = 0; i <= 48; i++) {
+        var h, m;
+        if (i %2 == 0) {
+            h = i / 2;
+            m = '00';
+        } else {
+            h = (i - 1) / 2;
+            m = '30';
+        }
+        h = h < 10 ? '0' + h : h;
+
+        countDownTimeArr.push(h + ':' + m)
+    }
+    scrollPanelInit(countDownTimeArr, selectIndex, function (item) {
+        console.log('倒计时; ' + item);
+        selectIndex = item;
+    });
+
+    plus.plusReady(function () {
+        plus.gatewayCmd.getDeviceInfo(function (data) {
+            gwID = data.gwID;
+            devID = data.devID;
+            var endpoints = data.endpoints;
+            handleEp(endpoints);
+            query();
+        });
+        plus.gatewayCmd.newDataRefresh(function (data) {
+            var endpoints = data.endpoints;
+            handleEp(endpoints);
+        })
+    });
+    $("#back").on("click", function() {
+//        plus.tools.goBack(function() {});
+        window.history.go(-1);
+    });
+
+    $(".btnLeft").on("click", function() {
+        // 左边的按钮
+        leftClick();
+    });
+    $(".btnRight").on("click", function() {
+        // 右边的按钮
+        rightClick();
+    });
+
+    // 查询
+    function query() {
+        sendCmd(0x8010, ["1"])
+    }
+
+    // 处理 endpoints
+    // 遍历解析
+    function handleEp(endpoints) {
+        endpoints.forEach(function (endpoint) {
+            var endpointNumber = endpoint.endpointNumber;
+            var endpointName = endpoint.endpointName;
+            var endpointType = endpoint.endpointType;
+            var clusters = endpoint.clusters;
+            clusters.forEach(function (cluster) {
+                var clusterId = cluster.clusterId;
+                var attributes = cluster.attributes;
+                attributes.forEach(function (attribute) {
+                    var attributeId = attribute.attributeId;
+                    var attributeValue = attribute.attributeValue;
+                    handleAttribute(attributeId, attributeValue)
+                })
+            })
+        });
+    }
+
+    // 处理 attribute
+    function handleAttribute(attributeId, attributeValue) {
+        console.log("attributeId:\t\t" + attributeId.toString(16));
+        console.log("attributeValue:\t\t" + attributeValue);
+
+        if (attributeId == 0x8001) {
+            handleAttribute8001(attributeValue)
+        } else if (attributeId == 0x800E) {
+            handleAttribute800E(attributeValue)
+        }
+    }
+
+    /**
+     * 解析 8001
+     *
+     * @param value
+     *                  xx yy cccc ee dddd zz bbbb qqqq ii dd HH mm ss ll rrrr qqqq
+     *                  基本数据，格式均为16进制如下：
+     *
+     *                   xx:        设备开关状态（开机、关机）
+     *                   yy:        过温保护开关
+     *                   cccc:      过温保护温度
+     *                   ee:        防冻保护开关
+     *                   dddd:      防冻保护温度
+     *                   zz:        温度标志位
+     *                   bbbb:      制热温度
+     *                   qqqq:      当前环境温度数值
+     *                   ii:        当前环境湿度
+     *                   dd:        定时器状态
+     *                   HHmmss:    定时器倒计时时间
+     *                   ll:        一键节能开关
+     *                   rrrr:      一键节能温度
+     *                   qqqq:      地表温度
+     */
+    function handleAttribute8001(value) {
+        console.log("Value-> " + value);
+        var xx = value.substr(0, 2);                      // xx:          设备开关状态  (00:关机 01开机)
+        var d2 = value.substr(26, 2);                     // dd:          定时器状态 (00 取消定时 01 定时开 02 定时关)
+        var HH = parseInt(value.substr(28, 2), 16);       // HH:          定时器倒计时时间
+        var mm = parseInt(value.substr(30, 2), 16);       // mm:          定时器倒计时时间
+        var SS = parseInt(value.substr(32, 2), 16);       // ss:          定时器倒计时时间
+
+        console.log("---------- 8001 ----------");
+        console.log("xx: " + xx + ", \t\t设备开关状态");
+        console.log("d2: " + d2 + ", \t\t定时器状态(00 取消定时 01 定时开 02 定时关)");
+        console.log("HH: " + HH + ", \t\t定时器倒计时时间");
+        console.log("mm: " + mm + ", \t\t定时器倒计时时间");
+        console.log("SS: " + SS + ", \t\t定时器倒计时时间");
+        console.log("---------- 8001 ----------");
+
+        showTips(xx, d2);
+        showTimer(HH, mm, SS);
+    }
+
+    function handleAttribute800E(value) {
+        var d2 = value.substr(0, 2);                     // dd:          定时器状态 (00 取消定时 01 定时开 02 定时关)
+        var HH = parseInt(value.substr(2, 2), 16);       // HH:          定时器倒计时时间
+        var mm = parseInt(value.substr(4, 2), 16);       // mm:          定时器倒计时时间
+
+        console.log("---------- 800E ----------");
+        console.log("d2: " + d2 + ", \t\t定时器状态(00 取消定时 01 定时开 02 定时关)");
+        console.log("HH: " + HH + ", \t\t定时器倒计时时间");
+        console.log("mm: " + mm + ", \t\t定时器倒计时时间");
+        console.log("---------- 800E ----------");
+
+        showTips(deviceState, d2);
+        showTimer(HH, mm, 0);
+    }
+
+    /**
+     * 显示提示
+     */
+    function showTips(d, t) {
+        deviceState = d;
+        timerState = t;
+
+        if (deviceState == '01') {
+            // 开机状态
+            if (timerState == "02") {
+                // 定时关
+                $('.tipsText').html(Device_Af_Details_Time2);
+                $('.tipsText').show()
+            } else {
+                // 定时取消
+                $('.tipsText').hide()
+            }
+        } else {
+            // 关机状态
+            if ( timerState == "01") {
+                // 定时开
+                $('.tipsText').html(Device_Af_Details_Time1);
+                $('.tipsText').show()
+            } else {
+                // 定时取消
+                $('.tipsText').hide()
+            }
+        }
+
+        showButton()
+    }
+
+    // 点击左边按钮
+    function leftClick() {
+        // 切换编辑状态
+        if (editState == 0) {
+            // 没有在编辑
+            // 如果倒计时开启的话, 则提示不能开启编辑状态
+            // 否则, 开启编辑
+
+            console.log('deviceState ---> ' + deviceState);
+            console.log('timerState  ---> ' + timerState);
+            if ((deviceState == '00' && timerState == '01') ||
+                (deviceState == '01' && timerState == '02')) {
+
+                showToast(langEidtError);
+                return;
+            } else {
+                $('.num_scroll_show').show();
+                $('.mainView').hide();
+
+                editState = 1;
+            }
+        } else {
+            // 正在编辑
+            // 取消编辑
+
+            $('.num_scroll_show').hide();
+            $('.mainView').show();
+
+            editState = 0;
+            selectIndex = defaultIndex;
+        }
+        showButton();
+    }
+
+    // 点击右边按钮
+    function rightClick() {
+        if (editState == 0) {
+            // 没有在编辑
+            // 这里的操作应该是
+            // 切换定时器状态
+
+            if (deviceState == '01') {
+                // 开机状态
+                // 如果是定时关 , 就关闭定时器
+                // 否则就启动定时关
+                if (timerState == '02') {
+                    // 取消定时
+                    sendCmd(0x8016, ['000'])
+                } else {
+                    // 定时关
+                    setTime('2');
+                }
+            } else {
+                // 关机状态
+                // 如果是定时开 , 就关闭定时器
+                // 否则就启动定时开
+                if (timerState == '01') {
+                    // 取消定时
+                    sendCmd(0x8016, ['000'])
+                } else {
+                    // 定时开
+                    setTime('1');
+                }
+            }
+        } else {
+            // 正在编辑
+            // 即点击确定按钮
+            // 即设置默认值
+
+            var num = getShowNum();
+            if (num == 0) {
+                showToast(langNotZero);
+                return
+            }
+            $('.num_scroll_show').hide();
+            $('.mainView').show();
+
+            editState = 0;
+            selectIndex = getShowNum();
+            defaultIndex = selectIndex;
+            info.setItem('ApDefaultIndex', defaultIndex + '');
+            $('.timeText').html(countDownTimeArr[selectIndex]);
+            showButton();
+        }
+    }
+
+    function showButton() {
+        if (deviceState == '01') {
+            // 开机状态
+            if (editState == 0) {
+                $('.btnLeft').find('i').attr('class', 'bottomButtonState2');
+                $('.btnLeft').find('i').html(langEdit);
+                if (timerState == "02") {
+                    // 定时关
+                    $('.btnRight').find('i').attr('class', 'bottomButtonState3');
+                    $('.btnRight').find('i').html(langClose);
+                } else {
+                    // 定时取消
+                    $('.btnRight').find('i').attr('class', 'bottomButtonState1');
+                    $('.btnRight').find('i').html(langStart);
+                }
+            } else {
+                $('.btnLeft').find('i').attr('class', 'bottomButtonState2');
+                $('.btnLeft').find('i').html(langCancel);
+                $('.btnRight').find('i').attr('class', 'bottomButtonState1');
+                $('.btnRight').find('i').html(langConfirm);
+            }
+        } else {
+            // 关机状态
+            if (editState == 0) {
+                $('.btnLeft').find('i').attr('class', 'bottomButtonState2');
+                $('.btnLeft').find('i').html(langEdit);
+                if (timerState == "01") {
+                    // 定时开
+                    $('.btnRight').find('i').attr('class', 'bottomButtonState3');
+                    $('.btnRight').find('i').html(langClose);
+                } else {
+                    // 定时取消
+                    $('.btnRight').find('i').attr('class', 'bottomButtonState1');
+                    $('.btnRight').find('i').html(langStart);
+                }
+            } else {
+                $('.btnLeft').find('i').attr('class', 'bottomButtonState2');
+                $('.btnLeft').find('i').html(langCancel);
+                $('.btnRight').find('i').attr('class', 'bottomButtonState1');
+                $('.btnRight').find('i').html(langConfirm);
+            }
+        }
+    }
+
+    /**
+     * 显示时间
+     */
+    function showTimer(h, m, s) {
+
+        if ((deviceState == '00' && timerState == '01') ||
+            (deviceState == '01' && timerState == '02') &&
+            !(h == 0 && m == 0 && s == 0)) {
+            var tH = h < 10 ? '0' + h : h;
+            var tM = m < 10 ? '0' + m : m;
+            var t = tH + ':' + tM;
+            $('.timeText').html(t)
+        } else {
+            $('.timeText').html(countDownTimeArr[selectIndex]);
+        }
+    }
+
+    function showToast(msg) {
+        window.showDialog.show(msg,2000);
+    }
+
+    function setTime(type) {
+        if (selectIndex == 0) {
+            showToast(langNotZero);
+            return 0;
+        } else {
+            var timeStr;
+            if (selectIndex < 10) {
+                timeStr = '0' + selectIndex;
+            } else {
+                timeStr = '' + selectIndex;
+            }
+
+            sendCmd(0x8016, [type + timeStr]);
+
+            return 1;
+        }
+    }
+
+    function sendCmd(commandId,parameter){
+        var jsonData = {};
+        jsonData.cmd = "501";
+        jsonData.gwID = gwID;
+        jsonData.devID = devID;
+        jsonData.endpointNumber = 1;
+        jsonData.commandType = 1;
+        jsonData.clusterId = 0x0201;
+        jsonData.commandId = commandId;
+        if(parameter){
+            jsonData.parameter = parameter;
+        }
+        plus.gatewayCmd.controlDevice(jsonData,function(){})
+    }
+</script>
+
+</html>
